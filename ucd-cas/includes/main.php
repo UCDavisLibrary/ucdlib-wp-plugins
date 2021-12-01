@@ -5,7 +5,7 @@ require_once( __DIR__ . '/menu.php' );
 class UCDPluginCAS {
   public function __construct(){
     $this->metaData = new UCDPluginCASMetaData();
-    $this->mmenu = new UCDPluginCASMenu();
+    $this->menu = new UCDPluginCASMenu();
     add_filter( 'timber/locations', array($this, 'add_timber_locations') );
   }
 
