@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name: UCD CAS
- * Plugin URI: https://github.com/UCDavisLibrary/ucdlib-wp-plugins
+ * Plugin URI: https://github.com/UCDavisLibrary/ucdlib-wp-plugins/tree/main/ucd-cas
  * Description: Reroutes WP auth through CAS
  * Version: 1.0.0-alpha.1
  * Author: UC Davis Library Online Strategy
