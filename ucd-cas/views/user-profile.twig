@@ -1,0 +1,21 @@
+{% macro textInput(field) %}
+  <tr>
+    <th><label for="{{field.slug}}">{{field.label}}</label></th>
+    <td>
+      <input 
+        type="text" 
+        name="{{field.slug}}" 
+        id="{{field.id}}" 
+        value="{{field.value ? field.value : ''}}" 
+        readonly 
+        class="regular-text">
+    </td>
+  </tr>
+{% endmacro %}
+
+<h3>CAS Attributes</h3>
+<table class="form-table">
+  {% for field in fields %}
+    {{ _self.textInput(field) }}
+  {% endfor %}
+</table>

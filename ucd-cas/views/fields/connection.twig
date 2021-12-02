@@ -1,20 +1,26 @@
-{% if args.label_for == slug~'_field_host' %}
+{% if args.short_slug == 'host' %}
   <input 
     id="{{args.label_for}}" 
     class="regular-text code"
     name="{{optionsSlug}}[{{args.label_for}}]" 
     type="text"
     value="{{options[args.label_for]}}"
+    {{args.env ? 'readonly'}}
     required>
+  {% if args.env %}
+    <p class="description">
+      Value is currently being set by an environmental variable and is readonly.
+    </p>
+  {% endif %}
   <p class="description">
-  <code>https://ssodev.ucdavis.edu/cas</code> is the development server. It does not require registration.
+  <code>ssodev.ucdavis.edu</code> is the development server. It does not require registration.
   </p>
   <p class="description">
-  <code>https://cas.ucdavis.edu/cas</code> is the production server. You must <a href="https://casmgr.ucdavis.edu/">register this site</a>.
+  <code>cas.ucdavis.edu</code> is the production server. You must <a href="https://casmgr.ucdavis.edu/">register this site</a>.
   </p>
 {% endif %}
 
-{% if args.label_for == slug~'_field_port' %}
+{% if args.short_slug == 'port' %}
   <input 
     id="{{args.label_for}}" 
     class="small-text"
@@ -25,7 +31,7 @@
   <p class="description">This is almost always going to be '443'</p>
 {% endif %}
 
-{% if args.label_for == slug~'_field_uri' %}
+{% if args.short_slug == 'uri' %}
   <input 
     id="{{args.label_for}}" 
     class="regular-text code"
@@ -38,7 +44,7 @@
   </p>
 {% endif %}
 
-{% if args.label_for == slug~'_field_validation' %}
+{% if args.short_slug == 'validation' %}
   <input 
     id="{{args.label_for}}" 
     class=""
@@ -49,7 +55,7 @@
   <p class="description">Enables SSL validation of the CAS server</p>
 {% endif %}
 
-{% if args.label_for == slug~'_field_validation_path' %}
+{% if args.short_slug == 'validation_path' %}
   <input 
     id="{{args.label_for}}" 
     class="regular-text code"
@@ -58,5 +64,17 @@
     value="{{options[args.label_for]}}">
   <p class="description">
   If using SSL validation, enter path to CA certificate that is the issuer of the CAS cert
+  </p>
+{% endif %}
+
+{% if args.short_slug == 'validation_uri' %}
+  <input 
+    id="{{args.label_for}}" 
+    class="regular-text code"
+    name="{{optionsSlug}}[{{args.label_for}}]" 
+    type="text"
+    value="{{options[args.label_for]}}">
+  <p class="description">
+  If using SSL validation, what is the server uri? Should be <code>p3/serviceValidate</code> for UC Davis.
   </p>
 {% endif %}

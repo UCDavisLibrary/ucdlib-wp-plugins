@@ -1,0 +1,36 @@
+{% if args.short_slug == 'prevent_user_creation' %}
+  <input 
+    id="{{args.label_for}}" 
+    class=""
+    name="{{optionsSlug}}[{{args.label_for}}]" 
+    type="checkbox"
+    value="1"
+    {{options[args.label_for] == "1" ? 'checked'}}>
+  <p class="description">If checked, only current site users will be able to login.</p>
+{% endif %}
+
+{% if args.short_slug == 'blacklist' %}
+  <textarea 
+    name="{{optionsSlug}}[{{args.label_for}}]"
+    class="regular-text"
+    id="{{args.label_for}}" 
+    rows="5" 
+    >{{options[args.label_for]}}
+  </textarea>
+  <p class="description">
+  Enter line-separated list of kerberos ids.
+  </p>
+{% endif %}
+
+{% if args.short_slug == 'access_denied_message' %}
+  <textarea 
+    name="{{optionsSlug}}[{{args.label_for}}]"
+    class="large-text"
+    id="{{args.label_for}}" 
+    rows="5" 
+    >{{options[args.label_for]}}
+  </textarea>
+  <p class="description">
+  Message to display to user if they are denied access to site.
+  </p>
+{% endif %}

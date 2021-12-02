@@ -1,10 +1,12 @@
 <?php
 class UCDPluginCASMenu {
-  public function __construct($slug){
+  public function __construct($slug, $env){
     $this->slug = $slug;
+    $this->env = $env;
     $this->optionsSlug = $this->slug . "_options";
     $this->capability = 'manage_options';
     $this->title = "CAS Configuration";
+    add_action('init', array($this, 'registerOptionsDefaults'));
     add_action('admin_menu', array($this, 'registerMenu'));
   }
 
@@ -17,6 +19,11 @@ class UCDPluginCASMenu {
       array($this, 'displayMenu')
     );
 
+    $this->addConnectionSection();
+    $this->addAuthorizationSection();
+  }
+
+  public function registerOptionsDefaults(){
     register_setting( 
       $this->slug, 
       $this->optionsSlug,
@@ -26,11 +33,13 @@ class UCDPluginCASMenu {
           $this->slug . "_field_host" => "ssodev.ucdavis.edu",
           $this->slug . "_field_port" => "443",
           $this->slug . "_field_uri" => "cas",
-          $this->slug . "_field_validation_path" => ""
+          $this->slug . "_field_validation_path" => "",
+          $this->slug . "_field_validation_uri" => "p3/serviceValidate",
+          $this->slug . "_field_access_denied_message" => "You are not authorized to login to this site.",
+          $this->slug . "_field_blacklist" => ""
         )
       )
      );
-    $this->addConnectionSection();
   }
 
   public function addConnectionSection(){
@@ -42,61 +51,65 @@ class UCDPluginCASMenu {
       $this->slug
     );
 
-    add_settings_field(
-      $this->slug . "_field_host",
-      "Host",
-      array($this, "displayFieldsConnection"),
-      $this->slug,
-      $sectionSlug,
-      array(
-        'label_for' => $this->slug . "_field_host"
-      )
+    $fields = array(
+      array("slug" => "host", "label" => "Host", "env" => $this->env['host']),
+      array("slug" => "port", "label" => "Port"),
+      array("slug" => "uri", "label" => "URI"),
+      array("slug" => "validation", "label" => "Do SSL Server Validation"),
+      array("slug" => "validation_path", "label" => "SSL Server Validation Cert Path"),
+      array("slug" => "validation_uri", "label" => "SSL Server Validation URI")
     );
 
-    add_settings_field(
-      $this->slug . "_field_port",
-      "Port",
-      array($this, "displayFieldsConnection"),
-      $this->slug,
+    $this->addSettingsFields($fields, "displayFieldsConnection", $sectionSlug);
+  }
+
+  public function addAuthorizationSection(){
+    $sectionSlug = $this->slug . "_section_authorization";
+    add_settings_section(
       $sectionSlug,
-      array(
-        'label_for' => $this->slug . "_field_port"
-      )
+      "Authorization", 
+      array($this, "displaySectionAuthorization"),
+      $this->slug
     );
 
-    add_settings_field(
-      $this->slug . "_field_uri",
-      "URI",
-      array($this, "displayFieldsConnection"),
-      $this->slug,
-      $sectionSlug,
-      array(
-        'label_for' => $this->slug . "_field_uri"
-      )
+    $fields = array(
+      array("slug" => "prevent_user_creation", "label" => "Don't Create Users after Authentication"),
+      array("slug" => "blacklist", "label" => "Blacklist"),
+      array("slug" => "access_denied_message", "label" => "Access Denied Message"),
     );
 
-    add_settings_field(
-      $this->slug . "_field_validation",
-      "Do SSL Server Validation",
-      array($this, "displayFieldsConnection"),
-      $this->slug,
-      $sectionSlug,
-      array(
-        'label_for' => $this->slug . "_field_validation"
-      )
-    );
+    $this->addSettingsFields($fields, "displayFieldsAuthorization", $sectionSlug);
+  }
 
-    add_settings_field(
-      $this->slug . "_field_validation_path",
-      "SSL Server Validation Cert Path",
-      array($this, "displayFieldsConnection"),
-      $this->slug,
-      $sectionSlug,
-      array(
-        'label_for' => $this->slug . "_field_validation_path"
-      )
-    );
+  public function addSettingsFields( $fields, $sectionCb, $sectionSlug){
+    foreach ($fields as $field) {
+      $f = $this->slug . "_field_" . $field['slug'];
+      $contextArgs = array(
+        'label_for' => $f,
+        'short_slug' => $field['slug']
+      );
+      if ( array_key_exists('env', $field) ) $contextArgs['env'] = $field['env'];
+      add_settings_field(
+        $f,
+        $field['label'],
+        array($this, $sectionCb),
+        $this->slug,
+        $sectionSlug,
+        $contextArgs
+      );
     }
+  }
+
+  public function displayFieldsAuthorization( $args ){
+    $context = array(
+      "args" => $args,
+      "options" => get_option( $this->optionsSlug ),
+      "slug" => $this->slug,
+      "optionsSlug" => $this->optionsSlug
+    );
+
+    Timber::render( "@" . $this->slug . "/fields/authorization.twig", $context );
+  }
 
   public function displaySectionConnection( $args ){
     $context = array(
@@ -115,6 +128,19 @@ class UCDPluginCASMenu {
     Timber::render( "@" . $this->slug . "/fields/connection.twig", $context );
   }
 
+  public function displaySectionAuthorization( $args ){
+    $context = array(
+      "args" => $args
+    );
+    Timber::render( "@" . $this->slug . "/sections/authorization.twig", $context );
+  }
+
+  public function textAreaToArray($text){
+    $arr = explode("\n", $text);
+    $arr = array_map("trim", $arr);
+    return $arr;
+  }
+
   public function displayMenu(){
     if ( ! current_user_can( $this->capability ) ) {
       return;
@@ -123,6 +149,10 @@ class UCDPluginCASMenu {
       "title" => $this->title,
       "slug" => $this->slug
     );
+
+    if ( ! class_exists( 'phpCAS' ) ) {
+      $context['cas_not_installed'] = true;
+    }
 
     Timber::render( "@" . $this->slug . "/menu.twig", $context );
   }
