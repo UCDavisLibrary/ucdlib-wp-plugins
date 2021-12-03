@@ -1,12 +1,12 @@
 {% extends getUcdTemplate('base') %}
 
-{% block content_container %}
-  <div class="l-container">
-    <div class="l-content u-space-mt--large">
-      <div class="panel panel--center o-box u-space-mb--flush">
-        <h2 class="heading--weighted-underline">Central Authentication Service (CAS)</h2>
-        <p>{{message}}</p>
-      </div>
+{% block content %}
+
+    <div class="panel panel--center o-box u-space-mb--flush u-space-mt--large">
+    <h2 class="heading--weighted-underline">Central Authentication Service (CAS)</h2>
+    <p>{{message}}</p>
+    {% if request_access_link %}
+        <a href="{{request_access_link}}" class="btn--primary">Request Access</a>
+    {% endif %}
     </div>
-  </div>
 {% endblock %}

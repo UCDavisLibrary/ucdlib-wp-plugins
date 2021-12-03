@@ -1,13 +1,8 @@
-{% if args.short_slug == 'host' %}
-  <input 
-    id="{{args.label_for}}" 
-    class="regular-text code"
-    name="{{optionsSlug}}[{{args.label_for}}]" 
-    type="text"
-    value="{{options[args.label_for]}}"
-    {{args.env ? 'readonly'}}
-    required>
-  {% if args.env %}
+{% from "@ucd-cas/macros.twig" import regularTextInput, smallTextInput, checkbox %}
+{% if field.args.short_slug == 'host' %}
+
+  {{ regularTextInput(field, true) }}
+  {% if field.args.env %}
     <p class="description">
       Value is currently being set by an environmental variable and is readonly.
     </p>
@@ -20,60 +15,32 @@
   </p>
 {% endif %}
 
-{% if args.short_slug == 'port' %}
-  <input 
-    id="{{args.label_for}}" 
-    class="small-text"
-    name="{{optionsSlug}}[{{args.label_for}}]" 
-    type="text"
-    value="{{options[args.label_for]}}"
-    required>
+{% if field.args.short_slug == 'port' %}
+  {{ smallTextInput(field) }}
   <p class="description">This is almost always going to be '443'</p>
 {% endif %}
 
-{% if args.short_slug == 'uri' %}
-  <input 
-    id="{{args.label_for}}" 
-    class="regular-text code"
-    name="{{optionsSlug}}[{{args.label_for}}]" 
-    type="text"
-    value="{{options[args.label_for]}}"
-    required>
+{% if field.args.short_slug == 'uri' %}
+  {{ regularTextInput(field, true) }} 
   <p class="description">
   UC Davis CAS servers are located at the <code>cas</code> URI
   </p>
 {% endif %}
 
-{% if args.short_slug == 'validation' %}
-  <input 
-    id="{{args.label_for}}" 
-    class=""
-    name="{{optionsSlug}}[{{args.label_for}}]" 
-    type="checkbox"
-    value="1"
-    {{options[args.label_for] == "1" ? 'checked'}}>
+{% if field.args.short_slug == 'validation' %}
+  {{ checkbox(field) }}
   <p class="description">Enables SSL validation of the CAS server</p>
 {% endif %}
 
-{% if args.short_slug == 'validation_path' %}
-  <input 
-    id="{{args.label_for}}" 
-    class="regular-text code"
-    name="{{optionsSlug}}[{{args.label_for}}]" 
-    type="text"
-    value="{{options[args.label_for]}}">
+{% if field.args.short_slug == 'validation_path' %}
+  {{ regularTextInput(field, true) }}  
   <p class="description">
   If using SSL validation, enter path to CA certificate that is the issuer of the CAS cert
   </p>
 {% endif %}
 
-{% if args.short_slug == 'validation_uri' %}
-  <input 
-    id="{{args.label_for}}" 
-    class="regular-text code"
-    name="{{optionsSlug}}[{{args.label_for}}]" 
-    type="text"
-    value="{{options[args.label_for]}}">
+{% if field.args.short_slug == 'validation_uri' %}
+  {{ regularTextInput(field, true) }} 
   <p class="description">
   If using SSL validation, what is the server uri? Should be <code>p3/serviceValidate</code> for UC Davis.
   </p>

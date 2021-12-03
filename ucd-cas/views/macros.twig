@@ -1,0 +1,62 @@
+{% macro regularTextInput( field, code ) %}
+  {% set class = "regular-text" %}
+  {% if code %}
+    {% set class = class~" code" %}
+  {% endif %}
+  {% if field.env %}
+    {% set value = field.env %}
+  {% else %}
+    {% set value = field.options[field.args.label_for] %}
+  {% endif %}
+  <input 
+    id="{{field.args.label_for}}" 
+    class="{{class}}"
+    name="{{field.optionsSlug}}[{{field.args.label_for}}]" 
+    type="text"
+    value="{{value}}"
+    {{field.args.env ? 'readonly'}}
+    {{field.args.required ? "required"}}>
+{% endmacro %}
+
+{% macro smallTextInput( field, code ) %}
+  {% set class = "small-text" %}
+  {% if code %}
+    {% set class = class~" code" %}
+  {% endif %}
+  {% if field.env %}
+    {% set value = field.env %}
+  {% else %}
+    {% set value = field.options[field.args.label_for] %}
+  {% endif %}
+  <input 
+    id="{{field.args.label_for}}" 
+    class="{{class}}"
+    name="{{field.optionsSlug}}[{{field.args.label_for}}]" 
+    type="text"
+    value="{{value}}"
+    {{field.args.required ? "required"}}>
+{% endmacro %}
+
+{% macro textArea( field, size="regular", rows="5") %}
+  {% set class = size~"-text" %}
+  {% if field.env %}
+    {% set value = field.env %}
+  {% else %}
+    {% set value = field.options[field.args.label_for] %}
+  {% endif %}
+  <textarea 
+  name="{{field.optionsSlug}}[{{field.args.label_for}}]"
+  class="{{class}}"
+  id="{{field.args.label_for}}" 
+  rows="{{rows}}" 
+  >{{value}}</textarea>
+{% endmacro %}
+
+{% macro checkbox(field) %}
+  <input 
+    id="{{field.args.label_for}}" 
+    name="{{field.optionsSlug}}[{{field.args.label_for}}]" 
+    type="checkbox"
+    value="1"
+    {{field.options[field.args.label_for] == "1" ? 'checked'}}>
+{% endmacro %}

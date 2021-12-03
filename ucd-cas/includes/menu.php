@@ -36,7 +36,10 @@ class UCDPluginCASMenu {
           $this->slug . "_field_validation_path" => "",
           $this->slug . "_field_validation_uri" => "p3/serviceValidate",
           $this->slug . "_field_access_denied_message" => "You are not authorized to login to this site.",
-          $this->slug . "_field_blacklist" => ""
+          $this->slug . "_field_access_denied_link" => "",
+          $this->slug . "_field_blacklist" => "",
+          $this->slug . "_field_whitelist" => "",
+          $this->slug . "_field_deptlist" => "060500",
         )
       )
      );
@@ -52,9 +55,9 @@ class UCDPluginCASMenu {
     );
 
     $fields = array(
-      array("slug" => "host", "label" => "Host", "env" => $this->env['host']),
-      array("slug" => "port", "label" => "Port"),
-      array("slug" => "uri", "label" => "URI"),
+      array("slug" => "host", "label" => "Host", "env" => $this->env['host'], "required" => true),
+      array("slug" => "port", "label" => "Port", "required" => true),
+      array("slug" => "uri", "label" => "URI", "required" => true),
       array("slug" => "validation", "label" => "Do SSL Server Validation"),
       array("slug" => "validation_path", "label" => "SSL Server Validation Cert Path"),
       array("slug" => "validation_uri", "label" => "SSL Server Validation URI")
@@ -74,8 +77,12 @@ class UCDPluginCASMenu {
 
     $fields = array(
       array("slug" => "prevent_user_creation", "label" => "Don't Create Users after Authentication"),
+      array("slug" => "prevent_deptlist", "label" => "Don't Use Department Access List"),
+      array("slug" => "deptlist", "label" => "Department Access List"),
       array("slug" => "blacklist", "label" => "Blacklist"),
+      array("slug" => "whitelist", "label" => "Whitelist"),
       array("slug" => "access_denied_message", "label" => "Access Denied Message"),
+      array("slug" => "access_denied_link", "label" => "Link to Request Access"),
     );
 
     $this->addSettingsFields($fields, "displayFieldsAuthorization", $sectionSlug);
@@ -89,6 +96,7 @@ class UCDPluginCASMenu {
         'short_slug' => $field['slug']
       );
       if ( array_key_exists('env', $field) ) $contextArgs['env'] = $field['env'];
+      if ( array_key_exists('required', $field) ) $contextArgs['required'] = $field['required'];
       add_settings_field(
         $f,
         $field['label'],
@@ -101,13 +109,13 @@ class UCDPluginCASMenu {
   }
 
   public function displayFieldsAuthorization( $args ){
-    $context = array(
+    $field = array(
       "args" => $args,
       "options" => get_option( $this->optionsSlug ),
       "slug" => $this->slug,
       "optionsSlug" => $this->optionsSlug
     );
-
+    $context = array("field" => $field);
     Timber::render( "@" . $this->slug . "/fields/authorization.twig", $context );
   }
 
@@ -119,12 +127,13 @@ class UCDPluginCASMenu {
   }
 
   public function displayFieldsConnection( $args ){
-    $context = array(
+    $field = array(
       "args" => $args,
       "options" => get_option( $this->optionsSlug ),
       "slug" => $this->slug,
       "optionsSlug" => $this->optionsSlug
     );
+    $context = array("field" => $field);
     Timber::render( "@" . $this->slug . "/fields/connection.twig", $context );
   }
 
@@ -133,12 +142,6 @@ class UCDPluginCASMenu {
       "args" => $args
     );
     Timber::render( "@" . $this->slug . "/sections/authorization.twig", $context );
-  }
-
-  public function textAreaToArray($text){
-    $arr = explode("\n", $text);
-    $arr = array_map("trim", $arr);
-    return $arr;
   }
 
   public function displayMenu(){
