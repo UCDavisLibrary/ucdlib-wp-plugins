@@ -46,3 +46,12 @@ function show_custom_template( $templates, $context ) {
 } 
 add_filter( 'ucd-theme_templates_single', 'show_custom_template', 10, 2 );
 ```
+
+## Advanced Custom Fields (ACF)
+Many of these plugins require that [ACF](https://www.advancedcustomfields.com) be installed and activated. If a plugin uses ACF and you want to edit the fields through the WP admin dashboard:
+1. Create a folder in `ucdlib-theme-wp/theme` called `acf-json`. This is where your changes will be saved to (as JSON files).
+2. Copy the JSON file you edited over into `ucdlib-wp-plugins/<plugin-you're-working-on>/wp-json`
+
+To ensure that there is no data loss when editing:
+1. Increment the `modified` field in the JSON file before editing
+2. Synchronize the field in the admin dashboard. This ensures that the version-controlled JSON file is the source of truth, and not whatever happens to be in the database.
