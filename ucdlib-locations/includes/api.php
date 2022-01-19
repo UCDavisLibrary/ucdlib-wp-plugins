@@ -16,7 +16,17 @@ class UCDLibPluginLocationsAPI {
   }
 
   public function epcb_locations($request){
-    return array('hello' => 'world');
+    $locations = Timber::get_posts( [
+      'post_type' => $this->config['postTypeSlug'],
+      'nopaging' => true,
+    ] );
+
+    $out = array();
+    foreach ($locations as $location) {
+      $loc = $location->core_data();
+      $out[] = $loc;
+    }
+    return $out;
   }
   
 }
