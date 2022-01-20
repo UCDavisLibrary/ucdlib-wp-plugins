@@ -1,12 +1,111 @@
 {
     "key": "group_61e877b492c24",
-    "title": "Hours and Occupancy",
-    "fields": [],
+    "title": "Operating Hours",
+    "fields": [
+        {
+            "key": "field_61e967a441d42",
+            "label": "Has Operating Hours",
+            "name": "has_operating_hours",
+            "type": "true_false",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "message": "This location has operating hours that can be displayed to the public",
+            "default_value": 0,
+            "ui": 1,
+            "ui_on_text": "",
+            "ui_off_text": ""
+        },
+        {
+            "key": "field_61e9826fa84ad",
+            "label": "Appointments",
+            "name": "appointments",
+            "type": "group",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "layout": "table",
+            "sub_fields": [
+                {
+                    "key": "field_61e982b7a84ae",
+                    "label": "Appt Required",
+                    "name": "required",
+                    "type": "true_false",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "12",
+                        "class": "",
+                        "id": ""
+                    },
+                    "message": "",
+                    "default_value": 0,
+                    "ui": 1,
+                    "ui_on_text": "",
+                    "ui_off_text": ""
+                },
+                {
+                    "key": "field_61e9844ecbe3b",
+                    "label": "Link Text",
+                    "name": "link_text",
+                    "type": "text",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "Appointment Required",
+                    "placeholder": "",
+                    "prepend": "",
+                    "append": "",
+                    "maxlength": ""
+                },
+                {
+                    "key": "field_61e98506cbe3c",
+                    "label": "Link Url",
+                    "name": "link_url",
+                    "type": "text",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "",
+                    "placeholder": "",
+                    "prepend": "",
+                    "append": "",
+                    "maxlength": ""
+                }
+            ]
+        }
+    ],
     "location": [
         [
             {
                 "param": "post_type",
                 "operator": "==",
+                "value": "location"
+            },
+            {
+                "param": "post_type",
+                "operator": "!=",
                 "value": "location"
             }
         ]
@@ -18,7 +117,7 @@
     "instruction_placement": "label",
     "hide_on_screen": "",
     "active": true,
-    "description": "Locations: Hours and Occupancy Settings",
+    "description": "Locations: Hours Settings",
     "show_in_rest": 0,
-    "modified": 1642625747
+    "modified": 1642706400
 }

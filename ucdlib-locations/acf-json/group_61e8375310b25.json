@@ -94,6 +94,32 @@
             "maxlength": ""
         },
         {
+            "key": "field_61e97cad01e7b",
+            "label": "Redirect to Custom Url",
+            "name": "redirect_to_custom_url",
+            "type": "true_false",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_61e8382754495",
+                        "operator": "!=empty"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "message": "The native Wordpress post for this location will redirect to the custom url specified above",
+            "default_value": 0,
+            "ui": 1,
+            "ui_on_text": "",
+            "ui_off_text": ""
+        },
+        {
             "key": "field_61e86fb5d2ea9",
             "label": "Parent Location",
             "name": "parent",
@@ -122,6 +148,11 @@
                 "param": "post_type",
                 "operator": "==",
                 "value": "location"
+            },
+            {
+                "param": "post_type",
+                "operator": "!=",
+                "value": "location"
             }
         ]
     ],
@@ -134,5 +165,5 @@
     "active": true,
     "description": "Locations: Core information",
     "show_in_rest": 0,
-    "modified": 1642629283
+    "modified": 1642706008
 }

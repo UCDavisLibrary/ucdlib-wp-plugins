@@ -1,0 +1,49 @@
+{
+    "key": "group_61e96c2d7efe2",
+    "title": "Occupancy",
+    "fields": [
+        {
+            "key": "field_61e9b56fbcb79",
+            "label": "Show Current Occupancy",
+            "name": "show_current_occupancy",
+            "type": "true_false",
+            "instructions": "Shows current location occupancy in applicable views",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "message": "",
+            "default_value": 0,
+            "ui": 1,
+            "ui_on_text": "",
+            "ui_off_text": ""
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "post_type",
+                "operator": "==",
+                "value": "location"
+            },
+            {
+                "param": "post_type",
+                "operator": "!=",
+                "value": "location"
+            }
+        ]
+    ],
+    "menu_order": 2,
+    "position": "normal",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": "",
+    "active": true,
+    "description": "Locations: Occupancy Settings",
+    "show_in_rest": 0,
+    "modified": 1642706370
+}

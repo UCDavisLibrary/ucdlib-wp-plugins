@@ -12,6 +12,7 @@ class UCDLibPluginLocationsAPI {
     register_rest_route($this->config['slug'], 'locations', array(
       'methods' => 'GET',
       'callback' => array($this, 'epcb_locations'),
+      'permission_callback' => function (){return true;}
     ) );
   }
 

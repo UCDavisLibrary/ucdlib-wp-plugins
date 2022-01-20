@@ -47,10 +47,10 @@ class UCDLibPluginLocationsPostTypes {
 		  ),
       'supports' => array(
         'title', 
-        //'editor', 
+        'editor', 
         //'author', 
         'thumbnail', 
-        'excerpt', 
+        // 'excerpt', 
         //'revisions',
         'page-attributes'
       )
