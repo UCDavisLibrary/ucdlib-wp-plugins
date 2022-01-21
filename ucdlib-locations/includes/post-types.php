@@ -5,8 +5,29 @@ class UCDLibPluginLocationsPostTypes {
     $this->config = $config;
 
     add_action( 'init', array($this, 'registerLocation') );
+    add_filter( 'ucd-theme/context/single', array($this, 'getLocationContext') );
+    add_filter( 'ucd-theme/templates/single', array($this, 'getLocationTemplate'), 10, 2 );
   }
 
+  // alter context before calling the location view
+  public function getLocationContext($context){
+    if ( $context['post']->post_type !== 'location' ) return $context;
+
+    $context['foo'] = "I'm a location page. Damn glad to meet ya.";
+
+    return $context;
+  }
+
+  // register location twig view
+  public function getLocationTemplate( $templates, $context ){
+    if ( $context['post']->post_type !== 'location' ) return $templates;
+    
+    $templates = array_merge( array("@" . $this->config['slug'] . "/location.twig"), $templates );
+
+    return $templates;
+  }
+
+  // register the location post type
   public function registerLocation(){
 
     $labels = array(

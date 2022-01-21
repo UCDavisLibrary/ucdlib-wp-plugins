@@ -111,6 +111,99 @@
                     "maxlength": ""
                 }
             ]
+        },
+        {
+            "key": "field_61eae08f73712",
+            "label": "Springshare Libcal",
+            "name": "api_libcal",
+            "type": "group",
+            "instructions": "Used for location hours.\r\nhttps:\/\/ucdavis.libcal.com\/admin\/api\/1.1",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "layout": "block",
+            "sub_fields": [
+                {
+                    "key": "field_61eae13f73713",
+                    "label": "Client ID",
+                    "name": "client_id",
+                    "type": "text",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "",
+                    "placeholder": "",
+                    "prepend": "",
+                    "append": "",
+                    "maxlength": ""
+                },
+                {
+                    "key": "field_61eae14873714",
+                    "label": "Client Secret",
+                    "name": "client_secret",
+                    "type": "text",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "",
+                    "placeholder": "",
+                    "prepend": "",
+                    "append": "",
+                    "maxlength": ""
+                },
+                {
+                    "key": "field_61eae1f173716",
+                    "label": "URL (Hours)",
+                    "name": "url_hours",
+                    "type": "text",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "https:\/\/ucdavis.libcal.com\/api\/1.1\/hours",
+                    "placeholder": "",
+                    "prepend": "",
+                    "append": "",
+                    "maxlength": ""
+                },
+                {
+                    "key": "field_61eae16273715",
+                    "label": "URL (Auth)",
+                    "name": "url_auth",
+                    "type": "text",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "https:\/\/ucdavis.libcal.com\/1.1\/oauth\/token",
+                    "placeholder": "",
+                    "prepend": "",
+                    "append": "",
+                    "maxlength": ""
+                }
+            ]
         }
     ],
     "location": [
@@ -136,5 +229,5 @@
     "active": true,
     "description": "Locations: Credentials for interacting with third-party APIs",
     "show_in_rest": 0,
-    "modified": 1642105363
+    "modified": 1642783257
 }

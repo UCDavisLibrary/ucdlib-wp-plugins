@@ -7,7 +7,7 @@ class UCDLibPluginLocationsACF {
 
     add_action( 'acf/init', array($this, 'register_options_page') );
     add_filter( 'acf/settings/load_json', array($this, 'add_json_load_point') );
-    add_action('acf/input/admin_head', array($this, 'move_block_editor'));
+    add_action( 'acf/input/admin_head', array($this, 'move_block_editor') );
   }
 
   public function register_options_page(){
@@ -31,6 +31,8 @@ class UCDLibPluginLocationsACF {
    * https://www.advancedcustomfields.com/resources/moving-wp-elements-content-editor-within-acf-fields/
    */
   public function move_block_editor(){
+    global $typenow;
+    if ( !isset($typenow) || $typenow !== 'location' ) return;
     ?>
     <script type="text/javascript">
     (function($) {
@@ -53,6 +55,12 @@ class UCDLibPluginLocationsACF {
         
     })(jQuery);    
     </script>
+    <style type="text/css">
+        .interface-interface-skeleton__body {
+          flex-grow: 0 !important;
+        }
+    </style>
+    
     <?php   
   }
   

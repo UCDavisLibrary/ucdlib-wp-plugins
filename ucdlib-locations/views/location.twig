@@ -1,0 +1,8 @@
+{% extends getUcdTemplate('base') %}
+
+{% block content %}
+  <p>{{foo}}</p>
+  {{dump(post.core_data)}}
+  {{post.content}}
+{% endblock %}
+

@@ -23,8 +23,8 @@ The UCD theme contains many [twig macros](https://github.com/UCDavisLibrary/ucdl
 The UC Davis theme has [hook filters](https://developer.wordpress.org/plugins/hooks/custom-hooks/) on the  context and twig variables for every [template file](https://developer.wordpress.org/themes/basics/template-files/#template-files) that it uses. Plugins can hook into these filters to modify the routing behavior of a site. The slug format is as follows:
 | Slug Format | Filtered Variable |
 | ----------- | -------- |
-| ucd-theme_templates_<template_file> | `$templates` | 
-| ucd-theme_context_<template_file> | `$context` |
+| ucd-theme/templates/<template_file> | `$templates` | 
+| ucd-theme/context/<template_file> | `$context` |
 
 ### Examples
 
@@ -36,7 +36,7 @@ function pass_new_variables_to_the_template( $context ) {
     }
     return $context;
 } 
-add_filter( 'ucd-theme_context_single', 'pass_new_variables_to_the_template' );
+add_filter( 'ucd-theme/context/single', 'pass_new_variables_to_the_template' );
 
 function show_custom_template( $templates, $context ) {             
     if ( $context['post']->post_type == 'book' ){
@@ -44,7 +44,7 @@ function show_custom_template( $templates, $context ) {
     }
     return $templates;
 } 
-add_filter( 'ucd-theme_templates_single', 'show_custom_template', 10, 2 );
+add_filter( 'ucd-theme/templates/single', 'show_custom_template', 10, 2 );
 ```
 
 ## Advanced Custom Fields (ACF)

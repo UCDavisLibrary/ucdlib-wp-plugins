@@ -25,6 +25,8 @@ class UCDLibPluginLocationsAPI {
     $out = array();
     foreach ($locations as $location) {
       $loc = $location->core_data();
+
+      $loc['hours'] = $location->get_hours();
       $out[] = $loc;
     }
     return $out;
