@@ -1,0 +1,67 @@
+{
+    "key": "group_61eb2641e963b",
+    "title": "Operating Hours",
+    "fields": [
+        {
+            "key": "field_61eb266de4c64",
+            "label": "Number of Weeks to Display",
+            "name": "hours_weeks",
+            "type": "number",
+            "instructions": "On a location's hours widget, how many weeks should display beyond the current week.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": 4,
+            "placeholder": "",
+            "prepend": "",
+            "append": "",
+            "min": 1,
+            "max": 12,
+            "step": 1
+        },
+        {
+            "key": "field_61eec607d28ec",
+            "label": "Cache Duration",
+            "name": "hours_cache_duration",
+            "type": "number",
+            "instructions": "Number of seconds operating hours from third-party APIs should be cached. To clear all caches, hit the 'update' button on this page.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": 300,
+            "placeholder": "",
+            "prepend": "",
+            "append": "",
+            "min": 1,
+            "max": "",
+            "step": 1
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "options_page",
+                "operator": "==",
+                "value": "acf-options-settings"
+            }
+        ]
+    ],
+    "menu_order": 0,
+    "position": "normal",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": "",
+    "active": true,
+    "description": "Locations: Global Hours Settings",
+    "show_in_rest": 0,
+    "modified": 1643041116
+}

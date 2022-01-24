@@ -20,6 +20,99 @@
             "esc_html": 0
         },
         {
+            "key": "field_61eae08f73712",
+            "label": "Springshare Libcal",
+            "name": "api_libcal",
+            "type": "group",
+            "instructions": "Used for location hours.\r\nhttps:\/\/ucdavis.libcal.com\/admin\/api\/1.1",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "layout": "block",
+            "sub_fields": [
+                {
+                    "key": "field_61eae13f73713",
+                    "label": "Client ID",
+                    "name": "client_id",
+                    "type": "text",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "",
+                    "placeholder": "",
+                    "prepend": "",
+                    "append": "",
+                    "maxlength": ""
+                },
+                {
+                    "key": "field_61eae14873714",
+                    "label": "Client Secret",
+                    "name": "client_secret",
+                    "type": "text",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "",
+                    "placeholder": "",
+                    "prepend": "",
+                    "append": "",
+                    "maxlength": ""
+                },
+                {
+                    "key": "field_61eae1f173716",
+                    "label": "URL (Hours)",
+                    "name": "url_hours",
+                    "type": "text",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "https:\/\/ucdavis.libcal.com\/api\/1.1\/hours",
+                    "placeholder": "",
+                    "prepend": "",
+                    "append": "",
+                    "maxlength": ""
+                },
+                {
+                    "key": "field_61eae16273715",
+                    "label": "URL (Auth)",
+                    "name": "url_auth",
+                    "type": "text",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "https:\/\/ucdavis.libcal.com\/1.1\/oauth\/token",
+                    "placeholder": "",
+                    "prepend": "",
+                    "append": "",
+                    "maxlength": ""
+                }
+            ]
+        },
+        {
             "key": "field_61e08451e3421",
             "label": "Sensource Vea",
             "name": "api_sensource_vea",
@@ -113,11 +206,11 @@
             ]
         },
         {
-            "key": "field_61eae08f73712",
-            "label": "Springshare Libcal",
-            "name": "api_libcal",
+            "key": "field_61ef054d54c84",
+            "label": "Sensource Safespace",
+            "name": "api_sensource_safespace",
             "type": "group",
-            "instructions": "Used for location hours.\r\nhttps:\/\/ucdavis.libcal.com\/admin\/api\/1.1",
+            "instructions": "Has current occupancy of a location (within 5 minutes)",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -128,9 +221,9 @@
             "layout": "block",
             "sub_fields": [
                 {
-                    "key": "field_61eae13f73713",
-                    "label": "Client ID",
-                    "name": "client_id",
+                    "key": "field_61ef05c154c85",
+                    "label": "URL",
+                    "name": "url",
                     "type": "text",
                     "instructions": "",
                     "required": 0,
@@ -140,64 +233,7 @@
                         "class": "",
                         "id": ""
                     },
-                    "default_value": "",
-                    "placeholder": "",
-                    "prepend": "",
-                    "append": "",
-                    "maxlength": ""
-                },
-                {
-                    "key": "field_61eae14873714",
-                    "label": "Client Secret",
-                    "name": "client_secret",
-                    "type": "text",
-                    "instructions": "",
-                    "required": 0,
-                    "conditional_logic": 0,
-                    "wrapper": {
-                        "width": "",
-                        "class": "",
-                        "id": ""
-                    },
-                    "default_value": "",
-                    "placeholder": "",
-                    "prepend": "",
-                    "append": "",
-                    "maxlength": ""
-                },
-                {
-                    "key": "field_61eae1f173716",
-                    "label": "URL (Hours)",
-                    "name": "url_hours",
-                    "type": "text",
-                    "instructions": "",
-                    "required": 0,
-                    "conditional_logic": 0,
-                    "wrapper": {
-                        "width": "",
-                        "class": "",
-                        "id": ""
-                    },
-                    "default_value": "https:\/\/ucdavis.libcal.com\/api\/1.1\/hours",
-                    "placeholder": "",
-                    "prepend": "",
-                    "append": "",
-                    "maxlength": ""
-                },
-                {
-                    "key": "field_61eae16273715",
-                    "label": "URL (Auth)",
-                    "name": "url_auth",
-                    "type": "text",
-                    "instructions": "",
-                    "required": 0,
-                    "conditional_logic": 0,
-                    "wrapper": {
-                        "width": "",
-                        "class": "",
-                        "id": ""
-                    },
-                    "default_value": "https:\/\/ucdavis.libcal.com\/1.1\/oauth\/token",
+                    "default_value": "https:\/\/app.safespace.io\/api\/raw-data\/live-occupancy",
                     "placeholder": "",
                     "prepend": "",
                     "append": "",
@@ -220,7 +256,7 @@
             }
         ]
     ],
-    "menu_order": 0,
+    "menu_order": 1,
     "position": "normal",
     "style": "default",
     "label_placement": "top",
@@ -229,5 +265,5 @@
     "active": true,
     "description": "Locations: Credentials for interacting with third-party APIs",
     "show_in_rest": 0,
-    "modified": 1642783257
+    "modified": 1643054556
 }

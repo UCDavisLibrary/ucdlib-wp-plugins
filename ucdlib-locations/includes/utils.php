@@ -19,4 +19,28 @@ class UCDLibPluginLocationsUtils {
 
     return array($start->format('Y-m-d'), $end->format('Y-m-d'));
   }
+
+  public static function getTodaysHours($hours){
+    $today = new DateTime('now', new DateTimeZone('America/Los_Angeles'));
+    $today = $today->format('Y-m-d');
+
+    $out = [
+      'status' => $hours['status']
+    ];
+
+    foreach (['status', 'source', 'message', 'cached'] as $field) {
+      if ( array_key_exists($field, $hours) ){
+        $out[$field] = $hours[$field];
+      }
+    }
+
+    if ( !array_key_exists('data', $hours) || !is_array($hours['data']) ){
+      $out['data'] = false;
+    } elseif ( !array_key_exists($today, $hours['data']) ) {
+      $out['data'] = false;
+    } else {
+      $out['data'] = $hours['data'][$today];
+    }
+    return $out;
+  }
 }

@@ -8,6 +8,7 @@ class UCDLibPluginLocationsACF {
     add_action( 'acf/init', array($this, 'register_options_page') );
     add_filter( 'acf/settings/load_json', array($this, 'add_json_load_point') );
     add_action( 'acf/input/admin_head', array($this, 'move_block_editor') );
+    add_action( 'acf/save_post', array($this, 'clear_all_transients'), 20 );
   }
 
   public function register_options_page(){
@@ -24,6 +25,24 @@ class UCDLibPluginLocationsACF {
   public function add_json_load_point( $paths ) {
     $paths[] = WP_PLUGIN_DIR . "/" . $this->config['slug'] . '/acf-json';
     return $paths;
+  }
+
+  // clears transients used to cache location data
+  public function clear_all_transients(  ){
+    $screen = get_current_screen();
+    if (
+      strpos($screen->id, "acf-options-settings") == true &&
+      $screen->post_type === $this->config['postTypeSlug']
+      ) {
+      delete_transient('libcal_token');
+      $locations = Timber::get_posts( [
+        'post_type' => $this->config['postTypeSlug'],
+        'nopaging' => true,
+      ] );
+      foreach ($locations as $location) {
+        delete_transient('libcal_hours_' . $location->ID);
+      }
+    }
   }
 
   /**

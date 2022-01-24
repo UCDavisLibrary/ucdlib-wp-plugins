@@ -1,4 +1,5 @@
 <?php
+require_once( __DIR__ . '/utils.php' );
 
 class UCDLibPluginLocationsAPI {
 
@@ -12,24 +13,49 @@ class UCDLibPluginLocationsAPI {
     register_rest_route($this->config['slug'], 'locations', array(
       'methods' => 'GET',
       'callback' => array($this, 'epcb_locations'),
-      'permission_callback' => function (){return true;}
+      'permission_callback' => function (){return true;},
+      'args' => [
+        'fields' => self::$location_fields
+      ]
     ) );
   }
 
   public function epcb_locations($request){
+    $fields = $request['fields'];
+    //return rest_ensure_response("hi there");
+
     $locations = Timber::get_posts( [
       'post_type' => $this->config['postTypeSlug'],
       'nopaging' => true,
     ] );
 
+
     $out = array();
     foreach ($locations as $location) {
       $loc = $location->core_data();
 
-      $loc['hours'] = $location->get_hours();
+
+      if ( in_array('hours', $fields) ) {
+        $loc['hours'] = $location->get_hours();
+      } elseif ( in_array('hours-today', $fields) ) {
+        $hours = $location->get_hours();
+        $loc['hoursToday'] = UCDLibPluginLocationsUtils::getTodaysHours($hours);
+      }
+
+      if ( in_array('occupancy-now', $fields) ) {
+        $loc['occupancyNow'] = $location->get_current_occupancy();
+      }
+
+      
       $out[] = $loc;
     }
-    return $out;
+    return rest_ensure_response($out);
   }
+
+  public static $location_fields = array(
+    'description' => 'Additional fields that can be returned with core location data.',
+    "type" => "array",
+    "default" => []
+  );
   
 }

@@ -53,6 +53,38 @@
             "save_other_choice": 0
         },
         {
+            "key": "field_61eb0248cb4e3",
+            "label": "Libcal Library\/Department ID",
+            "name": "libcal_id",
+            "type": "text",
+            "instructions": "Can be found here: https:\/\/ucdavis.libcal.com\/admin\/hours",
+            "required": 1,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_61e967a441d42",
+                        "operator": "==",
+                        "value": "1"
+                    },
+                    {
+                        "field": "field_61eafc0857cf6",
+                        "operator": "==",
+                        "value": "libcal"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": "",
+            "maxlength": ""
+        },
+        {
             "key": "field_61e9826fa84ad",
             "label": "Appointments",
             "name": "appointments",
@@ -125,38 +157,6 @@
                     "maxlength": ""
                 }
             ]
-        },
-        {
-            "key": "field_61eb0248cb4e3",
-            "label": "Libcal Library\/Department ID",
-            "name": "libcal_id",
-            "type": "text",
-            "instructions": "Can be found here: https:\/\/ucdavis.libcal.com\/admin\/hours",
-            "required": 1,
-            "conditional_logic": [
-                [
-                    {
-                        "field": "field_61e967a441d42",
-                        "operator": "==",
-                        "value": "1"
-                    },
-                    {
-                        "field": "field_61eafc0857cf6",
-                        "operator": "==",
-                        "value": "libcal"
-                    }
-                ]
-            ],
-            "wrapper": {
-                "width": "",
-                "class": "",
-                "id": ""
-            },
-            "default_value": "",
-            "placeholder": "",
-            "prepend": "",
-            "append": "",
-            "maxlength": ""
         }
     ],
     "location": [
@@ -182,5 +182,5 @@
     "active": true,
     "description": "Locations: Hours Settings",
     "show_in_rest": 0,
-    "modified": 1642791836
+    "modified": 1643058790
 }
