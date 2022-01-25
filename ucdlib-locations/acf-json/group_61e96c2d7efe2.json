@@ -3,6 +3,27 @@
     "title": "Occupancy",
     "fields": [
         {
+            "key": "field_61f05022f5435",
+            "label": "Max Capacity",
+            "name": "capacity",
+            "type": "number",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": "",
+            "min": 0,
+            "max": "",
+            "step": 1
+        },
+        {
             "key": "field_61e9b56fbcb79",
             "label": "Show Current Occupancy",
             "name": "show_current_occupancy",
@@ -20,6 +41,33 @@
             "ui": 1,
             "ui_on_text": "",
             "ui_off_text": ""
+        },
+        {
+            "key": "field_61f01c73899a8",
+            "label": "Sensource Safespace ID",
+            "name": "safespace_id",
+            "type": "text",
+            "instructions": "Go to https:\/\/vea.sensourceinc.com\/#\/login to find the id for a location.",
+            "required": 1,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_61e9b56fbcb79",
+                        "operator": "==",
+                        "value": "1"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": "",
+            "maxlength": ""
         }
     ],
     "location": [
@@ -45,5 +93,5 @@
     "active": true,
     "description": "Locations: Occupancy Settings",
     "show_in_rest": 0,
-    "modified": 1642706370
+    "modified": 1643139166
 }

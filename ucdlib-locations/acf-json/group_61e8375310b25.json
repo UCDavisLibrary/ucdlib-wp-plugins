@@ -136,10 +136,29 @@
                 "location"
             ],
             "taxonomy": "",
-            "allow_null": 0,
+            "allow_null": 1,
             "multiple": 0,
             "return_format": "id",
             "ui": 1
+        },
+        {
+            "key": "field_61f06287c3ada",
+            "label": "Is Not Collapsible",
+            "name": "not_collapsible",
+            "type": "true_false",
+            "instructions": "This location will not be displayed in the collapsible section of the main hours widget",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "message": "",
+            "default_value": 0,
+            "ui": 1,
+            "ui_on_text": "",
+            "ui_off_text": ""
         }
     ],
     "location": [
@@ -165,5 +184,5 @@
     "active": true,
     "description": "Locations: Core information",
     "show_in_rest": 0,
-    "modified": 1642706008
+    "modified": 1643145493
 }
