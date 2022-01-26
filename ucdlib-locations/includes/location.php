@@ -75,7 +75,17 @@ class UCDLibPluginLocationsLocation extends Timber\Post {
       return $this->get_current_occupancy;
     }
 
-    $this->get_current_occupancy = $this->get_safespace_occupancy();
+    // if current occupancy is not enabled on location page, bail
+    if ( !$this->meta('show_current_occupancy') ){
+      $out['status'] = 'good';
+      $out['message'] = "Location does not have public current capacity data";
+
+    // get current occupancy
+    } else {
+      $out = $this->get_safespace_occupancy();
+    }
+
+    $this->get_current_occupancy = $out;
     return $this->get_current_occupancy;
   }
 
@@ -85,13 +95,6 @@ class UCDLibPluginLocationsLocation extends Timber\Post {
       'data' => false,
       'source' => 'safespace'
     );
-
-    // if current occupancy is not enabled on location page, bail
-    if ( !$this->meta('show_current_occupancy') ){
-      $out['status'] = 'good';
-      $out['message'] = "Location does not have public current capacity data";
-      return $out;
-    }
   
     // check cache
     $transient_id = 'safespace_occupancy_' . $this->ID;
@@ -189,8 +192,11 @@ class UCDLibPluginLocationsLocation extends Timber\Post {
       'data' => false
     );
 
-    if ( $this->meta('hours_system') === 'libcal' ){
-  
+    if ( !$this->meta('has_operating_hours') ){
+      $out['status'] = 'good';
+      $out['message'] = "Location does not have public operating hours.";
+    }
+    elseif ( $this->meta('hours_system') === 'libcal' ){
       $out = $this->get_libcal_hours();
     } else {
       $out['message'] = "Operating hours not stored in a recognized system.";
@@ -207,13 +213,6 @@ class UCDLibPluginLocationsLocation extends Timber\Post {
       'data' => false,
       'source' => 'libcal'
     );
-
-    // if hours are not enabled on location admin page, bail.
-    if ( !$this->meta('has_operating_hours') ){
-      $out['status'] = 'good';
-      $out['message'] = "Location does not have public operating hours.";
-      return $out;
-    }
 
     // check cache
     $transient_id = 'libcal_hours_' . $this->ID;

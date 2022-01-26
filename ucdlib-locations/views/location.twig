@@ -2,6 +2,9 @@
 
 {% block content %}
   <p>{{foo}}</p>
+  <ucdlib-hours-today
+    api-host="{{site.site_url}}"
+  ></ucdlib-hours-today>
   {{dump(post.core_data)}}
   {{post.content}}
 {% endblock %}

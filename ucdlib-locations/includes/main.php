@@ -1,4 +1,5 @@
 <?php
+require_once( __DIR__ . '/assets.php' );
 require_once( __DIR__ . '/post-types.php' );
 require_once( __DIR__ . '/acf.php' );
 require_once( __DIR__ . '/api.php' );
@@ -10,10 +11,21 @@ class UCDLibPluginLocations {
 
     $config = array(
       'slug' => $this->slug,
-      'postTypeSlug' => 'location'
+      'postTypeSlug' => 'location',
+      'entryPath' => plugin_dir_path( __DIR__ ) . $this->slug . '.php',
+      'version' => false
     );
 
-    $config['api_credentials'] = $this->get_third_party_api_credentials($config['postTypeSlug']);
+    $plugin_metadata = get_file_data( $config['entryPath'], array(
+      'Version' => 'Version'
+    ) );
+
+    if ( ! empty( $plugin_metadata['Version'] ) ) {
+      $config['version'] = $plugin_metadata['Version'];
+    } 
+
+    // enqueue all assets
+    $this->assets = new UCDLibPluginLocationsAssets($config);
 
     // register 'location' post type
     $this->postTypes = new UCDLibPluginLocationsPostTypes($config);
@@ -27,13 +39,6 @@ class UCDLibPluginLocations {
     // register location views and custom Timber class
     $this->timber = new UCDLibPluginLocationsTimber($config);
 
-  }
-
-  // Retrieves third-party api credentials entered by an admin in an ACF menu
-  public function get_third_party_api_credentials( $menu_slug ){
-    $out = array();
-
-    return $out;
   }
 
 }

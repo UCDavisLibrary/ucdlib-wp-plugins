@@ -6,6 +6,17 @@ For a nice dockerized deployment pattern, see the [main website deployment repo]
 
 For general information on writing a plugin, refer to the [Wordpress Plugin Handbook](https://developer.wordpress.org/plugins). However, since these plugins are designed to be used with the UCD theme, you can take advantage of some custom development patterns listed in this readme.
 
+## Typical Plugin Structure
+| Directory/File | Description |
+| --------- | ----------- |
+| `acf-json` | Advanced Custom Fields (ACF) JSON load files. See section below |
+| `includes` | The plugin's core php. Ususally will be a collection of classes that hook onto WP actions and filters on instantiation |
+| `views` | Contains twig files for rendering views and blocks |
+| `src/editor` | JS/CSS source to be loaded by the WP editor/admin area |
+| `src/public` | JS/CSS source to be loaded by public-facing pages |
+| `assets` | Any static site assets |
+
+
 ## Twig Basics
 Since [twig](https://twig.symfony.com/doc/3.x/) is used by the UCD theme, feel free to use this templating language in your plugin.
 
