@@ -10,8 +10,13 @@ export class LocationsController{
 
       this._configValues = {
         host: {default: "https://library.ucdavis.edu", hostProp: 'apiHost'},
-        endpoint: {default: "wp-json/ucdlib-locations/locations", hostProp: 'apiEndpoint'}
+        endpoint: {default: "wp-json/ucdlib-locations/locations", hostProp: 'apiEndpoint'},
+        getChildren: {default: false, hostProp: 'showChildren'}
       }
+    }
+
+    hostConnected(){
+      console.log( this.makeAPIUrl() );
     }
 
     /**
@@ -21,10 +26,18 @@ export class LocationsController{
      * @returns the value
      */
     getConfigValue(key){
-      if (!key) return;
+      if (!key) {
+        console.warn("1 argument is required for 'getConfigValue' method.")
+        return;
+      }
       const value = this._configValues[key];
-      if ( !value ) return;
-      return this.host[value.hostProp] ? this.host[value.hostProp] : value.default;
+      if ( !value ) {
+        console.warn(`${key} is not a recognized config parameter.`);
+        return;
+      }
+
+      const hostValue = this.host[value.hostProp];
+      return hostValue == null || hostValue === "" ? value.default : this.host[value.hostProp];
     }
 
     makeAPIUrl(locationId=false, params={}){

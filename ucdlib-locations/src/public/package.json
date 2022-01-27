@@ -10,7 +10,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@ucd-lib/theme-elements": "^0.0.9"
+    "@lit-labs/task": "^1.1.1",
+    "@ucd-lib/theme-elements": "^0.0.9",
+    "@ucd-lib/theme-sass": "^5.0.16"
   },
   "devDependencies": {
     "@ucd-lib/cork-app-build": "^0.2.0",
