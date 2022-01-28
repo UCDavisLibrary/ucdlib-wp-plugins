@@ -4,6 +4,8 @@
   <p>{{foo}}</p>
   <ucdlib-hours-today
     api-host="{{site.site_url}}"
+    location="{{post.ID}}"
+    show-children
   ></ucdlib-hours-today>
   {{dump(post.core_data)}}
   {{post.content}}

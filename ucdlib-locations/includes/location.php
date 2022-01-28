@@ -155,11 +155,11 @@ class UCDLibPluginLocationsLocation extends Timber\Post {
 
     // check if libcal credentials are entered
     if ($this->meta('hours_system') === 'libcal') {
+      $creds = get_field('api_libcal', $this->post_type);
+
       if ( !$this->meta('libcal_id') ) {
         $out[] = 'Missing Libcal Library ID';
-      }
-      $creds = get_field('api_libcal', $this->post_type);
-      if ( 
+      } else if ( 
         !is_array( $creds ) ||
         !$creds['client_id'] ||
         !$creds['client_secret'] ||
@@ -167,8 +167,9 @@ class UCDLibPluginLocationsLocation extends Timber\Post {
         !$creds['url_auth']
         ) {
         $out[] = 'Missing libcal API credentials!';
+      } else {
+        $out[0] = true;
       }
-      $out[0] = true;
     } 
     
     else {
