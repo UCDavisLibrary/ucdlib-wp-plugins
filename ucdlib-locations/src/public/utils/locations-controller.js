@@ -1,6 +1,10 @@
 import {Task} from '@lit-labs/task';
 import {html} from 'lit';
+import { UcdlibLocation } from "./location-model";
 
+/**
+ * @classdesc Controller for fetching location data from ucdlib wordpress API
+ */
 export class LocationsController{
 
     /**
@@ -19,7 +23,7 @@ export class LocationsController{
         locationId: {default: 0, hostProp: 'location'},
         getChildren: {default: false, hostProp: 'showChildren'},
         taskMode: {default: 'interval', hostProp: 'ctlTaskMode', enum: ['interval', 'onConnected', 'manual']},
-        intervalLength: {default: 1000 * 60 * 5, hostProp: 'refreshRate'},
+        intervalLength: {default: 1000 * 60 * 15, hostProp: 'refreshRate'},
         useLocationId: {default: false, hostProp: 'useLocationId'},
         getCurrentOccupancy: {default: true, hostProp: 'getCurrentOccupancy'},
         getHours: {default: true, hostProp: 'getHours'}
@@ -66,8 +70,14 @@ export class LocationsController{
       }  
       const result = await response.json();
       this._data = result;
+      let out;
+      if ( Array.isArray( result ) ){
+        out = result.map(loc => new UcdlibLocation(loc) )
+      } else {
+        out = new UcdlibLocation(result);
+      }
       this.host.requestUpdate();
-      return result;
+      return out;
     }
 
     stopInterval(){
@@ -105,24 +115,6 @@ export class LocationsController{
       return url;
     }
 
-    locationHasHours(location){
-      if ( !location ) return false;
-      for (const field of ['hoursToday', 'hours']) {
-        if ( location[field] && location[field]['data'] ) return true;
-      }
-      return false;
-    }
-
-    getDaysHours(day){
-      const out = {
-        status: day.status
-      }
-      if (day.hours && Array.isArray(day.hours) ) {
-        out['hours'] = day.hours[0];
-      }
-      return out;
-    }
-
     render(renderFunctions) {
       return this.fetchTask.render(renderFunctions);
     }
@@ -150,4 +142,5 @@ export class LocationsController{
     renderRedText(text){
       return html`<span class="double-decker">${text}</span>`;
     }
+
   }

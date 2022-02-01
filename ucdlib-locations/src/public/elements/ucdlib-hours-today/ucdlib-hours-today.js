@@ -22,6 +22,7 @@ export default class UcdlibHoursToday extends LitElement {
       widgetTitle: {type: String, attribute: 'widget-title'},
       showChildren: {type: Boolean, attribute: 'show-children'},
       onlyShowChildren: {type: Boolean, attribute: 'only-show-children'},
+      hideCurrentOccupancy: {type: Boolean, attribute: 'hide-current-occupancy'},
       ctlTaskMode: {type: String, attribute: 'ctl-task-mode'},
       refreshRate: {type: Number, attribute: 'refresh-rate'},
       apiHost: {type: String, attribute: 'api-host'},
@@ -32,6 +33,10 @@ export default class UcdlibHoursToday extends LitElement {
 
   static get styles() {
     return styles();
+  }
+
+  willUpdate(){
+    this.getCurrentOccupancy = !this.hideCurrentOccupancy;
   }
 
   constructor() {
@@ -45,16 +50,6 @@ export default class UcdlibHoursToday extends LitElement {
     this.role = "complementary";
     this.ctl = new LocationsController(this);
 
-  }
-
-  _processData(apiResult){
-    const location = {
-      hasHours: this.ctl.locationHasHours(apiResult),
-    };
-    if ( location.hasHours ) {
-      location.hours = this.ctl.getDaysHours(apiResult.hoursToday.data);
-    }
-    return location;
   }
 
 }
