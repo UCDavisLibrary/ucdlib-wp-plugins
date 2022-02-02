@@ -188,17 +188,22 @@ class UCDLibPluginLocationsLocation extends Timber\Post {
       return $this->get_hours;
     }
 
+    $tz = new DateTimeZone('America/Los_Angeles');
+    $tz_offset = (new DateTime('now', $tz))->format('P');
+
     $out = array(
       'status' => 'error',
-      'data' => false
+      'data' => false,
+      'tzOffset' => $tz_offset
     );
+
 
     if ( !$this->meta('has_operating_hours') ){
       $out['status'] = 'good';
       $out['message'] = "Location does not have public operating hours.";
     }
     elseif ( $this->meta('hours_system') === 'libcal' ){
-      $out = $this->get_libcal_hours();
+      $out = array_merge($out, $this->get_libcal_hours());
     } else {
       $out['message'] = "Operating hours not stored in a recognized system.";
     }

@@ -24,23 +24,14 @@ class UCDLibPluginLocationsUtils {
     $today = new DateTime('now', new DateTimeZone('America/Los_Angeles'));
     $today = $today->format('Y-m-d');
 
-    $out = [
-      'status' => $hours['status']
-    ];
-
-    foreach (['status', 'source', 'message', 'cached'] as $field) {
-      if ( array_key_exists($field, $hours) ){
-        $out[$field] = $hours[$field];
-      }
-    }
-
     if ( !array_key_exists('data', $hours) || !is_array($hours['data']) ){
-      $out['data'] = false;
+      $todaysHours = false;
     } elseif ( !array_key_exists($today, $hours['data']) ) {
-      $out['data'] = false;
+      $todaysHours = false;
     } else {
-      $out['data'] = $hours['data'][$today];
+      $todaysHours = $hours['data'][$today];
     }
+    $out = array_merge($hours, ['data' => $todaysHours]);
     return $out;
   }
 }

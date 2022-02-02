@@ -1,5 +1,4 @@
 import { html, css } from 'lit';
-import "../ucdlib-occupancy-bar/ucdlib-occupancy-bar";
 import headingsStyles from "@ucd-lib/theme-sass/1_base_html/_headings.css";
 import headingClasses from "@ucd-lib/theme-sass/2_base_class/_headings.css";
 import brandClasses from "@ucd-lib/theme-sass/4_component/_category-brand.css";
@@ -22,15 +21,16 @@ export function styles() {
 export function render() { 
 return html`
   <h2 class="heading--underline">${this.widgetTitle}</h2>
-  <ucdlib-occupancy-bar></ucdlib-occupancy-bar>
+  
   ${this.ctl.render({
     complete: ( location ) => html`
-      ${ location.hasHoursData() ? html`
+      ${ location.hasHoursData ? html`
       <h3 class="heading--highlight">
-        ${location.isOpenToday() ? 
+        ${location.isOpenToday ? 
         location.renderHoursToday() : 
         html`<span>Closed</span>`}
       </h3>
+      ${ location.renderOccupancyBar() }
       ` : this.ctl.renderStatus('error')
       }
     `
