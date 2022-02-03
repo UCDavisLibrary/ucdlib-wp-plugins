@@ -5,7 +5,7 @@ export function styles() {
     :host {
       display: block;
     }
-    .occupancy-bar {
+    .container {
       display: flex;
       flex-wrap: wrap;
       align-items: center;
@@ -18,16 +18,16 @@ export function styles() {
       border-radius: 20px;
       background-color: #3DAE2B;
     }
-    .occupancy-bar--2 .user-icons {
+    .user-icons.user-icons--2 {
       background-color: #DAAA00;
     }
-    .occupancy-bar--3 .user-icons {
+    .user-icons.user-icons--3 {
       background-color: #F18A00;
     }
-    .occupancy-bar--4 .user-icons {
+    .user-icons.user-icons--4 {
       background-color: #F93549;
     }
-    .occupancy-bar--5 .user-icons {
+    .user-icons.user-icons--5 {
       background-color: #C6007E;
     }
     .user-icons svg {
@@ -44,6 +44,14 @@ export function styles() {
     .user-icons svg:last-child {
       margin-right: 0;
     }
+    .has-text .user-icons {
+      margin-right: .5rem;
+    }
+    .status-text {
+      font-weight: 700;
+      font-style: italic;
+      white-space: nowrap;
+    }
   `;
 
   return [elementStyles];
@@ -51,13 +59,12 @@ export function styles() {
 
 export function render() { 
 return html`
-<div class="container">
+<div class="container ${this.hideText ? 'no-text' : 'has-text'}">
   ${this.level ? html`
-    <div class="occupancy-bar occupancy-bar--${this.level}" title="Current Occupancy: ${this.current}">
-      <div class="user-icons">
-        ${[0,1,2,3,4].map((v) => this._renderUserSvg(v >= this.level))}
-      </div>
+    <div class="user-icons user-icons--${this.level}" title="Current Occupancy: ${this.current}">
+      ${[0,1,2,3,4].map((v) => this._renderUserSvg(v >= this.level))}
     </div>
+    <div class="status-text">${this.textOptions[this.level - 1]}</div>
   ` : html``}
 </div>
 

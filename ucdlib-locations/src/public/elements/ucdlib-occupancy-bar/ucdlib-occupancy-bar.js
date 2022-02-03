@@ -1,6 +1,16 @@
-import { LitElement, html, svg } from 'lit';
+import { LitElement, svg } from 'lit';
 import {render, styles} from "./ucdlib-occupancy-bar.tpl.js";
 
+/**
+ * @class UcdlibOccupancyBar
+ * @classdesc Renders a simple graphic denoting current occupancy on a 1-5 scale
+ * @property {Number} current - The current occupancy. Used with 'max' to calculate 'level'
+ * @property {Number} max - The max occupancy/capacity. Used with 'current' to calculate 'level'
+ * @property {Number} level - The occupancy level. Must be int on 1-5 scale. 
+ *  Attribute can be directly set, if not using 'current' and 'max' attributes
+ * @property {String} hideText - Will hide the status text that displays next to the graphic.
+ * 
+ */
 export default class UcdlibOccupancyBar extends LitElement {
 
   static get properties() {
@@ -34,8 +44,23 @@ export default class UcdlibOccupancyBar extends LitElement {
     if ( props.has('current') || props.has('max') ){
       this._setOccupancyLevel();
     }
+
+    // validate if user sets level property directly
+    if ( props.has('level') && this.level ){
+      if ( this.level > 5 ) {
+        this.level = 5;
+      } else if ( this.level < 0 ) {
+        this.level = 0;
+      } else {
+        this.level = parseInt(this.level);
+      }
+    }
   }
 
+  /**
+   * @method _setOccupancyLevel
+   * @description Sets occupancy level based on the current and max properties
+   */
   _setOccupancyLevel(){
     let level;
     if ( isNaN(this.current) || isNaN(this.max) ) {
@@ -52,11 +77,17 @@ export default class UcdlibOccupancyBar extends LitElement {
       }
     }
     this.level = level;
-    console.log(this.current, this.max, this.level);
+    //console.log(this.current, this.max, this.level);
     
     return;
   }
 
+  /**
+   * @method _renderUserSvg
+   * @description Renders a single avatar svg
+   * @param {Boolean} inactive - Assigns inactive class, which makes svg look faded.
+   * @returns {SVGTemplateResult}
+   */
   _renderUserSvg(inactive){
     return svg`
     <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class=${inactive ? 'inactive' : 'active'}>

@@ -106,6 +106,8 @@ class UCDLibPluginLocationsAPI {
       $out['children'] = [];
       $children = Timber::get_posts( [
         'nopaging' => true,
+        'orderby' => 'menu_order',
+        'order' => 'ASC',
         'meta_key' => 'parent',
         'meta_value' => $location->ID,
         'post_type' => $this->config['postTypeSlug']
@@ -128,6 +130,12 @@ class UCDLibPluginLocationsAPI {
     $out = array();
     if ( in_array('hours', $fields) ) {
       $out['hours'] = $location->get_hours();
+
+      // location has libcal id, but hours have not been set up
+      if ( is_array($out['hours']['data']) && !count($out['hours']['data']) ) {
+        $out['hours']['data'] = false;
+      }
+
     } elseif ( in_array('hours-today', $fields) ) {
       $hours = $location->get_hours();
       $out['hoursToday'] = UCDLibPluginLocationsUtils::getTodaysHours($hours);

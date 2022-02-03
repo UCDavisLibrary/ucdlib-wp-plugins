@@ -1,6 +1,14 @@
 import {Task} from '@lit-labs/task';
-import {html} from 'lit';
+import {html, css} from 'lit';
 import { UcdlibLocation } from "./location-model";
+
+import linkStyles from '@ucd-lib/theme-sass/1_base_html/_links.css';
+import iconStyles from "@ucd-lib/theme-sass/4_component/_icons.css.js";
+import headingsStyles from "@ucd-lib/theme-sass/1_base_html/_headings.css";
+import headingClasses from "@ucd-lib/theme-sass/2_base_class/_headings.css";
+import brandClasses from "@ucd-lib/theme-sass/4_component/_category-brand.css";
+import spaceClasses from "@ucd-lib/theme-sass/6_utility/_u-space.css";
+
 
 /**
  * @classdesc Controller for fetching location data from ucdlib wordpress API
@@ -60,6 +68,36 @@ export class LocationsController{
 
       const hostValue = this.host[value.hostProp];
       return hostValue == null || hostValue === "" ? value.default : this.host[value.hostProp];
+    }
+
+    static get styles() {
+
+      const customStyles = css`
+        .appt-link {
+          display: flex;
+          flex-wrap: nowrap;
+          align-items: center;
+        }
+        .appt-link svg {
+          display: inline-block;
+          min-width: .75rem;
+          min-height: .75rem;
+          width: .75rem;
+          height: .75rem;
+          margin-right: 0.5rem;
+          color: #73abdd;
+        }
+      `;
+
+      return [
+        linkStyles,
+        iconStyles,
+        headingsStyles,
+        headingClasses,
+        brandClasses,
+        spaceClasses,
+        customStyles
+      ];
     }
 
     async _getData(){
@@ -137,10 +175,6 @@ export class LocationsController{
         return defaultTemplates['error'];
       }
       return out;
-    }
-
-    renderRedText(text){
-      return html`<span class="double-decker">${text}</span>`;
     }
 
   }
