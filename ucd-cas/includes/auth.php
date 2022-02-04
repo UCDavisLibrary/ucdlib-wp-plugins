@@ -38,7 +38,11 @@ class UCDPluginCASAuth {
       $kerb = phpCAS::getUser();
       $user = get_user_by('login', $kerb);
       
-      if ( $user && $this->userIsBlackListed($kerb) ){
+      if ( 
+        $user && 
+        $this->userIsBlackListed($kerb) &&
+        !$this->userHasEnvironmentalAccess($kerb)
+        ){
         $this->do403();
 
       } elseif ( $user ) {
@@ -69,9 +73,24 @@ class UCDPluginCASAuth {
     phpCAS::logout();
   }
 
+  /**
+   * @method userHasEnvironmentalAccess
+   * @description user is guaranteed access from environmental variable
+   * @param kerb - Kerberos id
+   * @return Boolean
+   * 
+   */
+  public function userHasEnvironmentalAccess($kerb){
+    if ( !$this->env["ensure_users"] ) return false;
+    return in_array($kerb, $this->env["ensure_users"]);
+  }
+
   public function userCanBeCreated($kerb){
     $options = $this->get_options();
 
+    if ( $this->userHasEnvironmentalAccess($kerb) ){
+      return true;
+    }
     if ( array_key_exists($this->fieldsSlug . "prevent_user_creation", $options) ){
       return false;
     }

@@ -7,8 +7,12 @@ class UCDPluginCAS {
   public function __construct(){
     $this->slug = "ucd-cas";
     $this->env = array(
-      "host" => getenv('UCD_CAS_HOST')
+      "host" => getenv('UCD_CAS_HOST'),
+      "ensure_users" => getenv('UCD_CAS_ENSURE_USERS')
     );
+    if ( is_string($this->env['ensure_users']) ){
+      $this->env['ensure_users'] = array_map('trim', explode(',', $this->env['ensure_users'] ));
+    }
     $this->metaData = new UCDPluginCASMetaData($this->slug, $this->env);
     $this->menu = new UCDPluginCASMenu($this->slug, $this->env);
     $this->auth = new UCDPluginCASAuth($this->slug, $this->env);
