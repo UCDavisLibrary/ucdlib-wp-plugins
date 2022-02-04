@@ -1,10 +1,10 @@
 import { LitElement } from 'lit';
-import {render, styles} from "./ucdlib-hours-today.tpl.js";
+import {render, styles, renderComplete} from "./ucdlib-hours-today.tpl.js";
 import { LocationsController } from '../../utils/locations-controller.js';
 
 /**
  * @class UcdlibHoursToday
- * @classdesc Displays a UCD Library's hours for today\
+ * @classdesc Displays a UCD Library's hours for today
  * @property {Number} location - The wordpress post id of the location to be displayed. Required.
  * @property {String} widgetTitle - Defaults to "Today's Hours"
  * @property {Boolean} showChildren - Will display child departments/services, if they exist.
@@ -37,11 +37,17 @@ export default class UcdlibHoursToday extends LitElement {
 
   willUpdate(){
     this.getCurrentOccupancy = !this.hideCurrentOccupancy;
+    if ( !this.showChildren ) {
+      this.loadingHeight = "130px";
+    } else {
+      this.loadingHeight = "300px";
+    }
   }
 
   constructor() {
     super();
     this.render = render.bind(this);
+    this.renderComplete = renderComplete.bind(this);
     this.widgetTitle = "Today's Hours";
     this.showChildren = false;
     this.onlyShowChildren = false;

@@ -1,5 +1,6 @@
 import {Task} from '@lit-labs/task';
-import {html, css} from 'lit';
+import {html, css, svg} from 'lit';
+import { styleMap } from 'lit/directives/style-map.js';
 import { UcdlibLocation } from "./location-model";
 
 import linkStyles from '@ucd-lib/theme-sass/1_base_html/_links.css';
@@ -24,6 +25,7 @@ export class LocationsController{
       (this.host = host).addController(this);
 
       this.fetchTask = new Task(this.host, {task: async() => await this._getData(), autoRun: false});
+      this.hasSuccesfullyFetched = false;
 
       this._configValues = {
         host: {default: "https://library.ucdavis.edu", hostProp: 'apiHost'},
@@ -34,7 +36,12 @@ export class LocationsController{
         intervalLength: {default: 1000 * 60 * 15, hostProp: 'refreshRate'},
         useLocationId: {default: false, hostProp: 'useLocationId'},
         getCurrentOccupancy: {default: true, hostProp: 'getCurrentOccupancy'},
-        getHours: {default: true, hostProp: 'getHours'}
+        getHours: {default: true, hostProp: 'getHours'},
+        loadingHeight: {default: '100px', hostProp: 'loadingHeight'},
+        loadingIconSize: {default: '30px', hostProp: 'loadingIconSize'},
+        errorHeight: {default: '100px', hostProp: 'errorHeight'},
+        errorIconSize: {default: '30px', hostProp: 'errorIconSize'},
+        errorText: {default: "An error has occurred. Try again later.", hostProp: 'errorText'}
       }
     }
 
@@ -87,6 +94,41 @@ export class LocationsController{
           margin-right: 0.5rem;
           color: #73abdd;
         }
+        a.icon--circle-arrow-right::before {
+          color: var(--category-brand, #73abdd);
+        }
+        .center-content {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+        .loading-icon {
+          -ms-animation: rotating 2s linear infinite;
+          animation: rotating 2s linear infinite;
+          height: 1em;
+          width: 1em;
+          min-height: 1em;
+          min-width: 1em;
+          line-height: 0;
+        }
+        .error-icon {
+          height: 1em;
+          width: 1em;
+          min-height: 1em;
+          min-width: 1em;
+          line-height: 0;
+          margin-right: 10px;
+        }
+        @keyframes rotating {
+          from {
+            -ms-transform: rotate(0deg);
+            transform: rotate(0deg);
+          }
+          to {
+            -ms-transform: rotate(360deg);
+            transform: rotate(360deg);
+          }
+        }
       `;
 
       return [
@@ -114,6 +156,8 @@ export class LocationsController{
       } else {
         out = new UcdlibLocation(result);
       }
+      this.hasSuccesfullyFetched = true;
+      this._data = out;
       this.host.requestUpdate();
       return out;
     }
@@ -132,7 +176,7 @@ export class LocationsController{
       let locationId = this.getConfigValue('useLocationId') ? this.getConfigValue('locationId') : 0;
       if ( locationId ) {
         url += `/${locationId}`;
-        if ( this.getConfigValue('getChildren') ) params.children = true;
+        if ( this.getConfigValue('getChildren') || this.host.onlyShowChildren ) params.children = true;
       }
 
   
@@ -158,23 +202,51 @@ export class LocationsController{
     }
 
     renderStatus(status){
-      const defaultTemplates = {};
-      defaultTemplates['initial'] = html`
-        <p>Initial state</p>
-      `;
-      defaultTemplates['pending'] = html`
-        <p>Pending state</p>
-      `;
-      defaultTemplates['error'] = html`
-      <p>Error state</p>
-      `;
 
-      const out = defaultTemplates[status];
-      if ( !out ) {
+
+      if ( status === 'pending') {
+        const containerStyles = {};
+        const iconStyles = {};
+        containerStyles.height = this.getConfigValue('loadingHeight');
+        containerStyles.minHeight = this.getConfigValue('loadingHeight');
+        iconStyles.fontSize = this.getConfigValue('loadingIconSize');
+        return html`
+          <div class="loading center-content" style=${styleMap(containerStyles)}>
+            <div class="loading-icon secondary" style=${styleMap(iconStyles)}>
+              ${svg`
+              <svg aria-hidden="true" focusable="false" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M304 48c0 26.51-21.49 48-48 48s-48-21.49-48-48 21.49-48 48-48 48 21.49 48 48zm-48 368c-26.51 0-48 21.49-48 48s21.49 48 48 48 48-21.49 48-48-21.49-48-48-48zm208-208c-26.51 0-48 21.49-48 48s21.49 48 48 48 48-21.49 48-48-21.49-48-48-48zM96 256c0-26.51-21.49-48-48-48S0 229.49 0 256s21.49 48 48 48 48-21.49 48-48zm12.922 99.078c-26.51 0-48 21.49-48 48s21.49 48 48 48 48-21.49 48-48c0-26.509-21.491-48-48-48zm294.156 0c-26.51 0-48 21.49-48 48s21.49 48 48 48 48-21.49 48-48c0-26.509-21.49-48-48-48zM108.922 60.922c-26.51 0-48 21.49-48 48s21.49 48 48 48 48-21.49 48-48-21.491-48-48-48z"></path></svg>
+              `}
+            </div>
+          </div>
+        `;
+
+      } else if ( status === 'initial') {
+        return html`
+          <p>initial state</p>
+        `
+      } else if ( status === 'error') {
+        const containerStyles = {};
+        const iconStyles = {};
+        containerStyles.height = this.getConfigValue('errorHeight');
+        containerStyles.minHeight = this.getConfigValue('errorHeight');
+        iconStyles.fontSize = this.getConfigValue('errorIconSize');
+        const text = this.getConfigValue('errorText');
+        return html`
+          <div class="error center-content" style=${styleMap(containerStyles)}>
+            <div class="center-content">
+              <div class="error-icon double-decker" style=${styleMap(iconStyles)}>
+                ${svg`
+                <svg aria-hidden="true" focusable="false" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M504 256c0 136.997-111.043 248-248 248S8 392.997 8 256C8 119.083 119.043 8 256 8s248 111.083 248 248zm-248 50c-25.405 0-46 20.595-46 46s20.595 46 46 46 46-20.595 46-46-20.595-46-46-46zm-43.673-165.346l7.418 136c.347 6.364 5.609 11.346 11.982 11.346h48.546c6.373 0 11.635-4.982 11.982-11.346l7.418-136c.375-6.874-5.098-12.654-11.982-12.654h-63.383c-6.884 0-12.356 5.78-11.981 12.654z"></path></svg>
+                `}
+              </div>
+              <div>${text}</div>
+            </div>
+          </div>
+        `
+      } else {
         console.warn(`'${status} is not a recognized Lit Task status`);
-        return defaultTemplates['error'];
+        return html``;
       }
-      return out;
     }
 
   }

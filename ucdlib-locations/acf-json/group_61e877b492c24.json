@@ -97,7 +97,7 @@
                 "class": "",
                 "id": ""
             },
-            "layout": "table",
+            "layout": "row",
             "sub_fields": [
                 {
                     "key": "field_61e982b7a84ae",
@@ -123,7 +123,7 @@
                     "label": "Link Text",
                     "name": "link_text",
                     "type": "text",
-                    "instructions": "",
+                    "instructions": "Displays on Today's Hours widget and Locations lander page",
                     "required": 0,
                     "conditional_logic": 0,
                     "wrapper": {
@@ -132,6 +132,25 @@
                         "id": ""
                     },
                     "default_value": "Appointment Required",
+                    "placeholder": "",
+                    "prepend": "",
+                    "append": "",
+                    "maxlength": ""
+                },
+                {
+                    "key": "field_61fd357051880",
+                    "label": "Alternative Link Text",
+                    "name": "link_text_alt",
+                    "type": "text",
+                    "instructions": "Displays on main library hours page",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "Schedule a Visit",
                     "placeholder": "",
                     "prepend": "",
                     "append": "",
@@ -182,5 +201,5 @@
     "active": true,
     "description": "Locations: Hours Settings",
     "show_in_rest": 0,
-    "modified": 1643058790
+    "modified": 1643984615
 }

@@ -172,6 +172,19 @@ export class UcdlibLocation{
   }
 
   /**
+   * @method renderSeeAllLink
+   * @description Renders a link to the main library hours landing page
+   * @param {String} text - Link text to display
+   * @returns {TemplateResult}
+   */
+  renderSeeAllLink(text="See all library hours"){
+    if ( !this.data.links.hoursPage ) return html``;
+    return html`
+      <a href=${this.data.links.hoursPage} class="category-brand--secondary icon icon--circle-arrow-right">${text}</a>
+    `;
+  }
+
+  /**
    * @property {String|Boolean}
    * @description Returns data key of hours object.
    */

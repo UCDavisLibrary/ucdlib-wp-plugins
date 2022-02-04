@@ -1,0 +1,47 @@
+{
+    "key": "group_61fd245d69573",
+    "title": "Links",
+    "fields": [
+        {
+            "key": "field_61fd2554eea9c",
+            "label": "Hours Landing Page",
+            "name": "link_all_hours",
+            "type": "post_object",
+            "instructions": "The page where the hours for all UCD libraries are displayed",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "post_type": [
+                "page"
+            ],
+            "taxonomy": "",
+            "allow_null": 1,
+            "multiple": 0,
+            "return_format": "id",
+            "ui": 1
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "options_page",
+                "operator": "==",
+                "value": "acf-options-settings"
+            }
+        ]
+    ],
+    "menu_order": 0,
+    "position": "normal",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": "",
+    "active": true,
+    "description": "Locations: Global links to keep track of",
+    "show_in_rest": 0,
+    "modified": 1643983840
+}

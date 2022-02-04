@@ -24,6 +24,12 @@ class UCDLibPluginLocationsLocation extends Timber\Post {
     $out['links']['custom'] = $this->meta('custom_url');
     $out['links']['redirect_to_custom_url'] = $this->meta('redirect_to_custom_url');
     $out['links']['link'] = $out['links']['custom'] ? $out['links']['custom'] : $out['links']['native'];
+    $hoursPage = get_field('link_all_hours', $this->post_type);
+    if ( $hoursPage ) {
+      $out['links']['hoursPage'] = get_permalink( $hoursPage );
+    } else {
+      $out['links']['hoursPage'] = "";
+    }
 
     if ( !$out['appointments'] ) {
       $out['appointments'] = array(

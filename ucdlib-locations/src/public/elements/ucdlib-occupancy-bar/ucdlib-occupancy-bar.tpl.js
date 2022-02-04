@@ -51,6 +51,7 @@ export function styles() {
       font-weight: 700;
       font-style: italic;
       white-space: nowrap;
+      margin: 2px 0;
     }
   `;
 
