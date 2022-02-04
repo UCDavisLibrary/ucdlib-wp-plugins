@@ -1,4 +1,8 @@
 <?php
+/**
+ * @class UCDPluginCASAuth
+ * @classdesc Does user authentication and authorization
+ */
 class UCDPluginCASAuth {
   public function __construct($slug, $env){
     $this->slug = $slug;
@@ -13,6 +17,11 @@ class UCDPluginCASAuth {
     add_filter('wp_logout', array($this, 'logout'), 10,0);
   }
 
+  /**
+   * @method get_options
+   * @description retrieves plugin options as key/value pairs
+   * @return {Array}
+   */
   public function get_options(){
     if ( !isset($this->_options) ){
       $this->_options = get_option( $this->optionsSlug );
@@ -20,6 +29,13 @@ class UCDPluginCASAuth {
     return $this->_options;
   }
 
+  /**
+   * @method login
+   * @description CAS authenticates a user and either logs them in or creates an account for them.
+   * Attaches to the 'wp_authenticate' hook
+   * @param $user_login - Login entered by user. Not used by CAS
+   * @param $user_password - Wordpress password entered by user. Not used by CAS.
+   */
   public function login($user_login, $user_password){
     $options = $this->get_options();
     $this->createClient();
@@ -38,6 +54,7 @@ class UCDPluginCASAuth {
       $kerb = phpCAS::getUser();
       $user = get_user_by('login', $kerb);
       
+      // user is blacklisted, deny access
       if ( 
         $user && 
         $this->userIsBlackListed($kerb) &&
@@ -45,9 +62,11 @@ class UCDPluginCASAuth {
         ){
         $this->do403();
 
+      // a wordpress account already exists for user, log them in
       } elseif ( $user ) {
         $this->loginExistingUser($user);
 
+      // user does not have wp account, and we can create one for them
       } elseif ( $this->userCanBeCreated($kerb) ) {
         $newUserId = $this->createUser($kerb);
         if ( is_wp_error($newUserId) ){
@@ -68,6 +87,10 @@ class UCDPluginCASAuth {
     }
   }
 
+  /**
+   * @method logout
+   * @description Logs a user out from CAS
+   */
   public function logout(){
     $this->createClient();
     phpCAS::logout();
@@ -85,6 +108,12 @@ class UCDPluginCASAuth {
     return in_array($kerb, $this->env["ensure_users"]);
   }
 
+  /**
+   * @method userCanBeCreated
+   * @description A user can be created based on what has been entered in the plugin options
+   * @param kerb - Kerberos id
+   * @return Boolean
+   */
   public function userCanBeCreated($kerb){
     $options = $this->get_options();
 
@@ -107,6 +136,12 @@ class UCDPluginCASAuth {
     return true;
   }
 
+  /**
+   * @method userIsWhiteListed
+   * @description User is in the whitelist defined on the plugin options page
+   * @param kerb - Kerberos id
+   * @return Boolean
+   */
   public function userIsWhiteListed($kerb){
     $options = $this->get_options();
     $whitelist = $options[$this->fieldsSlug . "whitelist"];
@@ -114,6 +149,12 @@ class UCDPluginCASAuth {
     return in_array($kerb, $whitelist);
   }
 
+  /**
+   * @method userIsBlackListed
+   * @description User is in the blacklist defined on the plugin options page
+   * @param kerb - Kerberos id
+   * @returns Boolean
+   */
   public function userIsBlackListed($kerb){
     $options = $this->get_options();
     $blacklist = $options[$this->fieldsSlug . "blacklist"];
@@ -121,6 +162,12 @@ class UCDPluginCASAuth {
     return in_array($kerb, $blacklist);
   }
 
+  /**
+   * @method userIsInWhiteListedDepartment
+   * @description User is in one of the UC Davis departments defined on the plugin options page
+   * @param kerb - Kerberos id
+   * @returns Boolean
+   */
   public function userIsInWhiteListedDepartment(){
     $options = $this->get_options();
     $attributes = phpCAS::getAttributes();
@@ -133,6 +180,11 @@ class UCDPluginCASAuth {
     return in_array($attributes[$deptField], $whitelist);
   }
 
+  /**
+   * @method createUser
+   * @description Creates a wp account for the user authenticated with CAS
+   * @param kerb - Kerberos id
+   */
   public function createUser($kerb){
     $attributes = phpCAS::getAttributes();
     $options = $this->get_options();
@@ -165,6 +217,10 @@ class UCDPluginCASAuth {
     return $userId;
   }
 
+  /**
+   * @method do403
+   * @description Renders 403 page and kills php process
+   */
   public function do403($message=false){
     $options = $this->get_options();
     $context = Timber::context();
@@ -184,6 +240,11 @@ class UCDPluginCASAuth {
     exit;
   }
 
+  /**
+   * @method loginExistingUser
+   * @description Sets auth cookie and redirects user to admin dashboard
+   * @param user A wordpress user class
+   */
   public function loginExistingUser($user){
     wp_set_auth_cookie($user->ID, true);
     $this->setReadOnlyUserAttributes($user);
@@ -191,6 +252,11 @@ class UCDPluginCASAuth {
     exit;
   }
 
+  /**
+   * @method createClient
+   * @description Creates a CAS client using values from plugin options page
+   * @returns {phpCAS::client}
+   */
   public function createClient(){
     $options = $this->get_options();
     if ( $this->env['host'] ) {
@@ -204,6 +270,11 @@ class UCDPluginCASAuth {
     phpCAS::client(CAS_VERSION_3_0, $host, $port, $casUri);
   }
 
+  /**
+   * @method setReadOnlyUserAttributes
+   * @description Saves a few CAS attributes to a wp user's metadata
+   * @param user A wordpress user class
+   */
   public function setReadOnlyUserAttributes($user){
     $attributes = phpCAS::getAttributes();
     if ( !is_array($attributes) ) return;
