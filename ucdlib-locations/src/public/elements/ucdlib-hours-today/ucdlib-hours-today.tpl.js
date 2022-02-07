@@ -53,8 +53,9 @@ return html`
   ${this.ctl.render({
     complete: this.renderComplete,
     initial: () => this.ctl.renderStatus('pending'),
-    pending: () => this.ctl.hasSuccesfullyFetched ? 
-      () => renderComplete(this.ctl._data) : this.ctl.renderStatus('pending'),
+    pending: () => html`${this.ctl.hasSuccesfullyFetched ? 
+      this.renderComplete(this.ctl.data) : this.ctl.renderStatus('pending')
+    }`,
     error: () => this.ctl.renderStatus('error'),
   })}
 `;}

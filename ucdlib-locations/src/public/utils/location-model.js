@@ -1,4 +1,5 @@
 import { html, svg } from 'lit';
+import { DateTimeUtils } from './datetime';
 import "../elements/ucdlib-occupancy-bar/ucdlib-occupancy-bar";
 
 /**
@@ -19,6 +20,16 @@ export class UcdlibLocation{
     }
 
     this._setHoursFor24HrStatus()
+  }
+
+  /**
+   * @property {Boolean} roomNumber
+   * @description Room number of location. Will be 'Main Building' if is library
+   */
+  get roomNumber(){
+    if ( !this.data.labels ) return false;
+    if ( !this.data.labels.room_number && this.children.length ) return 'Main Building';
+    return this.data.labels.room_number;
   }
 
   /**
@@ -56,7 +67,7 @@ export class UcdlibLocation{
       if ( !this.data.hoursToday.data ) return false;
 
     } else if ( this.data.hours ){
-      if ( !Array.isArray(this.data.hours.data) ) return false;
+      if ( typeof this.data.hours.data !== 'object' || this.data.hours.data === null ) return false;
     } else {
       return false;
     }
@@ -69,7 +80,11 @@ export class UcdlibLocation{
    */
   get isOpenToday(){
     if ( !this.hasHoursData ) return false;
-    return this.data.hoursToday.data.status == 'open';
+    if ( this.data.hoursToday ) {
+      return this.data.hoursToday.data.status == 'open';
+    }
+    const todaysHours = this.data.hours.data[this._todayOnWestCoast()];
+    return todaysHours.status == 'open';
   }
 
   /**
@@ -130,6 +145,78 @@ export class UcdlibLocation{
   }
 
   /**
+   * @property {Object} hoursDateRange
+   * @description Date range (UTC) for which we have hours data (inclusive)
+   */
+  get hoursDateRange(){
+    const range = {from: false, to: false};
+    if ( !this.hasHoursData ) {
+      return range;
+    }
+    if ( this.data.hoursToday ) {
+      const now = this._nowOnWestCoast();
+      range.from = now;
+      range.to = now;
+      return range;
+    }
+    Object.keys(this.data.hours.data).forEach(d => {
+      d = new Date(d);
+      if ( !range.from ) {
+        range.from = d;
+      } else if ( d < range.from ) {
+        range.from = d;
+      }
+      if ( !range.to ) {
+        range.to = d;
+      } else if ( d > range.to ) {
+        range.to = d;
+      }
+    })
+    return range;
+  }
+
+  /**
+   * @method renderWeeklyHours
+   * @description Renders the operating hours for a given week
+   * @param {Array} week - An array of contiguous dates
+   * @returns {TemplateResult}
+   */
+  renderWeeklyHours(week){
+    if ( !this.hasHoursData ) return html``;
+    const today = new Date( this._todayOnWestCoast() );
+    let _week = [];
+    let _day;
+    week.forEach(day => {
+      _day = Object.assign({}, day);
+      _day.hours = this.getAnHoursObject(day.isoKey);
+      _week.push(_day);
+    })
+    console.log(week);
+
+    return html`
+      <div class="week">
+        ${_week.map(day => html`
+          <div class="day">
+            <div class="label">
+              <time datetime=${day.isoKey}>
+                <span>${day.day}</span>
+                <span>${day.month} ${day.dayOfMonth}</span>
+              </time>
+            </div>
+            <div class="value">
+              ${day.hours ? html`
+                <time></time><time></time>
+              ` : html`<span>?</span>`}
+              
+            </div>
+          </div>
+        `)}
+      </div>
+    `;
+
+  }
+
+  /**
    * @method renderHoursToday
    * @description Renders operating hours for today
    * @returns {TemplateResult}
@@ -185,6 +272,18 @@ export class UcdlibLocation{
   }
 
   /**
+   * @method getAnHoursObject
+   * @description Returns an hours object for a specific date
+   * @param {String} day - ISO format
+   * @returns {Object}
+   */
+  getAnHoursObject(day){
+    if ( !this.hasHoursData ) return false;
+    if ( !this.data.hours.data[day] ) return false;
+    return this.data.hours.data[day];
+  }
+
+  /**
    * @property {String|Boolean}
    * @description Returns data key of hours object.
    */
@@ -207,8 +306,8 @@ export class UcdlibLocation{
       !hours.to
       ) return false;
 
-    const fromTime = this._convertTimeToIso(hours.from);
-    const toTime = this._convertTimeToIso(hours.to);
+    const fromTime = DateTimeUtils.convertTimeToIso(hours.from);
+    const toTime = DateTimeUtils.convertTimeToIso(hours.to);
     const tz = this.data[this._hoursField].tzOffset;
 
     const from = new Date(`${date}T${fromTime}${tz}`);
@@ -220,29 +319,6 @@ export class UcdlibLocation{
     }
 
     return (needle >= from && needle < to);
-  }
-
-  /**
-   * @method _convertTimeToIso
-   * @description Converts a 12 hour string into 24 hour
-   * @param {String} time 12 hour string i.e. 1:30pm
-   * @returns {String} 24 hour string i.e. 13:30:00
-   */
-  _convertTimeToIso(time){
-    time = time.replace(/\s/g, '').split(":");
-    let hour = time[0];
-    let minute = time[1].slice(0,2);
-    let isPM = time[1].slice(2,4).toLowerCase() == 'pm';
-    if ( isPM ) {
-      if ( hour < 12 ) hour = parseInt(hour) + 12;
-
-    } else {
-      if ( hour == 12 ) hour = "00";
-    }
-    hour = String(hour).padStart(2, '0');
-    minute = String(minute).padStart(2, '0');
-    return `${hour}:${minute}:00`
-
   }
 
   /**

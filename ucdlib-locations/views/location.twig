@@ -1,13 +1,18 @@
 {% extends getUcdTemplate('base') %}
 
 {% block content %}
+  <ucdlib-hours
+    api-host="{{site.site_url}}"
+  ></ucdlib-hours>
   <p>{{foo}}</p>
   <div>
+    {#
     <ucdlib-hours-today
       api-host="{{site.site_url}}"
       location="{{post.ID}}"
       show-children
     ></ucdlib-hours-today>
+    #}
   </div>
   {{dump(post.core_data)}}
   {{post.content}}

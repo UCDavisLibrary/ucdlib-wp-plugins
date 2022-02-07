@@ -32,9 +32,11 @@ export class LocationsController{
         endpoint: {default: "wp-json/ucdlib-locations/locations", hostProp: 'apiEndpoint'},
         locationId: {default: 0, hostProp: 'location'},
         getChildren: {default: false, hostProp: 'showChildren'},
+        nestChildren: {default: false, hostProp: 'nestChildren'},
         taskMode: {default: 'interval', hostProp: 'ctlTaskMode', enum: ['interval', 'onConnected', 'manual']},
         intervalLength: {default: 1000 * 60 * 15, hostProp: 'refreshRate'},
         useLocationId: {default: false, hostProp: 'useLocationId'},
+        createHoursDateRange: {default: false, hostProp: 'createHoursDateRange'},
         getCurrentOccupancy: {default: true, hostProp: 'getCurrentOccupancy'},
         getHours: {default: true, hostProp: 'getHours'},
         loadingHeight: {default: '100px', hostProp: 'loadingHeight'},
@@ -43,6 +45,9 @@ export class LocationsController{
         errorIconSize: {default: '30px', hostProp: 'errorIconSize'},
         errorText: {default: "An error has occurred. Try again later.", hostProp: 'errorText'}
       }
+
+      this._days = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
+      this._months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
     }
 
     hostConnected(){
@@ -157,7 +162,11 @@ export class LocationsController{
         out = new UcdlibLocation(result);
       }
       this.hasSuccesfullyFetched = true;
-      this._data = out;
+      this._data = result;
+      this.data = out;
+      if ( this.getConfigValue('createHoursDateRange') ){
+        this._setHoursDateRange();
+      }
       this.host.requestUpdate();
       return out;
     }
@@ -186,6 +195,7 @@ export class LocationsController{
         fields.push('hours-today');
       } else if( hours ) {
         fields.push('hours');
+        if ( this.getConfigValue('nestChildren') ) params.format = 'nested';
       }
       if ( fields.length ) params.fields = fields.join(",");
       
@@ -247,6 +257,62 @@ export class LocationsController{
         console.warn(`'${status} is not a recognized Lit Task status`);
         return html``;
       }
+    }
+
+    /**
+     * @method _setHoursDateRange
+     * @description Sets date range for which we have hours data
+     */
+    _setHoursDateRange(){
+      const range = {from: false, to: false, weeks: []};
+      const ranges = [];
+      const locations = Array.isArray(this.data) ? this.data : [this.data];
+      for (const location of locations) {
+        ranges.push(location.hoursDateRange);
+
+        for (const child of location.children ) {
+          ranges.push(child.hoursDateRange);
+        }
+      }
+      for (const r of ranges){
+        if ( r.from ) {
+          if ( ! range.from ) {
+            range.from = r.from
+          } else if (r.from < range.from ) {
+            range.from = r.from;
+          }
+        }
+        if ( r.to ) {
+          if ( ! range.to ) {
+            range.to = r.to
+          } else if (r.to > range.to ) {
+            range.to = r.to;
+          }
+        }
+      }
+      if ( !range.from || !range.to ) {
+        throw new Error('Unable to construct hours date range');
+      }
+
+      let d = new Date(range.from.getTime());
+      let weekIndex = 0;
+      range.weeks.push([]);
+      while ( d <= range.to ) {
+        if ( range.weeks[weekIndex].length >= 7 ){
+          weekIndex += 1;
+          range.weeks.push([]);
+        }
+        range.weeks[weekIndex].push({
+          date: new Date(d.getTime()),
+          isoKey: d.toISOString().split('T')[0],
+          day: this._days[d.getUTCDay()],
+          month: this._months[d.getUTCMonth()],
+          dayOfMonth: d.getUTCDate()
+        })
+        d.setDate(d.getDate() + 1);
+      }
+
+      this.hoursDateRange = range;
     }
 
   }
