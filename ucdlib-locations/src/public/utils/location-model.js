@@ -183,29 +183,40 @@ export class UcdlibLocation{
    */
   renderWeeklyHours(week){
     if ( !this.hasHoursData ) return html``;
-    const today = new Date( this._todayOnWestCoast() );
+    const today = this._todayOnWestCoast();
     let _week = [];
     let _day;
+    let hours;
     week.forEach(day => {
       _day = Object.assign({}, day);
-      _day.hours = this.getAnHoursObject(day.isoKey);
+      hours = this.getAnHoursObject(day.isoKey);
+      _day.isToday = day.isoKey == today;
+      _day.hasHoursData = hours ? true : false;
+      if ( hours ) {
+        _day.isOpen = this.isOpenOnDay(day.isoKey);
+      }
+      if ( _day.isOpen ) {
+        _day.hours = this._getDaysHours(hours);
+      }
+      
       _week.push(_day);
     })
-    console.log(week);
 
     return html`
       <div class="week">
         ${_week.map(day => html`
-          <div class="day">
+          <div class="day ${day.isToday ? 'is-today' : ''}">
             <div class="label">
               <time datetime=${day.isoKey}>
-                <span>${day.day}</span>
-                <span>${day.month} ${day.dayOfMonth}</span>
+                <span class="day-of-week">${day.day}</span>
+                <span class="date">${day.month} ${day.dayOfMonth}</span>
               </time>
             </div>
             <div class="value">
-              ${day.hours ? html`
-                <time></time><time></time>
+              ${day.hasHoursData ? html`
+                ${ day.isOpen ? 
+                    this._renderHours(day.hours.from, day.hours.to) : html`
+                    <span class="double-decker">Closed</span>`}
               ` : html`<span>?</span>`}
               
             </div>
@@ -281,6 +292,17 @@ export class UcdlibLocation{
     if ( !this.hasHoursData ) return false;
     if ( !this.data.hours.data[day] ) return false;
     return this.data.hours.data[day];
+  }
+
+  /**
+   * @method isOpenOnDay
+   * @param {String} day iso formatted date
+   * @returns {Boolean}
+   */
+  isOpenOnDay(day){
+    if ( !this.hasHoursData || !this.data.hours) return;
+    if ( !this.data.hours.data[day] ) return;
+    return this.data.hours.data[day].status == 'open';
   }
 
   /**
@@ -370,8 +392,18 @@ export class UcdlibLocation{
       return html``;
     }
     const styles = 'white-space: nowrap;'; //TODO: make and use a theme utility class
+    let toIso = "";
+    let fromIso = "";
+    try {
+      toIso = DateTimeUtils.convertTimeToIso(to);
+      fromIso = DateTimeUtils.convertTimeToIso(from);
+    } catch (error) {
+      console.warn('Unable to convert time to iso');
+    }
+    from = `${from.slice(0, -2)} ${from.slice(-2)}`;
+    to = `${to.slice(0, -2)} ${to.slice(-2)}`;
     return html`
-    <span style="${styles}">${from}</span><span> - </span><span style="${styles}">${to}</span>
+    <time class="hours-from" datetime=${fromIso} style="${styles}">${from}</time><span> - </span><time class="hours-to" datetime=${toIso} style="${styles}">${to}</time>
     `;
   }
 

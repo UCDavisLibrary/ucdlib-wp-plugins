@@ -2,6 +2,7 @@ import {Task} from '@lit-labs/task';
 import {html, css, svg} from 'lit';
 import { styleMap } from 'lit/directives/style-map.js';
 import { UcdlibLocation } from "./location-model";
+import { DateTimeUtils } from './datetime';
 
 import linkStyles from '@ucd-lib/theme-sass/1_base_html/_links.css';
 import iconStyles from "@ucd-lib/theme-sass/4_component/_icons.css.js";
@@ -45,9 +46,6 @@ export class LocationsController{
         errorIconSize: {default: '30px', hostProp: 'errorIconSize'},
         errorText: {default: "An error has occurred. Try again later.", hostProp: 'errorText'}
       }
-
-      this._days = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
-      this._months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
     }
 
     hostConnected(){
@@ -260,6 +258,17 @@ export class LocationsController{
     }
 
     /**
+     * @method getWeekDayString
+     * @description Get formatted string of a day in a week
+     * @param {Array} week a week array (from this.hoursDateRange.weeks)
+     * @param {Number} index the day index within the week
+     * @returns 
+     */
+    getWeekDayString(week, index){
+      return `${week[index].month} ${week[index].dayOfMonth}, ${week[index].year}`;
+    }
+
+    /**
      * @method _setHoursDateRange
      * @description Sets date range for which we have hours data
      */
@@ -305,9 +314,10 @@ export class LocationsController{
         range.weeks[weekIndex].push({
           date: new Date(d.getTime()),
           isoKey: d.toISOString().split('T')[0],
-          day: this._days[d.getUTCDay()],
-          month: this._months[d.getUTCMonth()],
-          dayOfMonth: d.getUTCDate()
+          day: DateTimeUtils.labels.days[d.getUTCDay()],
+          month: DateTimeUtils.labels.months[d.getUTCMonth()],
+          dayOfMonth: d.getUTCDate(),
+          year: d.getUTCFullYear()
         })
         d.setDate(d.getDate() + 1);
       }

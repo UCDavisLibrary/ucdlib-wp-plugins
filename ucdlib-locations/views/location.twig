@@ -1,7 +1,9 @@
 {% extends getUcdTemplate('base') %}
 
-{% block content %}
-  <ucdlib-hours
+{% block content_container %}
+<div class="l-container l-basic--flipped">
+  <div class="l-content">
+    <ucdlib-hours
     api-host="{{site.site_url}}"
   ></ucdlib-hours>
   <p>{{foo}}</p>
@@ -16,5 +18,11 @@
   </div>
   {{dump(post.core_data)}}
   {{post.content}}
+  </div>
+  <div class="l-sidebar-second">
+    <p>hey girl, call me a sidenav cause i'm on your side</p>
+  </div>
+</div>
+
 {% endblock %}
 

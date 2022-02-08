@@ -1,4 +1,4 @@
-import { LitElement } from 'lit';
+import { LitElement, html } from 'lit';
 import {render, styles, renderComplete} from "./ucdlib-hours.tpl.js";
 import { LocationsController } from '../../utils/locations-controller.js';
 
@@ -18,7 +18,8 @@ export default class UcdlibHours extends LitElement {
       refreshRate: {type: Number, attribute: 'refresh-rate'},
       apiHost: {type: String, attribute: 'api-host'},
       apiEndpoint: {type: String, attribute: 'api-endpoint'},
-      ariaLabel: {type: String, attribute: 'aria-label', reflect: true}
+      ariaLabel: {type: String, attribute: 'aria-label', reflect: true},
+      _activeWeekPanel: {type: Number, state: true}
     }
   }
 
@@ -39,7 +40,47 @@ export default class UcdlibHours extends LitElement {
 
     // non-controller properties
     this.ariaLabel = "Operating Hours for UC Davis Library Locations";
+    this._activeWeekPanel = 0;
     
+  }
+
+  /**
+   * @method _renderWeekPaginator
+   * @description Renders the paginator that allows user to select a new week to display
+   * @returns {TemplateResult}
+   */
+   _renderWeekPaginator(){
+     const weeks = this.ctl.hoursDateRange.weeks;
+      return html`
+      <div class="paginator">
+        <button 
+          type="button" 
+          ?disabled=${!this._activeWeekPanel}
+          @click=${this._onBackwardClick}
+          >&#xf002</button>
+        <div class="week-label-container">
+          ${weeks.map((week, i) => html`
+            <div class="week-label heading--highlight ${i == this._activeWeekPanel ? 'active' : 'inactive'}">
+              <span class="keep-together">${this.ctl.getWeekDayString(week, 0)}</span><span> to </span><span class="keep-together">${this.ctl.getWeekDayString(week, 6)}</span>
+            </div>
+          `)}
+        </div>
+        <button 
+          type="button" 
+          ?disabled=${this._activeWeekPanel + 1 == weeks.length}
+          @click=${this._onForwardClick}>&#xf002</button>
+      </div>
+      `;
+  }
+
+  _onForwardClick(){
+    if ( this._activeWeekPanel + 1 == this.ctl.hoursDateRange.weeks.length ) return;
+    this._activeWeekPanel += 1;
+  }
+
+  _onBackwardClick(){
+    if ( !this._activeWeekPanel ) return;
+    this._activeWeekPanel -= 1;
   }
 
 }

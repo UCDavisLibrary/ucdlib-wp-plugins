@@ -20,4 +20,9 @@ export class DateTimeUtils {
     minute = String(minute).padStart(2, '0');
     return `${hour}:${minute}:00`
   }
+
+  static labels = {
+    days: ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'],
+    months: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+  }
 }
