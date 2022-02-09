@@ -1,5 +1,5 @@
 import { LitElement, html } from 'lit';
-import {render, styles, renderComplete} from "./ucdlib-hours.tpl.js";
+import * as Templates from "./ucdlib-hours.tpl";
 import { LocationsController } from '../../utils/locations-controller.js';
 
 /**
@@ -19,18 +19,25 @@ export default class UcdlibHours extends LitElement {
       apiHost: {type: String, attribute: 'api-host'},
       apiEndpoint: {type: String, attribute: 'api-endpoint'},
       ariaLabel: {type: String, attribute: 'aria-label', reflect: true},
-      _activeWeekPanel: {type: Number, state: true}
+      _activeWeekPanel: {type: Number, state: true},
+      _visibleServices: {type: Object, state: true}
     }
   }
 
   static get styles() {
-    return styles();
+    return Templates.styles();
   }
 
   constructor() {
     super();
-    this.render = render.bind(this);
-    this.renderComplete = renderComplete.bind(this);
+
+    // bind render functions
+    this.render = Templates.render.bind(this);
+    this.renderComplete = Templates.renderComplete.bind(this);
+    this._renderWeekPaginator = Templates._renderWeekPaginator.bind(this);
+    this._renderWeekLabel = Templates._renderWeekLabel.bind(this);
+    this._renderWeeklyHours = Templates._renderWeeklyHours.bind(this);
+    this._renderChild = Templates._renderChild.bind(this);
 
     // set up controller w/ its config props
     this.showChildren = true;
@@ -41,36 +48,45 @@ export default class UcdlibHours extends LitElement {
     // non-controller properties
     this.ariaLabel = "Operating Hours for UC Davis Library Locations";
     this._activeWeekPanel = 0;
+    this._visibleServices = {};
     
   }
 
+  getActiveWeek(){
+    return this.ctl.hoursDateRange.weeks[this._activeWeekPanel];
+  }
+
+  toggleServiceVisibility(locationId) {
+    this._visibleServices[locationId] = !this._visibleServices[locationId];
+    this.requestUpdate();
+  }
+
   /**
-   * @method _renderWeekPaginator
-   * @description Renders the paginator that allows user to select a new week to display
-   * @returns {TemplateResult}
+   * @method _getAnimationClasses
+   * @description Get classes to enable slide-in paging animation
+   * @param {Number} i - Current index of page
+   * @param {String} section - Where in element will classes be placed? Determines if any additional classes are needed
+   * @returns {Object}
    */
-   _renderWeekPaginator(){
-     const weeks = this.ctl.hoursDateRange.weeks;
-      return html`
-      <div class="paginator">
-        <button 
-          type="button" 
-          ?disabled=${!this._activeWeekPanel}
-          @click=${this._onBackwardClick}
-          >&#xf002</button>
-        <div class="week-label-container">
-          ${weeks.map((week, i) => html`
-            <div class="week-label heading--highlight ${i == this._activeWeekPanel ? 'active' : 'inactive'}">
-              <span class="keep-together">${this.ctl.getWeekDayString(week, 0)}</span><span> to </span><span class="keep-together">${this.ctl.getWeekDayString(week, 6)}</span>
-            </div>
-          `)}
-        </div>
-        <button 
-          type="button" 
-          ?disabled=${this._activeWeekPanel + 1 == weeks.length}
-          @click=${this._onForwardClick}>&#xf002</button>
-      </div>
-      `;
+  _getAnimationClasses(i, section){ 
+    const classes = {}
+    if ( section == 'label' ) {
+      classes['week-label'] = true;
+      classes['heading--highlight'] = true;
+    } else if ( section == 'data') {
+      classes['week-ctl'] = true;
+    } 
+    if ( i < this._activeWeekPanel ) {
+      classes['inactive'] = true;
+      classes['before'] = true;
+    } else if ( i == this._activeWeekPanel ) {
+      classes['active'] = true;
+    } else {
+      classes['inactive'] = true;
+      classes['after'] = true;
+    }
+
+    return classes;
   }
 
   _onForwardClick(){

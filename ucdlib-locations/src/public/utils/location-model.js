@@ -22,6 +22,10 @@ export class UcdlibLocation{
     this._setHoursFor24HrStatus()
   }
 
+  get id(){
+    return this.data.id;
+  }
+
   /**
    * @property {Boolean} roomNumber
    * @description Room number of location. Will be 'Main Building' if is library
@@ -47,6 +51,15 @@ export class UcdlibLocation{
    * @description Formal name of location
    */
   get name(){
+    return this.data.labels.title;
+  }
+
+  /**
+   * @property {String} shortName
+   * @description Short name of location. Returns the formal name if it does not exist.
+   */
+  get shortName(){
+    if ( this.data.labels.short ) return this.data.labels.short;
     return this.data.labels.title;
   }
 
@@ -113,6 +126,15 @@ export class UcdlibLocation{
     }
 
     return this._isInTimeFrame(today, hoursToday);
+  }
+
+  /**
+   * @property {Boolean} hasServices
+   * @description This location has children that are "services" 
+   * i.e. not collapsible in the main hours widget
+   */
+  get hasServices(){
+    return this.children.filter(c => !c.data.notACollapsibleChild).length ? true: false;
   }
 
   /**

@@ -1,4 +1,5 @@
 import { html, css } from 'lit';
+import { classMap } from 'lit/directives/class-map.js';
 import { LocationsController } from '../../utils/locations-controller.js';
 
 
@@ -27,7 +28,7 @@ export function styles() {
       color: var(--brand-primary, #022851);
       min-height: 0;
       border: none;
-      padding: var(--spacer--tiny, .25rem);
+      padding: .1rem .3rem;
       cursor: pointer;
     }
     .paginator button[disabled] {
@@ -44,16 +45,57 @@ export function styles() {
     .paginator .week-label {
       font-size: 1.2rem;
       margin: 0;
-      transition: left 400ms linear;
+      transition: left 350ms linear;
+      position: absolute;
+      top: 0;
     }
-    .paginator .week-label.inactive {
-      display: none;
+    .paginator .week-label.active {
+      left: 0;
+      right: 0;
+      margin: 0 .5rem;
+    }
+    .paginator .week-label.inactive.before {
+      left: -200%;
+    }
+    .paginator .week-label.inactive.after {
+      left: 200%;
+    }
+    .paginator .week-label.stub {
+      visibility: hidden;
+      position: static;
     }
     h3.heading--highlight {
       margin-bottom: 1rem;
     }
+    .child h3.heading--highlight {
+      margin-top: 1rem;
+    }
     ucdlib-occupancy-bar {
       margin-bottom: 1rem;
+    }
+    .week-container {
+      position: relative;
+      overflow: hidden;
+    }
+    .week-ctl {
+      margin: 0;
+      transition: left 350ms linear;
+      position: absolute;
+      top: 0;
+    }
+    .week-ctl.active {
+      left: 0;
+      width: 100%;
+    }
+    .week-ctl.inactive.before {
+      left: -200%;
+    }
+    .week-ctl.inactive.after {
+      left: 200%;
+    }
+    .week-ctl.stub {
+      visibility: hidden;
+      position: static;
     }
     .day {
       padding: .5rem .5rem;
@@ -68,6 +110,7 @@ export function styles() {
       width: 30%;
       min-width: 10%;
       padding-right: .5rem;
+      white-space: nowrap;
     }
     .label .date {
       white-space: nowrap;
@@ -77,6 +120,16 @@ export function styles() {
     }
     .day .value {
       flex-grow: 1;
+    }
+    .services {
+      display: none;
+    }
+    .services.visible {
+      display: block;
+    }
+    .services-toggle {
+      text-decoration: none;
+      cursor: pointer;
     }
     @media (max-width: 330px) {
       .label .date {
@@ -155,13 +208,91 @@ return html`
       <div>
         <h3 class="heading--highlight">${location.roomNumber}</h3>
         ${location.renderOccupancyBar()}
-        ${this.ctl.hoursDateRange.weeks.map((week, i) => html`
-          <div>
-            ${location.renderWeeklyHours(week) }
-          </div>
-        `)}
+        ${this._renderWeeklyHours(location) }
+        <div class="children">
+          ${location.children.filter(c => c.data.notACollapsibleChild).map(c => this._renderChild(c))}
+          ${location.hasServices ? html`
+            <div class="services ${this._visibleServices[location.id] ? 'visible' : ''}">
+              ${location.children.filter(c => !c.data.notACollapsibleChild).map(c => this._renderChild(c))}
+            </div>
+            <a class="services-toggle" 
+              @click=${() => this.toggleServiceVisibility(location.id)}>
+              ${this._visibleServices[location.id] ? 'Hide' : 'Show'} hours for ${location.shortName} services</a>
+          ` : html``}
+        </div>
+
         
       </div>
     </section>
   `)}
 `;}
+
+/**
+ * @function _renderWeekPaginator
+ * @description Renders the paginator that allows user to select a new week to display
+ * @returns {TemplateResult}
+ */
+  export function _renderWeekPaginator(){
+  const weeks = this.ctl.hoursDateRange.weeks;
+    return html`
+    <div class="paginator">
+      <button 
+        type="button" 
+        ?disabled=${!this._activeWeekPanel}
+        @click=${this._onBackwardClick}
+        >&#xf053</button>
+      <div class="week-label-container">
+        <div class="week-label stub heading--highlight" aria-hidden="true" focusable="false">
+          ${this._renderWeekLabel(weeks[this._activeWeekPanel])}
+        </div>
+        ${weeks.map((week, i) => html`
+          <div class=${classMap(this._getAnimationClasses(i, 'label'))} aria-hidden=${i == this._activeWeekPanel ? 'false' : 'true'}>
+            ${this._renderWeekLabel(week)}
+          </div>
+        `)}
+      </div>
+      <button 
+        type="button" 
+        ?disabled=${this._activeWeekPanel + 1 == weeks.length}
+        @click=${this._onForwardClick}>&#xf054</button>
+    </div>
+    `;
+}
+
+export function _renderWeekLabel(week){
+  return html`
+  <span class="keep-together">${this.ctl.getWeekDayString(week, 0)}</span><span> to </span><span class="keep-together">${this.ctl.getWeekDayString(week, 6)}</span>
+  `
+}
+
+/**
+ * @function _renderWeeklyHours
+ * @description Renders the hours for a given location
+ * @param {UcdlibLocation} location - A library/department
+ * @returns {TemplateResult}
+ */
+  export function _renderWeeklyHours(location){
+  const weeks = this.ctl.hoursDateRange.weeks;
+  return html`
+  <div class="week-container">
+    <div class="week-ctl stub">
+      ${location.renderWeeklyHours(this.getActiveWeek()) }
+    </div>
+    ${weeks.map((week, i) => html`
+      <div class=${classMap(this._getAnimationClasses(i, 'data'))}  aria-hidden=${i == this._activeWeekPanel ? 'false' : 'true'}>
+        ${location.renderWeeklyHours(week) }
+      </div>
+    `)}
+  </div>
+  `;
+}
+
+export function _renderChild(child){
+  if ( !child.hasHoursData ) return html``;
+  return html`
+    <div class="child">
+      <h3 class="heading--highlight">${child.name}</h3>
+      ${ this._renderWeeklyHours(child) }
+    </div>
+  `;
+}
