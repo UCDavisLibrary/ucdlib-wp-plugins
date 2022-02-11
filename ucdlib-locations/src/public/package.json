@@ -1,5 +1,5 @@
 {
-  "name": "public",
+  "name": "@ucd-lib/plugin-locations-public",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -7,17 +7,12 @@
     "watch": "webpack --config webpack-watch.config.js --watch",
     "dist": "webpack --config webpack-dist.config.js"
   },
+  "private": true,
   "author": "",
   "license": "ISC",
   "dependencies": {
     "@lit-labs/task": "^1.1.1",
     "@ucd-lib/theme-elements": "^0.0.9",
     "@ucd-lib/theme-sass": "^5.0.16"
-  },
-  "devDependencies": {
-    "@ucd-lib/cork-app-build": "^0.2.0",
-    "fs-extra": "^10.0.0",
-    "webpack": "^5.67.0",
-    "webpack-cli": "^4.9.2"
   }
 }

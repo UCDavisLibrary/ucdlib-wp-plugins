@@ -2,3 +2,6 @@ node_modules
 .DS_Store
 ucdlib-locations/assets/js/dev
 ucdlib-locations/assets/js/dist
+ucdlib-assets/assets/js/dev
+ucdlib-assets/assets/js/dist
+ucdlib-assets/assets/css
