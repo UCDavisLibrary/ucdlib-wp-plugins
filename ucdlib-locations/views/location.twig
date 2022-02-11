@@ -3,6 +3,7 @@
 {% block content_container %}
 <div class="l-container l-basic--flipped">
   <div class="l-content">
+    <div class="o-box"></div>
     <ucdlib-hours
     api-host="{{site.site_url}}"
   ></ucdlib-hours>
@@ -20,7 +21,13 @@
   {{post.content}}
   </div>
   <div class="l-sidebar-second">
-    <p>hey girl, call me a sidenav cause i'm on your side</p>
+    <div class="o-box">
+      <ucdlib-hours-today-simple
+        api-host="{{site.site_url}}"
+        location="{{post.ID}}"
+      >
+      </ucdlib-hours-today-simple>
+    </div>
   </div>
 </div>
 

@@ -75,6 +75,69 @@
                     "delay": 0
                 }
             ]
+        },
+        {
+            "key": "field_62052fe1531f3",
+            "label": "",
+            "name": "hours_placeholder",
+            "type": "group",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "layout": "block",
+            "sub_fields": [
+                {
+                    "key": "field_62053089531f4",
+                    "label": "Show Placeholder Message",
+                    "name": "show",
+                    "type": "true_false",
+                    "instructions": "Displays message instead of location's hours on hour's widget",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "message": "",
+                    "default_value": 0,
+                    "ui": 1,
+                    "ui_on_text": "",
+                    "ui_off_text": ""
+                },
+                {
+                    "key": "field_620530fa531f5",
+                    "label": "",
+                    "name": "message",
+                    "type": "wysiwyg",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": [
+                        [
+                            {
+                                "field": "field_62053089531f4",
+                                "operator": "==",
+                                "value": "1"
+                            }
+                        ]
+                    ],
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "",
+                    "tabs": "all",
+                    "toolbar": "basic",
+                    "media_upload": 0,
+                    "delay": 0
+                }
+            ]
         }
     ],
     "location": [
@@ -100,5 +163,5 @@
     "active": true,
     "description": "Locations: All things messaging",
     "show_in_rest": 0,
-    "modified": 1642712155
+    "modified": 1644508968
 }

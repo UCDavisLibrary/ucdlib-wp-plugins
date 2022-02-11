@@ -14,6 +14,8 @@ class UCDLibPluginLocationsLocation extends Timber\Post {
       'links' => array(),
       'parent' => $this->meta('parent'),
       'appointments' => $this->meta('appointments'),
+      'hoursPlaceholder' => $this->meta('hours_placeholder'),
+      'alerts' => $this->meta('alerts'),
       'order' => $this->menu_order
     );
 

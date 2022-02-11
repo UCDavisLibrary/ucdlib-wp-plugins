@@ -1,5 +1,6 @@
 import { html, css } from 'lit';
 import { classMap } from 'lit/directives/class-map.js';
+import { unsafeHTML } from 'lit/directives/unsafe-html.js';
 import { LocationsController } from '../../utils/locations-controller.js';
 
 
@@ -14,12 +15,16 @@ export function styles() {
     .location--no-hours {
       display: none;
     }
+    .location {
+      margin-bottom: 1rem;
+    }
     .paginator {
       background-color: var(--brand--primary-30, #ebf3fa);
       padding: var(--spacer--small, .5rem);
       display: flex;
       align-items: center;
       justify-content: space-between;
+      margin-bottom: 1rem;
     }
     .paginator button {
       font-family: "Font Awesome 5 Free";
@@ -131,6 +136,14 @@ export function styles() {
       text-decoration: none;
       cursor: pointer;
     }
+    .services-toggle .chevron {
+      font-family: "Font Awesome 5 Free";
+      display: inline-block;
+      font-size: .75rem;
+    }
+    .services.visible + .services-toggle .chevron {
+      transform: rotate(180deg);
+    }
     @media (max-width: 330px) {
       .label .date {
         display: block;
@@ -146,7 +159,7 @@ export function styles() {
       }
       .day {
         display: block;
-        flex-grow: 1;
+        flex: 1;
         padding: .5rem;
       }
       .day.is-today {
@@ -166,6 +179,11 @@ export function styles() {
       }
       .hours-to {
         display: block;
+      }
+    }
+    @media (min-width: 992px) and (max-width: 1199px) {
+      .day {
+        font-size: .9rem;
       }
     }
     @media (min-width: 1600px){
@@ -203,12 +221,15 @@ export function renderComplete(locations) {
 return html`
   ${this._renderWeekPaginator()}
   ${locations.map(location => html`
-    <section class="location ${!location.hasHoursData ? 'location--no-hours' : ''}">
+    <section class="location ${!location.hasHoursData && !location.hoursPlaceholder ? 'location--no-hours' : ''}">
       <h2 class="heading--underline">${location.name}</h2>
+      ${location.renderAlert()}
       <div>
         <h3 class="heading--highlight">${location.roomNumber}</h3>
         ${location.renderOccupancyBar()}
-        ${this._renderWeeklyHours(location) }
+        ${location.hoursPlaceholder ? html`
+          <div>${unsafeHTML(location.hoursPlaceholder)}</div>
+        ` : this._renderWeeklyHours(location) }
         <div class="children">
           ${location.children.filter(c => c.data.notACollapsibleChild).map(c => this._renderChild(c))}
           ${location.hasServices ? html`
@@ -217,7 +238,7 @@ return html`
             </div>
             <a class="services-toggle" 
               @click=${() => this.toggleServiceVisibility(location.id)}>
-              ${this._visibleServices[location.id] ? 'Hide' : 'Show'} hours for ${location.shortName} services</a>
+              ${this._visibleServices[location.id] ? 'Hide' : 'Show'} hours for ${location.shortName} services <span class="chevron">&#xf078</span></a>
           ` : html``}
         </div>
 

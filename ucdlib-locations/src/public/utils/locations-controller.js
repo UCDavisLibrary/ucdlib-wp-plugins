@@ -132,6 +132,18 @@ export class LocationsController{
             transform: rotate(360deg);
           }
         }
+        .global-alert {
+          display: flex;
+          align-items: center;
+          font-weight: var(--font-weight--bold, 700);
+        }
+        .global-alert .exclamation-icon {
+          width: 20px;
+          height: 20px;
+          min-width: 20px;
+          min-height: 20px;
+          margin-right: var(--spacer--small, .5rem);
+        }
       `;
 
       return [

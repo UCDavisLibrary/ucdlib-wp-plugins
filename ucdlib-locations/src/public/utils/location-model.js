@@ -88,6 +88,15 @@ export class UcdlibLocation{
   }
 
   /**
+   * @property {String} hoursPlaceholder
+   * @description Message to display instead of location's hours
+   */
+  get hoursPlaceholder(){
+    if ( !this.data.hoursPlaceholder || !this.data.hoursPlaceholder.show ) return "";
+    return this.data.hoursPlaceholder.message;
+  }
+
+  /**
    * @property {Boolean} isOpenToday
    * @description Location is open today (if has hours data)
    */
@@ -237,7 +246,9 @@ export class UcdlibLocation{
             <div class="value">
               ${day.hasHoursData ? html`
                 ${ day.isOpen ? 
-                    this._renderHours(day.hours.from, day.hours.to) : html`
+                    this.hasAppointments ? this.renderAppointmentsLink(false, true) :
+                      this._renderHours(day.hours.from, day.hours.to) 
+                  : html`
                     <span class="double-decker">Closed</span>`}
               ` : html`<span>?</span>`}
               
@@ -281,14 +292,21 @@ export class UcdlibLocation{
    * @param {Boolean} showIcon Renders a calendar icon before link. default: true
    * @returns {TemplateResult}
    */
-  renderAppointmentsLink(showIcon=true){
+  renderAppointmentsLink(showIcon=true, useAltText=false){
     if ( !this.hasAppointments ) return html``;
     const appt = this.data.appointments;
+    let text
+    if ( useAltText ){
+      text = appt.link_text_alt ? appt.link_text_alt : "Schedule a Visit";
+    } else {
+      text = appt.link_text ? appt.link_text : "Appointment Required";
+    }
+    
     const icon = svg`
       <svg aria-hidden="true" focusable="false" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
         <path fill="currentColor" d="M12 192h424c6.6 0 12 5.4 12 12v260c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48V204c0-6.6 5.4-12 12-12zm436-44v-36c0-26.5-21.5-48-48-48h-48V12c0-6.6-5.4-12-12-12h-40c-6.6 0-12 5.4-12 12v52H160V12c0-6.6-5.4-12-12-12h-40c-6.6 0-12 5.4-12 12v52H48C21.5 64 0 85.5 0 112v36c0 6.6 5.4 12 12 12h424c6.6 0 12-5.4 12-12z"></path>
       </svg>`
-    return html`<span class="appt-link">${showIcon ? icon : html``}<a href="${appt.link_url}">${appt.link_text}</a></span>`;
+    return html`<span class="appt-link">${showIcon ? icon : html``}<a href="${appt.link_url}">${text}</a></span>`;
   }
 
   /**
@@ -302,6 +320,37 @@ export class UcdlibLocation{
     return html`
       <a href=${this.data.links.hoursPage} class="category-brand--secondary icon icon--circle-arrow-right">${text}</a>
     `;
+  }
+
+  /**
+   * @method renderAlert
+   * @description Renders the stylized global location alert
+   * @returns {TemplateResult}
+   */
+  renderAlert(){
+    const alert = this.getAlert('global');
+    if ( !alert ) return html``;
+    return html`
+      <div class="global-alert double-decker">
+        <div class="exclamation-icon">
+          ${svg`
+            <svg aria-hidden="true" focusable="false" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M504 256c0 136.997-111.043 248-248 248S8 392.997 8 256C8 119.083 119.043 8 256 8s248 111.083 248 248zm-248 50c-25.405 0-46 20.595-46 46s20.595 46 46 46 46-20.595 46-46-20.595-46-46-46zm-43.673-165.346l7.418 136c.347 6.364 5.609 11.346 11.982 11.346h48.546c6.373 0 11.635-4.982 11.982-11.346l7.418-136c.375-6.874-5.098-12.654-11.982-12.654h-63.383c-6.884 0-12.356 5.78-11.981 12.654z"></path></svg>
+          `}
+        </div>
+        <div>${alert}</div>
+      </div>
+    `;
+  }
+
+  /**
+   * @method getAlert
+   * @description Returns an alert message
+   * @param {String} alert - Type of alert
+   * @returns {String}
+   */
+  getAlert(alert){
+    if ( !this.data.alerts || !this.data.alerts[alert]) return "";
+    return this.data.alerts[alert];
   }
 
   /**
