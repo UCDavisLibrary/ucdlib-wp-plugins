@@ -1,0 +1,20 @@
+{
+  "name": "@ucd-lib/plugin-assets-public",
+  "version": "1.0.0",
+  "description": "",
+  "main": "ucdlib-editor.js",
+  "scripts": {
+    "watch": "wp-scripts start ucdlib-editor.js --output-path=../../assets/js/editor/dev",
+    "dist": "wp-scripts build ucdlib-editor.js --output-path=../../assets/js/editor/dist",
+    "docker-package": "node ./lib/generate-docker-package-json.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "private": true,
+  "dependencies": {
+    "@ucd-lib/brand-theme-editor": "file:../../../../../themes/ucdlib-theme-wp/node_modules"
+  },
+  "devDependencies": {
+    "@wordpress/scripts": "^17.1.0"
+  }
+}

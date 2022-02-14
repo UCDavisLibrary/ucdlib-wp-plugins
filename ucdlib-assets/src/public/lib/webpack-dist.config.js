@@ -3,7 +3,7 @@ const fs = require('fs-extra');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const buildConfig = require('./build-config');
 
-let dist = '../../../assets/js/dist';
+let dist = `${buildConfig.assetsPath}js/dist`;
 let distFolder = path.join(__dirname, dist);
 if( fs.existsSync(distFolder) ) {
   fs.removeSync(distFolder);
@@ -14,32 +14,13 @@ let config = require('@ucd-lib/cork-app-build').dist({
   root : __dirname,
   // path to your entry .js file
   entry : '../index.js',
-  // folder where bundle.js will be written
+  dist: distFolder,
   modern : buildConfig.fileName,
+  ie: `${buildConfig.fileName.split(".")[0]}-ie.js`,
   clientModules : buildConfig.clientModules
 });
 
-let loaderOptions = {
-  css: {
-    loader: 'css-loader',
-    options : {
-      url: false
-    }
-  },
-  scss: {
-    loader: 'sass-loader',
-    options: {
-      implementation: require("sass"),
-      sassOptions: {
-        includePaths: [
-          "node_modules/@ucd-lib/theme-sass",
-          "node_modules/breakpoint-sass/stylesheets",
-          "node_modules/sass-toolkit/stylesheets"]
-      }
-    }
-  }
-}
-/** 
+
 if( !Array.isArray(config) ) config = [config];
 config.forEach(conf => {
   
@@ -49,16 +30,16 @@ config.forEach(conf => {
      test: /\.s[ac]ss$/i,
      use: [
        { loader: MiniCssExtractPlugin.loader},
-       loaderOptions.css,
-       loaderOptions.scss,
+       buildConfig.loaderOptions.css,
+       buildConfig.loaderOptions.scss,
      ]
    });
 
    conf.plugins = [
      new MiniCssExtractPlugin({
-       filename: '../../css/ucd-styles.css'
+       filename: `${buildConfig.assetsPath}css/ucdlib.css`
      })
    ]
 });
-*/
+
 module.exports = config;

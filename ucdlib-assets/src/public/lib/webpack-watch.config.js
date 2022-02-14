@@ -3,7 +3,7 @@ const fs = require('fs-extra');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const buildConfig = require('./build-config');
 
-let preview = '../../../assets/js/dev';
+let preview = `${buildConfig.assetsPath}/js/dev`;
 let previewFolder = path.join(__dirname, preview);
 if( fs.existsSync(previewFolder) ) {
   fs.removeSync(previewFolder);
@@ -20,26 +20,6 @@ let config = require('@ucd-lib/cork-app-build').watch({
   clientModules : buildConfig.clientModules
 });
 
-let loaderOptions = {
-  css: {
-    loader: 'css-loader',
-    options : {
-      url: false
-    }
-  },
-  scss: {
-    loader: 'sass-loader',
-    options: {
-      implementation: require("sass"),
-      sassOptions: {
-        includePaths: [
-          "node_modules/@ucd-lib/theme-sass",
-          "node_modules/breakpoint-sass/stylesheets",
-          "node_modules/sass-toolkit/stylesheets"]
-      }
-    }
-  }
-}
 if( !Array.isArray(config) ) config = [config];
 
 config.forEach(conf => {
@@ -50,14 +30,14 @@ config.forEach(conf => {
      test: /\.s[ac]ss$/i,
      use: [
        { loader: MiniCssExtractPlugin.loader},
-       loaderOptions.css,
-       loaderOptions.scss,
+       buildConfig.loaderOptions.css,
+       buildConfig.loaderOptions.scss,
      ]
    });
 
    conf.plugins = [
      new MiniCssExtractPlugin({
-       filename: '../../../assets/css/ucdlib-dev.css'
+       filename: `${buildConfig.assetsPath}css/ucdlib-dev.css`
      })
    ]
 });
