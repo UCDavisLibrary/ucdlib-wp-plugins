@@ -12,14 +12,16 @@
   "license": "ISC",
   "private": true,
   "dependencies": {
-    "@ucd-lib/brand-theme": "file:../../../../../themes/ucdlib-theme-wp/src/public",
-    "@ucd-lib/plugin-locations-public": "file:../../../ucdlib-locations/src/public"
+    "@ucd-lib/brand-theme": "file:../../../../themes/ucdlib-theme-wp/src/public",
+    "@ucd-lib/plugin-locations-public": "file:../../../ucdlib-locations/src/public",
+    "normalize-scss": "^7.0.1"
   },
   "devDependencies": {
     "@ucd-lib/cork-app-build": "^0.3.0",
     "breakpoint-sass": "^2.7.1",
     "cork-app-utils": "^1.0.5",
     "css-loader": "^5.2.4",
+    "dotenv": "^16.0.0",
     "fs-extra": "^10.0.0",
     "mini-css-extract-plugin": "^1.6.0",
     "sass": "^1.32.12",
