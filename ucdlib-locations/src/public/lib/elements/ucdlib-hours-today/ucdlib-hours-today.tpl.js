@@ -30,7 +30,16 @@ export function styles() {
       padding: 0 5px;
     }
 
-    @media (min-width: 400px) {
+    @media (min-width: 400px) and (max-width: 991px) {
+      .child-details {
+        display: flex;
+      }
+      .child-details.child-details--appts .separator {
+        display: block;
+      }
+    }
+
+    @media (min-width: 1600px) {
       .child-details {
         display: flex;
       }

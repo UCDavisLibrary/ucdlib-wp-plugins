@@ -1,7 +1,8 @@
 <?php
 require_once( __DIR__ . '/utils.php' );
+require_once( get_template_directory() . "/includes/classes/post.php");
 
-class UCDLibPluginLocationsLocation extends Timber\Post {
+class UCDLibPluginLocationsLocation extends UcdThemePost {
   
   protected $core_data;
   public function core_data(){
