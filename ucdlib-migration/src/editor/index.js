@@ -3,6 +3,8 @@ import { select } from "@wordpress/data";
 
 import metaPlugin from "./lib/plugins/post-meta";
 
-if ( select('core/editor') ){
-  registerPlugin( metaPlugin.name, metaPlugin.settings );
-  }
+if ( document.querySelector('ucdlib-plugin[plugin=ucdlib-migration]') ) {
+    if ( select('core/editor') ){
+        registerPlugin( metaPlugin.name, metaPlugin.settings );
+        }
+}

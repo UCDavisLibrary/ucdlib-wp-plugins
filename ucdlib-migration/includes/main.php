@@ -19,7 +19,19 @@ class UCDLibPluginMigration {
       $config['version'] = $plugin_metadata['Version'];
     } 
 
+    add_action( 'admin_head', array($this, 'admin_head') );
+
     $this->metaData = new UCDLibPluginMigrationMetaData( $config );
+  }
+
+  /**
+   * if this element is detected, editor JS for this plugin will be executed.
+   */
+  public function admin_head(){
+    echo "
+    <ucdlib-plugin plugin='$this->slug' style='display:none'>
+    </ucdlib-plugin>
+    ";
   }
 
 }
