@@ -1,4 +1,4 @@
-import { createElement, useState } from "@wordpress/element";
+import { createElement, useState, useEffect } from "@wordpress/element";
 import { PluginDocumentSettingPanel } from '@wordpress/edit-post';
 import { useDispatch, useSelect } from "@wordpress/data";
 import { 
@@ -6,11 +6,9 @@ import {
   PanelRow, 
   BaseControl, 
   Button, 
-  ButtonGroup,
-  ToggleControl,
-  TextControl,
-  Snackbar,
   Modal } from '@wordpress/components';
+import apiFetch from '@wordpress/api-fetch';
+import { addQueryArgs, getPath } from '@wordpress/url';
 import htm from 'htm';
 
 const html = htm.bind( createElement );
@@ -20,9 +18,12 @@ const Edit = () => {
 
   // get metadata
   const editPost = useDispatch( 'core/editor' ).editPost;
-  const pageMeta = useSelect( (select) => {
-    const meta = select('core/editor').getEditedPostAttribute('meta');
-    return meta ? meta : {};
+  const {pageMeta, permalink} = useSelect( (select) => {
+    let pageMeta = select('core/editor').getEditedPostAttribute('meta');
+    pageMeta = pageMeta ? pageMeta : {};
+    let permalink = select('core/editor').getPermalink();
+    permalink = permalink ? permalink : '';
+    return {pageMeta, permalink};
   }, []);
 
   // set up content status select
@@ -33,58 +34,39 @@ const Edit = () => {
     {value: 'go-live-ready', label: 'Go Live Ready'}
   ];
 
-  // set up old site redirect inputs
+  // get redirects from redirection plugin
   const [ redirectModalIsOpen, setRedirectModalOpen ] = useState( false );
   const [ redirectModalMode, setRedirectModalMode ] = useState( 'add' );
-  const [ isRegex, setRegex ] = useState( false );
-  const [ newPath, setNewPath ] = useState( '' );
+  const [ redirects, setRedirects ] = useState( [] );
 
-	const openRedirectModal = (mode) => {
-    setRedirectModalMode( mode)
+  useEffect(() => {
+    if ( permalink ){
+      const path = addQueryArgs( '/redirection/v1/redirect', {
+        filterBy: {
+          target: getPath(permalink),
+          status: 'enabled',
+          action: 'url'
+        }, 
+        per_page: 200
+      });
+      apiFetch( {path} ).then( 
+        ( r ) => {
+          setRedirects(r.items.filter(redirect => {
+            return redirect.action_data.url == `/${getPath(permalink)}` || redirect.action_data.url == permalink;
+          }));
+        }, 
+        (error) => {
+          console.warn('Unable to retrieve redirect list.')
+        })
+    }
+  }, [permalink])
+
+	const openRedirectModal = () => {
     setRedirectModalOpen( true )
   };
 	const closeRedirectModal = () => {
     setRedirectModalOpen( false );
   };
-
-  const addRedirect = () => {
-    if ( newPath ) {
-      const migration_redirects = JSON.parse(JSON.stringify(pageMeta.migration_redirects));
-      migration_redirects.push({path: newPath, regex: isRegex});
-      editPost({meta: {migration_redirects}})
-
-      wp.data.dispatch("core/notices").createNotice("success",
-      "Redirect added. Click 'Update' to save changes.", 
-      {
-        type: "snackbar",
-        isDismissible: true
-      });
-
-      setRegex(false);
-      setNewPath("");
-    } 
-    closeRedirectModal();
-  }
-
-  const editRedirect = ( i, field, value ) => {
-    if ( i > pageMeta.migration_redirects.length - 1 ) return;
-    
-    // nasty little workaround for making wp realize the array has changed
-    // probably related to this: https://github.com/WordPress/gutenberg/issues/25668
-    const migration_redirects = JSON.parse(JSON.stringify(pageMeta.migration_redirects));
-    migration_redirects[i][field] = value;
-    editPost({meta: {migration_redirects}});
-  }
-
-  const deleteRedirect = (i) => {
-    if ( i > pageMeta.migration_redirects.length - 1 ) return;
-    const migration_redirects = JSON.parse(JSON.stringify(pageMeta.migration_redirects));
-    migration_redirects.splice(i, 1);
-    editPost({meta: {migration_redirects}});
-    if ( !migration_redirects.length ){
-      closeRedirectModal();
-    }
-  }
 
   return html`
     <${PluginDocumentSettingPanel}
@@ -99,71 +81,22 @@ const Edit = () => {
         />
       </${PanelRow}>
       <${PanelRow}>
-        <${BaseControl.VisualLabel}>Redirects from Old Site</${BaseControl.VisualLabel}>
+        <${BaseControl.VisualLabel}>Redirects to this page</${BaseControl.VisualLabel}>
       </${PanelRow}>
-      <div style=${{marginBottom: '5px'}}>Number of redirects: ${pageMeta.migration_redirects.length}</div>
-      <${ButtonGroup}>
-        <${Button} variant="secondary" onClick=${ () => openRedirectModal('add') }>
-          Add
+      <div style=${{marginBottom: '5px'}}>Number of redirects: ${redirects.length}</div>
+      ${redirects.length ? html`
+        <${Button} variant="secondary" onClick=${ () => openRedirectModal() }>
+              View
         </${Button}>
-        ${pageMeta.migration_redirects.length ? html`
-          <${Button} variant="secondary" onClick=${ () => openRedirectModal('edit') }>
-            View/Edit
-          </${Button}>
-        ` : html``}
-      </${ButtonGroup}>
+      ` : html``}
       ${redirectModalIsOpen && html`
-        <${Modal} title="${redirectModalMode == 'add' ? 'Add a Redirect' : 'Edit Redirects'}" onRequestClose=${closeRedirectModal}>
-          ${redirectModalMode == 'add' && html`
-            <div>
-              <${ToggleControl} 
-                label="Regex"
-                checked=${ isRegex }
-                onChange=${() => setRegex(( state ) => ! state)} />
-              <${TextControl} 
-                label="Path"
-                value=${newPath}
-                onChange=${(v) => setNewPath(v)}
-              />
-              <${ButtonGroup}>
-                <${Button} variant="primary" onClick=${ addRedirect }>Save</${Button}>
-                <${Button} variant="secondary" onClick=${ closeRedirectModal }>Cancel</${Button}>
-              </${ButtonGroup}>
-            </div>
-          `}
-          ${redirectModalMode == 'edit' && html`
-            <div>
-              <div style=${{display: 'table'}}>
-                <div style=${{display: 'table-row'}}>
-                    <div style=${{display: 'table-cell', fontWeight: 600, paddingBottom: '6px'}}>Regex</div>
-                    <div style=${{display: 'table-cell', fontWeight: 600, paddingBottom: '6px'}}>Path</div>
-                </div>
-                ${pageMeta.migration_redirects.map((r, i) => html`
-                  <div key=${i} style=${{display: 'table-row'}}>
-                    <div style=${{display: 'table-cell'}}>
-                      <${ToggleControl} 
-
-                        checked=${ r.regex }
-                        onChange=${(v) => editRedirect(i, 'regex', v)} />
-                    </div>
-                    <div style=${{display: 'table-cell'}}>
-                      <${TextControl} 
-
-                        value=${r.path}
-                        onChange=${(v) => editRedirect(i, 'path', v)}
-                      />
-                    </div>
-                    <div style=${{display: 'table-cell', paddingLeft: '15px'}}>
-                    <${Button} variant="link" isDestructive onClick=${ () => deleteRedirect(i) }>X</${Button}>
-                    </div>
-                  </div>
-                `)}
-              </div>
+        <${Modal} title="Redirects to this page" onRequestClose=${closeRedirectModal}>
+          <div>
+            <div>${JSON.stringify(redirects)}</div>
               <${Button} variant="secondary" onClick=${ closeRedirectModal }>
                 Close
               </${Button}>
-            </div>
-          `}
+          </div>
         </${Modal}>
       `}
     </${PluginDocumentSettingPanel}>

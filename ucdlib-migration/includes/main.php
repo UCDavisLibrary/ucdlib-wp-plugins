@@ -1,6 +1,7 @@
 <?php
 require_once( __DIR__ . '/meta-data.php' );
 require_once( __DIR__ . '/guides.php' );
+require_once( __DIR__ . '/redirection.php' );
 
 class UCDLibPluginMigration {
   public function __construct(){
@@ -30,6 +31,8 @@ class UCDLibPluginMigration {
 
     // register guide stub post type
     $this->guides = new UCDLibPluginMigrationGuides( $config );
+
+    $this->redirection = new UCDLibPluginMigrationRedirection( $config );
   }
 
   /**

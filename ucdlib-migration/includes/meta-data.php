@@ -19,6 +19,8 @@ class UCDLibPluginMigrationMetaData {
       'type' => 'string',
       'default' => ''
     ) );
+
+    /** 
     register_post_meta( '', 'migration_redirects', array(
       'show_in_rest' => [
         'schema' => [
@@ -35,6 +37,7 @@ class UCDLibPluginMigrationMetaData {
       'type' => 'array',
       'default' => []
     ) );
+    */
   }
 
 }
