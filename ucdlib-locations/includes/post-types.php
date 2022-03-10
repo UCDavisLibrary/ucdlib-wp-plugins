@@ -73,7 +73,8 @@ class UCDLibPluginLocationsPostTypes {
         'thumbnail', 
         // 'excerpt', 
         //'revisions',
-        'page-attributes'
+        'page-attributes',
+        'custom-fields'
       )
     );
 
