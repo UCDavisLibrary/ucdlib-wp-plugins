@@ -33,13 +33,12 @@ const Edit = () => {
     {value: 'go-live-ready', label: 'Go Live Ready'}
   ];
 
-  const MySnackbarNotice = () => html`
-    <${Snackbar}>Post published successfully.</${Snackbar}>`
-  ;
-
   // set up old site redirect inputs
   const [ redirectModalIsOpen, setRedirectModalOpen ] = useState( false );
   const [ redirectModalMode, setRedirectModalMode ] = useState( 'add' );
+  const [ isRegex, setRegex ] = useState( false );
+  const [ newPath, setNewPath ] = useState( '' );
+
 	const openRedirectModal = (mode) => {
     setRedirectModalMode( mode)
     setRedirectModalOpen( true )
@@ -47,16 +46,15 @@ const Edit = () => {
 	const closeRedirectModal = () => {
     setRedirectModalOpen( false );
   };
-  const [ isRegex, setRegex ] = useState( false );
-  const [ newPath, setNewPath ] = useState( '' );
+
   const addRedirect = () => {
     if ( newPath ) {
-      const migration_redirects = pageMeta.migration_redirects;
+      const migration_redirects = JSON.parse(JSON.stringify(pageMeta.migration_redirects));
       migration_redirects.push({path: newPath, regex: isRegex});
       editPost({meta: {migration_redirects}})
 
       wp.data.dispatch("core/notices").createNotice("success",
-      "Redirect added", 
+      "Redirect added. Click 'Update' to save changes.", 
       {
         type: "snackbar",
         isDismissible: true
@@ -65,11 +63,10 @@ const Edit = () => {
       setRegex(false);
       setNewPath("");
     } 
-
     closeRedirectModal();
   }
+
   const editRedirect = ( i, field, value ) => {
-    console.log(i, field, value);
     if ( i > pageMeta.migration_redirects.length - 1 ) return;
     
     // nasty little workaround for making wp realize the array has changed
@@ -77,6 +74,16 @@ const Edit = () => {
     const migration_redirects = JSON.parse(JSON.stringify(pageMeta.migration_redirects));
     migration_redirects[i][field] = value;
     editPost({meta: {migration_redirects}});
+  }
+
+  const deleteRedirect = (i) => {
+    if ( i > pageMeta.migration_redirects.length - 1 ) return;
+    const migration_redirects = JSON.parse(JSON.stringify(pageMeta.migration_redirects));
+    migration_redirects.splice(i, 1);
+    editPost({meta: {migration_redirects}});
+    if ( !migration_redirects.length ){
+      closeRedirectModal();
+    }
   }
 
   return html`
@@ -147,7 +154,7 @@ const Edit = () => {
                       />
                     </div>
                     <div style=${{display: 'table-cell', paddingLeft: '15px'}}>
-                    <${Button} variant="link" isDestructive onClick=${ () => console.log(i) }>X</${Button}>
+                    <${Button} variant="link" isDestructive onClick=${ () => deleteRedirect(i) }>X</${Button}>
                     </div>
                   </div>
                 `)}
