@@ -1,5 +1,5 @@
 {
-  "name": "@ucd-lib/plugin-assets-public",
+  "name": "@ucd-lib/plugin-assets-editor",
   "version": "1.0.0",
   "description": "",
   "main": "ucdlib-editor.js",
@@ -12,7 +12,8 @@
   "license": "ISC",
   "private": true,
   "dependencies": {
-    "@ucd-lib/brand-theme-editor": "file:../../../../themes/ucdlib-theme-wp/src/editor"
+    "@ucd-lib/brand-theme-editor": "file:../../../../themes/ucdlib-theme-wp/src/editor",
+    "@ucd-lib/plugin-migration-editor": "file:../../../ucdlib-migration/src/editor"
   },
   "devDependencies": {
     "@wordpress/scripts": "^17.1.0"
