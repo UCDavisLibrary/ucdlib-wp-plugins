@@ -47,7 +47,9 @@ const Edit = () => {
           status: 'enabled',
           action: 'url'
         }, 
-        per_page: 200
+        per_page: 200,
+        orderby: "last_count",
+        direction: 'desc'
       });
       apiFetch( {path} ).then( 
         ( r ) => {
@@ -90,12 +92,27 @@ const Edit = () => {
         </${Button}>
       ` : html``}
       ${redirectModalIsOpen && html`
-        <${Modal} title="Redirects to this page" onRequestClose=${closeRedirectModal}>
+        <${Modal} title="Redirects to this page" isFullScreen onRequestClose=${closeRedirectModal}>
           <div>
-            <div>${JSON.stringify(redirects)}</div>
+            <div style=${{display: 'table', width: '100%'}}>
+              <div style=${{display: 'table-row'}}>
+                  <div style=${{display: 'table-cell', fontWeight: 600, paddingBottom: '6px', width: '60%'}}>URL</div>
+                  <div style=${{display: 'table-cell', fontWeight: 600, paddingBottom: '6px', width: '15%'}}>Hits</div>
+                  <div style=${{display: 'table-cell', fontWeight: 600, paddingBottom: '6px', width: '25%'}}>Last Access</div>
+              </div>
+              ${redirects.map((r, i) => html`
+                <div key=${i} style=${{display: 'table-row'}}>
+                  <div style=${{display: 'table-cell'}}>${r.url}</div>
+                  <div style=${{display: 'table-cell'}}>${r.hits}</div>
+                  <div style=${{display: 'table-cell'}}>${r.last_access}</div>
+                </div>
+              `)}
+            </div>
+            <div style=${{marginTop: '10px'}}>
               <${Button} variant="secondary" onClick=${ closeRedirectModal }>
                 Close
               </${Button}>
+            </div>
           </div>
         </${Modal}>
       `}
