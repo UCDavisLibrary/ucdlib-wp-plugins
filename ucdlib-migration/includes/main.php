@@ -1,6 +1,5 @@
 <?php
 require_once( __DIR__ . '/meta-data.php' );
-require_once( __DIR__ . '/guides.php' );
 require_once( __DIR__ . '/redirection.php' );
 
 class UCDLibPluginMigration {
@@ -9,7 +8,6 @@ class UCDLibPluginMigration {
 
     $config = array(
       'slug' => $this->slug,
-      'guideSlug' => 'guide-stub',
       'entryPath' => plugin_dir_path( __DIR__ ) . $this->slug . '.php',
       'version' => false
     );
@@ -24,13 +22,9 @@ class UCDLibPluginMigration {
     $this->config = $config;
 
     add_action( 'admin_head', array($this, 'admin_head') );
-    add_filter( 'timber/locations', array($this, 'add_timber_locations') );
 
     // register custom metadata for posts
     $this->metaData = new UCDLibPluginMigrationMetaData( $config );
-
-    // register guide stub post type
-    $this->guides = new UCDLibPluginMigrationGuides( $config );
 
     $this->redirection = new UCDLibPluginMigrationRedirection( $config );
   }
@@ -44,11 +38,6 @@ class UCDLibPluginMigration {
     <ucdlib-plugin plugin='$this->slug' style='display:none'>
     </ucdlib-plugin>
     ";
-  }
-
-  public function add_timber_locations($paths){
-    $paths[$this->config['slug']] = array(WP_PLUGIN_DIR . "/" . $this->config['slug'] . '/views');
-    return $paths;
   }
 
 }

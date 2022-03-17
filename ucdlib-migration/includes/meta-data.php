@@ -19,25 +19,6 @@ class UCDLibPluginMigrationMetaData {
       'type' => 'string',
       'default' => ''
     ) );
-
-    /** 
-    register_post_meta( '', 'migration_redirects', array(
-      'show_in_rest' => [
-        'schema' => [
-          'items' => [
-            'type' => 'object',
-            'properties' => [
-              'path' => ['type' => 'string'],
-              'regex' => ['type' => 'boolean']
-            ]
-          ]
-        ]
-      ],
-      'single' => true,
-      'type' => 'array',
-      'default' => []
-    ) );
-    */
   }
 
 }
