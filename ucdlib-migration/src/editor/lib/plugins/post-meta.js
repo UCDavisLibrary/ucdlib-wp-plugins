@@ -41,7 +41,9 @@ const Edit = () => {
 
   useEffect(() => {
     if ( permalink ){
-      const permaPath = getPath(permalink).endsWith("/") ? getPath(permalink).slice(0, -1) : getPath(permalink);
+      let permaPath = getPath(permalink);
+      if ( !permaPath ) permaPath = "";
+      permaPath = permaPath.endsWith("/") ? permaPath.slice(0, -1) : permaPath;
       const path = addQueryArgs( '/redirection/v1/redirect', {
         filterBy: {
           target: permaPath,
