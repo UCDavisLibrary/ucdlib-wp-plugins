@@ -10,23 +10,7 @@ class UCDLibPluginSearchACF {
     if ( $doHooks ){
       add_action( 'acf/init', array($this, 'register_options_page') );
       add_filter( 'acf/settings/load_json', array($this, 'add_json_load_point') );
-      add_filter( 'acf/load_field/name=post_types', array($this, 'loadPostTypes') );
-      add_action( 'acf/save_post', array($this, 'on_options_page_save'), 20 );
-      add_action( 'wp_after_admin_bar_render', function(){
-      });
     }
-
-  }
-
-  public function on_options_page_save(){
-    $screen = get_current_screen();
-    $menuSlug = "acf-options" . "-" . $this->config['menuTitleSlug'];
-    if ( !strpos($screen->id, $menuSlug) ){
-      return;
-    }
-    require_once( __DIR__ . '/activation.php' );
-    $activationTasks = new UCDLibPluginSearchActivation( $this->config, false );
-    $activationTasks->createPostUpdatesTriggers();
 
   }
 
@@ -46,16 +30,4 @@ class UCDLibPluginSearchACF {
     return $paths;
   }
 
-  public function loadPostTypes( $field ){
-    $field['choices'] = array();
-    $post_types = get_post_types( [], 'objects' );
-    
-    foreach ( $post_types  as $post_type ) {
-      $field['choices'][ $post_type->name ] = $post_type->label;
-    }
-
-    return $field;
-  }
-
-  
 }

@@ -1,0 +1,24 @@
+{% extends getUcdTemplate('base') %}
+
+{% from getUcdMacro('links') import pagination %}
+
+{% block content %}
+  <div class="panel o-box">
+    <ucd-theme-search-form
+      value="{{search_query}}"
+      form-action="/"
+      form-method='GET'
+      query-param="s">
+    </ucd-theme-search-form>
+  </div>
+  <div class="panel o-box">
+    {% if error_in_search %}
+        <div class="alert alert--error">Something went wrong when getting your results. Please try again later.</div>
+    {% elseif found_posts %}
+      <h2 class="search-findings">Your search returned {{ found_posts }} results.</h2>
+      {{dump(results.hits.hits.0)}}
+    {% else %}
+      <div class="alert">No posts match your search!</div>
+    {% endif %}
+  </div>
+{% endblock %}
