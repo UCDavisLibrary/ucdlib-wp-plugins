@@ -14,15 +14,25 @@ class UCDLibPluginSearchElasticsearch {
       add_action( 'pre_get_posts', array($this, 'interceptWpSearch') );
       add_filter( 'ucd-theme/context/search', array($this, 'setContext') );
       add_filter( 'ucd-theme/templates/search', array($this, 'setTemplate'), 10, 2 );
+      add_action( 'template_redirect', array($this, 'resetWpSearch') );
     }
   }
 
+  /**
+   * Make the elasticsearch client, which is loaded with all other php dependencies via composer by the theme.
+   */
   public function createClient(){
     $c = $this->config['elasticsearch'];
     $host = 'http://' . $c['username'] . ':' . $c['password'] . '@' . $c['host'] . ':' . $c['port'];
     return Elasticsearch\ClientBuilder::create()->setHosts([$host])->build();
   }
 
+  /**
+   * Runs right before main wp query is performed.
+   * Very unwise to stop the query alltogether, so this method:
+   *  1) simplifies it to reduce data transfer
+   *  2) tricks wp to never throw a 404 based on the results of the query
+   */
   public function interceptWpSearch( $query ){
     if ( ! is_admin() && $query->is_main_query() && is_search() ) {
 
@@ -38,6 +48,23 @@ class UCDLibPluginSearchElasticsearch {
     }
   }
 
+  /**
+   * Is run after the main wp query is done.
+   * Cleans up any unintended side effects of hijacking the main query object
+   */
+  public function resetWpSearch(){
+    global $wp_query;
+    if ( ! is_admin() && $wp_query->is_main_query() && is_search() ) {
+      
+      // some things are derived from the search query, such as the title tag
+      $wp_query->set('s', $this->searchQuery);
+    }
+  }
+
+  /**
+   * Runs right before the twig template is rendered.
+   * Any data (search results) that needs to be rendered is added to the context here
+   */
   public function setContext($context){
     $context['currentPage'] = $this->currentPage;
     $context['pageSize'] = $this->pageSize;
@@ -70,6 +97,9 @@ class UCDLibPluginSearchElasticsearch {
 
   }
 
+  /**
+   * Uses the custom search twig template in this plugin rather than the default theme template
+   */
   public function setTemplate( $templates, $context ){
     if ( array_key_exists('is404', $context) && $context['is404']){
       status_header(404);
@@ -82,6 +112,9 @@ class UCDLibPluginSearchElasticsearch {
     return $templates;
   }
 
+  /**
+   * Using values from the main wp query, search elasticsearch for matching documents
+   */
   public function doMainSearch(){
     $params = [
       'index' => $this->config['elasticsearch']['indexAlias'],
