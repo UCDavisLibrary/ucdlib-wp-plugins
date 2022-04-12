@@ -1,24 +1,15 @@
 <?php
 
-// Sets up the service post type and associated taxonomies
+// Sets up the service post type
 class UCDLibPluginDirectoryServices {
   public function __construct($config){
     $this->config = $config;
-    $this->config['postTypeSlug'] = 'service';
-    $this->config['taxSlugs'] = array(
-      'type' => 'service-type',
-      'library' => 'service-library'
-    );
 
-    // register 'service' non-public post type
     add_action( 'init', array($this, 'register') );
     add_filter( 'timber/post/classmap', array($this, 'extend_timber_post') );
-
-    // register taxonomies for 'service' post type
-    add_action( 'init', array($this, 'register_type_taxonomy') );
-    add_action( 'init', array($this, 'register_library_taxonomy') );
   }
 
+  // register 'service' non-public post type
   public function register(){
     $labels = array(
       'name'                  => _x( 'Services', 'Post type general name', 'textdomain' ),
@@ -55,8 +46,8 @@ class UCDLibPluginDirectoryServices {
       'show_ui' => true,
       'show_in_rest' => true,
       'show_in_nav_menus' => false,
-      'show_in_menu' => true,
-      'menu_position' => 20,
+      'show_in_menu' => $this->config['slug'],
+      'menu_position' => 30,
       'menu_icon' => 'dashicons-info',
       'supports' => array(
         'title', 
@@ -70,82 +61,13 @@ class UCDLibPluginDirectoryServices {
       )
     );
 
-    register_post_type( $this->config['postTypeSlug'], $args );
+    register_post_type( $this->config['postSlugs']['service'], $args );
   }
-
-
-  public function register_type_taxonomy(){
-    $labels = [
-      'name'              => _x( 'Service Types', 'taxonomy general name' ),
-      'singular_name'     => _x( 'Service Type', 'taxonomy singular name' ),
-      'search_items'      => __( 'Search Service Types' ),
-      'all_items'         => __( 'All Service Types' ),
-      'parent_item'       => __( 'Parent Service Type' ),
-      'parent_item_colon' => __( 'Parent Service Type:' ),
-      'edit_item'         => __( 'Edit Service Type' ),
-      'update_item'       => __( 'Update Service Type' ),
-      'add_new_item'      => __( 'Add New Service Type' ),
-      'new_item_name'     => __( 'New Service Type' ),
-      'menu_name'         => __( 'Service Types' ),
-    ];
-    $args = [
-      'labels' => $labels,
-      'description' => 'Controlled list of categories for Library services',
-      'public' => false,
-      'publicly_queryable' => false,
-      'hierarchical' => false,
-      'show_ui' => true,
-      'show_in_nav_menus' => false,
-      'show_in_rest' => true,
-      'show_admin_column' => true,
-      'meta_box_cb' => 'post_categories_meta_box'
-    ];
-
-    register_taxonomy(
-      $this->config['taxSlugs']['type'], 
-      $this->config['postTypeSlug'],
-      $args
-    );
-  }
-
-  public function register_library_taxonomy(){
-    $labels = [
-      'name'              => _x( 'Libraries', 'taxonomy general name' ),
-      'singular_name'     => _x( 'Library', 'taxonomy singular name' ),
-      'search_items'      => __( 'Search Libraries' ),
-      'all_items'         => __( 'All Libraries' ),
-      'edit_item'         => __( 'Edit Library' ),
-      'update_item'       => __( 'Update Library' ),
-      'add_new_item'      => __( 'Add New Library' ),
-      'new_item_name'     => __( 'New Library' ),
-      'menu_name'         => __( 'Library Filters' ),
-    ];
-    $args = [
-      'labels' => $labels,
-      'description' => 'Let user filter services by library',
-      'public' => false,
-      'publicly_queryable' => false,
-      'hierarchical' => false,
-      'show_ui' => true,
-      'show_in_nav_menus' => false,
-      'show_in_rest' => true,
-      'show_admin_column' => true,
-      'meta_box_cb' => 'post_categories_meta_box'
-    ];
-
-    register_taxonomy(
-      $this->config['taxSlugs']['library'], 
-      $this->config['postTypeSlug'],
-      $args
-    );
-  }
-
-
 
   // Tell Timber to always load our custom service class when returned by a query
   public function extend_timber_post( $classmap ){
     $custom_classmap = array(
-      $this->config['postTypeSlug'] => UCDLibPluginDirectoryService::class,
+      $this->config['postSlugs']['service'] => UCDLibPluginDirectoryService::class,
     );
 
     return array_merge( $classmap, $custom_classmap );
@@ -154,6 +76,7 @@ class UCDLibPluginDirectoryServices {
 }
 
 // custom methods to be called in templates
+// where we will fetch postmeta
 class UCDLibPluginDirectoryService extends Timber\Post {
 
 }

@@ -1,0 +1,204 @@
+{
+    "key": "group_625485e0594f3",
+    "title": "Contact Information",
+    "fields": [
+        {
+            "key": "field_625486165f1d1",
+            "label": "Phone",
+            "name": "phone",
+            "type": "repeater",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "collapsed": "",
+            "min": 1,
+            "max": 5,
+            "layout": "block",
+            "button_label": "Add Phone Number",
+            "sub_fields": [
+                {
+                    "key": "field_6254864f5f1d2",
+                    "label": "Number",
+                    "name": "number",
+                    "type": "group",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "layout": "table",
+                    "sub_fields": [
+                        {
+                            "key": "field_625486c55f1d3",
+                            "label": "Area Code",
+                            "name": "area_code",
+                            "type": "text",
+                            "instructions": "",
+                            "required": 1,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "placeholder": "",
+                            "prepend": "(",
+                            "append": ")",
+                            "maxlength": 3
+                        },
+                        {
+                            "key": "field_625486fd5f1d4",
+                            "label": "###",
+                            "name": "middle",
+                            "type": "text",
+                            "instructions": "",
+                            "required": 1,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "placeholder": "",
+                            "prepend": "-",
+                            "append": "-",
+                            "maxlength": 3
+                        },
+                        {
+                            "key": "field_6254871b5f1d5",
+                            "label": "####",
+                            "name": "end",
+                            "type": "text",
+                            "instructions": "",
+                            "required": 1,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "placeholder": "",
+                            "prepend": "",
+                            "append": "",
+                            "maxlength": 3
+                        }
+                    ]
+                },
+                {
+                    "key": "field_6254875b5f1d6",
+                    "label": "Parenthetical Text",
+                    "name": "parenthetical_text",
+                    "type": "text",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "",
+                    "placeholder": "",
+                    "prepend": "",
+                    "append": "",
+                    "maxlength": ""
+                }
+            ]
+        },
+        {
+            "key": "field_625489aef64ce",
+            "label": "Email",
+            "name": "email",
+            "type": "repeater",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "collapsed": "",
+            "min": 1,
+            "max": 5,
+            "layout": "block",
+            "button_label": "Add Email",
+            "sub_fields": [
+                {
+                    "key": "field_625489ddf64cf",
+                    "label": "Address",
+                    "name": "address",
+                    "type": "email",
+                    "instructions": "",
+                    "required": 1,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "",
+                    "placeholder": "",
+                    "prepend": "",
+                    "append": ""
+                },
+                {
+                    "key": "field_62548a02f64d0",
+                    "label": "Parenthetical Text",
+                    "name": "parenthetical_text",
+                    "type": "text",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "",
+                    "placeholder": "",
+                    "prepend": "",
+                    "append": "",
+                    "maxlength": ""
+                }
+            ]
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "post_type",
+                "operator": "==",
+                "value": "service"
+            }
+        ],
+        [
+            {
+                "param": "post_type",
+                "operator": "==",
+                "value": "department"
+            }
+        ]
+    ],
+    "menu_order": 1,
+    "position": "normal",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": "",
+    "active": true,
+    "description": "Services + Departments: Phone, Email, etc",
+    "show_in_rest": 1,
+    "modified": 1649786202
+}

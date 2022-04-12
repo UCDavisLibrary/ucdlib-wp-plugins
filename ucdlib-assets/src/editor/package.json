@@ -13,7 +13,8 @@
   "private": true,
   "dependencies": {
     "@ucd-lib/brand-theme-editor": "file:../../../../ucdlib-theme-wp/src/editor",
-    "@ucd-lib/plugin-migration-editor": "file:../../../ucdlib-migration/src/editor"
+    "@ucd-lib/plugin-migration-editor": "file:../../../ucdlib-migration/src/editor",
+    "@ucd-lib/plugin-directory-editor": "file:../../../ucdlib-directory/src/editor"
   },
   "devDependencies": {
     "@wordpress/scripts": "^17.1.0"
