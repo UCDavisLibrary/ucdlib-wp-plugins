@@ -23,6 +23,7 @@ class UCDLibPluginDirectory {
 
     add_action( 'admin_menu', array($this, 'add_admin_menu'));
     add_action( 'admin_head', array($this, 'admin_head') );
+    add_filter( 'timber/locations', array($this, 'add_timber_locations') );
 
   }
 
@@ -80,6 +81,14 @@ class UCDLibPluginDirectory {
     <ucdlib-plugin plugin='$this->slug' style='display:none'>
     </ucdlib-plugin>
     ";
+  }
+
+  /**
+   * Adds twig files under the @ucdlib-directory namespace
+   */
+  public function add_timber_locations($paths){
+    $paths[$this->config['slug']] = array(WP_PLUGIN_DIR . "/" . $this->config['slug'] . '/views');
+    return $paths;
   }
 
 }
