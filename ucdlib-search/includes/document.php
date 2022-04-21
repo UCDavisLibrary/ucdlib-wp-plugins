@@ -17,6 +17,17 @@ class UCDLibPluginSearchDocument {
     return $this->document['_source']['title'];
   }
 
+  public function highlight(){
+    if( array_key_exists('content', $this->document['highlight']) ) {
+      return $this->document['highlight']['content'][0];
+    }
+    if( array_key_exists('title', $this->document['highlight']) ) {
+      return $this->document['highlight']['title'][0];
+    }
+
+    return '';
+  }
+
   public function link(){
     if ( $this->post ){
       return $this->post->link();
