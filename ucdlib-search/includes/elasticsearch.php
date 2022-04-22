@@ -157,6 +157,11 @@ class UCDLibPluginSearchElasticsearch {
               'direct_generator' => [ [
                 'field' => 'title.trigram',
                 'suggest_mode' => 'always'
+              ], [
+                "field" => "title.reverse",
+                "suggest_mode" => "always",
+                "pre_filter" => "reverse",
+                "post_filter" => "reverse"
               ] ],
               'highlight' => [
                 "pre_tag" => "<em>",
@@ -172,6 +177,31 @@ class UCDLibPluginSearchElasticsearch {
               'direct_generator' => [ [
                 'field' => 'description.trigram',
                 'suggest_mode' => 'always'
+              ], [
+                "field" => "description.reverse",
+                "suggest_mode" => "always",
+                "pre_filter" => "reverse",
+                "post_filter" => "reverse"
+              ] ],
+              'highlight' => [
+                "pre_tag" => "<em>",
+                "post_tag" => "</em>"
+              ]
+            ]
+          ],
+          'content_phrase' => [
+            'phrase' => [
+              'field' => 'content.trigram',
+              'size' => 1,
+              'gram_size' => 3,
+              'direct_generator' => [ [
+                'field' => 'content.trigram',
+                'suggest_mode' => 'always'
+              ], [
+                "field" => "content.reverse",
+                "suggest_mode" => "always",
+                "pre_filter" => "reverse",
+                "post_filter" => "reverse"
               ] ],
               'highlight' => [
                 "pre_tag" => "<em>",

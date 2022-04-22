@@ -21,7 +21,7 @@
     {% if error_in_search %}
         <div class="alert alert--error">Something went wrong when getting your results. Please try again later.</div>
     {% elseif found_posts %}
-      {% if suggest.score > 0 %}
+      {% if suggest.score > 0.001 %}
           <h3 class="search-findings">Did you mean: <a href="?s={{suggest.text|url_encode}}">{{suggest.highlighted}}</a> </h3>
       {% endif %}
 
