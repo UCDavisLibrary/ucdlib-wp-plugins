@@ -11,6 +11,25 @@ class UCDLibPluginAssets {
       'isDevEnv' => getenv('UCD_THEME_ENV') == 'dev',
     );
 
+    // Build params
+    $config['buildParams'] = array(
+      "APP_VERSION" => getenv('APP_VERSION'),
+      "BUILD_TIME" => getenv('BUILD_TIME'),
+      "WEBSITE_TAG" => getenv('WEBSITE_TAG')
+    );
+
+    if ( $config['buildParams'][ "APP_VERSION"] ) {
+      if ( substr_compare($config['buildParams'][ "APP_VERSION"], '-1', -strlen('-1')) === 0 ) {
+        $config['bundleVersion'] = (new DateTime())->getTimestamp();
+      } else {
+        $config['bundleVersion'] = $config['buildParams'][ "APP_VERSION"];
+      }
+
+    } else {
+      $config['bundleVersion'] = (new DateTime())->getTimestamp();
+    }
+    
+
     // static asset uris
     $config['uris'] = array(
       'base' => trailingslashit( plugins_url() ) . $config['slug'] . "/assets"
@@ -85,7 +104,7 @@ class UCDLibPluginAssets {
         $slug, 
         $this->config['uris']['js'] . "/editor/dev/" . $file, 
         array(), 
-        $this->config['version'], 
+        $this->config['bundleVersion'], 
         true);
 
     } else {
@@ -93,7 +112,7 @@ class UCDLibPluginAssets {
         $slug, 
         $this->config['uris']['js'] . "/editor/dist/" . $file, 
         array(), 
-        $this->config['version'],
+        $this->config['bundleVersion'],
         true);
     }
   }
@@ -107,28 +126,28 @@ class UCDLibPluginAssets {
         $slug,
         $this->config['uris']['js'] . "/dev/ucdlib.js",
         array(),
-        $this->config['version'],
+        $this->config['bundleVersion'],
         true
       );
       wp_enqueue_style( 
         $slug,
         $this->config['uris']['css'] . "/ucdlib-dev.css",
         array(), 
-        $this->config['version']
+        $this->config['bundleVersion']
       );
     } else {
       wp_enqueue_script(
         $slug,
         $this->config['uris']['js'] . "/dist/ucdlib.js",
         array(),
-        $this->config['version'],
+        $this->config['bundleVersion'],
         true
       );
       wp_enqueue_style( 
         $slug,
         $this->config['uris']['css'] . "/ucdlib.css",
         array(), 
-        $this->config['version']
+        $this->config['bundleVersion']
       );
     }
   }

@@ -41,9 +41,12 @@ const Edit = () => {
 
   useEffect(() => {
     if ( permalink ){
+      let permaPath = getPath(permalink);
+      if ( !permaPath ) permaPath = "";
+      permaPath = permaPath.endsWith("/") ? permaPath.slice(0, -1) : permaPath;
       const path = addQueryArgs( '/redirection/v1/redirect', {
         filterBy: {
-          target: getPath(permalink),
+          target: permaPath,
           status: 'enabled',
           action: 'url'
         }, 
@@ -54,7 +57,7 @@ const Edit = () => {
       apiFetch( {path} ).then( 
         ( r ) => {
           setRedirects(r.items.filter(redirect => {
-            return redirect.action_data.url == `/${getPath(permalink)}` || redirect.action_data.url == permalink;
+            return redirect.action_data.url == `/${permaPath}` || redirect.action_data.url == permalink;
           }));
         }, 
         (error) => {

@@ -1,0 +1,33 @@
+{% macro search_result(kwargs) %}
+  {% if kwargs.result %}
+    {% set result = kwargs.result %}
+  {% else %}
+    {% set result = kwargs %}
+  {% endif %}
+
+  {% if result.author.first_name and result.author.last_name %}
+    {% set author = result.author.first_name ~ " " ~ result.author.last_name %}
+  {% else %}
+    {% set author = result.author.name %}
+  {% endif %}
+
+  <div class="search-result">
+    <h3 class="search-result__title"><a href="{{ result.link }}">{{ result.title }}</a></h3>
+    <p>{{ result.highlight }}</p>
+    {% if result.showPublishedDate or result.showAuthor %}
+      <div class="search-result__info">
+        {{result.showAuthor ? author}}
+        {{result.showPublishedDate and result.showAuthor ? " | "}}
+        {{result.showPublishedDate ? result.date}}
+      </div>
+    {% endif %}
+
+    {#
+    <ucd-theme-list-accordion>
+      <li>ES Document</li>
+      <li><pre>{{dump(result.document)}}</pre></li>
+    </ucd-theme-list-accordion>
+    #}
+  </div>
+
+{% endmacro %}
