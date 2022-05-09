@@ -4,9 +4,12 @@
 class UCDLibPluginDirectoryServiceTypes {
   public function __construct($config){
     $this->config = $config;
+    $this->slug = $this->config['taxSlugs']['service-type'];
 
     add_action( 'init', array($this, 'register') );
     add_action( 'admin_menu', array($this, 'add_to_menu'));
+    add_action( 'parent_file',  array($this, 'expand_parent_menu') );
+
   }
 
   // register taxonomy
@@ -48,9 +51,16 @@ class UCDLibPluginDirectoryServiceTypes {
 
   // add to plugin admin menu
   public function add_to_menu(){
-    $slug = $this->config['taxSlugs']['service-type'];
     $label = 'Service Types';
-    add_submenu_page($this->config['slug'], $label, $label, 'edit_posts', "edit-tags.php?taxonomy=$slug",false );
+    add_submenu_page($this->config['slug'], $label, $label, 'edit_posts', "edit-tags.php?taxonomy=$this->slug",false );
+  }
+
+  // expand plugin menu when on taxonomy admin page
+  public function expand_parent_menu($parent_file){
+    if ( get_current_screen()->taxonomy == $this->slug ) {
+      $parent_file = $this->config['slug'];
+    }
+    return $parent_file;
   }
 
 }

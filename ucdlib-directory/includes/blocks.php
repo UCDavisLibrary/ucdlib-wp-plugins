@@ -14,7 +14,8 @@ class UCDLibPluginDirectoryBlocks {
   }
 
   public static $registry = [
-    'ucdlib-directory/name' => ['twig' => '@ucd-directory/blocks/person-name.twig']
+    'ucdlib-directory/name' => ['twig' => '@ucd-directory/blocks/person-name.twig'],
+    'ucdlib-directory/title' => ['twig' => '@ucd-directory/blocks/person-title.twig']
   ];
 
   public function loadIcons($icons){

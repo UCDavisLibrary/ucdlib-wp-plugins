@@ -6,11 +6,15 @@ require_once( get_template_directory() . "/includes/classes/post.php");
 class UCDLibPluginDirectoryPeople {
   public function __construct($config){
     $this->config = $config;
+    $this->slug = $this->config['postSlugs']['person'];
 
     add_action( 'init', array($this, 'register') );
     add_filter( 'timber/post/classmap', array($this, 'extend_timber_post') );
-    add_action('init', array($this, 'register_post_meta'));
+    add_action( 'init', array($this, 'register_post_meta') );
     add_action( 'admin_menu', array($this, 'add_shortcut_to_profile'));
+    add_filter( 'manage_' . $this->slug . '_posts_columns', array($this, 'customize_admin_list_columns') );
+    add_filter( 'post_row_actions', array($this, 'add_admin_list_user_link') , 10, 2);
+
     add_action( 'ucd-theme/template/author', array($this, 'redirect_author'));
     add_filter( 'ucd-theme/context/single', array($this, 'set_context') );
     add_filter( 'ucd-theme/templates/single', array($this, 'set_template'), 10, 2 );
@@ -23,6 +27,10 @@ class UCDLibPluginDirectoryPeople {
     $template = [
       [
         'ucdlib-directory/name', 
+        ["lock" => ["move" => true, "remove" => true]]
+      ],
+      [
+        'ucdlib-directory/title', 
         ["lock" => ["move" => true, "remove" => true]]
       ]
     ];
@@ -132,6 +140,22 @@ class UCDLibPluginDirectoryPeople {
       'default' => 0,
       'type' => 'number',
     ) );
+    register_post_meta( '', 'positions', array(
+      'show_in_rest' => [
+        'schema' => [
+          'items' => [
+            'type' => 'object',
+            'properties' => [
+              'title' => ['type' => 'string'],
+              'department' => ['type' => 'number']
+            ]
+          ]
+        ]
+      ],
+      'single' => true,
+      'type' => 'array',
+      'default' => []
+    ) );
 
   }
 
@@ -197,6 +221,27 @@ class UCDLibPluginDirectoryPeople {
     );
 
     return array_merge( $classmap, $custom_classmap );
+  }
+
+  // customize what is displayed on the admin table that lists all people
+  public function customize_admin_list_columns( $columns ){
+    unset($columns['date']);
+    unset($columns['author']);
+    return $columns;
+  }
+
+  // Add link to wp user account for each user in the admin table that lists all people
+  public function add_admin_list_user_link( $actions, $post ){
+    if ( $post->post_type == $this->slug ) {
+      if ( array_key_exists('inline hide-if-no-js', $actions) ) unset($actions['inline hide-if-no-js']);
+      $user_id = get_post_meta($post->ID, 'wp_user_id', true);
+      if ( $user_id ) {
+        $actions['account'] = "<a href='/wp-admin/user-edit.php?user_id=$user_id'>User Account</a>";
+      }
+     
+      echo "position title";
+    }
+    return $actions;
   }
 
 }
