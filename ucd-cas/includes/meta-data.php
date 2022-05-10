@@ -11,8 +11,20 @@ class UCDPluginCASMetaData {
       array('slug' => $this->slug . "_dept_code", 'label' => "Department Code"),
     );
 
+    add_action( 'init', array($this, 'register_meta') );
     add_action( 'show_user_profile', array($this, 'add_user_meta') );
     add_action( 'edit_user_profile', array($this, 'add_user_meta') );
+  }
+
+  public function register_meta(){
+    foreach ($this->userMetaFields as $field) {
+      register_meta('user', $field['slug'], array(
+        "type" => "string",
+        "single" => true,
+        "show_in_rest" => true 
+      ));
+    }
+
   }
 
   public function add_user_meta($user){

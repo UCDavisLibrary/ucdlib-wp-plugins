@@ -14,8 +14,8 @@ class UCDLibPluginDirectoryBlocks {
   }
 
   public static $registry = [
-    'ucdlib-directory/name' => ['twig' => '@ucd-directory/blocks/person-name.twig'],
-    'ucdlib-directory/title' => ['twig' => '@ucd-directory/blocks/person-title.twig']
+    'ucdlib-directory/name' => ['twig' => '@ucdlib-directory/blocks/person-name.twig'],
+    'ucdlib-directory/title' => ['twig' => '@ucdlib-directory/blocks/person-title.twig', 'transform' => ['getPosition']]
   ];
 
   public function loadIcons($icons){
@@ -73,7 +73,7 @@ class UCDLibPluginDirectoryBlocks {
    *  
    */
   public function render_callback($block_attributes, $content, $block) {
-    
+
     // Retrieve metadata from registry
     $blockName = $block->name;
     if ( !$blockName ) return;

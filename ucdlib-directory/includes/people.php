@@ -13,8 +13,10 @@ class UCDLibPluginDirectoryPeople {
     add_action( 'init', array($this, 'register_post_meta') );
     add_action( 'admin_menu', array($this, 'add_shortcut_to_profile'));
     add_filter( 'manage_' . $this->slug . '_posts_columns', array($this, 'customize_admin_list_columns') );
+    add_action( 'manage_' . $this->slug  . '_posts_custom_column', array($this, 'add_admin_list_column'), 10, 2);
     add_filter( 'post_row_actions', array($this, 'add_admin_list_user_link') , 10, 2);
 
+    add_action( 'ucd-cas/login', array($this, 'transfer_ownership'), 10, 2 );
     add_action( 'ucd-theme/template/author', array($this, 'redirect_author'));
     add_filter( 'ucd-theme/context/single', array($this, 'set_context') );
     add_filter( 'ucd-theme/templates/single', array($this, 'set_template'), 10, 2 );
@@ -140,6 +142,26 @@ class UCDLibPluginDirectoryPeople {
       'default' => 0,
       'type' => 'number',
     ) );
+    register_post_meta( $slug, 'position_dept', array(
+      'show_in_rest' => true,
+      'single' => true,
+      'default' => 0,
+      'type' => 'number',
+    ) );
+    register_post_meta( $slug, 'position_title', array(
+      'show_in_rest' => true,
+      'single' => true,
+      'default' => '',
+      'type' => 'string',
+    ) );
+    register_post_meta( $slug, 'username', array(
+      'show_in_rest' => true,
+      'single' => true,
+      'default' => '',
+      'type' => 'string',
+    ) );
+
+    /** 
     register_post_meta( '', 'positions', array(
       'show_in_rest' => [
         'schema' => [
@@ -156,6 +178,7 @@ class UCDLibPluginDirectoryPeople {
       'type' => 'array',
       'default' => []
     ) );
+    */
 
   }
 
@@ -227,7 +250,17 @@ class UCDLibPluginDirectoryPeople {
   public function customize_admin_list_columns( $columns ){
     unset($columns['date']);
     unset($columns['author']);
-    return $columns;
+    return array_merge($columns, ['department' => __('Department', 'textdomain')]);
+  }
+
+  // add new columns to the admin table
+  public function add_admin_list_column( $column_key, $post_id ) {
+    if ( $column_key ==  'department')
+    $department = get_post_meta($post_id, 'position_dept', true);
+    if ( $department ) {
+      $department_name = get_the_title($department);
+    }
+    echo (!empty($department_name)) ? __($department_name, 'textdomain') : __('-', 'textdomain');
   }
 
   // Add link to wp user account for each user in the admin table that lists all people
@@ -238,10 +271,40 @@ class UCDLibPluginDirectoryPeople {
       if ( $user_id ) {
         $actions['account'] = "<a href='/wp-admin/user-edit.php?user_id=$user_id'>User Account</a>";
       }
-     
-      echo "position title";
+      $title = get_post_meta($post->ID, 'position_title', true);
+      if ( $title ) {
+        echo $title;
+      }
     }
     return $actions;
+  }
+
+  // if a person profile has been created, but respective wp user doesn't exist yet,
+  // will transfer ownership to user when they log in
+  public function transfer_ownership( $user, $kerberos ){
+    // bail if already has profile or no profile has kerb
+    $profile = Timber::get_posts([
+      'post_type' => $this->slug,
+      'meta_key' => 'wp_user_id',
+      'meta_value' => $user->ID,
+      'posts_per_page' => 1
+    ]);
+    if ( count($profile) ) return;
+    $profile = Timber::get_posts([
+      'post_type' => $this->slug,
+      'meta_key' => 'username',
+      'meta_value' => $kerberos,
+      'posts_per_page' => 1
+    ]);
+    if ( !count($profile) ) return;
+    $profile = $profile[0];
+
+    // set author and link account
+    update_post_meta($profile->ID, 'wp_user_id', $user->ID);
+    wp_update_post( [
+      'ID' => $profile->ID,
+      'post_author' => $user->ID
+    ] );
   }
 
 }

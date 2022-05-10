@@ -247,7 +247,9 @@ class UCDPluginCASAuth {
    */
   public function loginExistingUser($user){
     wp_set_auth_cookie($user->ID, true);
-    $this->setReadOnlyUserAttributes($user);
+    $kerberos = phpCAS::getUser();
+    $this->setReadOnlyUserAttributes($user, $kerberos);
+    do_action( $this->slug . "/login", $user, $kerberos);
     wp_redirect("/wp-admin");
     exit;
   }
