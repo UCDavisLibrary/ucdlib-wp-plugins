@@ -84,6 +84,20 @@ class UCDLibPluginSearchElasticsearch {
         $current_url = parse_url($current_url);
         $context['paginationUrl'] =  $current_url;
       }
+
+      // filter suggest
+      $suggest = ['score' => 0, 'highlighted' => '', 'text' => ''];
+      foreach ($results['suggest'] as $key => $value) {
+        foreach($value as $item) {
+          foreach($item['options'] as $option) {
+            if( $option['score'] > $suggest['score'] ) {
+              $suggest = $option;
+            }
+          }
+        }
+      }
+      $context['suggest'] = $suggest;
+
       return $context;
 
     } catch (\Throwable $th) {
@@ -124,9 +138,79 @@ class UCDLibPluginSearchElasticsearch {
         'query' => [
           'multi_match' => [
             'query' => $this->searchQuery,
-            'fields' => ['content', 'title^3']
+            'fields' => ['content', 'description', 'title^3']
+          ]
+        ],
+        'highlight' => [
+          'order' => 'score',
+          'fields' => [
+            '*' => new stdClass()
+          ]
+        ],
+        'suggest' => [
+          'text' => $this->searchQuery,
+          'title_phrase' => [
+            'phrase' => [
+              'field' => 'title.trigram',
+              'size' => 1,
+              'gram_size' => 3,
+              'direct_generator' => [ [
+                'field' => 'title.trigram',
+                'suggest_mode' => 'always'
+              ], [
+                "field" => "title.reverse",
+                "suggest_mode" => "always",
+                "pre_filter" => "reverse",
+                "post_filter" => "reverse"
+              ] ],
+              'highlight' => [
+                "pre_tag" => "<em>",
+                "post_tag" => "</em>"
+              ]
+            ]
+          ],
+          'description_phrase' => [
+            'phrase' => [
+              'field' => 'description.trigram',
+              'size' => 1,
+              'gram_size' => 3,
+              'direct_generator' => [ [
+                'field' => 'description.trigram',
+                'suggest_mode' => 'always'
+              ], [
+                "field" => "description.reverse",
+                "suggest_mode" => "always",
+                "pre_filter" => "reverse",
+                "post_filter" => "reverse"
+              ] ],
+              'highlight' => [
+                "pre_tag" => "<em>",
+                "post_tag" => "</em>"
+              ]
+            ]
+          ],
+          'content_phrase' => [
+            'phrase' => [
+              'field' => 'content.trigram',
+              'size' => 1,
+              'gram_size' => 3,
+              'direct_generator' => [ [
+                'field' => 'content.trigram',
+                'suggest_mode' => 'always'
+              ], [
+                "field" => "content.reverse",
+                "suggest_mode" => "always",
+                "pre_filter" => "reverse",
+                "post_filter" => "reverse"
+              ] ],
+              'highlight' => [
+                "pre_tag" => "<em>",
+                "post_tag" => "</em>"
+              ]
+            ]
           ]
         ]
+
       ]
     ];
     $response = $this->client->search($params);

@@ -13,7 +13,7 @@
 
   <div class="search-result">
     <h3 class="search-result__title"><a href="{{ result.link }}">{{ result.title }}</a></h3>
-    <p>{{ result.excerpt }}</p>
+    <p>{{ result.highlight }}</p>
     {% if result.showPublishedDate or result.showAuthor %}
       <div class="search-result__info">
         {{result.showAuthor ? author}}
