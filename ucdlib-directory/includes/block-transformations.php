@@ -17,5 +17,12 @@ class UCDLibPluginDirectoryBlockTransformations {
     
     return $attrs;
   }
+
+  public static function getPronouns($attrs=[]){
+    $post_id = get_the_ID();
+    $attrs['pronouns'] = get_post_meta($post_id, 'pronouns', true);
+    $attrs['hide'] = get_post_meta($post_id, 'hidePronouns', true);
+    return $attrs;
+  }
 }
 ?>

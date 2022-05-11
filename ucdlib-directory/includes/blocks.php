@@ -15,7 +15,9 @@ class UCDLibPluginDirectoryBlocks {
 
   public static $registry = [
     'ucdlib-directory/name' => ['twig' => '@ucdlib-directory/blocks/person-name.twig'],
-    'ucdlib-directory/title' => ['twig' => '@ucdlib-directory/blocks/person-title.twig', 'transform' => ['getPosition']]
+    'ucdlib-directory/title' => ['twig' => '@ucdlib-directory/blocks/person-title.twig', 'transform' => ['getPosition']],
+    'ucdlib-directory/pronouns' => ['twig' => '@ucdlib-directory/blocks/person-pronouns.twig', 'transform' => ['getPronouns']],
+    'ucdlib-directory/library-locations' => ['twig' => '@ucdlib-directory/blocks/person-library-locations.twig']
   ];
 
   public function loadIcons($icons){

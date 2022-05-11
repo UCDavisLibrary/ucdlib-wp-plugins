@@ -1,11 +1,8 @@
 import { html, SelectUtils } from "@ucd-lib/brand-theme-editor/lib/utils";
 import { useBlockProps } from '@wordpress/block-editor';
 import { Button, Modal, TextControl, SelectControl } from '@wordpress/components';
-import { getQueryArg } from "@wordpress/url";
 import { useState, useEffect } from '@wordpress/element';
 import { useDispatch, useSelect } from "@wordpress/data";
-import htm from "htm";
-
 
 export default ( props ) => {
   const { attributes, setAttributes } = props;

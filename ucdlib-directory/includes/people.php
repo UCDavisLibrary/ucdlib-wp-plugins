@@ -34,6 +34,14 @@ class UCDLibPluginDirectoryPeople {
       [
         'ucdlib-directory/title', 
         ["lock" => ["move" => true, "remove" => true]]
+      ],
+      [
+        'ucdlib-directory/pronouns',
+        ["lock" => ["move" => true, "remove" => true]]
+      ],
+      [
+        'ucdlib-directory/library-locations',
+        ["lock" => ["move" => true, "remove" => true]]
       ]
     ];
     $labels = array(
@@ -159,6 +167,24 @@ class UCDLibPluginDirectoryPeople {
       'single' => true,
       'default' => '',
       'type' => 'string',
+    ) );
+    register_post_meta( $slug, 'hide_pronouns', array(
+      'show_in_rest' => true,
+      'single' => true,
+      'default' => false,
+      'type' => 'boolean',
+    ) );
+    register_post_meta( $slug, 'pronouns', array(
+      'show_in_rest' => true,
+      'single' => true,
+      'default' => '',
+      'type' => 'string',
+    ) );
+    register_post_meta( $slug, 'hide_libraries', array(
+      'show_in_rest' => true,
+      'single' => true,
+      'default' => false,
+      'type' => 'boolean',
     ) );
 
     /** 
