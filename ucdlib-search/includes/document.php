@@ -32,6 +32,9 @@ class UCDLibPluginSearchDocument {
     if ( $this->post ){
       return $this->post->link();
     }
+    if ( isset($this->document['_source']['link']) ) {
+      return $this->document['_source']['link'];
+    }
     return $this->document['_source']['id'];
   }
 
