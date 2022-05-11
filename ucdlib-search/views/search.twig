@@ -14,9 +14,17 @@
   </div>
   <div class="panel o-box">
     
+      <script>
+        window.suggest = {{ suggest|json_encode() }}
+      </script>
+
     {% if error_in_search %}
         <div class="alert alert--error">Something went wrong when getting your results. Please try again later.</div>
     {% elseif found_posts %}
+      {% if suggest.score > 0.001 %}
+          <h3 class="search-findings">Did you mean: <a href="?s={{suggest.text|url_encode}}">{{suggest.highlighted}}</a> </h3>
+      {% endif %}
+
       <h2 class="search-findings">Your search returned {{ found_posts }} results.</h2>
       {% for result in results %}
         {{ search_result(result) }}
@@ -32,6 +40,10 @@
         </ucd-theme-pagination>
       {% endif %}
     {% else %}
+      {% if suggest.score > 0 %}
+          <h3 class="search-findings">Did you mean: <a href="?s={{suggest.text|url_encode}}">{{suggest.highlighted}}</a> </h3>
+      {% endif %}
+
       <div class="alert">No posts match your search!</div>
     {% endif %}
   </div>
