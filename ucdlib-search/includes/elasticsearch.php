@@ -138,7 +138,7 @@ class UCDLibPluginSearchElasticsearch {
         'query' => [
           'multi_match' => [
             'query' => $this->searchQuery,
-            'fields' => ['content', 'description', 'title^3']
+            'fields' => ['content', 'description', 'title^3', 'altTitles^3', 'tags.text^2']
           ]
         ],
         'highlight' => [

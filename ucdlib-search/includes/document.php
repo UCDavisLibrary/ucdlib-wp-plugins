@@ -27,6 +27,12 @@ class UCDLibPluginSearchDocument {
     if( array_key_exists('description', $this->document['highlight']) ) {
       return $this->document['highlight']['description'][0];
     }
+    if( array_key_exists('altTitles', $this->document['highlight']) ) {
+      return $this->document['highlight']['altTitles'][0];
+    }
+    if( array_key_exists('tags.text', $this->document['highlight']) ) {
+      return 'Tag: '.$this->document['highlight']['tags.text'][0];
+    }
 
     return '';
   }
