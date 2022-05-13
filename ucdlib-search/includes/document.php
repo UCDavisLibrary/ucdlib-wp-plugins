@@ -14,6 +14,9 @@ class UCDLibPluginSearchDocument {
   }
 
   public function title(){
+    if( array_key_exists('title', $this->document['highlight']) ) {
+      return $this->document['highlight']['title'][0];
+    }
     return $this->document['_source']['title'];
   }
 
@@ -21,8 +24,8 @@ class UCDLibPluginSearchDocument {
     if( array_key_exists('content', $this->document['highlight']) ) {
       return $this->document['highlight']['content'][0];
     }
-    if( array_key_exists('title', $this->document['highlight']) ) {
-      return $this->document['highlight']['title'][0];
+    if( array_key_exists('description', $this->document['highlight']) ) {
+      return $this->document['highlight']['description'][0];
     }
 
     return '';
