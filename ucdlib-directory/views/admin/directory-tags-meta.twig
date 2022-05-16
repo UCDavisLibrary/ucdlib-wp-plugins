@@ -1,0 +1,26 @@
+{% macro label(for, inline) %}
+  <label {{inline ? "style='display:inline;'"}} for="{{for}}">Is a Subject Area</label>
+{% endmacro %}
+
+{% macro checkbox(value, slug, showLabel) %}
+  <input type="checkbox" {{value ? 'checked'}} id="{{slug}}" name="{{slug}}">
+  {% if showLabel %}
+    {{_self.label(slug, true)}}
+  {% endif %}
+  <p class="description">Term will be a 'Subject Area' Directory Filter.</p>
+{% endmacro %}
+
+{% if current_filter ends with 'edit_form_fields' %}
+  <tr class="form-field">
+    <th valign="top" scope="row">{{_self.label(fieldSlug)}}</th>
+      <td>
+        {{_self.checkbox(fieldValue, fieldSlug)}}
+      </td>
+  </tr> 
+
+{% elseif current_filter ends with 'add_form_fields' %}
+  <div class="form-field">
+    {{_self.checkbox(fieldValue, fieldSlug, true)}}
+  </div>  
+
+{% endif %}

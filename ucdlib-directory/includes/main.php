@@ -3,6 +3,7 @@
 require_once( __DIR__ . '/acf.php' );
 require_once( __DIR__ . '/blocks.php' );
 require_once( __DIR__ . '/departments.php' );
+require_once( __DIR__ . '/directory-tags.php' );
 require_once( __DIR__ . '/libraries.php' );
 require_once( __DIR__ . '/people.php' );
 require_once( __DIR__ . '/service-types.php' );
@@ -16,6 +17,7 @@ class UCDLibPluginDirectory {
     $this->acf = new UCDLibPluginDirectoryACF( $this->config );
     $this->blocks = new UCDLibPluginDirectoryBlocks( $this->config );
     $this->departments = new UCDLibPluginDirectoryDepartments( $this->config );
+    $this->directoryTags = new UCDLibPluginDirectoryDirectoryTags( $this->config );
     $this->libraries = new UCDLibPluginDirectoryLibraries( $this->config );
     $this->people = new UCDLibPluginDirectoryPeople( $this->config );
     $this->serviceTypes = new UCDLibPluginDirectoryServiceTypes( $this->config );
@@ -52,7 +54,8 @@ class UCDLibPluginDirectory {
       'version' => false,
       'taxSlugs' => [
         'service-type' => 'service-type',
-        'library' => 'library'
+        'library' => 'library',
+        'directory' => 'directory-tag'
       ],
       'postSlugs' => [
         'service' => 'service',
