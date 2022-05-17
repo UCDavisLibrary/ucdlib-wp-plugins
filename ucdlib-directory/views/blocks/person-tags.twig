@@ -1,0 +1,8 @@
+{% if attributes.tags and not attributes.hide %}
+  <div>
+    <h2 class="heading--auxiliary">Directory Tags</h2>
+    {% for tag in attributes.tags %}
+      <a class="tags__tag">{{tag.name}}</a>
+    {% endfor %}
+  </div>
+{% endif %}

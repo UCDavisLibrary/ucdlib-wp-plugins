@@ -29,7 +29,7 @@ class UCDLibPluginDirectoryLibraries {
       'description' => 'Let user filter services and people by library',
       'public' => false,
       'publicly_queryable' => false,
-      'hierarchical' => false,
+      'hierarchical' => true,
       'show_ui' => true,
       'show_in_nav_menus' => false,
       'show_in_rest' => true,

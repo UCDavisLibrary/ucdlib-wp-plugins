@@ -21,7 +21,35 @@ class UCDLibPluginDirectoryBlockTransformations {
   public static function getPronouns($attrs=[]){
     $post_id = get_the_ID();
     $attrs['pronouns'] = get_post_meta($post_id, 'pronouns', true);
-    $attrs['hide'] = get_post_meta($post_id, 'hidePronouns', true);
+    $attrs['hide'] = get_post_meta($post_id, 'hide_pronouns', true);
+    return $attrs;
+  }
+
+  public static function getBio($attrs=[]){
+    $post_id = get_the_ID();
+    $attrs['bio'] = get_post_meta($post_id, 'bio', true);
+    $attrs['hide'] = get_post_meta($post_id, 'hide_bio', true);
+    return $attrs;
+  }
+
+  public static function getLibraries($attrs=[]){
+    $post_id = get_the_ID();
+    $attrs['libraries'] = get_the_terms($post_id, 'library');
+    $attrs['hide'] = get_post_meta($post_id, 'hide_libraries', true);
+    return $attrs;
+  }
+
+  public static function getDirectoryTags($attrs=[]){
+    $post_id = get_the_ID();
+    $attrs['tags'] = get_the_terms($post_id, 'directory-tag');
+    $attrs['hide'] = get_post_meta($post_id, 'hide_tags', true);
+    return $attrs;
+  }
+
+  public static function getExpertiseAreas($attrs=[]){
+    $post_id = get_the_ID();
+    $attrs['tags'] = get_the_terms($post_id, 'expertise-areas');
+    $attrs['hide'] = get_post_meta($post_id, 'hide_tags', true);
     return $attrs;
   }
 }

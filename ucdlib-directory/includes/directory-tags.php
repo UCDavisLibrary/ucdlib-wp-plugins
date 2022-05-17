@@ -1,6 +1,7 @@
 <?php
 
 // Directory Tag taxonomy
+// includes 'subject areas'
 class UCDLibPluginDirectoryDirectoryTags {
   public function __construct($config){
     $this->config = $config;
@@ -37,7 +38,7 @@ class UCDLibPluginDirectoryDirectoryTags {
       'description' => 'Controlled list of tags and subject areas used in people directory',
       'public' => false,
       'publicly_queryable' => false,
-      'hierarchical' => false,
+      'hierarchical' => true,
       'show_ui' => true,
       'show_in_nav_menus' => false,
       'show_in_rest' => true,
@@ -58,6 +59,7 @@ class UCDLibPluginDirectoryDirectoryTags {
     register_term_meta($this->slug, 'isSubjectArea', ['type' => 'boolean', 'single' => true, 'show_in_rest' => true]);
   }
 
+  // renders custom meta fields on add/edit taxonomy term forms
   public function render_term_meta( $term ){
     $fieldSlug = 'isSubjectArea';
     $context = [
@@ -71,6 +73,7 @@ class UCDLibPluginDirectoryDirectoryTags {
     Timber::render('@' . $this->config['slug'] . '/admin/directory-tags-meta.twig' , $context);
   }
 
+  // saves custom meta fields on add/edit taxonomy term forms
   public function save_term_meta( $term_id ){
     $fieldSlug = 'isSubjectArea';
     $isSubjectArea = isset($_POST[$fieldSlug]);

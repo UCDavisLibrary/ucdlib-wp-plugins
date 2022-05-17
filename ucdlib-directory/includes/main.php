@@ -1,6 +1,7 @@
 <?php
 
 require_once( __DIR__ . '/acf.php' );
+require_once( __DIR__ . '/areas-of-expertise.php' );
 require_once( __DIR__ . '/blocks.php' );
 require_once( __DIR__ . '/departments.php' );
 require_once( __DIR__ . '/directory-tags.php' );
@@ -22,6 +23,7 @@ class UCDLibPluginDirectory {
     $this->people = new UCDLibPluginDirectoryPeople( $this->config );
     $this->serviceTypes = new UCDLibPluginDirectoryServiceTypes( $this->config );
     $this->services = new UCDLibPluginDirectoryServices( $this->config );
+    $this->areasOfExpertise = new UCDLibPluginDirectoryAreasOfExpertise( $this->config );
 
     add_action( 'admin_menu', array($this, 'add_admin_menu'));
     add_action( 'admin_head', array($this, 'admin_head') );
@@ -55,7 +57,8 @@ class UCDLibPluginDirectory {
       'taxSlugs' => [
         'service-type' => 'service-type',
         'library' => 'library',
-        'directory' => 'directory-tag'
+        'directory' => 'directory-tag',
+        'expertise' => 'expertise-areas'
       ],
       'postSlugs' => [
         'service' => 'service',

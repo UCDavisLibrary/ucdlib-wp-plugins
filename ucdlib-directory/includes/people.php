@@ -42,6 +42,18 @@ class UCDLibPluginDirectoryPeople {
       [
         'ucdlib-directory/library-locations',
         ["lock" => ["move" => true, "remove" => true]]
+      ],
+      [
+        'ucdlib-directory/bio',
+        ["lock" => ["move" => true, "remove" => true]]
+      ],
+      [
+        'ucdlib-directory/expertise-areas',
+        ["lock" => ["move" => true, "remove" => true]]
+      ],
+      [
+        'ucdlib-directory/tags',
+        ["lock" => ["move" => true, "remove" => true]]
       ]
     ];
     $labels = array(
@@ -168,19 +180,43 @@ class UCDLibPluginDirectoryPeople {
       'default' => '',
       'type' => 'string',
     ) );
-    register_post_meta( $slug, 'hide_pronouns', array(
-      'show_in_rest' => true,
-      'single' => true,
-      'default' => false,
-      'type' => 'boolean',
-    ) );
     register_post_meta( $slug, 'pronouns', array(
       'show_in_rest' => true,
       'single' => true,
       'default' => '',
       'type' => 'string',
     ) );
+    register_post_meta( $slug, 'bio', array(
+      'show_in_rest' => true,
+      'single' => true,
+      'default' => '',
+      'type' => 'string',
+    ) );
+    register_post_meta( $slug, 'hide_pronouns', array(
+      'show_in_rest' => true,
+      'single' => true,
+      'default' => false,
+      'type' => 'boolean',
+    ) );
     register_post_meta( $slug, 'hide_libraries', array(
+      'show_in_rest' => true,
+      'single' => true,
+      'default' => false,
+      'type' => 'boolean',
+    ) );
+    register_post_meta( $slug, 'hide_tags', array(
+      'show_in_rest' => true,
+      'single' => true,
+      'default' => false,
+      'type' => 'boolean',
+    ) );
+    register_post_meta( $slug, 'hide_expertise_areas', array(
+      'show_in_rest' => true,
+      'single' => true,
+      'default' => false,
+      'type' => 'boolean',
+    ) );
+    register_post_meta( $slug, 'hide_bio', array(
       'show_in_rest' => true,
       'single' => true,
       'default' => false,

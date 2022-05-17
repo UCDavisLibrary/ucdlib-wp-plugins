@@ -14,9 +14,12 @@ const Edit = () => {
 
   // get page metadata to show in panel
   const meta = SelectUtils.editedPostAttribute('meta');
-  const hidePronouns = meta.hide_pronouns ? meta.hide_pronouns : false;
-  const hideLibraries = meta.hide_libraries ? meta.hide_libraries : false;
-  const { editPost } = useDispatch( 'core/editor', [ hidePronouns ] );
+  const hidePronouns = meta.hide_pronouns ? true : false;
+  const hideLibraries = meta.hide_libraries ? true : false;
+  const hideDirectoryTags = meta.hide_tags ? true : false;
+  const hideExpertiseAreas = meta.hide_expertise_areas ? true : false; 
+  const hideBio = meta.hide_bio ? true : false; 
+  const { editPost } = useDispatch( 'core/editor', [ hidePronouns, hideLibraries, hideDirectoryTags, hideExpertiseAreas, hideBio ] );
 
 
   return html`
@@ -35,6 +38,21 @@ const Edit = () => {
             label="Hide Library Locations"
             checked=${hideLibraries}
             onChange=${() => editPost({meta: { hide_libraries: !hideLibraries}})}
+          />
+          <${ToggleControl} 
+            label="Hide Bio"
+            checked=${hideBio}
+            onChange=${() => editPost({meta: { hide_bio: !hideBio}})}
+          />
+          <${ToggleControl} 
+            label="Hide Directory Tags"
+            checked=${hideDirectoryTags}
+            onChange=${() => editPost({meta: { hide_tags: !hideDirectoryTags}})}
+          />
+          <${ToggleControl} 
+            label="Hide Areas of Expertise"
+            checked=${hideExpertiseAreas}
+            onChange=${() => editPost({meta: { hide_expertise_areas: !hideExpertiseAreas}})}
           />
         </${PluginDocumentSettingPanel}>
       `}

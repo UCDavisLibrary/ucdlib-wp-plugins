@@ -14,10 +14,33 @@ class UCDLibPluginDirectoryBlocks {
   }
 
   public static $registry = [
-    'ucdlib-directory/name' => ['twig' => '@ucdlib-directory/blocks/person-name.twig'],
-    'ucdlib-directory/title' => ['twig' => '@ucdlib-directory/blocks/person-title.twig', 'transform' => ['getPosition']],
-    'ucdlib-directory/pronouns' => ['twig' => '@ucdlib-directory/blocks/person-pronouns.twig', 'transform' => ['getPronouns']],
-    'ucdlib-directory/library-locations' => ['twig' => '@ucdlib-directory/blocks/person-library-locations.twig']
+    'ucdlib-directory/bio' => [
+      'twig' => '@ucdlib-directory/blocks/person-bio.twig', 
+      'transform' => ['getBio']
+    ],
+    'ucdlib-directory/name' => [
+      'twig' => '@ucdlib-directory/blocks/person-name.twig'
+    ],
+    'ucdlib-directory/title' => [
+      'twig' => '@ucdlib-directory/blocks/person-title.twig', 
+      'transform' => ['getPosition']
+    ],
+    'ucdlib-directory/pronouns' => [
+      'twig' => '@ucdlib-directory/blocks/person-pronouns.twig', 
+      'transform' => ['getPronouns']
+    ],
+    'ucdlib-directory/library-locations' => [
+      'twig' => '@ucdlib-directory/blocks/person-library-locations.twig',
+      'transform' => ['getLibraries']
+    ],
+    'ucdlib-directory/tags' => [
+      'twig' => '@ucdlib-directory/blocks/person-tags.twig',
+      'transform' => ['getDirectoryTags']
+    ],
+    'ucdlib-directory/expertise-areas' => [
+      'twig' => '@ucdlib-directory/blocks/person-expertise-areas.twig',
+      'transform' => ['getExpertiseAreas']
+    ]
   ];
 
   public function loadIcons($icons){
