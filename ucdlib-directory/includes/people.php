@@ -192,6 +192,23 @@ class UCDLibPluginDirectoryPeople {
       'default' => '',
       'type' => 'string',
     ) );
+    register_post_meta( '', 'contact', array(
+      'show_in_rest' => [
+        'schema' => [
+          'items' => [
+            'type' => 'object',
+            'properties' => [
+              'type' => ['type' => 'string'],
+              'value' => ['type' => 'string'],
+              'label' => ['type' => 'string']
+            ]
+          ]
+        ]
+      ],
+      'single' => true,
+      'type' => 'array',
+      'default' => []
+    ) );
     register_post_meta( $slug, 'hide_pronouns', array(
       'show_in_rest' => true,
       'single' => true,
@@ -222,25 +239,12 @@ class UCDLibPluginDirectoryPeople {
       'default' => false,
       'type' => 'boolean',
     ) );
-
-    /** 
-    register_post_meta( '', 'positions', array(
-      'show_in_rest' => [
-        'schema' => [
-          'items' => [
-            'type' => 'object',
-            'properties' => [
-              'title' => ['type' => 'string'],
-              'department' => ['type' => 'number']
-            ]
-          ]
-        ]
-      ],
+    register_post_meta( $slug, 'hide_contact', array(
+      'show_in_rest' => true,
       'single' => true,
-      'type' => 'array',
-      'default' => []
+      'default' => false,
+      'type' => 'boolean',
     ) );
-    */
 
   }
 
