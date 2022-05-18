@@ -18,6 +18,9 @@ class UCDLibPluginDirectoryBlocks {
       'twig' => '@ucdlib-directory/blocks/person-bio.twig', 
       'transform' => ['getBio']
     ],
+    'ucdlib-directory/contact' => [
+      'twig' => '@ucdlib-directory/blocks/person-contact.twig'
+    ],
     'ucdlib-directory/name' => [
       'twig' => '@ucdlib-directory/blocks/person-name.twig'
     ],

@@ -1,4 +1,5 @@
 import personBio from "./ucdlib-directory-bio";
+import personContact from "./ucdlib-directory-contact";
 import personName from "./ucdlib-directory-name";
 import personTitle from "./ucdlib-directory-title";
 import personPronouns from "./ucdlib-directory-pronouns";
@@ -8,6 +9,7 @@ import personExpertiseAreas from "./ucdlib-directory-expertise-areas";
 
 export default [
   personBio,
+  personContact,
   personName,
   personTitle,
   personPronouns,
