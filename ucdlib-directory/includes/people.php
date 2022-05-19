@@ -245,6 +245,12 @@ class UCDLibPluginDirectoryPeople {
       'type' => 'array',
       'default' => []
     ) );
+    register_post_meta( $slug, 'contactAppointmentUrl', array(
+      'show_in_rest' => true,
+      'single' => true,
+      'default' => '',
+      'type' => 'string',
+    ) );
     register_post_meta( $slug, 'hide_pronouns', array(
       'show_in_rest' => true,
       'single' => true,

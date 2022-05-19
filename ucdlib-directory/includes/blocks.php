@@ -19,7 +19,8 @@ class UCDLibPluginDirectoryBlocks {
       'transform' => ['getBio']
     ],
     'ucdlib-directory/contact' => [
-      'twig' => '@ucdlib-directory/blocks/person-contact.twig'
+      'twig' => '@ucdlib-directory/blocks/person-contact.twig',
+      'transform' => ['getContactInfo']
     ],
     'ucdlib-directory/name' => [
       'twig' => '@ucdlib-directory/blocks/person-name.twig'
@@ -126,6 +127,13 @@ class UCDLibPluginDirectoryBlocks {
       !in_array($block_attributes['icon'], $this->iconsUsed)) {
         $this->iconsUsed[] = $block_attributes['icon'];
       }
+    if ( array_key_exists('icons', $block_attributes) && is_array($block_attributes['icons'])) {
+      foreach ($block_attributes['icons'] as $icon) {
+        if ( !in_array($icon, $this->iconsUsed)) {
+          $this->iconsUsed[] = $icon;
+        }
+      }
+    }
 
     // Render twig
     ob_start();
