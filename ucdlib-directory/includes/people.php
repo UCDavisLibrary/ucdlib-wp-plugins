@@ -40,6 +40,10 @@ class UCDLibPluginDirectoryPeople {
         ["lock" => ["move" => true, "remove" => true]]
       ],
       [
+        'ucdlib-directory/contact',
+        ["lock" => ["move" => true, "remove" => true]]
+      ],
+      [
         'ucdlib-directory/library-locations',
         ["lock" => ["move" => true, "remove" => true]]
       ],
@@ -192,7 +196,7 @@ class UCDLibPluginDirectoryPeople {
       'default' => '',
       'type' => 'string',
     ) );
-    register_post_meta( '', 'contact', array(
+    register_post_meta( '', 'contactWebsite', array(
       'show_in_rest' => [
         'schema' => [
           'items' => [
@@ -208,6 +212,44 @@ class UCDLibPluginDirectoryPeople {
       'single' => true,
       'type' => 'array',
       'default' => []
+    ) );
+    register_post_meta( '', 'contactEmail', array(
+      'show_in_rest' => [
+        'schema' => [
+          'items' => [
+            'type' => 'object',
+            'properties' => [
+              'value' => ['type' => 'string'],
+              'label' => ['type' => 'string']
+            ]
+          ]
+        ]
+      ],
+      'single' => true,
+      'type' => 'array',
+      'default' => []
+    ) );
+    register_post_meta( '', 'contactPhone', array(
+      'show_in_rest' => [
+        'schema' => [
+          'items' => [
+            'type' => 'object',
+            'properties' => [
+              'value' => ['type' => 'string'],
+              'label' => ['type' => 'string']
+            ]
+          ]
+        ]
+      ],
+      'single' => true,
+      'type' => 'array',
+      'default' => []
+    ) );
+    register_post_meta( $slug, 'contactAppointmentUrl', array(
+      'show_in_rest' => true,
+      'single' => true,
+      'default' => '',
+      'type' => 'string',
     ) );
     register_post_meta( $slug, 'hide_pronouns', array(
       'show_in_rest' => true,
