@@ -69,7 +69,7 @@ class UCDLibPluginSearchElasticsearch {
     $context['currentPage'] = $this->currentPage;
     $context['pageSize'] = $this->pageSize;
     $context['search_query'] = $this->searchQuery;
-    $context['title'] = 'Search results for ' . $this->searchQuery;
+    $context['title'] = 'Search Our Website';
     try {
       $results = $this->doMainSearch();
       $context['results'] = array_map(function($x){return new UCDLibPluginSearchDocument($x);}, $results['hits']['hits']);

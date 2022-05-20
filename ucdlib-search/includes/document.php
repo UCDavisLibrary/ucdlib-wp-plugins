@@ -13,6 +13,51 @@ class UCDLibPluginSearchDocument {
     }
   }
 
+  protected $type;
+  public function type(){
+    if ( !empty( $this->type ) ) {
+      return $this->type;
+    }
+    $type = ['value' => 'info-page', 'label' => 'Information Page'];
+    $t = $this->document['_source']['type'];
+    if ( $t == 'post' ) {
+      $type = ['value' => 'news', 'label' => 'Library News'];
+    } elseif ( $t == 'database' ) {
+      $type = ['value' => 'database', 'label' => 'Database'];
+    } elseif ( $t == 'libguide' ) {
+      $type = ['value' => 'research-guide', 'label' => 'Research Guide'];
+    }
+
+    $this->type = $type;
+    return $this->type;
+  }
+
+  protected $image;
+  public function image(){
+    if ( ! empty( $this->image ) ) {
+      return $this->image;
+    }
+    $image = false;
+    $base_url = trailingslashit( plugins_url() ) . "ucdlib-search/assets/teaser-images/";
+    $type = $this->type();
+    
+    if ( $this->post ){
+      if ( $this->post->teaser_image() ) {
+        $image = $this->post->teaser_image()->src('thumbnail');
+      } elseif ( $this->post->post_type == 'post' ) {
+        $image = $base_url . 'search-news.jpg';
+      } 
+    } elseif ( $type['value'] == 'database') {
+      $image = $base_url . 'search-databases.jpg';
+    } elseif ( $type['value'] == 'research-guide') {
+      $image = $base_url . 'search-researchguides.jpg';
+    }
+
+    if ( !$image ) $image = $base_url . 'search-informationpages.jpg';
+    $this->image = $image;
+    return $this->image;
+  }
+
   public function title(){
     if( array_key_exists('title', $this->document['highlight']) ) {
       return $this->document['highlight']['title'][0];

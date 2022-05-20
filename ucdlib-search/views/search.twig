@@ -1,7 +1,12 @@
 {% extends getUcdTemplate('base') %}
 
 {% from getUcdMacro('links') import pagination %}
+{% from getUcdMacro('links') import breadcrumbs as render_crumbs %}
 {% from '@ucdlib-search/macros/search-result.twig' import search_result %}
+
+{% block breadcrumbs %}
+  {{render_crumbs([{title: 'Home', link: '/'}, {title: 'Search'}])}}
+{% endblock %}
 
 {% block content %}
   <div class="panel o-box">
