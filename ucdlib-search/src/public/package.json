@@ -1,0 +1,17 @@
+{
+    "name": "@ucd-lib/plugin-search-public",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "watch": "webpack --config webpack-watch.config.js --watch",
+        "dist": "webpack --config webpack-dist.config.js"
+    },
+    "private": true,
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "@ucd-lib/theme-sass": "^5.0.16",
+        "lit": "^2.2.4"
+    }
+}

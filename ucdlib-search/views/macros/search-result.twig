@@ -20,7 +20,7 @@
       <h3 class="vm-teaser__title"><a href="{{result.link}}">{{result.title}}</a></h3>
       <p class="vm-teaser__result-type">{{result.type.label}}</p>
       <div class="vm-teaser__summary">
-        {% if result.type.value == 'news' %}
+        {% if result.type.showByline %}
 
           <div class="list--pipe">
             {% if result.showAuthor %}
@@ -29,7 +29,7 @@
             {% if result.showPublishedDate %}
               <li>{{result.date}}</li>
             {% endif %}
-              <li>{{result.highlight}}</li>
+              <li style="display:inline;">{{result.highlight}}</li>
           </div>
         {% else %}
           {{ result.highlight }}

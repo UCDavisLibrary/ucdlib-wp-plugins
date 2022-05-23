@@ -8,48 +8,69 @@
   {{render_crumbs([{title: 'Home', link: '/'}, {title: 'Search'}])}}
 {% endblock %}
 
-{% block content %}
-  <div class="panel o-box">
-    <ucd-theme-search-form
-      value="{{search_query}}"
-      form-action="/"
-      form-method='GET'
-      query-param="s">
-    </ucd-theme-search-form>
+{% block content_container %}
+<div class="l-container l-basic--flipped">
+  <script>
+    window.suggest = {{ suggest|json_encode() }};
+    window.typeFacets = {{ typeFacets|json_encode() }};
+  </script>
+  <div class="l-sidebar-first panel o-box">
+   <ucdlib-search-filter></ucdlib-search-filter>
   </div>
-  <div class="panel o-box">
-    
-      <script>
-        window.suggest = {{ suggest|json_encode() }}
-      </script>
+  <div class="l-content">
+    <div class="panel o-box u-space-mb--flush">
+        <ucd-theme-search-form
+          value="{{search_query}}"
+          form-action="/"
+          form-method='GET'
+          query-param="s">
+        </ucd-theme-search-form>
+    </div>
+    <div class="panel o-box u-space-pt--flush">
 
-    {% if error_in_search %}
-        <div class="alert alert--error">Something went wrong when getting your results. Please try again later.</div>
-    {% elseif found_posts %}
-      {% if suggest.score > 0.001 %}
-          <h3 class="search-findings">Did you mean: <a href="?s={{suggest.text|url_encode}}">{{suggest.highlighted}}</a> </h3>
-      {% endif %}
+      {# 500 error #}
+      {% if error_in_search %}
+          <div class="alert alert--error">Something went wrong when getting your results. Please try again later.</div>
+      
+      {# at least one result found #}
+      {% elseif found_posts %}
 
-      <h2 class="search-findings">Your search returned {{ found_posts }} results.</h2>
-      {% for result in results %}
-        {{ search_result(result) }}
-      {% endfor %}
-      {% if hasPages %}
-        <ucd-theme-pagination
-          current-page="{{currentPage}}"
-          max-pages="{{lastPage}}"
-          base-path="{{paginationUrl.path ~ 'page/'}}"
-          query-params="{{paginationUrl.query}}"
-          xs-screen
-          ellipses>
-        </ucd-theme-pagination>
-      {% endif %}
-    {% else %}
-      {% if suggest.score > 0 %}
-          <h3 class="search-findings">Did you mean: <a href="?s={{suggest.text|url_encode}}">{{suggest.highlighted}}</a> </h3>
-      {% endif %}
+        <h5 class="search-results-message">{{ found_posts }} results for "{{ search_query }}".</h5>
+        {% if hasSuggestion %}
+          <h5 class="search-results-message">Did you mean: <a href="?s={{suggest.text|url_encode}}">{{suggest.highlighted}}</a> </h5>
+        {% endif %}
 
-      <div class="alert">No posts match your search!</div>
-    {% endif %}
+        <div class="search-results u-space-mt--large">
+          {% for result in results %}
+            {{ search_result(result) }}
+          {% endfor %}
+        </div>
+        {% if hasPages %}
+          <ucd-theme-pagination
+            current-page="{{currentPage}}"
+            max-pages="{{lastPage}}"
+            base-path="{{paginationUrl.path ~ 'page/'}}"
+            query-params="{{paginationUrl.query}}"
+            xs-screen
+            ellipses>
+          </ucd-theme-pagination>
+        {% endif %}
+      
+      {# no results #}
+      {% else %}
+        <h5 class="search-results-message">Sorry, we're having trouble finding "{{search_query}}"</h5>
+        {% if hasSuggestion %}
+            <h5 class="search-results-message">Did you mean: <a href="?s={{suggest.text|url_encode}}">{{suggest.highlighted}}</a> </h5>
+        {% endif %}
+
+        <h5>Suggestions:</h5>
+        <ul class="list--arrow">
+          <li>Check for typos and spelling errors</li>
+          <li>Try for generic keywords</li>
+          <li>Try different keywords</li>
+        </ul>
+      {% endif %}
+    </div>
   </div>
+</div>
 {% endblock %}
