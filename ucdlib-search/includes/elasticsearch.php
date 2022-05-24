@@ -80,6 +80,27 @@ class UCDLibPluginSearchElasticsearch {
     return $this->typeFacets;
   }
 
+  protected $sortOptions;
+  public function sortOptions(){
+    if ( !empty( $this->sortOptions ) ){
+      return $this->sortOptions;
+    }
+    $v = strtolower(get_query_var('sortby', ''));
+    $hasSort = in_array( $v, array_map(function($o){return $o['urlArg'];}, $this->config->sortOptions) );
+    $options = [];
+    foreach ($this->config->sortOptions as $o) {
+      if ( $hasSort ) {
+        $o['isSelected'] = $o['urlArg'] === $v;
+      } else {
+        $o['isSelected'] = $o['default'];
+
+      }
+      $options[] = $o;
+    }
+    $this->sortOptions = $options;
+    return $this->sortOptions;
+  }
+
   /**
    * Runs right before the twig template is rendered.
    * Any data (search results) that needs to be rendered is added to the context here
@@ -90,6 +111,7 @@ class UCDLibPluginSearchElasticsearch {
     $context['search_query'] = $this->searchQuery;
     $context['title'] = 'Search Our Website';
     $context['typeFacets'] = $this->typeFacets();
+    $context['sortOptions'] = $this->sortOptions();
     try {
       $results = $this->doMainSearch();
       $context['results'] = array_map(function($x){return new UCDLibPluginSearchDocument($x, $this->config);}, $results['hits']['hits']);
@@ -251,6 +273,13 @@ class UCDLibPluginSearchElasticsearch {
         }
       }
       $params['body']['query']['bool']['filter'] = ['terms' => ['type' =>  $documentTypes]];
+    }
+
+    // add sort
+    $sort = array_filter($this->sortOptions(), function($f){return $f['isSelected'];});
+    $i = array_key_first($sort);
+    if ( $i && $sort[$i]['es']){
+      $params['body']['sort'] = [$sort[$i]['es']];
     }
 
     $response = $this->client->search($params);

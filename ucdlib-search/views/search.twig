@@ -13,8 +13,9 @@
   <script>
     window.suggest = {{ suggest|json_encode() }};
     window.typeFacets = {{ typeFacets|json_encode() }};
+    window.sortOptions = {{ sortOptions|json_encode() }}
   </script>
-  <div class="l-sidebar-first panel o-box">
+  <div class="l-sidebar-first o-box">
 
    <ucdlib-search-filter
     url="{{site.site_url}}"

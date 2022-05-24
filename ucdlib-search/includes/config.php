@@ -40,6 +40,21 @@ class UCDLibPluginSearchConfig {
     ],
   ];
 
+  public $sortOptions = [
+    [
+      'urlArg' => 'relevance',
+      'label' => 'Relevance',
+      'es' => false,
+      'default' => true
+    ],
+    [
+      'urlArg' => 'date',
+      'label' => 'Date',
+      'es' => ['sortByDate' => ['order' => 'desc', 'format' => 'strict_date_optional_time_nanos']],
+      'default' => false
+    ],
+  ];
+
   public $menuTitle = 'UCD Library Search';
   public $menuTitleSlug = 'ucd-library-search';
 
@@ -73,6 +88,15 @@ class UCDLibPluginSearchConfig {
       }
       elseif ( $facet[$by] === $value ) {
         return $facet;
+      }
+    }
+    return false;
+  }
+
+  public function getSortOption($value, $by='urlArg'){
+    foreach ($this->sortOptions as $o) {
+      if ( $o[$by] === $value ){
+        return $o;
       }
     }
     return false;
