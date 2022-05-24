@@ -15,16 +15,18 @@
     window.typeFacets = {{ typeFacets|json_encode() }};
   </script>
   <div class="l-sidebar-first panel o-box">
-   <ucdlib-search-filter></ucdlib-search-filter>
+
+   <ucdlib-search-filter
+    url="{{site.site_url}}"
+    keyword="{{search_query}}"
+   ></ucdlib-search-filter>
   </div>
   <div class="l-content">
     <div class="panel o-box u-space-mb--flush">
-        <ucd-theme-search-form
-          value="{{search_query}}"
-          form-action="/"
-          form-method='GET'
-          query-param="s">
-        </ucd-theme-search-form>
+      <ucdlib-search-input
+        url="{{site.site_url}}"
+        keyword="{{search_query}}"
+      ></ucdlib-search-input>
     </div>
     <div class="panel o-box u-space-pt--flush">
 
@@ -68,6 +70,10 @@
           <li>Check for typos and spelling errors</li>
           <li>Try for generic keywords</li>
           <li>Try different keywords</li>
+          {% set selectedTypeFacets = typeFacets|filter(f => f.isSelected) %}
+          {% if selectedTypeFacets and selectedTypeFacets|length != typeFacets|length %}
+            <li>Broaden your search filters to include more content types</li>
+          {% endif %}
         </ul>
       {% endif %}
     </div>

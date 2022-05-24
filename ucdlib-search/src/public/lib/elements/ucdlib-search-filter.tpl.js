@@ -57,7 +57,13 @@ return html`
       <ul class="list--reset checkbox">
         ${this.filters.map(f => html`
           <li>
-            <input @input=${this._onFilterChange} id=${this._checkIdPrefix+f.urlArg} name=${f.urlArg} type="checkbox" ?checked=${f.isSelected}>
+            <input 
+              role="link"
+              @input=${this._onFilterInput} 
+              @keyup=${this._onFilterKeyUp}
+              id=${this._checkIdPrefix+f.urlArg} 
+              name=${f.urlArg} type="checkbox" 
+              ?checked=${f.isSelected}>
             <label class="primary" for=${this._checkIdPrefix+f.urlArg}>${f.labelPlural}</label>
           </li>`)}
       </ul>

@@ -6,7 +6,11 @@ export default class UcdlibSearchFilter extends LitElement {
   static get properties() {
     return {
       filterVar: {type: String, attribute: 'filter-var'},
-      filters: {type: Array}
+      filters: {type: Array},
+      url: {type: String},
+      keyword: {type: String},
+      keyKeyword: {type: String},
+      keyFilters: {type: String}
     }
   }
 
@@ -20,6 +24,10 @@ export default class UcdlibSearchFilter extends LitElement {
     this.filterVar = 'window.typeFacets';
     this.filters = [];
     this._checkIdPrefix = 'check-';
+    this.url = "/";
+    this.keyword = "";
+    this.keyKeyword = "s";
+    this.keyFilters = "type";
   }
 
   willUpdate(props){
@@ -42,14 +50,26 @@ export default class UcdlibSearchFilter extends LitElement {
     }
   }
 
-  _onFilterChange(e){
-    const filterId = e.target.id.slice(this._checkIdPrefix.length);
+  toggleFilter(filterId){
+    if ( !filterId ) return;
     this.filters.forEach(f => {
       if ( f.urlArg === filterId ) {
         f.isSelected = !f.isSelected;
       }
     });
     this.apply();
+  }
+
+  _onFilterInput(e){
+    const filterId = e.target.id.slice(this._checkIdPrefix.length);
+    this.toggleFilter(filterId);
+  }
+
+  _onFilterKeyUp(e){
+    if (e.key === 'Enter' || e.keyCode === 13) {
+      const filterId = e.target.id.slice(this._checkIdPrefix.length);
+      this.toggleFilter(filterId);
+    }
   }
 
   _onSubmit(e){
@@ -59,7 +79,13 @@ export default class UcdlibSearchFilter extends LitElement {
   }
 
   apply(){
-    console.log(this.filters);
+    const params = new URLSearchParams();
+    params.append(this.keyKeyword, this.keyword);
+    let appliedFilters = this.filters.filter(f => f.isSelected).map(f => f.urlArg).join(",");
+    if ( appliedFilters ) {
+      params.append(this.keyFilters, appliedFilters);
+    }
+    window.location = this.url + '?' + params.toString();
   }
 
 }
