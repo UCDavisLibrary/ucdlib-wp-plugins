@@ -5,6 +5,7 @@
   "main": "ucdlib-editor.js",
   "scripts": {
     "watch": "wp-scripts start ucdlib-editor.js --output-path=../../assets/js/editor/dev",
+    "init-bundle": "wp-scripts build ucdlib-editor.js --output-path=../../assets/js/editor/dev",
     "dist": "wp-scripts build ucdlib-editor.js --output-path=../../assets/js/editor/dist",
     "docker-package": "node ./lib/generate-docker-package-json.js"
   },

@@ -5,6 +5,7 @@
     "main": "index.js",
     "scripts": {
         "watch": "webpack --config ./lib/webpack-watch.config.js --watch",
+        "init-bundle": "webpack --config ./lib/webpack-watch.config.js",
         "dist": "webpack --config ./lib/webpack-dist.config.js",
         "docker-package": "node ./lib/generate-docker-package-json.js"
     },
