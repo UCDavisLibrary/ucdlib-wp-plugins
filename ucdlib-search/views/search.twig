@@ -38,7 +38,7 @@
       {# at least one result found #}
       {% elseif found_posts %}
 
-        <h5 class="search-results-message">{{ found_posts }} results for "{{ search_query }}".</h5>
+        <h5 class="search-results-message">{{ found_posts }} results for "{{ search_query }}"</h5>
         {% if hasSuggestion %}
           <h5 class="search-results-message">Did you mean: <a href="?s={{suggest.text|url_encode}}">{{suggest.highlighted}}</a> </h5>
         {% endif %}
@@ -50,6 +50,7 @@
         </div>
         {% if hasPages %}
           <ucd-theme-pagination
+            class="u-space-mt--large"
             current-page="{{currentPage}}"
             max-pages="{{lastPage}}"
             base-path="{{paginationUrl.path ~ 'page/'}}"
