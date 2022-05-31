@@ -55,7 +55,7 @@ class UCDLibPluginAssets {
 
     $this->config = $config;
 
-
+    add_action( 'init', [$this, 'registerPluginCustomizations']);
     add_action( 'wp_enqueue_scripts', array($this, "enqueue_scripts") );
     add_action( 'wp_enqueue_scripts', array($this, "deregister_public"), 1000);
     add_action( 'enqueue_block_editor_assets', array($this, "enqueue_block_editor_assets"), 3);
@@ -64,6 +64,18 @@ class UCDLibPluginAssets {
     add_action( 'after_setup_theme', array($this, 'enqueue_editor_css'));
     // add_filter( 'mce_css', array($this, 'enqueue_editor_css') );
     
+  }
+
+  // registers customizations to third party plugins
+  public function registerPluginCustomizations(){
+    if ( $this->is_plugin_active('forminator/forminator.php') ){
+      require_once( __DIR__ . '/forminator.php' );
+      $this->forminator = new UCDLibPluginAssetsForminator();
+    }
+  }
+
+  public function is_plugin_active($plugin){
+    return in_array( $plugin, get_option( 'active_plugins', array() ), true );
   }
 
   public function enqueue_editor_css(){

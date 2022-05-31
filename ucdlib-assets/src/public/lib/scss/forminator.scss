@@ -1,0 +1,10 @@
+// shims for the forminator third-party plugin
+.forminator-error-message {
+  color: #c10230
+}
+.radio > .forminator-label {
+    display: block;
+    padding-bottom: 0.25rem;
+    color: #022851;
+    font-weight: 700;
+}
