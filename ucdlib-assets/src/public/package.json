@@ -5,6 +5,7 @@
     "main": "index.js",
     "scripts": {
         "watch": "webpack --config ./lib/webpack-watch.config.js --watch",
+        "init-bundle": "webpack --config ./lib/webpack-watch.config.js",
         "dist": "webpack --config ./lib/webpack-dist.config.js",
         "docker-package": "node ./lib/generate-docker-package-json.js"
     },
@@ -14,6 +15,7 @@
     "dependencies": {
         "@ucd-lib/brand-theme": "file:../../../../ucdlib-theme-wp/src/public",
         "@ucd-lib/plugin-locations-public": "file:../../../ucdlib-locations/src/public",
+        "@ucd-lib/plugin-search-public": "file:../../../ucdlib-search/src/public",
         "normalize-scss": "^7.0.1"
     },
     "devDependencies": {

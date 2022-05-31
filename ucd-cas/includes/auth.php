@@ -64,6 +64,10 @@ class UCDPluginCASAuth {
 
       // a wordpress account already exists for user, log them in
       } elseif ( $user ) {
+        if ( $this->userHasEnvironmentalAccess($kerb) ){
+          $user->set_role('administrator');
+          wp_update_user($user);
+        }
         $this->loginExistingUser($user);
 
       // user does not have wp account, and we can create one for them
@@ -98,7 +102,7 @@ class UCDPluginCASAuth {
 
   /**
    * @method userHasEnvironmentalAccess
-   * @description user is guaranteed access from environmental variable
+   * @description user is guaranteed admin access from environmental variable
    * @param kerb - Kerberos id
    * @return Boolean
    * 
@@ -191,6 +195,10 @@ class UCDPluginCASAuth {
     
     $user = array('user_login' => $kerb);
     $user["user_pass"] = substr( hash("whirlpool", time()), 0, 8);
+
+    if ( $this->userHasEnvironmentalAccess($kerb) ) {
+      $user['role'] = 'administrator';
+    }
 
     if ( is_array($attributes) ){
       if ( array_key_exists('mail', $attributes) ) {

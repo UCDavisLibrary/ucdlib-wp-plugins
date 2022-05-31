@@ -22,7 +22,7 @@ class UCDLibPluginSearchElasticsearch {
    * Make the elasticsearch client, which is loaded with all other php dependencies via composer by the theme.
    */
   public function createClient(){
-    $c = $this->config['elasticsearch'];
+    $c = $this->config->elasticsearch;
     $host = 'http://' . $c['username'] . ':' . $c['password'] . '@' . $c['host'] . ':' . $c['port'];
     return Elasticsearch\ClientBuilder::create()->setHosts([$host])->build();
   }
@@ -62,6 +62,46 @@ class UCDLibPluginSearchElasticsearch {
   }
 
   /**
+   * Get facets with 'isSelected' property
+   */
+  protected $typeFacets;
+  public function typeFacets(){
+    if ( ! empty( $this->typeFacets ) ) {
+      return $this->typeFacets;
+    }
+    $v = explode(",", get_query_var('type', ''));
+    $facets = [];
+    foreach ($this->config->facets as $f) {
+      $f['isSelected'] = array_key_exists('urlArg', $f) && in_array(strtolower($f['urlArg']), $v );
+      $facets[] = $f;
+    }
+    
+    $this->typeFacets = $facets;
+    return $this->typeFacets;
+  }
+
+  protected $sortOptions;
+  public function sortOptions(){
+    if ( !empty( $this->sortOptions ) ){
+      return $this->sortOptions;
+    }
+    $v = strtolower(get_query_var('sortby', ''));
+    $hasSort = in_array( $v, array_map(function($o){return $o['urlArg'];}, $this->config->sortOptions) );
+    $options = [];
+    foreach ($this->config->sortOptions as $o) {
+      if ( $hasSort ) {
+        $o['isSelected'] = $o['urlArg'] === $v;
+      } else {
+        $o['isSelected'] = $o['default'];
+
+      }
+      $options[] = $o;
+    }
+    $this->sortOptions = $options;
+    return $this->sortOptions;
+  }
+
+  /**
    * Runs right before the twig template is rendered.
    * Any data (search results) that needs to be rendered is added to the context here
    */
@@ -69,10 +109,12 @@ class UCDLibPluginSearchElasticsearch {
     $context['currentPage'] = $this->currentPage;
     $context['pageSize'] = $this->pageSize;
     $context['search_query'] = $this->searchQuery;
-    $context['title'] = 'Search results for ' . $this->searchQuery;
+    $context['title'] = 'Search Our Website';
+    $context['typeFacets'] = $this->typeFacets();
+    $context['sortOptions'] = $this->sortOptions();
     try {
       $results = $this->doMainSearch();
-      $context['results'] = array_map(function($x){return new UCDLibPluginSearchDocument($x);}, $results['hits']['hits']);
+      $context['results'] = array_map(function($x){return new UCDLibPluginSearchDocument($x, $this->config);}, $results['hits']['hits']);
       $context['found_posts'] = $results['hits']['total']['value'];
       $context['hasPages'] = $context['found_posts'] > $context['pageSize'];
       $context['lastPage'] = ceil($context['found_posts'] / $this->pageSize);
@@ -97,6 +139,10 @@ class UCDLibPluginSearchElasticsearch {
         }
       }
       $context['suggest'] = $suggest;
+      // TODO: make threshhold a plugin setting
+      if ( array_key_exists('score', $suggest) && $suggest['score'] > 0.001 ){
+        $context['hasSuggestion'] = true;
+      }
 
       return $context;
 
@@ -120,7 +166,7 @@ class UCDLibPluginSearchElasticsearch {
       $views = $GLOBALS['UcdSite']->views;
       $templates = array( $views->getTemplate('404') );
     } else {
-      $templates = array_merge( array("@" . $this->config['slug'] . "/search.twig"), $templates );
+      $templates = array_merge( array("@" . $this->config->slug . "/search.twig"), $templates );
     }
 
     return $templates;
@@ -131,14 +177,18 @@ class UCDLibPluginSearchElasticsearch {
    */
   public function doMainSearch(){
     $params = [
-      'index' => $this->config['elasticsearch']['indexAlias'],
+      'index' => $this->config->elasticsearch['indexAlias'],
       'body'  => [
         'size' => $this->pageSize,
         'from' => ($this->currentPage - 1) * $this->pageSize,
         'query' => [
-          'multi_match' => [
-            'query' => $this->searchQuery,
-            'fields' => ['content', 'description', 'title^3', 'altTitles^3', 'tags.text^2']
+          'bool' => [
+            'must' => [
+              'multi_match' => [
+                'query' => $this->searchQuery,
+                'fields' => ['content', 'description', 'title^3', 'altTitles^3', 'tags.text^2']
+              ],
+            ]
           ]
         ],
         'highlight' => [
@@ -210,9 +260,28 @@ class UCDLibPluginSearchElasticsearch {
             ]
           ]
         ]
-
       ]
     ];
+
+    // add any filters
+    $facets = array_filter($this->typeFacets(), function($f){return $f['isSelected'];});
+    if ( count($facets) ){
+      $documentTypes = [];
+      foreach ($facets as $facet) {
+        foreach ($facet['documentType'] as $dt) {
+          $documentTypes[] = $dt;
+        }
+      }
+      $params['body']['query']['bool']['filter'] = ['terms' => ['type' =>  $documentTypes]];
+    }
+
+    // add sort
+    $sort = array_filter($this->sortOptions(), function($f){return $f['isSelected'];});
+    $i = array_key_first($sort);
+    if ( $i && $sort[$i]['es']){
+      $params['body']['sort'] = [$sort[$i]['es']];
+    }
+
     $response = $this->client->search($params);
   
   return $response;

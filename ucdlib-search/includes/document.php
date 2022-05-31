@@ -4,13 +4,33 @@
  * Wrapper class for an elasticsearch document "hit"
  */
 class UCDLibPluginSearchDocument {
-  public function __construct($document){
+  public function __construct($document, $config){
+    $this->config = $config;
     $this->document = $document;
-    if ( in_array( $document['_source']['type'], get_post_types() ) ){
+
+    $this->type = $this->config->getFacet($document['_source']['type'], 'documentType');
+    if ( $this->type['source'] == 'wordpress' ){
       $this->post = Timber::get_post($document['_source']['id']);
     } else {
       $this->post = null;
     }
+  }
+
+  protected $image;
+  public function image(){
+    if ( ! empty( $this->image ) ) {
+      return $this->image;
+    }
+    $image = false;
+    $base_url = $this->config->teaserImageUrl();
+
+    if ( $this->post && $this->post->teaser_image() ){
+      $image = $this->post->teaser_image()->src('thumbnail');
+    } else {
+      $image = $base_url . $this->type['defaultImage'];
+    }
+    $this->image = $image;
+    return $this->image;
   }
 
   public function title(){
