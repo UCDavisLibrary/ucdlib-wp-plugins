@@ -1,10 +1,99 @@
+@use '@ucd-lib/theme-sass/2_base_class/_buttons-mixin.scss' as *;
+
 // shims for the forminator third-party plugin
 .forminator-error-message {
-  color: #c10230
+  color: #c10230;
+  display: block;
 }
-.radio > .forminator-label {
+.forminator-response-message.forminator-error {
+  color: #c10230;
+}
+.radio, .checkbox {
+ &> .forminator-label {
+  display: block;
+  padding-bottom: 0.25rem;
+  color: #022851;
+  font-weight: 700;
+  font-size: 1rem;
+  line-height: 1.618;
+  margin-bottom: 0;
+  }
+
+  .forminator-description {
     display: block;
-    padding-bottom: 0.25rem;
-    color: #022851;
-    font-weight: 700;
+    margin-bottom: .5rem;
+  }
+}
+
+input,select {
+  &+ .forminator-description {
+    margin-top: .5rem;
+    display: block;
+  }
+} 
+
+.forminator-input-with-icon > label {
+  display: none;
+}
+
+input.forminator-datepicker {
+  max-width: 250px;
+}
+.ui-datepicker{
+  padding: 1rem 1rem 0;
+  background-color: #ebf3fa;
+}
+.ui-datepicker-next {
+  float: right;
+}
+.ui-datepicker-prev {
+  display: inline-block;
+  padding-bottom: .5rem;
+}
+.ui-datepicker-title {
+  display: flex;
+}
+.ui-datepicker-month {
+  margin-right: .5rem;
+}
+.ui-datepicker-header {
+  margin-bottom: .5rem;
+}
+.forminator-timepicker .forminator-row {
+  align-items: flex-end;
+}
+.forminator-file-upload input {
+  border: none;
+  box-shadow: none;
+}
+.forminator-button {
+  @include btn();
+}
+.forminator-button-next {
+  @include btn--primary();
+}
+.forminator-button-back {
+  @include btn--primary();
+}
+.forminator-button-submit {
+  @include btn--primary();
+}
+.forminator-pagination-footer {
+  margin-top: 1rem;
+  display: flex;
+}
+.forminator-pagination-steps {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+}
+.forminator-step {
+  @include btn--sm();
+  @include btn--alt3();
+  margin: .25rem .25rem;
+
+  &.forminator-current {
+    @include btn--disabled();
+  }
 }
