@@ -1,5 +1,7 @@
 @use '@ucd-lib/brand-theme/scss/style.scss' as style;
 
+@use './forminator.scss' as forminator;
+
 // move to search plugin
 .vm-teaser.vm-teaser--search {
   .vm-teaser__result-type {
