@@ -1,0 +1,24 @@
+{
+    "name": "@ucd-lib/plugin-locations-editor",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "docker-package": "node ./lib/generate-docker-package-json.js"
+    },
+    "private": true,
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "@ucd-lib/brand-theme-editor": "file:../../../../ucdlib-theme-wp/src/editor",
+        "@wordpress/api-fetch": "^6.0.1",
+        "@wordpress/blocks": "^11.5.1",
+        "@wordpress/components": "^15.0.0",
+        "@wordpress/data": "^6.3.0",
+        "@wordpress/edit-post": "^6.0.2",
+        "@wordpress/element": "^4.1.1",
+        "@wordpress/plugins": "^4.1.3",
+        "@wordpress/url": "^3.4.1",
+        "htm": "^3.1.0"
+    }
+}
