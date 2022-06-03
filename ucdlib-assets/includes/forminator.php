@@ -6,6 +6,39 @@ class UCDLibPluginAssetsForminator {
     add_filter('forminator_field_markup', [$this, 'styleRadioAndCheck'], 10, 3);
     add_filter('forminator_field_markup', [$this, 'styleConsentBox'], 10, 3);
     add_filter('forminator_render_button_markup', [$this, 'styleSubmitButton'], 10, 2);
+    add_action( 'admin_init', [$this, 'forceNoStyling']);
+    add_action( 'admin_footer', [$this, 'removeStyleOptions']);
+  }
+
+  public function removeStyleOptions(){
+    if( isset( $_GET['page'] ) ){
+      if( $_GET['page'] == 'forminator-cform-wizard' ){
+        ?>
+        <script type="text/javascript">
+        jQuery(document).ready(function(){
+          jQuery('a[href="/appearance"]').click(function(){
+            setTimeout(function(){
+              jQuery('#forminator-form-appearance .sui-box-body').children().eq(0).remove();
+            },40);
+          });
+        });	
+        </script>
+        <?php
+      }
+    }
+  }
+
+  public function forceNoStyling(){
+    if( isset( $_GET['page'] ) && $_GET['page'] == 'forminator-cform-wizard' ){
+      $form_id = isset( $_GET['id'] ) ? $_GET['id'] : '';
+      if( $form_id ){
+        $form_meta = get_post_meta($form_id, 'forminator_form_meta', true);
+        if( $form_meta['settings']['form-style'] != 'none' ){
+          $form_meta['settings']['form-style'] = 'none';
+          update_post_meta( $form_id, 'forminator_form_meta', $form_meta );
+        }
+      }
+    }
   }
 
   public function styleSubmitButton($html, $button){
