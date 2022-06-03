@@ -4,6 +4,7 @@ require_once( __DIR__ . '/post-types.php' );
 require_once( __DIR__ . '/acf.php' );
 require_once( __DIR__ . '/api.php' );
 require_once( __DIR__ . '/timber.php' );
+require_once( __DIR__ . '/meta-data.php' );
 
 class UCDLibPluginLocations {
   public function __construct(){
@@ -40,6 +41,8 @@ class UCDLibPluginLocations {
 
     // register location views and custom Timber class
     $this->timber = new UCDLibPluginLocationsTimber($config);
+
+    $this->metaData = new UCDLibPluginLocationsMetaData($config);
 
   }
 

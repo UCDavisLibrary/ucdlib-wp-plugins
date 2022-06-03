@@ -3,88 +3,6 @@
     "title": "Operating Hours",
     "fields": [
         {
-            "key": "field_61e967a441d42",
-            "label": "Has Operating Hours",
-            "name": "has_operating_hours",
-            "type": "true_false",
-            "instructions": "",
-            "required": 0,
-            "conditional_logic": 0,
-            "wrapper": {
-                "width": "",
-                "class": "",
-                "id": ""
-            },
-            "message": "This location has operating hours that can be displayed to the public",
-            "default_value": 0,
-            "ui": 1,
-            "ui_on_text": "",
-            "ui_off_text": ""
-        },
-        {
-            "key": "field_61eafc0857cf6",
-            "label": "Hours System",
-            "name": "hours_system",
-            "type": "radio",
-            "instructions": "Where are the hours for this location managed?",
-            "required": 0,
-            "conditional_logic": [
-                [
-                    {
-                        "field": "field_61e967a441d42",
-                        "operator": "==",
-                        "value": "1"
-                    }
-                ]
-            ],
-            "wrapper": {
-                "width": "",
-                "class": "",
-                "id": ""
-            },
-            "choices": {
-                "libcal": "Springshare Libcal"
-            },
-            "allow_null": 0,
-            "other_choice": 0,
-            "default_value": "",
-            "layout": "vertical",
-            "return_format": "value",
-            "save_other_choice": 0
-        },
-        {
-            "key": "field_61eb0248cb4e3",
-            "label": "Libcal Library\/Department ID",
-            "name": "libcal_id",
-            "type": "text",
-            "instructions": "Can be found here: https:\/\/ucdavis.libcal.com\/admin\/hours",
-            "required": 1,
-            "conditional_logic": [
-                [
-                    {
-                        "field": "field_61e967a441d42",
-                        "operator": "==",
-                        "value": "1"
-                    },
-                    {
-                        "field": "field_61eafc0857cf6",
-                        "operator": "==",
-                        "value": "libcal"
-                    }
-                ]
-            ],
-            "wrapper": {
-                "width": "",
-                "class": "",
-                "id": ""
-            },
-            "default_value": "",
-            "placeholder": "",
-            "prepend": "",
-            "append": "",
-            "maxlength": ""
-        },
-        {
             "key": "field_61e9826fa84ad",
             "label": "Appointments",
             "name": "appointments",
@@ -201,5 +119,5 @@
     "active": true,
     "description": "Locations: Hours Settings",
     "show_in_rest": 0,
-    "modified": 1644508944
+    "modified": 1654291225
 }
