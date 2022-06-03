@@ -24,6 +24,8 @@ class UCDLibPluginLocations {
       $config['version'] = $plugin_metadata['Version'];
     } 
 
+    add_action( 'admin_head', array($this, 'admin_head') );
+
     // enqueue all assets
     $this->assets = new UCDLibPluginLocationsAssets($config);
 
@@ -39,6 +41,17 @@ class UCDLibPluginLocations {
     // register location views and custom Timber class
     $this->timber = new UCDLibPluginLocationsTimber($config);
 
+  }
+
+  /**
+   * if this element is detected, editor JS for this plugin will be executed.
+   * Necessary because we use a single js build process for all plugins and the theme
+   */
+  public function admin_head(){
+    echo "
+    <ucdlib-plugin plugin='$this->slug' style='display:none'>
+    </ucdlib-plugin>
+    ";
   }
 
 }
