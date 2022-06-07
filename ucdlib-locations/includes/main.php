@@ -1,5 +1,6 @@
 <?php
 require_once( __DIR__ . '/assets.php' );
+require_once( __DIR__ . '/blocks.php' );
 require_once( __DIR__ . '/post-types.php' );
 require_once( __DIR__ . '/acf.php' );
 require_once( __DIR__ . '/api.php' );
@@ -29,6 +30,9 @@ class UCDLibPluginLocations {
 
     // enqueue all assets
     $this->assets = new UCDLibPluginLocationsAssets($config);
+
+    // register custom blocks
+    $this->blocks = new UCDLibPluginLocationsBlocks($config);
 
     // register 'location' post type
     $this->postTypes = new UCDLibPluginLocationsPostTypes($config);

@@ -6,7 +6,7 @@ class UCDLibPluginLocationsPostTypes {
 
     add_action( 'init', array($this, 'registerLocation') );
     add_filter( 'ucd-theme/context/single', array($this, 'getLocationContext') );
-    add_filter( 'ucd-theme/templates/single', array($this, 'getLocationTemplate'), 10, 2 );
+    //add_filter( 'ucd-theme/templates/single', array($this, 'getLocationTemplate'), 10, 2 );
   }
 
   // alter context before calling the location view

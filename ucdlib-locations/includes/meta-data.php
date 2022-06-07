@@ -5,6 +5,7 @@ class UCDLibPluginLocationsMetaData {
     $this->config = $config;
     add_action('init', [$this, 'register_hours']);
     add_action('init', [$this, 'register_core']);
+    add_action('init', [$this, 'register_single_template']);
   }
 
   // core metadata
@@ -58,6 +59,16 @@ class UCDLibPluginLocationsMetaData {
       'single' => true,
       'default' => 0,
       'type' => 'number',
+    ) );
+  }
+
+  // metadata for single template display
+  public function register_single_template(){
+    register_post_meta( $this->config['postTypeSlug'], 'hide_hours_block', array(
+      'show_in_rest' => true,
+      'single' => true,
+      'default' => false,
+      'type' => 'boolean',
     ) );
   }
 

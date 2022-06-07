@@ -55,7 +55,7 @@ class UCDLibPluginLocationsLocation extends UcdThemePost {
     
     $occupancy = $this->meta('occupancy');
     $capacity = $occupancy['capacity'];
-    $capacity = $this->meta('capacity');
+    $out['capacity'] = $capacity ? $capacity : 0;
 
     $this->core_data = $out;
     return $this->core_data;
