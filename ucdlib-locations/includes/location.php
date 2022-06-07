@@ -11,21 +11,34 @@ class UCDLibPluginLocationsLocation extends UcdThemePost {
     }
     $out = array(
       'id' => $this->ID,
-      'labels' => $this->meta('labels'),
-      'links' => array(),
-      'parent' => $this->meta('parent'),
-      'appointments' => $this->meta('appointments'),
-      'hoursPlaceholder' => $this->meta('hours_placeholder'),
-      'alerts' => $this->meta('alerts'),
+      'labels' => [],
+      'links' => [],
+      'parent' => intVal($this->meta('location_parent')),
+      'appointments' => [
+        'required' => $this->meta('has_appointments') ? true : false
+      ],
+      'hoursPlaceholder' => [
+        'show' => $this->meta('has_hours_placeholder') ? true : false,
+        'message' => $this->meta('hours_placeholder')
+      ],
+      'alerts' => ['global' => $this->meta('alert_text'), 'showGlobal' => $this->meta('has_alert') ? true : false],
       'order' => $this->menu_order
     );
 
     $out['labels']['title'] = $this->title();
-    if ( array_key_exists("", $out['labels']) ) unset($out['labels']['']);
+    $out['labels']['short'] = $this->meta('label_short');
+    $out['labels']['room_number'] = $this->meta('room_number');
 
     $out['links']['native'] = $this->link();
-    $out['links']['custom'] = $this->meta('custom_url');
-    $out['links']['redirect_to_custom_url'] = $this->meta('redirect_to_custom_url');
+    $out['links']['custom'] = '';
+    $custom_url = $this->meta('redirect');
+    if ( $custom_url['postId'] ) {
+      $p = Timber::get_post( $custom_url['postId'] );
+      if ( $p ) $out['links']['custom'] = $p->link();
+    } else if ( $custom_url['url'] ) {
+      $out['links']['custom'] = $custom_url['url'];
+    } 
+    $out['links']['redirect_to_custom_url'] = $this->meta('has_redirect') ? true : false;
     $out['links']['link'] = $out['links']['custom'] ? $out['links']['custom'] : $out['links']['native'];
     $hoursPage = get_field('link_all_hours', $this->post_type);
     if ( $hoursPage ) {
@@ -34,20 +47,29 @@ class UCDLibPluginLocationsLocation extends UcdThemePost {
       $out['links']['hoursPage'] = "";
     }
 
-    if ( !$out['appointments'] ) {
-      $out['appointments'] = array(
-        'required' => false
-      );
+    if ( $out['appointments']['required'] ) {
+      $appointments = $this->meta('appointments');
+      $out['appointments']['link_text'] = $appointments['linkText'];
+      $out['appointments']['link_url'] = $appointments['linkUrl'];
     }
+    
+    $occupancy = $this->meta('occupancy');
+    $capacity = $occupancy['capacity'];
     $capacity = $this->meta('capacity');
-    if ( $capacity ) $out['capacity'] = intval($capacity);
-
-    if ( $out['parent'] ){
-      $out['notACollapsibleChild'] = $this->meta('not_collapsible');
-    }
 
     $this->core_data = $out;
     return $this->core_data;
+  }
+
+  protected $safespace_id;
+  public function safespace_id(){
+    if ( ! empty( $this->safespace_id ) ) {
+      return $this->safespace_id;
+    }
+    $occupancy = $this->meta('occupancy');
+    $this->safespace_id = $occupancy['safespaceId'];
+
+    return $this->safespace_id;
   }
 
   protected $can_get_current_occupancy;
@@ -63,7 +85,7 @@ class UCDLibPluginLocationsLocation extends UcdThemePost {
       $out[] = "Missing Safespace credentials in settings page";
     }
 
-    elseif ( $this->meta('safespace_id') ) {
+    elseif ( $this->safespace_id() ) {
       return array(true);
     }
 
@@ -85,7 +107,7 @@ class UCDLibPluginLocationsLocation extends UcdThemePost {
     }
 
     // if current occupancy is not enabled on location page, bail
-    if ( !$this->meta('show_current_occupancy') ){
+    if ( !$this->meta('has_occupancy') ){
       $out['status'] = 'good';
       $out['message'] = "Location does not have public current capacity data";
 
@@ -132,7 +154,7 @@ class UCDLibPluginLocationsLocation extends UcdThemePost {
 
       # construct GET request for libcal location
       $creds = get_field('api_sensource_safespace', $this->post_type);
-      $url = trailingslashit($creds['url']) . $this->meta('safespace_id');
+      $url = trailingslashit($creds['url']) . $this->safespace_id();
       $out['cached'] = time();
 
       // do GET request and cache data
@@ -162,27 +184,20 @@ class UCDLibPluginLocationsLocation extends UcdThemePost {
     }
     $out = array(false);
 
-    // check if libcal credentials are entered
-    if ($this->meta('hours_system') === 'libcal') {
-      $creds = get_field('api_libcal', $this->post_type);
+    $creds = get_field('api_libcal', $this->post_type);
 
-      if ( !$this->meta('libcal_id') ) {
-        $out[] = 'Missing Libcal Library ID';
-      } else if ( 
-        !is_array( $creds ) ||
-        !$creds['client_id'] ||
-        !$creds['client_secret'] ||
-        !$creds['url_hours'] ||
-        !$creds['url_auth']
-        ) {
-        $out[] = 'Missing libcal API credentials!';
-      } else {
-        $out[0] = true;
-      }
-    } 
-    
-    else {
-      $out[] = 'No hours system for this location.';
+    if ( !$this->meta('libcal_id') ) {
+      $out[] = 'Missing Libcal Library ID';
+    } else if ( 
+      !is_array( $creds ) ||
+      !$creds['client_id'] ||
+      !$creds['client_secret'] ||
+      !$creds['url_hours'] ||
+      !$creds['url_auth']
+      ) {
+      $out[] = 'Missing libcal API credentials!';
+    } else {
+      $out[0] = true;
     }
 
     $this->can_get_hours = $out;
@@ -210,11 +225,8 @@ class UCDLibPluginLocationsLocation extends UcdThemePost {
     if ( !$this->meta('has_operating_hours') ){
       $out['status'] = 'good';
       $out['message'] = "Location does not have public operating hours.";
-    }
-    elseif ( $this->meta('hours_system') === 'libcal' ){
-      $out = array_merge($out, $this->get_libcal_hours());
     } else {
-      $out['message'] = "Operating hours not stored in a recognized system.";
+      $out = array_merge($out, $this->get_libcal_hours());
     }
 
     $this->get_hours = $out;

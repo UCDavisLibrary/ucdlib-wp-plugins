@@ -3,6 +3,7 @@ import { PluginDocumentSettingPanel } from '@wordpress/edit-post';
 import { useDispatch } from "@wordpress/data";
 import { 
   ToggleControl,
+  TextareaControl,
   TextControl } from '@wordpress/components';
 import { html, SelectUtils } from "@ucd-lib/brand-theme-editor/lib/utils";
 
@@ -18,13 +19,17 @@ const Edit = () => {
   const appointments = meta.appointments ? meta.appointments : {};
   const hasOccupancy = meta.has_occupancy ? true : false;
   const occupancy = meta.occupancy ? meta.occupancy : {};
+  const hasPlaceholder = meta.has_hours_placeholder ? true : false;
+  const placeholderText = meta.hours_placeholder ? meta.hours_placeholder : '';
   const libcalId = meta.libcal_id ? meta.libcal_id : '';
   const watchedVars = [
     hasOperatingHours,
     hasAppointments,
     appointments,
     hasOccupancy,
-    occupancy
+    occupancy,
+    hasPlaceholder,
+    placeholderText
   ];
   const { editPost } = useDispatch( 'core/editor', watchedVars );
 
@@ -67,6 +72,23 @@ const Edit = () => {
                 value=${appointments.linkUrl}
                 onChange=${linkUrl => editPost({meta: {appointments: {...appointments, linkUrl}}})}
               />
+            </div>
+          `}
+          ${!hasOperatingHours && html`
+            <div>
+            <${ToggleControl} 
+              label="Display Placeholder Message"
+              checked=${hasPlaceholder}
+              onChange=${() => editPost({meta: { has_hours_placeholder: !hasPlaceholder}})}
+              help="Will display custom text instead of location hours on hours page."
+            />
+            ${hasPlaceholder && html`
+              <${TextareaControl} 
+                label="Placeholder Text"
+                value=${placeholderText}
+                onChange=${hours_placeholder => editPost({meta: {hours_placeholder}})}
+              />
+            `}
             </div>
           `}
           <${ToggleControl} 

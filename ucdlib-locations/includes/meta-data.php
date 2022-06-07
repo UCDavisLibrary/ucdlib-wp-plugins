@@ -115,5 +115,17 @@ class UCDLibPluginLocationsMetaData {
       'default' => ['capacity' => 0, 'safespaceId' => ''],
       'type' => 'object',
     ) );
+    register_post_meta( $this->config['postTypeSlug'], 'has_hours_placeholder', array(
+      'show_in_rest' => true,
+      'single' => true,
+      'default' => false,
+      'type' => 'boolean',
+    ) );
+    register_post_meta( $this->config['postTypeSlug'], 'hours_placeholder', array(
+      'show_in_rest' => true,
+      'single' => true,
+      'default' => '',
+      'type' => 'string',
+    ) );
   }
 }
