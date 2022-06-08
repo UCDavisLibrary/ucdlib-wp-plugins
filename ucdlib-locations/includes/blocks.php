@@ -5,16 +5,21 @@ require_once( __DIR__ . '/block-transformations.php' );
 class UCDLibPluginLocationsBlocks {
   public function __construct($config){
     $this->config = $config;
+    $this->slug = $config['slug'];
     $this->iconsUsed = [];
+
+    $this->registry = [
+      "$this->slug/hours-today" => [
+        'twig' => $this->twigPath('hours-today'),
+        'transform' => ['getCurrentLocationId', 'getSiteUrl', 'getLocationMeta']
+      ]
+    ];
 
     add_action('block_categories_all', array($this, 'addCategories'), 10,2);
     add_action( 'init', array( $this, 'register_blocks'));
     add_filter( 'ucd-theme/loaded-icons', array($this, 'loadIcons'), 10, 1);
     
   }
-
-  public static $registry = [
-  ];
 
   public function twigPath($block){
     return '@' . $this->config['slug'] . "/blocks/$block.twig";
@@ -47,7 +52,7 @@ class UCDLibPluginLocationsBlocks {
    * Registers serverside rendering callback of all plugin blocks
    */
   public function register_blocks( ) {
-    foreach (self::$registry as $name => $block) {
+    foreach ($this->registry as $name => $block) {
       $settings = array(
         'api_version' => 2, 
         'render_callback' => array($this, 'render_callback')
@@ -74,7 +79,7 @@ class UCDLibPluginLocationsBlocks {
     // Retrieve metadata from registry
     $blockName = $block->name;
     if ( !$blockName ) return;
-    $meta = self::$registry[$blockName];
+    $meta = $this->registry[$blockName];
 
     // Apply any transformations to block attributes specified in registry
     if ( array_key_exists("transform", $meta) ){

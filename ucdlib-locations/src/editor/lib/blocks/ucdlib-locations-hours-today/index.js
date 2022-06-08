@@ -38,6 +38,14 @@ const settings = {
       type: 'string',
       default: ''
     },
+    seeMoreText: {
+      type: 'string',
+      default: 'See all library hours'
+    },
+    hideSeeMore: {
+      type: 'boolean',
+      default: false
+    },
     flush: {
       type: 'boolean',
       default: false

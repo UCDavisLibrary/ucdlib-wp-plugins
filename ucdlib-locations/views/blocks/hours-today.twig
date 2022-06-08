@@ -1,0 +1,15 @@
+{% if not attributes.meta.hide_hours_block[0] %}
+  <div class="{{not attributes.flush ? 'o-box panel'}}">
+    <ucdlib-hours-today 
+      api-host='{{attributes.site_url}}'
+      location="{{attributes.locationId}}"
+      widget-title="{{attributes.widgetTitle ? attributes.widgetTitle : "Today's Hours"}}"
+      child-filter="{{attributes.childFilter}}"
+      see-more-text="{{attributes.seeMoreText ? attributes.seeMoreText : 'See all library hours' }}"
+      {{attributes.hideTitle ? 'hide-title'}}
+      {{attributes.showChildren ? 'show-children'}}
+      {{attributes.onlyShowChildren ? 'only-show-children'}}
+      {{attributes.hideSeeMore ? 'hide-see-more'}}
+    ></ucdlib-hours-today>
+  </div>
+{% endif %}

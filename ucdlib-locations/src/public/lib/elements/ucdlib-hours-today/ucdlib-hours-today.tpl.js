@@ -7,6 +7,10 @@ export function styles() {
       display: block;
     }
 
+    .hide {
+      display: none;
+    }
+
     .location-status.hide {
       display: none;
     }
@@ -27,6 +31,7 @@ export function styles() {
     }
     .child-details {
       display: block;
+      flex-wrap: wrap;
     }
     .child-details .separator {
       display: none;
@@ -42,7 +47,7 @@ export function styles() {
       }
     }
 
-    @media (min-width: 1600px) {
+    @media (min-width: 1400px) {
       .child-details {
         display: flex;
       }
@@ -100,7 +105,9 @@ export function renderComplete(location) {
       </div>
     `)}
   </div>
-  ${ location.renderSeeAllLink() }
+  <div class="${this.hideSeeMore ? 'hide' : ''}">
+    ${ location.renderSeeAllLink(this.seeMoreText) }
+  </div>
   ` : this.ctl.renderStatus('error')
   }
 `;}
