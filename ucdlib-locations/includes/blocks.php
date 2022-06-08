@@ -12,7 +12,11 @@ class UCDLibPluginLocationsBlocks {
       "$this->slug/hours-today" => [
         'twig' => $this->twigPath('hours-today'),
         'transform' => ['getCurrentLocationId', 'getSiteUrl', 'getLocationMeta']
-      ]
+      ],
+      "$this->slug/amenities" => [
+        'twig' => $this->twigPath('amenities'),
+        'transform' => ['getLocationMeta']
+      ],
     ];
 
     add_action('block_categories_all', array($this, 'addCategories'), 10,2);

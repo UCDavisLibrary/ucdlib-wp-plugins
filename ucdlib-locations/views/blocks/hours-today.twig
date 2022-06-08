@@ -1,5 +1,5 @@
 {% if not attributes.meta.hide_hours_block[0] %}
-  <div class="{{not attributes.flush ? 'o-box panel'}}">
+  <aside class="{{not attributes.flush ? 'o-box panel'}}">
     <ucdlib-hours-today 
       api-host='{{attributes.site_url}}'
       location="{{attributes.locationId}}"
@@ -11,5 +11,5 @@
       {{attributes.onlyShowChildren ? 'only-show-children'}}
       {{attributes.hideSeeMore ? 'hide-see-more'}}
     ></ucdlib-hours-today>
-  </div>
+  </aside>
 {% endif %}

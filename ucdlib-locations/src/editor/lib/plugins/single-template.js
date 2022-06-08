@@ -15,8 +15,10 @@ const Edit = () => {
   const isLocation = SelectUtils.editedPostAttribute('type') === 'location';
   const meta = SelectUtils.editedPostAttribute('meta');
   const hideHours = meta.hide_hours_block ? true : false;
+  const hideAmenities = meta.hide_amenities_block ? true : false;
   const watchedVars = [
-    hideHours
+    hideHours,
+    hideAmenities
   ];
   const { editPost } = useDispatch( 'core/editor', watchedVars );
 
@@ -32,6 +34,11 @@ const Edit = () => {
             label="Hide Hours Block"
             checked=${hideHours}
             onChange=${() => editPost({meta: { hide_hours_block: !hideHours}})}
+          />
+          <${ToggleControl} 
+            label="Hide Amenities Block"
+            checked=${hideAmenities}
+            onChange=${() => editPost({meta: { hide_amenities_block: !hideAmenities}})}
           />
         </${PluginDocumentSettingPanel}>
       `}

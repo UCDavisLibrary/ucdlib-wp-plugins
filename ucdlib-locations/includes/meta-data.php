@@ -70,6 +70,12 @@ class UCDLibPluginLocationsMetaData {
       'default' => false,
       'type' => 'boolean',
     ) );
+    register_post_meta( $this->config['postTypeSlug'], 'hide_amenities_block', array(
+      'show_in_rest' => true,
+      'single' => true,
+      'default' => false,
+      'type' => 'boolean',
+    ) );
   }
 
   // hours and occupancy
