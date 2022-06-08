@@ -76,6 +76,12 @@ class UCDLibPluginLocationsMetaData {
       'default' => false,
       'type' => 'boolean',
     ) );
+    register_post_meta( $this->config['postTypeSlug'], 'hide_use_the_library_block', array(
+      'show_in_rest' => true,
+      'single' => true,
+      'default' => false,
+      'type' => 'boolean',
+    ) );
   }
 
   // hours and occupancy

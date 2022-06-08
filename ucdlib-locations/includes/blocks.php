@@ -17,6 +17,10 @@ class UCDLibPluginLocationsBlocks {
         'twig' => $this->twigPath('amenities'),
         'transform' => ['getLocationMeta']
       ],
+      "$this->slug/use" => [
+        'twig' => $this->twigPath('use-the-library'),
+        'transform' => ['getLocationMeta']
+      ],
     ];
 
     add_action('block_categories_all', array($this, 'addCategories'), 10,2);

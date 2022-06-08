@@ -16,9 +16,11 @@ const Edit = () => {
   const meta = SelectUtils.editedPostAttribute('meta');
   const hideHours = meta.hide_hours_block ? true : false;
   const hideAmenities = meta.hide_amenities_block ? true : false;
+  const hideUseTheLibrary = meta.hide_use_the_library_block ? true : false;
   const watchedVars = [
     hideHours,
-    hideAmenities
+    hideAmenities,
+    hideUseTheLibrary
   ];
   const { editPost } = useDispatch( 'core/editor', watchedVars );
 
@@ -39,6 +41,11 @@ const Edit = () => {
             label="Hide Amenities Block"
             checked=${hideAmenities}
             onChange=${() => editPost({meta: { hide_amenities_block: !hideAmenities}})}
+          />
+          <${ToggleControl} 
+            label="Hide Use The Library Block"
+            checked=${hideUseTheLibrary}
+            onChange=${() => editPost({meta: { hide_use_the_library_block: !hideUseTheLibrary}})}
           />
         </${PluginDocumentSettingPanel}>
       `}
