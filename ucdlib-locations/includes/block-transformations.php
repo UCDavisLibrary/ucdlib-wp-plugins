@@ -20,5 +20,14 @@ class UCDLibPluginLocationsBlockTransformations {
     $attrs['meta'] = get_post_meta(get_the_ID());
     return $attrs;
   }
+
+  static function getAddress($attrs){
+    $attrs['icon'] = 'ucd-public:fa-location-dot';
+    if ( array_key_exists('text', $attrs) && $attrs['text'] ) {
+      return $attrs;
+    }
+    $attrs['text'] = get_post_meta(get_the_ID(), 'display_address', true);
+    return $attrs;
+  }
 }
 ?>

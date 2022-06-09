@@ -16,3 +16,21 @@
 .search-results-message {
   font-style: italic;
 }
+
+// move to locations plugin
+
+.location-address {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+
+  ucdlib-icon {
+    margin-right: 10px;
+    color: #73abdd;
+  }
+
+  .heading--h5 {
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+}

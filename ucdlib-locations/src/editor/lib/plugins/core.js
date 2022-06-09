@@ -25,6 +25,7 @@ const Edit = () => {
   const emptyRedirect = {postId: 0, url: ''};
   const redirect = meta.redirect ? meta.redirect : emptyRedirect;
   const locationParent = meta.location_parent ? meta.location_parent : 0;
+  const address = meta.display_address ? meta.display_address : '';
   const watchedVars = [
     labelShort,
     roomNumber,
@@ -32,7 +33,8 @@ const Edit = () => {
     alertText,
     hasRedirect,
     redirect,
-    locationParent
+    locationParent,
+    address
   ];
   const { editPost } = useDispatch( 'core/editor', watchedVars );
   const currentId = SelectUtils.editedPostAttribute('id');
@@ -83,6 +85,11 @@ const Edit = () => {
               label="Short Label"
               onChange=${label_short => editPost({meta: {label_short}})}
               help="Less than 15 characters or so..."
+            />
+            <${TextControl} 
+              value=${address}
+              label="Address to Display"
+              onChange=${display_address => editPost({meta: {display_address}})}
             />
             <${TextControl} 
               value=${roomNumber}

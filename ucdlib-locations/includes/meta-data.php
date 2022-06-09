@@ -59,6 +59,12 @@ class UCDLibPluginLocationsMetaData {
       'default' => 0,
       'type' => 'number',
     ) );
+    register_post_meta( $this->config['postTypeSlug'], 'display_address', array(
+      'show_in_rest' => true,
+      'single' => true,
+      'default' => '',
+      'type' => 'string',
+    ) );
   }
 
   // hours and occupancy

@@ -12,6 +12,10 @@ class UCDLibPluginLocationsBlocks {
       "$this->slug/hours-today" => [
         'twig' => $this->twigPath('hours-today'),
         'transform' => ['getCurrentLocationId', 'getSiteUrl']
+      ],
+      "$this->slug/address" => [
+        'twig' => $this->twigPath('address'),
+        'transform' => ['getAddress']
       ]
     ];
 
