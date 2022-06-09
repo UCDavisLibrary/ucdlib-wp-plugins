@@ -65,7 +65,6 @@ class UCDLibPluginLocationsPostTypes {
       'menu_position' => 20,
       'menu_icon' => 'dashicons-location',
       'rewrite'			  => array(
-        'slug' => '/',
 			  'with_front'	  => false
 		  ),
       'supports' => array(
