@@ -1,4 +1,3 @@
-{% if not attributes.meta.hide_hours_block[0] %}
   <aside class="{{not attributes.flush ? 'o-box panel'}}">
     <ucdlib-hours-today 
       api-host='{{attributes.site_url}}'
@@ -12,4 +11,3 @@
       {{attributes.hideSeeMore ? 'hide-see-more'}}
     ></ucdlib-hours-today>
   </aside>
-{% endif %}

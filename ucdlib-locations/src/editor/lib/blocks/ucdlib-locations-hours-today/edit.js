@@ -6,10 +6,6 @@ export default ( props ) => {
   const { attributes, setAttributes } = props;
   const blockProps = useBlockProps();
 
-  // get metadata
-  const meta = SelectUtils.editedPostAttribute('meta');
-  const hide = meta.hide_hours_block ? true : false;
-
   const currentPage = SelectUtils.editedPostAttribute('id');
   const locationId = attributes.locationId ? attributes.locationId : currentPage;
 
@@ -48,11 +44,9 @@ export default ( props ) => {
 
   return html`
   <div ...${ blockProps }>
-    ${!hide && html`
-      <div className="${attributes.flush ? '' : 'o-box panel'}">
-        <ucdlib-hours-today ...${eleProps}></ucdlib-hours-today>
-      </div>
-    `}
+    <div className="${attributes.flush ? '' : 'o-box panel'}">
+      <ucdlib-hours-today ...${eleProps}></ucdlib-hours-today>
+    </div>
     <${InspectorControls}>
       <${PanelBody} title="Widget Settings">
         <${SelectControl} 
