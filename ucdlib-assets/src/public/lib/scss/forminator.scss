@@ -41,7 +41,9 @@ input.forminator-datepicker {
 }
 .ui-datepicker{
   padding: 1rem 1rem 0;
-  background-color: #ebf3fa;
+  background-color: #fff;
+  z-index: 999 !important;
+  border: 1px solid #022851;
 }
 .ui-datepicker-next {
   float: right;
