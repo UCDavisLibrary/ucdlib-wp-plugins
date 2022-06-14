@@ -1,3 +1,4 @@
+import metaDescription from "./ucdlib-directory-description";
 import personBio from "./ucdlib-directory-bio";
 import personContact from "./ucdlib-directory-contact";
 import personName from "./ucdlib-directory-name";
@@ -8,6 +9,7 @@ import personTags from "./ucdlib-directory-tags";
 import personExpertiseAreas from "./ucdlib-directory-expertise-areas";
 
 export default [
+  metaDescription,
   personBio,
   personContact,
   personName,

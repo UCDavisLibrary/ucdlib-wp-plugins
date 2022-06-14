@@ -182,13 +182,6 @@
                 "operator": "==",
                 "value": "service"
             }
-        ],
-        [
-            {
-                "param": "post_type",
-                "operator": "==",
-                "value": "department"
-            }
         ]
     ],
     "menu_order": 1,
@@ -200,5 +193,5 @@
     "active": true,
     "description": "Services + Departments: Phone, Email, etc",
     "show_in_rest": 1,
-    "modified": 1652122752
+    "modified": 1655240345
 }

@@ -4,13 +4,19 @@
 class UCDLibPluginDirectoryDepartments {
   public function __construct($config){
     $this->config = $config;
+    $this->slug = $config['postSlugs']['department'];
 
     add_action( 'init', array($this, 'register') );
+    add_action( 'init', [$this, 'register_post_meta'] );
     add_filter( 'timber/post/classmap', array($this, 'extend_timber_post') );
   }
 
   // register 'department' non-public post type
   public function register(){
+    $template = [
+      ['ucdlib-directory/description', ['placeholder' => 'About this department...']]
+    ];
+
     $labels = array(
       'name'                  => _x( 'Departments', 'Post type general name', 'textdomain' ),
       'singular_name'         => _x( 'Department', 'Post type singular name', 'textdomain' ),
@@ -49,9 +55,11 @@ class UCDLibPluginDirectoryDepartments {
       'show_in_nav_menus' => false,
       'show_in_menu' => $this->config['slug'],
       'menu_position' => 30,
+      'template' => $template,
+      'template_lock' => 'all',
       'supports' => array(
         'title', 
-        //'editor', 
+        'editor', 
         //'author', 
         //'thumbnail', 
         // 'excerpt', 
@@ -61,17 +69,79 @@ class UCDLibPluginDirectoryDepartments {
       )
     );
 
-    register_post_type( $this->config['postSlugs']['department'], $args );
+    register_post_type( $this->slug, $args );
   }
 
   // Tell Timber to always load our custom department class when returned by a query
   public function extend_timber_post( $classmap ){
     $custom_classmap = array(
-      $this->config['postSlugs']['department'] => UCDLibPluginDirectoryDepartment::class,
+      $this->slug => UCDLibPluginDirectoryDepartment::class,
     );
 
     return array_merge( $classmap, $custom_classmap );
   }
+
+    // register custom metadata for this post type
+    public function register_post_meta(){
+      $slug = $this->slug;
+  
+      register_post_meta( $slug, 'description', array(
+        'show_in_rest' => true,
+        'single' => true,
+        'default' => '',
+        'type' => 'string',
+      ) );
+      register_post_meta( $slug, 'contactWebsite', array(
+        'show_in_rest' => [
+          'schema' => [
+            'items' => [
+              'type' => 'object',
+              'properties' => [
+                'type' => ['type' => 'string'],
+                'value' => ['type' => 'string'],
+                'label' => ['type' => 'string']
+              ]
+            ]
+          ]
+        ],
+        'single' => true,
+        'type' => 'array',
+        'default' => []
+      ) );
+      register_post_meta( $slug, 'contactEmail', array(
+        'show_in_rest' => [
+          'schema' => [
+            'items' => [
+              'type' => 'object',
+              'properties' => [
+                'value' => ['type' => 'string'],
+                'label' => ['type' => 'string']
+              ]
+            ]
+          ]
+        ],
+        'single' => true,
+        'type' => 'array',
+        'default' => []
+      ) );
+      register_post_meta( $slug, 'contactPhone', array(
+        'show_in_rest' => [
+          'schema' => [
+            'items' => [
+              'type' => 'object',
+              'properties' => [
+                'value' => ['type' => 'string'],
+                'label' => ['type' => 'string']
+              ]
+            ]
+          ]
+        ],
+        'single' => true,
+        'type' => 'array',
+        'default' => []
+      ) );
+  
+    }
 
 }
 
