@@ -1,9 +1,12 @@
 <?php
 
+require_once( __DIR__ . '/utils.php' );
+
 // Sets up the service post type
 class UCDLibPluginDirectoryServices {
   public function __construct($config){
     $this->config = $config;
+    $this->slug = $config['postSlugs']['service'];
 
     add_action( 'init', array($this, 'register') );
     add_filter( 'timber/post/classmap', array($this, 'extend_timber_post') );
@@ -11,6 +14,21 @@ class UCDLibPluginDirectoryServices {
 
   // register 'service' non-public post type
   public function register(){
+    $template = [
+      [
+        'ucdlib-directory/description', 
+        ['placeholder' => 'About this service...']
+      ],
+      [
+        'ucdlib-directory/contact', 
+        [
+          'placeholder' => 'Service contact info...',
+          'allowAppointment' => false,
+          'allowAdditionalText' => true
+        ]
+      ]
+    ];
+
     $labels = array(
       'name'                  => _x( 'Services', 'Post type general name', 'textdomain' ),
       'singular_name'         => _x( 'Service', 'Post type singular name', 'textdomain' ),
@@ -49,9 +67,11 @@ class UCDLibPluginDirectoryServices {
       'show_in_menu' => $this->config['slug'],
       'menu_position' => 30,
       'menu_icon' => 'dashicons-info',
+      'template' => $template,
+      'template_lock' => 'all',
       'supports' => array(
         'title', 
-        //'editor', 
+        'editor', 
         //'author', 
         //'thumbnail', 
         // 'excerpt', 
@@ -61,17 +81,32 @@ class UCDLibPluginDirectoryServices {
       )
     );
 
-    register_post_type( $this->config['postSlugs']['service'], $args );
+    register_post_type( $this->slug, $args );
   }
 
   // Tell Timber to always load our custom service class when returned by a query
   public function extend_timber_post( $classmap ){
     $custom_classmap = array(
-      $this->config['postSlugs']['service'] => UCDLibPluginDirectoryService::class,
+      $this->slug => UCDLibPluginDirectoryService::class,
     );
 
     return array_merge( $classmap, $custom_classmap );
   }
+
+    // register custom metadata for this post type
+    public function register_post_meta(){
+      $slug = $this->slug;
+  
+      register_post_meta( $slug, 'description', array(
+        'show_in_rest' => true,
+        'single' => true,
+        'default' => '',
+        'type' => 'string',
+      ) );
+
+      UCDLibPluginDirectoryUtils::registerContactMeta($slug);
+
+    }
 
 }
 

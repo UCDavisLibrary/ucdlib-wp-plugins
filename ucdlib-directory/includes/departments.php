@@ -1,5 +1,7 @@
 <?php
 
+require_once( __DIR__ . '/utils.php' );
+
 // Sets up the department post type
 class UCDLibPluginDirectoryDepartments {
   public function __construct($config){
@@ -14,7 +16,17 @@ class UCDLibPluginDirectoryDepartments {
   // register 'department' non-public post type
   public function register(){
     $template = [
-      ['ucdlib-directory/description', ['placeholder' => 'About this department...']]
+      [
+        'ucdlib-directory/description', 
+        ['placeholder' => 'About this department...']
+      ],
+      [
+        'ucdlib-directory/contact', 
+        [
+          'placeholder' => 'Department contact info...',
+          'allowAppointment' => false
+        ]
+      ]
     ];
 
     $labels = array(
@@ -91,56 +103,9 @@ class UCDLibPluginDirectoryDepartments {
         'default' => '',
         'type' => 'string',
       ) );
-      register_post_meta( $slug, 'contactWebsite', array(
-        'show_in_rest' => [
-          'schema' => [
-            'items' => [
-              'type' => 'object',
-              'properties' => [
-                'type' => ['type' => 'string'],
-                'value' => ['type' => 'string'],
-                'label' => ['type' => 'string']
-              ]
-            ]
-          ]
-        ],
-        'single' => true,
-        'type' => 'array',
-        'default' => []
-      ) );
-      register_post_meta( $slug, 'contactEmail', array(
-        'show_in_rest' => [
-          'schema' => [
-            'items' => [
-              'type' => 'object',
-              'properties' => [
-                'value' => ['type' => 'string'],
-                'label' => ['type' => 'string']
-              ]
-            ]
-          ]
-        ],
-        'single' => true,
-        'type' => 'array',
-        'default' => []
-      ) );
-      register_post_meta( $slug, 'contactPhone', array(
-        'show_in_rest' => [
-          'schema' => [
-            'items' => [
-              'type' => 'object',
-              'properties' => [
-                'value' => ['type' => 'string'],
-                'label' => ['type' => 'string']
-              ]
-            ]
-          ]
-        ],
-        'single' => true,
-        'type' => 'array',
-        'default' => []
-      ) );
-  
+
+      UCDLibPluginDirectoryUtils::registerContactMeta($slug);
+
     }
 
 }

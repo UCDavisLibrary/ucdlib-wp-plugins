@@ -3,9 +3,6 @@
     "version": "1.0.0",
     "description": "",
     "main": "index.js",
-    "scripts": {
-        "docker-package": "node ./lib/generate-docker-package-json.js"
-    },
     "private": true,
     "author": "",
     "license": "ISC",
