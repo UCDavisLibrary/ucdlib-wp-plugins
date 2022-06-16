@@ -14,6 +14,10 @@ class UCDLibPluginLocationsBlocks extends UCDThemeBlockRenderer {
         'twig' => $this->twigPath('hours-today'),
         'transform' => ['getCurrentLocationId', 'getSiteUrl']
       ],
+      "$this->slug/hours" => [
+        'twig' => $this->twigPath('hours'),
+        'transform' => ['getSiteUrl']
+      ],
       "$this->slug/address" => [
         'twig' => $this->twigPath('address'),
         'transform' => ['getAddress']

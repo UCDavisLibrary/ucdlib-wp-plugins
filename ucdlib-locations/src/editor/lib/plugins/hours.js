@@ -104,7 +104,7 @@ const Edit = () => {
                 onChange=${capacity => editPost({meta: {occupancy: {...occupancy, capacity}}})}
               />
               <${TextControl} 
-                label="Max Capacity"
+                label="Safespace Id"
                 value=${occupancy.safespaceId}
                 onChange=${safespaceId => editPost({meta: {occupancy: {...occupancy, safespaceId}}})}
                 help="Go to https://vea.sensourceinc.com/#/login to find the id for a location."

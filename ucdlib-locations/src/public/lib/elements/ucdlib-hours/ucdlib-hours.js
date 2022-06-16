@@ -18,9 +18,11 @@ export default class UcdlibHours extends LitElement {
       refreshRate: {type: Number, attribute: 'refresh-rate'},
       apiHost: {type: String, attribute: 'api-host'},
       apiEndpoint: {type: String, attribute: 'api-endpoint'},
+      surfaceChildren: {type: String, attribute: 'surface-children'},
       ariaLabel: {type: String, attribute: 'aria-label', reflect: true},
       _activeWeekPanel: {type: Number, state: true},
-      _visibleServices: {type: Object, state: true}
+      _visibleServices: {type: Object, state: true},
+      _surfaceChildren: {type: Array, state: true}
     }
   }
 
@@ -49,7 +51,14 @@ export default class UcdlibHours extends LitElement {
     this.ariaLabel = "Operating Hours for UC Davis Library Locations";
     this._activeWeekPanel = 0;
     this._visibleServices = {};
+    this.surfaceChildren = '';
     
+  }
+
+  willUpdate(props){
+    if ( props.has('surfaceChildren') ) {
+      this._surfaceChildren = this.surfaceChildren.split(',').map(x => parseInt(x))
+    }
   }
 
   getActiveWeek(){
