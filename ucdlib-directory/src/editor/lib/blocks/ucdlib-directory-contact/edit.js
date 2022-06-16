@@ -58,6 +58,7 @@ export default ( props ) => {
         emails=${emails}
         websites=${websites}
         allowAppointment=${attributes.allowAppointment}
+        allowAdditionalText=${attributes.allowAdditionalText}
       />
     </div>
 

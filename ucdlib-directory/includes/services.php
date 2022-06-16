@@ -9,6 +9,7 @@ class UCDLibPluginDirectoryServices {
     $this->slug = $config['postSlugs']['service'];
 
     add_action( 'init', array($this, 'register') );
+    add_action( 'init', [$this, 'register_post_meta']);
     add_filter( 'timber/post/classmap', array($this, 'extend_timber_post') );
   }
 
