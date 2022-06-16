@@ -15,7 +15,8 @@
     "@ucd-lib/brand-theme-editor": "file:../../../../ucdlib-theme-wp/src/editor",
     "@ucd-lib/plugin-migration-editor": "file:../../../ucdlib-migration/src/editor",
     "@ucd-lib/plugin-directory-editor": "file:../../../ucdlib-directory/src/editor",
-    "@ucd-lib/plugin-locations-editor": "file:../../../ucdlib-locations/src/editor"
+    "@ucd-lib/plugin-locations-editor": "file:../../../ucdlib-locations/src/editor",
+    "@ucd-lib/plugin-special-editor": "file:../../../ucdlib-special/src/editor"
   },
   "devDependencies": {
     "@wordpress/scripts": "^23.1.0"
