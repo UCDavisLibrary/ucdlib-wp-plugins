@@ -31,10 +31,10 @@ export function styles() {
       background-color: #C6007E;
     }
     .user-icons svg {
-      width: 18px;
-      height: 18px;
-      min-width: 18px;
-      min-height: 18px;
+      width: 1rem;
+      height: 1rem;
+      min-width: 1rem;
+      min-height: 1rem;
       margin-right: 4px;
       color: #fff;
     }

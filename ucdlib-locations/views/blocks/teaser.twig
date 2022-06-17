@@ -1,0 +1,69 @@
+{% macro body(attributes) %}
+  {% set location = attributes.location %}
+  {% set site_url = attributes.site_url %}
+  {% set label = location.meta('label_short') %}
+  {% set label = label ? ' ' ~ label %}
+  {% set more_text = 'More' ~ label ~ ' Info' %}
+  <div>
+    <div class="u-space-mb--small">
+      <h3 class="vm-teaser__title"><a href="{{location.link}}">{{location.title}}</a></h3>
+      {% set display_address =  location.meta('display_address') %}
+      {% if display_address %}
+        <div>
+          <span class="icon icon--location">{{display_address}}</span>
+        </div>
+      {% endif %}
+      {% if location.meta('has_alert') %}
+        <div>
+          <span class="icon-ucdlib">
+            <ucdlib-icon icon='ucd-public:fa-circle-exclamation'></ucdlib-icon>
+            <span>{{location.meta('alert_text')}}</span>
+          </span>
+        </div>
+      {% endif %}
+    </div>
+    {% if location.meta('has_operating_hours') %}
+      <ucdlib-hours-today-simple class="u-space-mb--small" api-host='{{site_url}}' location='{{location.id}}'></ucdlib-hours-today-simple>
+    {% endif %}
+    <div>
+      <a href="{{location.link}}" class="icon icon--circle-arrow-right">{{more_text}}</a>
+    </div>
+  </div>
+{% endmacro %}
+
+{% macro image(attributes) %}
+  {% set location = attributes.location %}
+  {% if attributes.featured %}
+    {% set aspectRatio = '1x1' %}
+    {% set img = location.thumbnail_1x1 %}
+  {% else %}
+    {% set aspectRatio = '4x3' %}
+    {% set img = location.thumbnail_4x3 %}
+  {% endif %}
+  {% set src = img.src ? img.src : DefaultImageByAspectRatio(aspectRatio) %}
+    <a style="background-image:url('{{src}}')" class="teaser--image aspect--{{aspectRatio}} u-background-image"></a>
+{% endmacro %}
+
+{% if attributes.location %}
+  <div class="teaser--location">
+    {% if attributes.featured %}
+      <div class='vm-teaser teaser--location--featured'>
+        <div class="vm-teaser__figure category">
+          {{ _self.image(attributes) }}
+        </div>
+        <div class="vm-teaser__body">
+          {{_self.body(attributes)}}
+        </div>
+      </div>
+    {% else %}
+      <div>
+        <div class="l-2col l-2col--33-67 l-maintain-grid">
+          <div class="l-first">
+            {{ _self.image(attributes) }}
+          </div>
+          <div class="l-second">{{_self.body(attributes)}}</div>
+        </div>
+      </div>
+    {% endif %}
+  </div>
+{% endif %}
