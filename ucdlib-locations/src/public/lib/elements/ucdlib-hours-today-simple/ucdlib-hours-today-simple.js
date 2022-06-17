@@ -27,6 +27,15 @@ export default class UcdlibHoursTodaySimple extends LitElement {
     return Templates.styles();
   }
 
+  willUpdate(props){
+
+    if ( this.ctl && this.ctl.data ) {
+      ['location'].map(v => {
+        if ( props.has(v) ) this.ctl.fetchTask.run();
+      })
+    }
+  }
+
   constructor() {
     super();
     this.render = Templates.render.bind(this);
