@@ -30,7 +30,7 @@ export function render() {
       pending: () => html`${this.ctl.hasSuccesfullyFetched ? 
         this.renderComplete(this.ctl.data) : this.ctl.renderStatus('pending')
       }`,
-      error: () => this.ctl.renderStatus('error'),
+      error: () => html``,
     })}
   `;}
   

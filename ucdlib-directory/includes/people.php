@@ -196,7 +196,7 @@ class UCDLibPluginDirectoryPeople {
       'default' => '',
       'type' => 'string',
     ) );
-    register_post_meta( '', 'contactWebsite', array(
+    register_post_meta( $slug, 'contactWebsite', array(
       'show_in_rest' => [
         'schema' => [
           'items' => [
@@ -213,7 +213,7 @@ class UCDLibPluginDirectoryPeople {
       'type' => 'array',
       'default' => []
     ) );
-    register_post_meta( '', 'contactEmail', array(
+    register_post_meta( $slug, 'contactEmail', array(
       'show_in_rest' => [
         'schema' => [
           'items' => [
@@ -229,7 +229,7 @@ class UCDLibPluginDirectoryPeople {
       'type' => 'array',
       'default' => []
     ) );
-    register_post_meta( '', 'contactPhone', array(
+    register_post_meta( $slug, 'contactPhone', array(
       'show_in_rest' => [
         'schema' => [
           'items' => [

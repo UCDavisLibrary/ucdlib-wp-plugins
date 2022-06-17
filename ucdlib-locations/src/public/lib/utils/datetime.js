@@ -21,8 +21,10 @@ export class DateTimeUtils {
     return `${hour}:${minute}:00`
   }
 
-  static labels = {
-    days: ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'],
-    months: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-  }
+  static labels() {
+    return {
+      days: ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'],
+      months: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+    }
+  } 
 }

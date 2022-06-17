@@ -16,3 +16,59 @@
 .search-results-message {
   font-style: italic;
 }
+
+// move to locations plugin
+
+.location-address {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+
+  ucdlib-icon {
+    margin-right: 10px;
+    color: #73abdd;
+  }
+
+  .heading--h5 {
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+}
+
+.teaser--location {
+  margin-bottom: 2rem;
+
+  .icon-ucdlib {
+    --category-brand: #c10230;
+    color: var(--category-brand);
+  
+    ucdlib-icon {
+      color: var(--category-brand, #73abdd);
+      margin-right: 0.6rem;
+      margin-left: 0.15rem;
+      min-width: 0.8rem;
+      min-height: 0.8rem;
+      width: 0.8rem;
+      height: 0.8rem;
+    }
+  
+  }
+  .icon--circle-arrow-right {
+    --category-brand: #ffbf00;
+  }
+  .teaser--location--featured {
+    background-color: #f7fafd;
+    padding: 1.5rem;
+  }
+  .vm-teaser__figure {
+    width: 20%;
+    max-width: 135px;
+  }
+
+}
+@media (min-width: 768px){
+  .teaser--location--featured .vm-teaser__figure {
+    margin-right: 1.5rem;
+  }
+}
+

@@ -3,10 +3,11 @@
 class UCDLibPluginLocationsPostTypes {
   public function __construct( $config ){
     $this->config = $config;
+    $this->slug = $config['slug'];
 
     add_action( 'init', array($this, 'registerLocation') );
     add_filter( 'ucd-theme/context/single', array($this, 'getLocationContext') );
-    add_filter( 'ucd-theme/templates/single', array($this, 'getLocationTemplate'), 10, 2 );
+    //add_filter( 'ucd-theme/templates/single', array($this, 'getLocationTemplate'), 10, 2 );
   }
 
   // alter context before calling the location view
@@ -64,7 +65,7 @@ class UCDLibPluginLocationsPostTypes {
       'menu_position' => 20,
       'menu_icon' => 'dashicons-location',
       'rewrite'			  => array(
-			  'with_front'	  => false,
+			  'with_front'	  => false
 		  ),
       'supports' => array(
         'title', 
@@ -75,7 +76,19 @@ class UCDLibPluginLocationsPostTypes {
         //'revisions',
         'page-attributes',
         'custom-fields'
-      )
+      ),
+      'template' => [
+        ['ucd-theme/layout-basic', ['sideBarLocation' => 'right', 'modifier' => 'flipped'], [
+          ['ucd-theme/column', ['layoutClass' => 'l-content', 'forbidWidthEdit' => true], [
+            ['core/pattern', ['slug' => "$this->slug/actions"]],
+            ['core/pattern', ['slug' => "$this->slug/about"]]
+          ]],
+          ['ucd-theme/column', ['layoutClass' => 'l-sidebar-first', 'forbidWidthEdit' => true], [
+            ['ucdlib-locations/hours-today', ["showChildren" => true]],
+            ['core/pattern', ['slug' => "$this->slug/amenities"]]
+          ]]
+        ]]
+      ]
     );
 
     register_post_type( $this->config['postTypeSlug'], $args );

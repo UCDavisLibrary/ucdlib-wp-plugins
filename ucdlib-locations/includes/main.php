@@ -1,9 +1,12 @@
 <?php
 require_once( __DIR__ . '/assets.php' );
+require_once( __DIR__ . '/blocks.php' );
+require_once( __DIR__ . '/patterns.php' );
 require_once( __DIR__ . '/post-types.php' );
 require_once( __DIR__ . '/acf.php' );
 require_once( __DIR__ . '/api.php' );
 require_once( __DIR__ . '/timber.php' );
+require_once( __DIR__ . '/meta-data.php' );
 
 class UCDLibPluginLocations {
   public function __construct(){
@@ -29,6 +32,12 @@ class UCDLibPluginLocations {
     // enqueue all assets
     $this->assets = new UCDLibPluginLocationsAssets($config);
 
+    // register custom blocks
+    $this->blocks = new UCDLibPluginLocationsBlocks($config);
+
+    // register block patterns
+    $this->patterns = new UCDLibPluginLocationsPatterns($config);
+
     // register 'location' post type
     $this->postTypes = new UCDLibPluginLocationsPostTypes($config);
 
@@ -40,6 +49,8 @@ class UCDLibPluginLocations {
 
     // register location views and custom Timber class
     $this->timber = new UCDLibPluginLocationsTimber($config);
+
+    $this->metaData = new UCDLibPluginLocationsMetaData($config);
 
   }
 

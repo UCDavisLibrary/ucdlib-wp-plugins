@@ -108,7 +108,7 @@ class UCDLibPluginLocationsAPI {
         'nopaging' => true,
         'orderby' => 'menu_order',
         'order' => 'ASC',
-        'meta_key' => 'parent',
+        'meta_key' => 'location_parent',
         'meta_value' => $location->ID,
         'post_type' => $this->config['postTypeSlug']
 

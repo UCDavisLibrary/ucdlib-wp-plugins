@@ -223,18 +223,18 @@ return html`
   ${locations.map(location => html`
     <section class="location ${!location.hasHoursData && !location.hoursPlaceholder ? 'location--no-hours' : ''}">
       <h2 class="heading--underline">${location.name}</h2>
-      ${location.renderAlert()}
       <div>
-        <h3 class="heading--highlight">${location.roomNumber}</h3>
+        ${location.children.length ? html`<h3 class="heading--highlight">${location.roomNumber}</h3>` : html``}
+        ${location.renderAlert('u-space-mb')}
         ${location.renderOccupancyBar()}
         ${location.hoursPlaceholder ? html`
           <div>${unsafeHTML(location.hoursPlaceholder)}</div>
         ` : this._renderWeeklyHours(location) }
         <div class="children">
-          ${location.children.filter(c => c.data.notACollapsibleChild).map(c => this._renderChild(c))}
-          ${location.hasServices ? html`
+          ${location.children.filter(c => this._surfaceChildren.includes(c.id)).map(c => this._renderChild(c))}
+          ${location.hasServices && location.children.filter(c => !this._surfaceChildren.includes(c.id)).length ? html`
             <div class="services ${this._visibleServices[location.id] ? 'visible' : ''}">
-              ${location.children.filter(c => !c.data.notACollapsibleChild).map(c => this._renderChild(c))}
+              ${location.children.filter(c => !this._surfaceChildren.includes(c.id)).map(c => this._renderChild(c))}
             </div>
             <a class="services-toggle" 
               @click=${() => this.toggleServiceVisibility(location.id)}>

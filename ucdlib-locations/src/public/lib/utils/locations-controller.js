@@ -326,8 +326,8 @@ export class LocationsController{
         range.weeks[weekIndex].push({
           date: new Date(d.getTime()),
           isoKey: d.toISOString().split('T')[0],
-          day: DateTimeUtils.labels.days[d.getUTCDay()],
-          month: DateTimeUtils.labels.months[d.getUTCMonth()],
+          day: DateTimeUtils.labels().days[d.getUTCDay()],
+          month: DateTimeUtils.labels().months[d.getUTCMonth()],
           dayOfMonth: d.getUTCDate(),
           year: d.getUTCFullYear()
         })

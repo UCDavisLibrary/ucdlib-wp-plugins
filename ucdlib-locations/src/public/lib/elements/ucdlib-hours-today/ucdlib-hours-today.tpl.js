@@ -7,7 +7,14 @@ export function styles() {
       display: block;
     }
 
+    .hide {
+      display: none;
+    }
+
     .location-status.hide {
+      display: none;
+    }
+    .heading--underline.hide {
       display: none;
     }
 
@@ -24,6 +31,7 @@ export function styles() {
     }
     .child-details {
       display: block;
+      flex-wrap: wrap;
     }
     .child-details .separator {
       display: none;
@@ -39,7 +47,7 @@ export function styles() {
       }
     }
 
-    @media (min-width: 1600px) {
+    @media (min-width: 1400px) {
       .child-details {
         display: flex;
       }
@@ -57,7 +65,7 @@ export function styles() {
 
 export function render() { 
 return html`
-  <h2 class="heading--underline">${this.widgetTitle}</h2>
+  <h2 class="heading--underline ${this.hideTitle ? 'hide' : ''}">${this.widgetTitle}</h2>
   
   ${this.ctl.render({
     complete: this.renderComplete,
@@ -84,7 +92,7 @@ export function renderComplete(location) {
   </div>
   <div class="children ${location.hasChildren ? '': 'children--none'}">
     ${location.children.map(child => html`
-      <div class="child u-space-mb ${child.hasHoursData ? 'child--has-hours' : 'child--no-hours'}">
+      <div class="child u-space-mb ${child.hasHoursData && (!this._childFilter.length || this._childFilter.includes(child.id)) ? 'child--has-hours' : 'child--no-hours'}">
         <div class="name">${child.name}</div>
         <div class="child-details ${child.hasAppointments ? 'child-details--appts' : ''}">
           <div>${child.isOpenToday ? 
@@ -97,7 +105,9 @@ export function renderComplete(location) {
       </div>
     `)}
   </div>
-  ${ location.renderSeeAllLink() }
+  <div class="${this.hideSeeMore ? 'hide' : ''}">
+    ${ location.renderSeeAllLink(this.seeMoreText) }
+  </div>
   ` : this.ctl.renderStatus('error')
   }
 `;}
