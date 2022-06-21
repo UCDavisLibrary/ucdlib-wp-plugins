@@ -16,6 +16,9 @@ export function styles() {
       display: none;
     }
     .location {
+      margin-bottom: 2rem;
+    }
+    .location:last-child{
       margin-bottom: 1rem;
     }
     .paginator {

@@ -79,8 +79,8 @@ class UCDLibPluginLocationsAPI {
           $out[$child['id']] = $child;
         }
       }
-      $out = array_values($out);
     }
+    $out = array_values($out);
 
     return rest_ensure_response($out);
   }
