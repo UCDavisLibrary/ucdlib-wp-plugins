@@ -138,6 +138,9 @@ export function styles() {
     .services-toggle {
       text-decoration: none;
       cursor: pointer;
+      margin-top: 1rem;
+      display: block;
+      font-weight: 700;
     }
     .services-toggle .chevron {
       font-family: "Font Awesome 5 Free";
@@ -241,7 +244,7 @@ return html`
             </div>
             <a class="services-toggle" 
               @click=${() => this.toggleServiceVisibility(location.id)}>
-              ${this._visibleServices[location.id] ? 'Hide' : 'Show'} hours for ${location.shortName} services <span class="chevron">&#xf078</span></a>
+              ${this._visibleServices[location.id] ? 'Hide' : 'Show'} hours for ${location.shortName} Library services <span class="chevron">&#xf078</span></a>
           ` : html``}
         </div>
 
