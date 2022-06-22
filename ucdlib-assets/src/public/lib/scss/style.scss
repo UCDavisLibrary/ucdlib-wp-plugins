@@ -37,6 +37,17 @@
 
 .teaser--location {
   margin-bottom: 2rem;
+  --list-pipe-pipe: #4c4c4c;
+  --o-media-gutter: var(--o-media-gutter-default, 1rem);
+  --o-media-gutter--right: var(--o-media-gutter-default, 1rem);
+  --o-media-gutter--left: 0;
+  color: var(--category-brand-contrast-color, #4c4c4c);
+  font-size: 0.875rem;
+  line-height: 1.3;
+
+  .teaser--image {
+    display: block;
+  }
 
   .icon-ucdlib {
     --category-brand: #c10230;
@@ -69,6 +80,9 @@
 @media (min-width: 768px){
   .teaser--location--featured .vm-teaser__figure {
     margin-right: 1.5rem;
+  }
+  .teaser--location {
+    font-size: 1rem;
   }
 }
 

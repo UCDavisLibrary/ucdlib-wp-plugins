@@ -1,13 +1,13 @@
 import { UCDIcons } from "@ucd-lib/brand-theme-editor/lib/utils";
 import Edit from './edit';
+import { Save } from "@ucd-lib/brand-theme-editor/lib/utils";
 
-const name = 'ucdlib-locations/teaser';
+const name = 'ucdlib-locations/teasers';
 const settings = {
   api_version: 2,
-	title: "Location Teaser",
-  parent: ['ucdlib-locations/teasers'],
-	description: "Preview a location",
-	icon: UCDIcons.renderPublic('fa-building-columns'),
+	title: "Location Teasers",
+	description: "Preview UC Davis Library locations",
+	icon: UCDIcons.renderPublic('fa-city'),
 	category: 'ucdlib-locations',
 	keywords: [ 'teaser', 'building', 'library' ],
   supports: {
@@ -15,16 +15,9 @@ const settings = {
     "customClassName": false
   },
   attributes: {
-    locationId: {
-      type: 'number',
-      default: 0
-    },
-    featured: {
-      type: 'boolean',
-      default: false
-    }
   },
   edit: Edit,
+  save: Save
 };
 
 export default { name, settings };

@@ -55,7 +55,7 @@ export default ( props ) => {
   `};
 
   const teaserImage = () => html`
-    <a style=${{display: 'block', backgroundImage: `url(${imgSrc})`}} className="aspect--${imgAspectRatio} u-background-image"></a>
+    <a style=${{backgroundImage: `url(${imgSrc})`}} className="teaser--image aspect--${imgAspectRatio} u-background-image"></a>
   `
 
 
