@@ -118,6 +118,7 @@ class UCDLibPluginSpecialCollections {
 
   // add data to view context
   public function set_context($context){
+    if ( $context['post']->post_type !== $this->slug ) return $context;
     $p = $context['post'];
     $context['config'] = $this->config;
     $context['sidebar'] = Timber::get_widgets( $p->collectionType() );
