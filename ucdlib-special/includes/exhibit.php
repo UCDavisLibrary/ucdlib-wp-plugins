@@ -347,7 +347,7 @@ class UCDLibPluginSpecialExhibitPage extends UcdThemePost {
     if ( $ancestor ) {
       $this->exhibitCuratorOrgs = $ancestor->curatorOrgs();
     } else {
-      $this->exhibitCuratorOrgs = $this-curatorOrgs();
+      $this->exhibitCuratorOrgs = $this->curatorOrgs();
     }
     return $this->exhibitCuratorOrgs;
   }
