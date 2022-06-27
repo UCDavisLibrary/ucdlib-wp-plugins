@@ -32,6 +32,24 @@ class UCDLibPluginSpecialMetaData {
       'type' => 'string',
       'default' => ''
     ) );
+    register_post_meta( '', 'inclusiveDates', array(
+      'show_in_rest' => true,
+      'single' => true,
+      'type' => 'string',
+      'default' => ''
+    ) );
+    register_post_meta( '', 'extent', array(
+      'show_in_rest' => true,
+      'single' => true,
+      'type' => 'string',
+      'default' => ''
+    ) );
+    register_post_meta( '', 'subject', array(
+      'show_in_rest' => true,
+      'single' => true,
+      'type' => 'string',
+      'default' => ''
+    ) );
   }
 
 }
