@@ -4,11 +4,21 @@ require_once( __DIR__ . '/admin.php' );
 require_once( __DIR__ . '/blocks.php' );
 require_once( __DIR__ . '/collection.php' );
 require_once( __DIR__ . '/config.php' );
+require_once( __DIR__ . '/api.php' );
+
 
 // primary class for special collections plugin
 // all actions and filters are applied here
 class UCDLibPluginSpecial {
   public function __construct(){
+    $this->slug = "ucdlib-special";
+
+    $configs = array(
+      'slug' => $this->slug,
+      'postTypeSlug' => 'collection',
+      'entryPath' => plugin_dir_path( __DIR__ ) . $this->slug . '.php',
+      'version' => false
+    );
 
     // config values. slugs and what not.
     $this->config = new UCDLibPluginSpecialConfig();
@@ -24,6 +34,9 @@ class UCDLibPluginSpecial {
 
     // 'special-collection' post type
     $this->collection = new UCDLibPluginSpecialCollections( $this->config );
+
+    // register our API endpoints at /wp-json/ucdlib-special
+    $this->api = new UCDLibPluginSpecialAPI( $configs);
 
     add_filter( 'timber/locations', array($this, 'add_timber_locations') );
 
