@@ -1,7 +1,7 @@
 import { Fragment } from "@wordpress/element";
 import { PluginDocumentSettingPanel } from '@wordpress/edit-post';
 import { useDispatch } from "@wordpress/data";
-import { SelectControl } from '@wordpress/components';
+import { TextControl, SelectControl, Button } from "@wordpress/components";
 import { html, SelectUtils } from "@ucd-lib/brand-theme-editor/lib/utils";
 
 const name = 'ucdlib-special-collection';
@@ -12,6 +12,7 @@ const Edit = () => {
   const isCollection = SelectUtils.editedPostAttribute('type') === 'collection';
   const meta = SelectUtils.editedPostAttribute('meta');
   const collectionType = meta.collectionType || 'manuscript';
+  const almaRecordId = meta.almaRecordId;
   const watchedVars = [
     collectionType
   ];
@@ -21,6 +22,16 @@ const Edit = () => {
     {value: 'manuscript', label: 'Manuscript'},
     {value: 'university-archive', label: 'University Archive'}
   ];
+
+  const searchRecordId = () => {
+    // todo
+    console.log('pinging api');
+    debugger;
+    // update slug to use recordId
+    const slug = SelectUtils.editedPostAttribute('slug') || '';
+    const { editPost } = useDispatch( 'core/editor', [ slug ] );
+    editPost({slug: attributes.almaRecordId });
+  }
 
   return html`
     <${Fragment}>
@@ -35,6 +46,17 @@ const Edit = () => {
               value=${collectionType}
               onChange=${collectionType => editPost({meta: {collectionType}})}
             /> 
+            <${TextControl} 
+              value=${almaRecordId}
+              label="Alma Record ID"
+              onChange=${almaRecordId => editPost({meta: {almaRecordId}})}
+            />
+            <${Button} 
+              variant="primary"
+              onClick=${searchRecordId}
+              style=${{ marginBottom: '1.5em' }}
+              >Search Record ID
+            </${Button}>
         </${PluginDocumentSettingPanel}>
       `}
     </${Fragment}>

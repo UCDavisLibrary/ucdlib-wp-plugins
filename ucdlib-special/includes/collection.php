@@ -27,7 +27,18 @@ class UCDLibPluginSpecialCollections {
   // registers the post type
   public function register(){
     // new posts will start with this template
-    $template = [];
+    $template = [
+      // ['ucd-theme/layout-basic', ['sideBarLocation' => 'right', 'modifier' => 'flipped'], [
+      //   ['ucd-theme/column', ['layoutClass' => 'l-content', 'forbidWidthEdit' => true], [
+      //     ['core/pattern', ['slug' => "$this->slug/actions"]],
+      //     ['core/pattern', ['slug' => "$this->slug/about"]]
+      //   ]],
+      //   ['ucd-theme/column', ['layoutClass' => 'l-sidebar-first', 'forbidWidthEdit' => true], [
+      //     ['ucdlib-locations/hours-today', ["showChildren" => true]],
+      //     ['core/pattern', ['slug' => "$this->slug/amenities"]]
+      //   ]]
+      // ]]
+    ];
     
     $labels = array(
       'name'                  => _x( 'Collections', 'Post type general name', 'textdomain' ),

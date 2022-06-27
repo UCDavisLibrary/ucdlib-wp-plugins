@@ -4,6 +4,7 @@ require_once( __DIR__ . '/admin.php' );
 require_once( __DIR__ . '/blocks.php' );
 require_once( __DIR__ . '/collection.php' );
 require_once( __DIR__ . '/config.php' );
+require_once( __DIR__ . '/meta-data.php' );
 
 // primary class for special collections plugin
 // all actions and filters are applied here
@@ -24,6 +25,8 @@ class UCDLibPluginSpecial {
 
     // 'special-collection' post type
     $this->collection = new UCDLibPluginSpecialCollections( $this->config );
+
+    $this->metaData = new UCDLibPluginSpecialMetaData( $this->config );
 
     add_filter( 'timber/locations', array($this, 'add_timber_locations') );
 

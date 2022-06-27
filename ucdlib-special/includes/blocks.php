@@ -2,7 +2,7 @@
 require_once( __DIR__ . '/block-transformations.php' );
 require_once( get_template_directory() . '/includes/classes/block-renderer.php' );
 
-// Set up server-side rendering for gutenberg location blocks
+// Set up server-side rendering for gutenberg collection blocks
 class UCDLibPluginSpecialBlocks extends UCDThemeBlockRenderer {
   public function __construct($config){
     parent::__construct();
@@ -17,7 +17,12 @@ class UCDLibPluginSpecialBlocks extends UCDThemeBlockRenderer {
      *    'transform' => ['{{method1}}', '{{method2}}']
      *  ]
      */
-    $this->registry = [];
+    $this->registry = [
+      "$this->slug/collection" => [
+        'twig' => $this->twigPath('collection'),
+        // 'transform' => ['getAddress']
+      ]
+    ];
 
     add_action('block_categories_all', array($this, 'addCategories'), 10,2);
     
