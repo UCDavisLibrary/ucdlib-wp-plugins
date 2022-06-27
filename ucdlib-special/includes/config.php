@@ -11,7 +11,9 @@ class UCDLibPluginSpecialConfig {
     ],
     'taxonomies' => [
       'az' => 'collection-az',
-      'subject' => 'collection-subject'
+      'subject' => 'collection-subject',
+      'curator' => 'curator',
+      'location' => 'exhibit-location'
     ]
     ];
 

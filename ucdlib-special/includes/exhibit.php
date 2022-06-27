@@ -1,5 +1,8 @@
 <?php
 require_once( __DIR__ . '/api-exhibit.php' );
+require_once( __DIR__ . '/config.php' );
+require_once( __DIR__ . '/tax-curator.php' );
+require_once( __DIR__ . '/tax-exhibit-location.php' );
 require_once( get_template_directory() . "/includes/classes/post.php");
 
 // the "exhibit" post type
@@ -9,6 +12,9 @@ class UCDLibPluginSpecialExhibits {
     $this->slug = $config->postTypes['exhibit'];
 
     $this->api = new UCDLibPluginSpecialAPIExhibit( $config );
+
+    $this->curators = new UCDLibPluginSpecialCurators( $config );
+    $this->locations = new UCDLibPluginSpecialExhibitLocations( $config );
 
     // register taxonomies
 
@@ -88,12 +94,51 @@ class UCDLibPluginSpecialExhibits {
   public function register_post_meta(){
     $slug = $this->slug;
 
-    // 'physical' or 'online'
-    register_post_meta( $slug, 'exhibitType', array(
+    register_post_meta( $slug, 'isOnline', array(
       'show_in_rest' => true,
       'single' => true,
-      'default' => 'physical',
+      'default' => false,
+      'type' => 'boolean',
+    ) );
+    register_post_meta( $slug, 'isPhysical', array(
+      'show_in_rest' => true,
+      'single' => true,
+      'default' => false,
+      'type' => 'boolean',
+    ) );
+    register_post_meta( $slug, 'isPermanent', array(
+      'show_in_rest' => true,
+      'single' => true,
+      'default' => false,
+      'type' => 'boolean',
+    ) );
+    register_post_meta( $slug, 'dateFrom', array(
+      'show_in_rest' => true,
+      'single' => true
+    ) );
+    register_post_meta( $slug, 'dateTo', array(
+      'show_in_rest' => true,
+      'single' => true
+    ) );
+    register_post_meta( $slug, 'curators', array(
+      'show_in_rest' => [
+        'schema' => ['items' => ['type' => 'string']]
+      ],
+      'single' => true,
+      'default' => [],
+      'type' => 'array'
+    ) );
+    register_post_meta( $slug, 'locationDirections', array(
+      'show_in_rest' => true,
+      'single' => true,
+      'default' => '',
       'type' => 'string',
+    ) );
+    register_post_meta( $slug, 'locationMap', array(
+      'show_in_rest' => true,
+      'single' => true,
+      'default' => 0,
+      'type' => 'number',
     ) );
 
   }
@@ -193,5 +238,175 @@ class UCDLibPluginSpecialExhibitPage extends UcdThemePost {
       $this->exhibitId = $this->id;
     }
     return $this->exhibitId;
+  }
+
+  protected $exhibitIsOnline;
+  public function exhibitIsOnline(){
+    if ( ! empty( $this->exhibitIsOnline ) ) {
+      return $this->exhibitIsOnline;
+    }
+    $ancestor = $this->exhibit();
+    if ( $ancestor ) {
+      $this->exhibitIsOnline = $ancestor->meta('isOnline');
+    } else {
+      $this->exhibitIsOnline = $this->meta('isOnline');
+    }
+    return $this->exhibitIsOnline;
+  }
+
+  protected $exhibitIsPhysical;
+  public function exhibitIsPhysical(){
+    if ( ! empty( $this->exhibitIsPhysical ) ) {
+      return $this->exhibitIsPhysical;
+    }
+    $ancestor = $this->exhibit();
+    if ( $ancestor ) {
+      $this->exhibitIsPhysical = $ancestor->meta('isPhysical');
+    } else {
+      $this->exhibitIsPhysical = $this->meta('isPhysical');
+    }
+    return $this->exhibitIsPhysical;
+  }
+
+  protected $exhibitIsPermanent;
+  public function exhibitIsPermanent(){
+    if ( ! empty( $this->exhibitIsPermanent ) ) {
+      return $this->exhibitIsPermanent;
+    }
+    $ancestor = $this->exhibit();
+    if ( $ancestor ) {
+      $this->exhibitIsPermanent = $ancestor->meta('isPermanent');
+    } else {
+      $this->exhibitIsPermanent = $this->meta('isPermanent');
+    }
+    return $this->exhibitIsPermanent;
+  }
+
+  protected $exhibitDateFrom;
+  public function exhibitDateFrom(){
+    if ( ! empty( $this->exhibitDateFrom ) ) {
+      return $this->exhibitDateFrom;
+    }
+    $ancestor = $this->exhibit();
+    if ( $ancestor ) {
+      $this->exhibitDateFrom = $ancestor->meta('dateFrom');
+    } else {
+      $this->exhibitDateFrom = $this->meta('dateFrom');
+    }
+    return $this->exhibitDateFrom;
+  }
+
+  protected $exhibitDateTo;
+  public function exhibitDateTo(){
+    if ( ! empty( $this->exhibitDateTo ) ) {
+      return $this->exhibitDateTo;
+    }
+    $ancestor = $this->exhibit();
+    if ( $ancestor ) {
+      $this->exhibitDateTo = $ancestor->meta('dateTo');
+    } else {
+      $this->exhibitDateTo = $this->meta('dateTo');
+    }
+    return $this->exhibitDateTo;
+  }
+
+  protected $exhibitCurators;
+  public function exhibitCurators(){
+    if ( ! empty( $this->exhibitCurators ) ) {
+      return $this->exhibitCurators;
+    }
+    $ancestor = $this->exhibit();
+    if ( $ancestor ) {
+      $this->exhibitCurators = $ancestor->meta('curators');
+    } else {
+      $this->exhibitCurators = $this->meta('curators');
+    }
+    return $this->exhibitCurators;
+  }
+
+  protected $exhibitLocationDirections;
+  public function exhibitLocationDirections(){
+    if ( ! empty( $this->exhibitLocationDirections ) ) {
+      return $this->exhibitLocationDirections;
+    }
+    $ancestor = $this->exhibit();
+    if ( $ancestor ) {
+      $this->exhibitLocationDirections = $ancestor->meta('locationDirections');
+    } else {
+      $this->exhibitLocationDirections = $this->meta('locationDirections');
+    }
+    return $this->exhibitLocationDirections;
+  }
+
+  protected $exhibitCuratorOrgs;
+  public function exhibitCuratorOrgs(){
+    if ( ! empty( $this->exhibitCuratorOrgs ) ) {
+      return $this->exhibitCuratorOrgs;
+    }
+    $ancestor = $this->exhibit();
+    if ( $ancestor ) {
+      $this->exhibitCuratorOrgs = $ancestor->curatorOrgs();
+    } else {
+      $this->exhibitCuratorOrgs = $this-curatorOrgs();
+    }
+    return $this->exhibitCuratorOrgs;
+  }
+
+  protected $curatorOrgs;
+  public function curatorOrgs(){
+    if ( ! empty( $this->curatorOrgs ) ) {
+      return $this->curatorOrgs;
+    }
+    $terms = get_the_terms( $this->id, UCDLibPluginSpecialConfig::$config['taxonomies']['curator']);
+    $this->curatorOrgs = $terms ? $terms : [];
+    return $this->curatorOrgs;
+  }
+
+  protected $exhibitLocations;
+  public function exhibitLocations(){
+    if ( ! empty( $this->exhibitLocations ) ) {
+      return $this->exhibitLocations;
+    }
+    $ancestor = $this->exhibit();
+    if ( $ancestor ) {
+      $this->exhibitLocations = $ancestor->locations();
+    } else {
+      $this->exhibitLocations = $this->locations();
+    }
+    return $this->exhibitLocations;
+  }
+
+  protected $locations;
+  public function locations(){
+    if ( ! empty( $this->locations ) ) {
+      return $this->locations;
+    }
+    $terms = get_the_terms( $this->id, UCDLibPluginSpecialConfig::$config['taxonomies']['location']);
+    $this->locations = $terms ? $terms : [];
+    return $this->locations;
+  }
+
+  protected $exhibitLocationMap;
+  public function exhibitLocationMap(){
+    if ( ! empty( $this->exhibitLocationMap ) ) {
+      return $this->exhibitLocationMap;
+    }
+    $ancestor = $this->exhibit();
+    if ( $ancestor ) {
+      $this->exhibitLocationMap = $ancestor->locationMap();
+    } else {
+      $this->exhibitLocationMap = $this->locationMap();
+    }
+    return $this->exhibitLocationMap;
+  }
+
+  protected $locationMap;
+  public function locationMap(){
+    if ( ! empty( $this->locationMap ) ) {
+      return $this->locationMap;
+    }
+    $mapId = $this->meta('locationMap');
+    $this->locationMap = [ 'id' => $mapId ];
+    return $this->locationMap;
   }
 }

@@ -31,8 +31,19 @@ class UCDLibPluginSpecialAPIExhibit {
     }
     $out = [
       'id' => $post->id,
+      'pageTitle' => $post->title(),
       'exhibitTitle' => $post->exhibitTitle(),
-      'exhibitId' => $post->exhibitId()
+      'exhibitId' => $post->exhibitId(),
+      'exhibitIsOnline' => $post->exhibitIsOnline(),
+      'exhibitIsPhysical' => $post->exhibitIsPhysical(),
+      'exhibitIsPermanent' => $post->exhibitIsPermanent(),
+      'exhibitDateFrom' => $post->exhibitDateFrom(),
+      'exhibitDateTo' => $post->exhibitDateTo(),
+      'exhibitCuratorOrgs' => $post->exhibitCuratorOrgs(),
+      'exhibitCurators' => $post->exhibitCurators(),
+      'exhibitLocations' => $post->exhibitLocations(),
+      'exhibitLocationDirections' => $post->exhibitLocationDirections(),
+      'exhibitLocationMap' => $post->exhibitLocationMap()
     ];
 
     return rest_ensure_response($out);
