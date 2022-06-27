@@ -6,6 +6,7 @@ require_once( __DIR__ . '/collection.php' );
 require_once( __DIR__ . '/config.php' );
 require_once( __DIR__ . '/api.php' );
 
+require_once( __DIR__ . '/meta-data.php' );
 
 // primary class for special collections plugin
 // all actions and filters are applied here
@@ -37,6 +38,9 @@ class UCDLibPluginSpecial {
 
     // register our API endpoints at /wp-json/ucdlib-special
     $this->api = new UCDLibPluginSpecialAPI( $configs);
+
+    
+    $this->metaData = new UCDLibPluginSpecialMetaData( $this->config );
 
     add_filter( 'timber/locations', array($this, 'add_timber_locations') );
 
