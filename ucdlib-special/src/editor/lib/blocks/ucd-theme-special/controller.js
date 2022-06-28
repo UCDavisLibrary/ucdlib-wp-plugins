@@ -1,8 +1,7 @@
 import {Task} from '@lit-labs/task';
-import { LitElement} from 'lit';
 
-export class ApiController extends LitElement{
-  host;
+export class ApiController {
+//   host;
 //   value;
 //   kinds = Names.kinds;
 //   task;
@@ -10,7 +9,6 @@ export class ApiController extends LitElement{
     const baseUrl = url;
     this.url = baseUrl;
     this.host = host;
-    console.log(this.host);
     this.task = new Task(
       this.host,
       async () => {

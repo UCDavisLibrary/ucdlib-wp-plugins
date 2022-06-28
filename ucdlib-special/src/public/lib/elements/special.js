@@ -35,6 +35,8 @@ export default class SpecialCollection extends LitElement {
 
     this.errorMessage = 'Href is not a api endpoint.';
     this.render=render.bind(this);
+    console.log("here");
+
 
   }
   
@@ -49,6 +51,8 @@ export default class SpecialCollection extends LitElement {
   firstUpdated(changedProperties){
     if(this.almakey != ''){
        this.perma = new ApiController(this, this._requestUrl());
+       console.log("Perma:", this.perma);
+
        this.requestUpdate();
     }
   }
@@ -78,7 +82,7 @@ export default class SpecialCollection extends LitElement {
 
     /* Add configuration here */
     
-
+    console.log(results);
     /* Bubble up the results variable to wordpress block component */
     const options = {
         detail: {results},

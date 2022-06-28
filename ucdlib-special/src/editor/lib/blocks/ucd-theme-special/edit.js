@@ -2,23 +2,51 @@ import { html, SelectUtils } from "@ucd-lib/brand-theme-editor/lib/utils";
 import { TextControl, PanelBody, Button } from "@wordpress/components";
 import { useBlockProps, BlockControls, InnerBlocks, InspectorControls } from '@wordpress/block-editor';
 import { useDispatch } from "@wordpress/data";
+import * as React from 'react';
+import { useController } from '@lit-labs/react/use-controller.js';
+import { ApiController } from "./controller";
+import { useRef, useEffect } from "@wordpress/element";
+
+const runController = (recordId) => {
+  // todo 
+  console.log('pinging api');
+  if(recordId !== ''){
+    console.log("empty");
+  }
+  let url = "http://localhost:3000/wp-json/ucdlib-special/collection_pnx/";
+  let requestUrl = url + recordId;//attributes.almaRecordId;
+  let results = {};
+  let perma =  useController(React, (host) => new ApiController(host, requestUrl));
+  return perma.task["_value"];
+
+
+}
 
 export default ( props ) => {
+
   const { attributes, setAttributes } = props;
   const blockProps = useBlockProps();
+  const ctlResult = runController(attributes.almaRecordId);
+  console.log("Result:",ctlResult);
 
-  const runController = () => {
-    // todo
-    console.log('pinging api');
-    
-    // update slug to use recordId
-    const slug = SelectUtils.editedPostAttribute('slug') || '';
-    const { editPost } = useDispatch( 'core/editor', [ slug ] );
-    editPost({slug: attributes.almaRecordId });
+
+
+  const runButton = (almaRecordId) => {  
+    console.log("Here");
+
+    setAttributes({almaRecordId});
+    //update slug to use recordId
+    // const slug = SelectUtils.editedPostAttribute('slug') || '';
+    // const { editPost } = useDispatch( 'core/editor', [ slug ] );
+    // editPost({slug: attributes.almaRecordId });
+  
   }
+
+
 
   return html`
   <div ...${ blockProps }>
+
     <${BlockControls} group="block">
       
     </${BlockControls}>
@@ -33,7 +61,7 @@ export default ( props ) => {
           />
           <${Button} 
             variant="primary"
-            onClick=${runController}
+            onClick=${almaRecordId => {runButton(attributes.almaRecordId)}}
             style=${{ marginBottom: '1.5em' }}
             >Search Record ID
           </${Button}>
