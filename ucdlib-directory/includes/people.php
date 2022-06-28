@@ -1,12 +1,15 @@
 <?php
 
 require_once( get_template_directory() . "/includes/classes/post.php");
+require_once( __DIR__ . '/api-people.php' );
 
 // Sets up the person post type
 class UCDLibPluginDirectoryPeople {
   public function __construct($config){
     $this->config = $config;
     $this->slug = $this->config['postSlugs']['person'];
+
+    $this->api = new UCDLibPluginDirectoryAPIPeople( $config );
 
     add_action( 'init', array($this, 'register') );
     add_filter( 'timber/post/classmap', array($this, 'extend_timber_post') );
@@ -421,4 +424,21 @@ class UCDLibPluginDirectoryPeople {
 // where we will fetch postmeta
 class UCDLibPluginDirectoryPerson extends UcdThemePost {
 
+  protected $name_first;
+  public function name_first(){
+    if ( ! empty( $this->name_first ) ) {
+      return $this->name_first;
+    }
+    $this->name_first = $this->meta('name_first');
+    return $this->name_first;
+  }
+
+  protected $name_last;
+  public function name_last(){
+    if ( ! empty( $this->name_last ) ) {
+      return $this->name_last;
+    }
+    $this->name_last = $this->meta('name_last');
+    return $this->name_last;
+  }
 }

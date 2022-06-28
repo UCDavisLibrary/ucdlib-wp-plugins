@@ -5,8 +5,9 @@ import {
   CheckboxControl,
   DatePicker,
   Dropdown,
-  SelectControl, 
+  FormTokenField,
   TextControl,
+  TextareaControl,
   __experimentalText as Text,
   ToggleControl,
   Modal, 
@@ -25,6 +26,20 @@ const Edit = () => {
 
   // get various select options
   const curatorOrgs = SelectUtils.terms('curator', {per_page: '-1', orderby: 'name', order: 'asc'});
+  const locations = SelectUtils.terms('exhibit-location', {per_page: '-1', orderby: 'name', order: 'asc'});
+  const [ peoplePosts, setPeoplePosts ] = useState( [] );
+  useEffect(() => {
+    const path = `ucdlib-directory/people`;
+    apiFetch( {path} ).then( 
+      ( r ) => {
+        setPeoplePosts(r);
+      }, 
+      (error) => {
+        setPeoplePosts([]);
+        console.warn(error);
+      })
+
+  }, []);
 
   const {editEntityRecord} = useDispatch( 'core' );
 
@@ -41,6 +56,7 @@ const Edit = () => {
   const postTitle = SelectUtils.editedPostAttribute('title');
   const postMeta = SelectUtils.editedPostAttribute('meta');
   const postCuratorOrgs = SelectUtils.editedPostAttribute('curator');
+  const postLocations = SelectUtils.editedPostAttribute('exhibit-location');
   const watchedVars = [
     postTitle,
     postMeta.isOnline,
@@ -48,7 +64,10 @@ const Edit = () => {
     postMeta.isPermanent,
     postMeta.dateFrom,
     postMeta.dateTo,
-    postCuratorOrgs
+    postMeta.curators,
+    postMeta.locationDirections,
+    postCuratorOrgs,
+    postLocations
   ];
   const { editPost } = useDispatch( 'core/editor', watchedVars );
   const [ exhibitTitle, setExhibitTitle ] = useState( postTitle );
@@ -58,18 +77,44 @@ const Edit = () => {
   const [ exhibitDateFrom, setExhibitDateFrom ] = useState( postMeta.dateFrom );
   const [ exhibitDateTo, setExhibitDateTo ] = useState( postMeta.dateTo );
   const [ exhibitCuratorOrgs, setExhibitCuratorOrgs] = useState(postCuratorOrgs);
+  const [ exhibitCurators, setExhibitCurators] = useState(postMeta.curators);
+  const [ exhibitLocations, setExhibitLocations] = useState(postLocations);
+  const [ exhibitLocationDirections, setExhibitLocationDirections] = useState(postMeta.locationDirections);
+
+  // format people the way selector likes
+  const people = (() => {
+    const out = {
+      names: [],
+      byId: {},
+      byName: {},
+      curators: []
+    }
+    peoplePosts.forEach(p => {
+      p.name = `${p.name_first} ${p.name_last}`.trim();
+      if ( name && p.id ) {
+        out.names.push(p.name);
+        out.byId[p.id] = p;
+        out.byName[p.name] = p
+        if ( exhibitCurators.includes(p.id) ) out.curators.push(p.name);
+      }
+    })
+    return out;
+  })();
 
   // write metadata to current page or top-level parent
   const saveMetadata = () => {
     const data = {
       title: exhibitTitle,
       curator: exhibitCuratorOrgs,
+      'exhibit-location': exhibitLocations,
       meta: {
         isOnline: exhibitIsOnline,
         isPhysical: exhibitIsPhysical,
         isPermanent: exhibitIsPhysical ? exhibitIsPermanent : false,
         dateFrom: (exhibitIsPhysical && !exhibitIsPermanent) ? exhibitDateFrom : null,
         dateTo: (exhibitIsPhysical && !exhibitIsPermanent) ? exhibitDateTo : null,
+        curators: exhibitCurators,
+        locationDirections: exhibitLocationDirections
       }
     }
     if ( topExhibit ) {
@@ -102,6 +147,9 @@ const Edit = () => {
         setExhibitDateFrom(r.exhibitDateFrom);
         setExhibitDateTo(r.exhibitDateTo);
         setExhibitCuratorOrgs(r.exhibitCuratorOrgs.map(org => org.term_id));
+        setExhibitCurators(r.exhibitCurators);
+        setExhibitLocations(r.exhibitLocations.map(loc => loc.term_id));
+        setExhibitLocationDirections( r.exhibitLocationDirections);
       }, 
       (error) => {
         setParentError(true);
@@ -109,6 +157,7 @@ const Edit = () => {
 
   }, [parent]);
 
+  // exhibit to/from date picker
   const datePickerDropdown = (onClose, field) => {
     const setter = field == 'from' ? setExhibitDateFrom : setExhibitDateTo;
     const value = field == 'from' ? exhibitDateFrom : exhibitDateTo;
@@ -129,12 +178,21 @@ const Edit = () => {
       </div>
     `
   }
+  const dateLabel = (d) => {
+    if ( !d ) return 'Not Set';
+    return `${d.slice(0,4)}-${d.slice(4,6)}-${d.slice(6)}`;
+  }
 
   const toggleArrayMember = (needle, haystack) => {
     if ( haystack.includes(needle) ) {
       return haystack.filter(v => v != needle );
     }
     return [...haystack, needle];
+  }
+
+  const onIndividualCuratorChange = (curators) => {
+    curators = curators.map(c => people.byName[c]).filter(c => c != undefined).map(c => c.id);
+    setExhibitCurators(curators);
   }
 
   return html`
@@ -183,7 +241,7 @@ const Edit = () => {
                           renderToggle=${({onToggle }) => html`
                             <div onClick=${onToggle} style=${{cursor:'pointer'}}> 
                               <span>Start: </span>
-                              <span>${exhibitDateFrom || 'Not Set'}</span>
+                              <span>${dateLabel(exhibitDateFrom)}</span>
                             </div>
                           `}
                           renderContent=${({ onClose }) => datePickerDropdown(onClose, 'from')}
@@ -194,7 +252,7 @@ const Edit = () => {
                           renderToggle=${({onToggle }) => html`
                             <div onClick=${onToggle} style=${{cursor:'pointer'}}> 
                               <span>End: </span>
-                              <span>${exhibitDateTo || 'Not Set'}</span>
+                              <span>${dateLabel(exhibitDateTo)}</span>
                             </div>
                           `}
                           renderContent=${({ onClose }) => datePickerDropdown(onClose, 'to')}
@@ -217,10 +275,42 @@ const Edit = () => {
                         </div>
                       `)}
                     </div>
+                    <div>
+                      <h4>Individual Curators</h4>
+                      <${FormTokenField}
+                        label='Add Curator'
+                        value=${ people.curators }
+                        suggestions=${ people.names }
+                        onChange=${ onIndividualCuratorChange }
+                      />
+                    </div>
                   </div>
+                  ${exhibitIsPhysical && html`
+                    <div>
+                      <h3>Exhibit Location</h3>
+                      <div style=${{marginBottom: '10px'}}>
+                        ${locations.map(loc => html`
+                          <div key=${loc.id}>
+                            <${CheckboxControl} 
+                              label=${loc.name}
+                              checked=${exhibitLocations.includes(loc.id)}
+                              onChange=${ () => setExhibitLocations(toggleArrayMember(loc.id, exhibitLocations))}
+                            />
+                          </div>
+                        `)}
+                        <${TextareaControl}
+                          label="Directions to Exhibit"
+                          help="Brief blurb to help patrons find this exhibit in the specified location."
+                          value=${exhibitLocationDirections}
+                          onChange=${setExhibitLocationDirections}
+                          placeholder='This exhibit is located...'
+                        />
+                      </div>
+                    </div>
+                  `}
 
 
-                  <div style=${{margin: '10px 0'}}>
+                  <div style=${{marginTop: '20px', marginBottom: '10px'}}>
                     <${Button} onClick=${saveMetadata} variant="primary">Save</${Button}>
                     <${Button} onClick=${closeModal} variant="secondary">Close</${Button}>
                   </div>

@@ -122,7 +122,7 @@ class UCDLibPluginSpecialExhibits {
     ) );
     register_post_meta( $slug, 'curators', array(
       'show_in_rest' => [
-        'schema' => ['items' => ['type' => 'string']]
+        'schema' => ['items' => ['type' => 'number']]
       ],
       'single' => true,
       'default' => [],
