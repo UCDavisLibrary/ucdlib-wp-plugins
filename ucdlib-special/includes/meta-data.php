@@ -20,6 +20,12 @@ class UCDLibPluginSpecialMetaData {
       'type' => 'string',
       'default' => ''
     ) );
+    register_post_meta( '', 'biographyOriginal', array(
+      'show_in_rest' => true,
+      'single' => true,
+      'type' => 'string',
+      'default' => ''
+    ) );
     register_post_meta( '', 'description', array(
       'show_in_rest' => true,
       'single' => true,
