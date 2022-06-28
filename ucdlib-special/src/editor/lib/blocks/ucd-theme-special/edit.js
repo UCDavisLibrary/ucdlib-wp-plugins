@@ -26,6 +26,7 @@ export default ( props ) => {
 
   const { attributes, setAttributes } = props;
   const blockProps = useBlockProps();
+  console.log("Attribute:", attributes.almaRecordId);
   const ctlResult = runController(attributes.almaRecordId);
   console.log("Result:",ctlResult);
 

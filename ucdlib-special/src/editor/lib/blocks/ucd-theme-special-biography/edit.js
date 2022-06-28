@@ -12,6 +12,7 @@ export default ( props ) => {
   // test original value, will be set in first API call
   editPost({meta: {biographyOriginal: 'Non-profit corporation founded in 1972 to develop alternative energy and to contribute to a lifestyle independent of organized society. Originating in Saugus, California, and later moving to Mariposa County, the collective focused on solar and wind power generation. Earthmind\'s central figure, Michael Hackleman, supported the group by putting up wind machines and by publishing books and articles on alternative energy.'}});
 
+  // console.log("rendered");
   const onRevertClicked = (e) => {
     editPost({meta: {biography: meta.biographyOriginal}});
   } 
