@@ -212,6 +212,16 @@ class UCDLibPluginSpecialExhibitPage extends UcdThemePost {
     return $this->exhibitType;
   }
 
+  protected $isTopPage;
+  public function isTopPage() {
+    if ( ! empty( $this->isTopPage ) ) {
+      return $this->isTopPage;
+    }
+    $exhibit = $this->exhibit();
+    $this->isTopPage = $exhibit ? false : true;
+    return $this->isTopPage;
+  }
+
   // returns top-level exhibit page
   protected $exhibit;
   public function exhibit(){
@@ -323,6 +333,21 @@ class UCDLibPluginSpecialExhibitPage extends UcdThemePost {
       $this->exhibitDateTo = $this->meta('dateTo');
     }
     return $this->exhibitDateTo;
+  }
+
+  protected $exhibitDateRange;
+  public function exhibitDateRange(){
+    if ( ! empty( $this->exhibitDateRange ) ) {
+      return $this->exhibitDateRange;
+    }
+    if ( $this->exhibitDateFrom() && $this->exhibitDateTo() ){
+      $from = wp_date( get_option( 'date_format' ), strtotime($this->exhibitDateFrom()), new DateTimeZone( "UTC" ));
+      $to = wp_date( get_option( 'date_format' ), strtotime($this->exhibitDateTo()), new DateTimeZone( "UTC" ));
+      $this->exhibitDateRange = $from . ' - ' . $to;
+    } else {
+      $this->exhibitDateRange = '';
+    }
+    return $this->exhibitDateRange;
   }
 
   protected $exhibitCurators;
