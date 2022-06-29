@@ -123,6 +123,7 @@ class UCDLibPluginDirectoryPeople {
 
   // add data to view context
   public function set_context($context){
+    if ( $context['post']->post_type !== $this->slug ) return $context;
     $p = $context['post'];
     
     // custom breadcrumbs that include the directory page

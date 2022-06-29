@@ -156,6 +156,21 @@ class UCDLibPluginSpecialExhibits {
   public function set_context($context){
     if ( $context['post']->post_type !== $this->slug ) return $context;
     $p = $context['post'];
+
+    // put exhibits lander in breadcrumbs
+    $crumbs = $p->breadcrumbs();
+    $exhibitsLander = get_field('asc_exhibits_page', $this->config->slug);
+    if ( $exhibitsLander ){
+      $exhibitsLander = Timber::get_post($exhibitsLander);
+      if ( $exhibitsLander ) {
+        $exhibitsLanderCrumbs = $exhibitsLander->breadcrumbs();
+        if ( $exhibitsLanderCrumbs && count($exhibitsLanderCrumbs) ){
+          $crumbs = array_merge($exhibitsLanderCrumbs, array_slice($crumbs, 1));
+        }
+      }
+    }
+    $context['breadcrumbs'] = $crumbs;
+
     $context['config'] = $this->config;
     $context['sidebar'] = Timber::get_widgets( $this->slug );
     

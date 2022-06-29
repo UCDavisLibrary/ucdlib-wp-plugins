@@ -1,4 +1,10 @@
+{% from getUcdMacro('links') import breadcrumbs as render_crumbs %}
+
 {% extends getUcdTemplate('base') %}
+
+{% block breadcrumbs %}
+  {{render_crumbs(breadcrumbs)}}
+{% endblock %}
 
 {% block content_container %}
 <div class="l-container l-basic--flipped">
