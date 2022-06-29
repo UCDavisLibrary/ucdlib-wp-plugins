@@ -41,34 +41,6 @@ const runController = (recordId, meta, editPost) => {
     console.log("RE:",meta);
 
 
-    // if(result.author) { 
-    //   editPost({meta: {creator: result.author[0]}});
-    // }
-    // if(result.callNumber) { 
-    //   editPost({meta: {callNumber: result.callNumber}});
-    // }
-    // if(result.corp) { 
-    //   editPost({meta: {creator: result.corp[0]}});
-    // }
-    // if(result.date) { 
-    //   editPost({meta: {inclusiveDates: result.date[0]}});
-    // }
-    // if(result.description) { 
-    //   editPost({meta: {description: result.description.join(' ')}});
-    // }
-    // if(result.extent) { 
-    //   editPost({meta: {extent: result.extent[0]}});
-    // }
-    // if(result.links) { 
-    //   editPost({meta: {links: result.links}});
-    // }
-    // if(result.tags) { 
-    //   editPost({meta: {subject: result.tags}});
-    // }
-    // if(result.title) { 
-    //   editPost({meta: {title: result.title[0]}});
-    // }
-    // console.log(meta.creator)
   });
 
 }

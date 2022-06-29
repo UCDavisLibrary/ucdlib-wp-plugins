@@ -1,5 +1,3 @@
-import {Task} from '@lit-labs/task';
-
 export class ApiController {
   constructor(url) { 
     this.task = this.fetch(url)
