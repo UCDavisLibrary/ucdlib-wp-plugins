@@ -20,6 +20,14 @@
       {% endif %}
     {% endif %}
     {{post.content}}
+
+    {% if post.prevPage %}
+      <a href="{{post.prevPage.link}}" class="btn btn--primary">{{post.prevPage.title}}</a>
+    {% endif %}
+
+    {% if post.nextPage %}
+      <a href="{{post.nextPage.link}}" class="btn btn--primary">{{post.nextPage.title}}</a>
+    {% endif %}
   </div>
   <div class="l-sidebar-second">
     {{sidebar}}

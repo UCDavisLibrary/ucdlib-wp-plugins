@@ -43,7 +43,7 @@ class UCDLibPluginSpecialExhibits {
       'view_item'             => __( 'View Exhibit', 'textdomain' ),
       'all_items'             => __( 'All Exhibits', 'textdomain' ),
       'search_items'          => __( 'Search Exhibits', 'textdomain' ),
-      'parent_item_colon'     => __( 'Parent Exhibit:', 'textdomain' ),
+      'parent_item_colon'     => __( 'Parent Exhibit Page:', 'textdomain' ),
       'not_found'             => __( 'No exhibit found.', 'textdomain' ),
       'not_found_in_trash'    => __( 'No exhibit found in Trash.', 'textdomain' ),
       'featured_image'        => _x( 'Featured Image', 'textdomain' ),
@@ -448,5 +448,75 @@ class UCDLibPluginSpecialExhibitPage extends UcdThemePost {
     $mapId = $this->meta('locationMap');
     $this->locationMap = [ 'id' => $mapId ];
     return $this->locationMap;
+  }
+
+  protected $siblings;
+  public function siblings(){
+    if ( ! empty( $this->siblings ) ) {
+      return $this->siblings;
+    }
+    $slug = UCDLibPluginSpecialConfig::$config['postTypes']['exhibit'];
+    $this->siblings = [];
+    if ( $this->parent() ){
+      $siblings = [];
+      foreach ($this->parent()->children() as $s) {
+        $siblings[] = $s;
+      }
+      $this->siblings = $siblings;
+    }
+    return $this->siblings;
+  }
+
+  protected $nextPage;
+  public function nextPage(){
+    if ( ! empty( $this->nextPage ) ) {
+      return $this->nextPage;
+    }
+
+    $slug = UCDLibPluginSpecialConfig::$config['postTypes']['exhibit'];
+    $this->nextPage = null;
+    $children = $this->children($slug);
+    
+
+    if ( count($children) ){
+      foreach ($children as $child) {
+        $this->nextPage = $child;
+        break;
+      }
+    } elseif ( count($this->siblings()) ) {
+      $found_self = false;
+      foreach ($this->siblings() as $sibling) {
+        if ( $found_self ) {
+          $this->nextPage = $sibling;
+          break;
+        }
+        if ( $sibling->id == $this->id ) $found_self = true;
+
+      }
+    }
+    return $this->nextPage;
+  }
+
+  protected $prevPage;
+  public function prevPage(){
+    if ( ! empty( $this->prevPage ) ) {
+      return $this->prevPage;
+    }
+    $this->prevPage = null;
+    $found_self = false;
+    foreach (array_reverse($this->siblings()) as $sibling) {
+      if ( $found_self ) {
+        $this->prevPage = $sibling;
+        break;
+      }
+      if ( $sibling->id == $this->id ) $found_self = true;
+    }
+    if ( !$this->prevPage && $this->parent() ) {
+      $this->prevPage = $this->parent();
+    }
+
+    return $this->prevPage;
+
+    $slug = UCDLibPluginSpecialConfig::$config['postTypes']['exhibit'];
   }
 }
