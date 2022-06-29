@@ -6,6 +6,7 @@ import {
   DatePicker,
   Dropdown,
   FormTokenField,
+  SelectControl,
   TextControl,
   TextareaControl,
   __experimentalText as Text,
@@ -15,9 +16,14 @@ import {
 import { useEffect, useState } from '@wordpress/element';
 import apiFetch from '@wordpress/api-fetch';
 import { html, SelectUtils } from "@ucd-lib/brand-theme-editor/lib/utils";
+import { ImagePicker } from "@ucd-lib/brand-theme-editor/lib/block-components";
 
+/**
+ * Allows user to set metadata for an exhibit 
+ * by clicking a button in the publish panel that will open a modal.
+ * If the current exhbit page is a child, metadata will be read from and written to the top-level ancestor.
+ */
 const name = 'ucdlib-special-exhibit';
-
 const Edit = () => {
 
   // bail if not exhibit
@@ -27,6 +33,10 @@ const Edit = () => {
   // get various select options
   const curatorOrgs = SelectUtils.terms('curator', {per_page: '-1', orderby: 'name', order: 'asc'});
   const locations = SelectUtils.terms('exhibit-location', {per_page: '-1', orderby: 'name', order: 'asc'});
+  const locationOptions = [
+    {value: '', label: 'Select a location', disabled: true},
+    ...locations.map(l => {return {value: l.id, label: l.name}})
+  ];
   const [ peoplePosts, setPeoplePosts ] = useState( [] );
   useEffect(() => {
     const path = `ucdlib-directory/people`;
@@ -66,6 +76,7 @@ const Edit = () => {
     postMeta.dateTo,
     postMeta.curators,
     postMeta.locationDirections,
+    postMeta.locationMap,
     postCuratorOrgs,
     postLocations
   ];
@@ -80,6 +91,22 @@ const Edit = () => {
   const [ exhibitCurators, setExhibitCurators] = useState(postMeta.curators);
   const [ exhibitLocations, setExhibitLocations] = useState(postLocations);
   const [ exhibitLocationDirections, setExhibitLocationDirections] = useState(postMeta.locationDirections);
+  const [ exhibitLocationMap, setExhibitLocationMap ] = useState(postMeta.locationMap);
+
+  const setStateFromCurrentPage = () => {
+    setTopExhibit(0);
+    setExhibitTitle(postTitle);
+    setExhibitIsOnline(postMeta.isOnline);
+    setExhibitIsPhysical(postMeta.isPhysical);
+    setExhibitIsPermanent(postMeta.isPermanent);
+    setExhibitDateFrom(postMeta.dateFrom);
+    setExhibitDateTo(postMeta.dateTo);
+    setExhibitCuratorOrgs(postCuratorOrgs);
+    setExhibitCurators(postMeta.curators);
+    setExhibitLocations(postLocations);
+    setExhibitLocationDirections( postMeta.locationDirections );
+    setExhibitLocationMap(postMeta.locationMap)
+  }
 
   // format people the way selector likes
   const people = (() => {
@@ -101,6 +128,8 @@ const Edit = () => {
     return out;
   })();
 
+  const exhibitLocationMapObject = SelectUtils.image(exhibitLocationMap);
+
   // write metadata to current page or top-level parent
   const saveMetadata = () => {
     const data = {
@@ -114,7 +143,8 @@ const Edit = () => {
         dateFrom: (exhibitIsPhysical && !exhibitIsPermanent) ? exhibitDateFrom : null,
         dateTo: (exhibitIsPhysical && !exhibitIsPermanent) ? exhibitDateTo : null,
         curators: exhibitCurators,
-        locationDirections: exhibitLocationDirections
+        locationDirections: exhibitLocationDirections,
+        locationMap: exhibitLocationMap
       }
     }
     if ( topExhibit ) {
@@ -133,7 +163,7 @@ const Edit = () => {
   useEffect(() => {
     if ( !parent ) {
       setParentError(false);
-      setTopExhibit(0);
+      setStateFromCurrentPage();
       return;
     }
     const path = `ucdlib-special/exhibit-page/${parent}`;
@@ -143,6 +173,7 @@ const Edit = () => {
         setTopExhibit(r.exhibitId);
         setExhibitTitle(r.exhibitTitle);
         setExhibitIsOnline(r.exhibitIsOnline);
+        setExhibitIsPermanent(r.exhibitIsPermanent);
         setExhibitIsPhysical(r.exhibitIsPhysical);
         setExhibitDateFrom(r.exhibitDateFrom);
         setExhibitDateTo(r.exhibitDateTo);
@@ -150,9 +181,11 @@ const Edit = () => {
         setExhibitCurators(r.exhibitCurators);
         setExhibitLocations(r.exhibitLocations.map(loc => loc.term_id));
         setExhibitLocationDirections( r.exhibitLocationDirections);
+        setExhibitLocationMap(r.exhibitLocationMap.id)
       }, 
       (error) => {
         setParentError(true);
+        setStateFromCurrentPage();
       })
 
   }, [parent]);
@@ -204,7 +237,7 @@ const Edit = () => {
         <div>
           <${Button} onClick=${openModal} variant="primary">Edit Exhibit Metadata</${Button}>
           ${modalIsOpen && html`
-            <${Modal} title='Exhibit Metadata' onRequestClose=${closeModal}>
+            <${Modal} title='Exhibit Metadata' onRequestClose=${closeModal} shouldCloseOnClickOutside=${false}>
               ${parentError ? html`
                 <div><p>There was an error when retrieving exhibit metadata. Please try again later.</p></div>
               ` : html`
@@ -289,21 +322,25 @@ const Edit = () => {
                     <div>
                       <h3>Exhibit Location</h3>
                       <div style=${{marginBottom: '10px'}}>
-                        ${locations.map(loc => html`
-                          <div key=${loc.id}>
-                            <${CheckboxControl} 
-                              label=${loc.name}
-                              checked=${exhibitLocations.includes(loc.id)}
-                              onChange=${ () => setExhibitLocations(toggleArrayMember(loc.id, exhibitLocations))}
-                            />
-                          </div>
-                        `)}
+                        <${SelectControl} 
+                          options=${locationOptions}
+                          value=${exhibitLocations.length ? exhibitLocations[0] : ''}
+                          onChange=${id => setExhibitLocations([id])}
+                        />
                         <${TextareaControl}
                           label="Directions to Exhibit"
                           help="Brief blurb to help patrons find this exhibit in the specified location."
                           value=${exhibitLocationDirections}
                           onChange=${setExhibitLocationDirections}
                           placeholder='This exhibit is located...'
+                        />
+                        <h4>Directional Map</h4>
+                        <${ImagePicker} 
+                          notPanel=${true}
+                          imageId=${exhibitLocationMap}
+                          image=${exhibitLocationMapObject}
+                          onSelect=${(image) => setExhibitLocationMap(image.id)}
+                          onRemove=${() => setExhibitLocationMap(0)}
                         />
                       </div>
                     </div>
