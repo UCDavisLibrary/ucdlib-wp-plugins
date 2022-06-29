@@ -1,37 +1,24 @@
 import {Task} from '@lit-labs/task';
 
 export class ApiController {
-//   host;
-//   value;
-//   kinds = Names.kinds;
-//   task;
-  constructor(host, url) {
-    const baseUrl = url;
-    this.url = baseUrl;
-    this.host = host;
-    console.log("URL:", url);
-    this.task = new Task(
-      this.host,
-      async () => {
-        const response = await fetch(`${baseUrl}`);
-        const result = await response.json();
-        const error = result.error;
-        if (error !== undefined) {
-          throw new Error(error);
-        }
-        return result;
-      },
-        
-      () => [this.url]
-    );
-
+  constructor(url) { 
+    this.task = this.fetch(url)
+    this.taskResult;
   }
 
-
-  render(renderFunctions) {
-    return this.task.render(renderFunctions);
+  async fetch(url){
+    let task;
+    task = await this.taskFetch(url);
+    this.taskResult = task;
+    return task;
   }
-
+  async taskFetch(url){
+    return fetch(`${url}`)
+    .then((response) => {return response.json()})
+    .catch((error) => {
+      console.error('Error:', error);
+    });
+  }
 
 
 }

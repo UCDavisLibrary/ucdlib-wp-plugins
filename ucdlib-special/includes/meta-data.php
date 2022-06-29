@@ -14,6 +14,12 @@ class UCDLibPluginSpecialMetaData {
       'type' => 'string',
       'default' => ''
     ) );
+    register_post_meta( '', 'callNumber', array(
+      'show_in_rest' => true,
+      'single' => true,
+      'type' => 'string',
+      'default' => ''
+    ) );
     register_post_meta( '', 'biography', array(
       'show_in_rest' => true,
       'single' => true,
@@ -21,6 +27,12 @@ class UCDLibPluginSpecialMetaData {
       'default' => ''
     ) );
     register_post_meta( '', 'biographyOriginal', array(
+      'show_in_rest' => true,
+      'single' => true,
+      'type' => 'string',
+      'default' => ''
+    ) );
+    register_post_meta( '', 'creator', array(
       'show_in_rest' => true,
       'single' => true,
       'type' => 'string',
@@ -51,10 +63,26 @@ class UCDLibPluginSpecialMetaData {
       'default' => ''
     ) );
     register_post_meta( '', 'subject', array(
-      'show_in_rest' => true,
+      'show_in_rest' => [
+        'schema' => [
+          'type' => 'array',
+          'items' =>array('type' => 'string'),
+        ]
+      ],
       'single' => true,
-      'type' => 'string',
-      'default' => ''
+      'type' => 'array',
+      'default' => []
+    ) );
+    register_post_meta( '', 'links', array(
+      'show_in_rest' => [
+        'schema' => [
+          'type' => 'array',
+          'items' =>array('type' => 'string'),
+        ]
+      ],
+      'single' => true,
+      'type' => 'array',
+      'default' => []
     ) );
   }
 

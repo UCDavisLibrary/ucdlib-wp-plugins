@@ -50,7 +50,7 @@ export default class SpecialCollection extends LitElement {
    */  
   firstUpdated(changedProperties){
     if(this.almakey != ''){
-       this.perma = new ApiController(this, this._requestUrl());
+       this.perma = await new ApiController(this, this._requestUrl());
        console.log("Perma:", this.perma);
 
        this.requestUpdate();

@@ -11,24 +11,65 @@ import { useState } from '@wordpress/element';
 
 const name = 'ucdlib-special-collection';
 
-const runController = (recordId) => {
-  // todo 
-  let perma = null;
-  console.log('pinging api');
-
-  if(recordId !== ''){
-    console.log("empty");
+const runController = (recordId, meta, editPost) => { 
+  if(recordId === ''){
+    return
   }
+  let perma = null;
+
+  console.log('pinging api');
   let url = "http://localhost:3000/wp-json/ucdlib-special/collection_pnx/";
-  let requestUrl = url + recordId;//attributes.almaRecordId;
-  let results = {};
-  console.log("U:",React);
+  let requestUrl = url + recordId;
+  perma = new ApiController(requestUrl);
+  perma["task"].then(function(result) {
+    editPost(
+      {meta:
+        {
+          creator: result.author ? result.author[0] : null, 
+          callNumber: result.callNumber,
+          creator: result.corp ? result.corp[0] : null,
+          inclusiveDates: result.date ? result.date[0] : null,
+          description: result.description.join(' '),
+          extent: result.extent ? result.extent[0] : null,
+          links: result.links,
+          subject: result.tags,
+          title: result.title ? result.title[0] : null,
+        }
+
+      }
+    );
+    console.log("RE:",meta);
 
 
-  perma =  useController(React, (host) => new ApiController(host, requestUrl));
-  console.log("Control:", perma);
-  return perma.task["_value"];
-
+    // if(result.author) { 
+    //   editPost({meta: {creator: result.author[0]}});
+    // }
+    // if(result.callNumber) { 
+    //   editPost({meta: {callNumber: result.callNumber}});
+    // }
+    // if(result.corp) { 
+    //   editPost({meta: {creator: result.corp[0]}});
+    // }
+    // if(result.date) { 
+    //   editPost({meta: {inclusiveDates: result.date[0]}});
+    // }
+    // if(result.description) { 
+    //   editPost({meta: {description: result.description.join(' ')}});
+    // }
+    // if(result.extent) { 
+    //   editPost({meta: {extent: result.extent[0]}});
+    // }
+    // if(result.links) { 
+    //   editPost({meta: {links: result.links}});
+    // }
+    // if(result.tags) { 
+    //   editPost({meta: {subject: result.tags}});
+    // }
+    // if(result.title) { 
+    //   editPost({meta: {title: result.title[0]}});
+    // }
+    // console.log(meta.creator)
+  });
 
 }
 
@@ -51,23 +92,15 @@ const Edit = () => {
     {value: 'manuscript', label: 'Manuscript'},
     {value: 'university-archive', label: 'University Archive'}
   ];
-
+  debugger;
   const searchRecordId = () => {
     // todo
     console.log('pinging api');
-    // editPost({meta: {almaRecordId: meta.almaRecordId}});
-    setAlmaRecord(meta.almaRecordId);
+    runController(meta.almaRecordId, meta, editPost);
 
-    
-    // update slug to use recordId
-    // const slug = SelectUtils.editedPostAttribute('slug') || '';
-    // const { editPost } = useDispatch( 'core/editor', [ slug ] );
-    // editPost({slug: attributes.almaRecordId });
+
   }
 
-  console.log("Attribute:", almaRecordId);
-  const ctlResult = runController(almaRecord);
-  console.log("Result:",ctlResult);
 
   return html`
     <${Fragment}>
