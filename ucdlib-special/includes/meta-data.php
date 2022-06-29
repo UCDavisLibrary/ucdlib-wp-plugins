@@ -8,6 +8,37 @@ class UCDLibPluginSpecialMetaData {
   }
 
   public function register_post_meta(){
+    register_post_meta( '', 'originalData', array(
+      'show_in_rest' => [
+        'schema' => [
+          'type' => 'object',
+          'properties' => [
+            "creator" => ['type' => 'string'],
+            "callNumber"=> ['type' => 'string'],
+            "inclusiveDates" => ['type' => 'string'],
+            "findingAid" => ['type' => 'object'],
+            "description" => ['type' => 'string'],
+            "extent" => ['type' => 'string'],
+            "links" => ['type' => 'array'],
+            "subject" => ['type' => 'array'],
+            "title" => ['type' => 'string'],
+          ]
+        ]
+      ],
+      'single' => true,
+      'type' => 'object',
+      'default' =>  [
+        "creator" => '',
+        "callNumber"=> '',
+        "inclusiveDates" => '',
+        "findingAid" => ['@id' => '', 'linkType' => '', 'linkURL' => '', 'displayLabel' => ''],
+        "description" => '',
+        "extent" => '',
+        "links" => [],
+        "subject" => [],
+        "title" => '',
+      ]      
+    ) );
     register_post_meta( '', 'almaRecordId', array(
       'show_in_rest' => true,
       'single' => true,
@@ -45,10 +76,20 @@ class UCDLibPluginSpecialMetaData {
       'default' => ''
     ) );
     register_post_meta( '', 'findingAid', array(
-      'show_in_rest' => true,
+      'show_in_rest' => [
+        'schema' => [
+          'type' => 'object',
+          'properties' => [
+            "@id" => ['type' => 'string'],
+            "linkType" => ['type' => 'string'],
+            "linkURL" => ['type' => 'string'],
+            "displayLabel" =>  ['type' => 'string'],
+          ]
+        ]
+      ],
       'single' => true,
-      'type' => 'string',
-      'default' => ''
+      'type' => 'object',
+      'default' => ['@id' => '', 'linkType' => '', 'linkURL' => '', 'displayLabel' => '']
     ) );
     register_post_meta( '', 'inclusiveDates', array(
       'show_in_rest' => true,

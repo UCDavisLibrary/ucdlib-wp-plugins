@@ -5,7 +5,7 @@ require_once( __DIR__ . '/blocks.php' );
 require_once( __DIR__ . '/collection.php' );
 require_once( __DIR__ . '/config.php' );
 require_once( __DIR__ . '/api.php' );
-
+require_once( __DIR__ . '/patterns.php' );
 require_once( __DIR__ . '/meta-data.php' );
 
 // primary class for special collections plugin
@@ -38,6 +38,9 @@ class UCDLibPluginSpecial {
 
     // register our API endpoints at /wp-json/ucdlib-special
     $this->api = new UCDLibPluginSpecialAPI( $configs);
+
+    // Sets up block patterns for special collections
+    $this->patterns = new UCDLibPluginSpecialPatterns( $configs);
 
     // register meta-data from the form
     $this->metaData = new UCDLibPluginSpecialMetaData( $this->config );

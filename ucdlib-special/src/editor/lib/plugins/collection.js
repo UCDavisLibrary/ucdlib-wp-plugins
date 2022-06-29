@@ -22,13 +22,25 @@ const runController = (recordId, meta, editPost) => {
   let requestUrl = url + recordId;
   perma = new ApiController(requestUrl);
   perma["task"].then(function(result) {
+    let findingAid = {};
+
+    // for(let aid in Object.values(result.links)){
+    //   console.log(aid);
+    //   if(aid.displayLabel == "OAC finding aid")
+    //     findingAid = aid;
+    // }
+
+    findingAid = result.links.filter(r => r.displayLabel === 'OAC finding aid')
+
     editPost(
       {meta:
         {
+          originalData: result,
           creator: result.author ? result.author[0] : null, 
           callNumber: result.callNumber,
           creator: result.corp ? result.corp[0] : null,
           inclusiveDates: result.date ? result.date[0] : null,
+          findingAid: findingAid ? findingAid[0] : null,
           description: result.description.join(' '),
           extent: result.extent ? result.extent[0] : null,
           links: result.links,
@@ -38,7 +50,7 @@ const runController = (recordId, meta, editPost) => {
 
       }
     );
-    console.log("RE:",meta);
+    console.log("MetaData Collection:",meta);
 
 
   });
@@ -64,7 +76,6 @@ const Edit = () => {
     {value: 'manuscript', label: 'Manuscript'},
     {value: 'university-archive', label: 'University Archive'}
   ];
-  debugger;
   const searchRecordId = () => {
     // todo
     console.log('pinging api');
