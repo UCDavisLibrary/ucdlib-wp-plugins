@@ -31,10 +31,12 @@ class UCDLibPluginSpecialMetaData {
         "creator" => '',
         "callNumber"=> '',
         "inclusiveDates" => '',
-        "findingAid" => ['@id' => '', 'linkType' => '', 'linkURL' => '', 'displayLabel' => ''],
+        "findingAid" => ['id' => '', 'linkType' => '', 'linkURL' => '', 'displayLabel' => ''],
         "description" => '',
         "extent" => '',
-        "links" => [],
+        "links" => array(
+          ['id' => '', 'linkType' => '', 'linkURL' => '', 'displayLabel' => '']
+        ),
         "subject" => [],
         "title" => '',
       ]      
@@ -57,12 +59,6 @@ class UCDLibPluginSpecialMetaData {
       'type' => 'string',
       'default' => ''
     ) );
-    register_post_meta( '', 'biographyOriginal', array(
-      'show_in_rest' => true,
-      'single' => true,
-      'type' => 'string',
-      'default' => ''
-    ) );
     register_post_meta( '', 'creator', array(
       'show_in_rest' => true,
       'single' => true,
@@ -80,7 +76,7 @@ class UCDLibPluginSpecialMetaData {
         'schema' => [
           'type' => 'object',
           'properties' => [
-            "@id" => ['type' => 'string'],
+            "id" => ['type' => 'string'],
             "linkType" => ['type' => 'string'],
             "linkURL" => ['type' => 'string'],
             "displayLabel" =>  ['type' => 'string'],
@@ -89,7 +85,7 @@ class UCDLibPluginSpecialMetaData {
       ],
       'single' => true,
       'type' => 'object',
-      'default' => ['@id' => '', 'linkType' => '', 'linkURL' => '', 'displayLabel' => '']
+      'default' => ['id' => '', 'linkType' => '', 'linkURL' => '', 'displayLabel' => '']
     ) );
     register_post_meta( '', 'inclusiveDates', array(
       'show_in_rest' => true,
@@ -107,7 +103,7 @@ class UCDLibPluginSpecialMetaData {
       'show_in_rest' => [
         'schema' => [
           'type' => 'array',
-          'items' =>array('type' => 'string'),
+          'items' => array('type' => 'string'),
         ]
       ],
       'single' => true,
@@ -115,15 +111,22 @@ class UCDLibPluginSpecialMetaData {
       'default' => []
     ) );
     register_post_meta( '', 'links', array(
-      'show_in_rest' => [
-        'schema' => [
-          'type' => 'array',
-          'items' =>array('type' => 'string'),
-        ]
-      ],
+      'type'  => 'array',
+      'show_in_rest' => array(
+          'schema' => array(
+              'type'  => 'array',
+              'items' => array(
+                'type'       => 'object',
+                'properties' => array(
+                  "id" => ['type' => 'string'],
+                  "linkType" => ['type' => 'string'],
+                  "linkURL" => ['type' => 'string'],
+                  "displayLabel" =>  ['type' => 'string'],
+                ),
+              ),
+          ),
+      ),
       'single' => true,
-      'type' => 'array',
-      'default' => []
     ) );
   }
 

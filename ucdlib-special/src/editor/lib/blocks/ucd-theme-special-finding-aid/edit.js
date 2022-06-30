@@ -17,8 +17,10 @@ export default ( props ) => {
       <h4>Finding Aid</h4>
       <${RichText}
           tagName="a"
-          className=""
-          value=${meta.findingAid}
+          className=""          
+          href=${meta.findingAid.linkURL}
+          title="Online Archive of California (OAC)"
+          value="Online Archive of California (OAC)"
           onChange="${findingAid => {editPost({meta: {findingAid}})}}"
         />
     </div>

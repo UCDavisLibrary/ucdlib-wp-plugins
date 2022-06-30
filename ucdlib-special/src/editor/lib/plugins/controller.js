@@ -17,6 +17,4 @@ export class ApiController {
       console.error('Error:', error);
     });
   }
-
-
 }

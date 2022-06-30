@@ -28,16 +28,9 @@ class UCDLibPluginSpecialCollections {
   public function register(){
     // new posts will start with this template
     $template = [
-      // ['ucd-theme/layout-basic', ['sideBarLocation' => 'right', 'modifier' => 'flipped'], [
-      //   ['ucd-theme/column', ['layoutClass' => 'l-content', 'forbidWidthEdit' => true], [
-      //     ['core/pattern', ['slug' => "$this->slug/actions"]],
-      //     ['core/pattern', ['slug' => "$this->slug/about"]]
-      //   ]],
-      //   ['ucd-theme/column', ['layoutClass' => 'l-sidebar-first', 'forbidWidthEdit' => true], [
-      //     ['ucdlib-locations/hours-today', ["showChildren" => true]],
-      //     ['core/pattern', ['slug' => "$this->slug/amenities"]]
-      //   ]]
-      // ]]
+      ['ucd-theme/layout-basic', ['sideBarLocation' => 'right', 'modifier' => 'flipped'], [
+        ['core/pattern', ['slug' => "$this->slug/collection"]]
+      ]]
     ];
     
     $labels = array(
