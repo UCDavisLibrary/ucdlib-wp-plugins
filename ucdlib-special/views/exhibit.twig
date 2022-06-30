@@ -22,7 +22,7 @@
     {{post.content}}
 
     {% if post.prevPage or post.nextPage %}
-      <div class='u-space-mt'>
+      <div class='btn--seq-container'>
       {% if post.prevPage %}
         <a href="{{post.prevPage.link}}" class="btn btn--seq btn--seq__prev">{{post.prevPage.title}}</a>
       {% endif %}

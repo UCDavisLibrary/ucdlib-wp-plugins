@@ -202,14 +202,25 @@ class UCDLibPluginSpecialExhibits {
 // is available in context as 'post'
 class UCDLibPluginSpecialExhibitPage extends UcdThemePost {
 
+  // override children method to only return exhibit pages
+  // just makes things easier
+  protected $children;
+  public function children($post_type = 'any'){
+    if ( ! empty( $this->children ) ) {
+      return $this->children;
+    }
+    $slug = UCDLibPluginSpecialConfig::$config['postTypes']['exhibit'];
+    $this->children = parent::children($slug);
+    return $this->children;
+  }
+
   protected $exhibitIsHierarchical;
   public function exhibitIsHierarchical(){
     if ( ! empty( $this->exhibitIsHierarchical ) ) {
       return $this->exhibitIsHierarchical;
     }
-    $slug = UCDLibPluginSpecialConfig::$config['postTypes']['exhibit'];
     $exhibit = $this->exhibit();
-    $this->exhibitIsHierarchical = count($exhibit->children($slug)) ? true : false;
+    $this->exhibitIsHierarchical = count($exhibit->children()) ? true : false;
     return $this->exhibitIsHierarchical;
   }
 
@@ -397,11 +408,10 @@ class UCDLibPluginSpecialExhibitPage extends UcdThemePost {
     if ( ! empty( $this->siblings ) ) {
       return $this->siblings;
     }
-    $slug = UCDLibPluginSpecialConfig::$config['postTypes']['exhibit'];
     $this->siblings = [];
     if ( $this->parent() ){
       $siblings = [];
-      foreach ($this->parent()->children($slug) as $s) {
+      foreach ($this->parent()->children() as $s) {
         $siblings[] = $s;
       }
       $this->siblings = $siblings;
@@ -415,9 +425,8 @@ class UCDLibPluginSpecialExhibitPage extends UcdThemePost {
       return $this->nextPage;
     }
 
-    $slug = UCDLibPluginSpecialConfig::$config['postTypes']['exhibit'];
     $this->nextPage = null;
-    $children = $this->children($slug);
+    $children = $this->children();
 
     if ( count($children) ){
       foreach ($children as $child) {
@@ -457,7 +466,5 @@ class UCDLibPluginSpecialExhibitPage extends UcdThemePost {
     }
 
     return $this->prevPage;
-
-    $slug = UCDLibPluginSpecialConfig::$config['postTypes']['exhibit'];
   }
 }

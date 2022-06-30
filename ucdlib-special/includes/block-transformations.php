@@ -24,5 +24,10 @@ class UCDLibPluginSpecialBlockTransformations {
     $attrs['dept_page_link'] = $link;
     return $attrs;
   }
+
+  public static function currentPost( $attrs=[]){
+    $attrs['post'] = Timber::get_post();
+    return $attrs;
+  }
 }
 ?>

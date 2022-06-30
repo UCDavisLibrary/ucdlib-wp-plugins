@@ -6,10 +6,10 @@ import blocks from "./lib/blocks";
 import plugins from "./lib/plugins";
 
 if ( document.querySelector('ucdlib-plugin[plugin=ucdlib-special]') ) {
+  blocks.forEach(block => {
+    registerBlockType( block.name, block.settings );
+  });
   if ( select('core/editor') ){
-    blocks.forEach(block => {
-      registerBlockType( block.name, block.settings );
-    });
     plugins.forEach(plugin => {
       registerPlugin( plugin.name, plugin.settings );
     })
