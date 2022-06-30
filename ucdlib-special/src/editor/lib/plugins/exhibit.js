@@ -137,8 +137,8 @@ const Edit = () => {
       curator: exhibitCuratorOrgs,
       'exhibit-location': exhibitLocations,
       meta: {
-        isOnline: exhibitIsOnline,
-        isPhysical: exhibitIsPhysical,
+        isOnline: exhibitIsOnline ? true : false,
+        isPhysical: exhibitIsPhysical? true : false,
         isPermanent: exhibitIsPhysical ? exhibitIsPermanent : false,
         dateFrom: (exhibitIsPhysical && !exhibitIsPermanent) ? exhibitDateFrom : null,
         dateTo: (exhibitIsPhysical && !exhibitIsPermanent) ? exhibitDateTo : null,

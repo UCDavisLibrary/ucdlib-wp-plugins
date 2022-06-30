@@ -86,3 +86,20 @@
   }
 }
 
+// move to special collections plugin
+.curator-widget {
+  border: 2px solid #ffdf80;
+  padding: 1rem;
+
+  .subsection-label {
+    font-style: italic;
+  }
+
+  .previous-display {
+    font-style: italic;
+    font-size: .75rem;
+    margin-top: 1.5rem;
+    color: rgb(119, 119, 119);
+  }
+}
+

@@ -295,6 +295,30 @@ class UCDLibPluginSpecialExhibitPage extends UcdThemePost {
     return $this->exhibitIsPermanent;
   }
 
+  protected $exhibitIsPast;
+  public function exhibitIsPast(){
+    if ( ! empty( $this->exhibitIsPast ) ) {
+      return $this->exhibitIsPast;
+    }
+    if ( 
+      $this->exhibitIsPermanent() || 
+      !$this->exhibitIsPhysical() ||
+      !$this->exhibitDateTo() ){
+      $this->exhibitIsPast = false;
+    } else {
+      $tz = new DateTimeZone("America/Los_Angeles");
+      $end = $this->exhibitDateTo();
+      $end = substr($end, 0, 4) . '-' .  substr($end, 4, 2) . '-' . substr($end, 6, 2) . 'T00:00:00';
+      $end = new DateTime($end, $tz);
+      //echo $end->format('Y-m-d\TH:i:s.u');
+      $now = new DateTime('today', $tz);
+      //echo $now->format('Y-m-d\TH:i:s.u');
+      $this->exhibitIsPast = $now > $end;
+    } 
+
+    return $this->exhibitIsPast;
+  }
+
   protected $exhibitDateFrom;
   public function exhibitDateFrom(){
     if ( ! empty( $this->exhibitDateFrom ) ) {
@@ -333,7 +357,19 @@ class UCDLibPluginSpecialExhibitPage extends UcdThemePost {
     if ( ! empty( $this->exhibitCurators ) ) {
       return $this->exhibitCurators;
     }
-    $this->exhibitCurators = $this->exhibit()->meta('curators');
+    $curators = $this->exhibit()->meta('curators');
+    if ( count($curators) ) {
+      $q = [
+        'post__in' => $curators, 
+        'ignore_sticky_posts' => true, 
+        'post_type' => 'any',
+        'orderby' => 'post__in'
+      ];
+      $this->exhibitCurators = Timber::get_posts($q);
+    } else {
+      $this->exhibitCurators = $curators;
+    }
+
     return $this->exhibitCurators;
   }
 

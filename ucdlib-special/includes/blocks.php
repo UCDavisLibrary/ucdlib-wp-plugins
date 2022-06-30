@@ -21,6 +21,10 @@ class UCDLibPluginSpecialBlocks extends UCDThemeBlockRenderer {
       "$this->slug/exhibit-subnav" => [
         'twig' => $this->twigPath('exhibit-subnav'),
         'transform' => ['currentPost']
+      ],
+      "$this->slug/exhibit-curators" => [
+        'twig' => $this->twigPath('exhibit-curators'),
+        'transform' => ['currentPost']
       ]
     ];
 
