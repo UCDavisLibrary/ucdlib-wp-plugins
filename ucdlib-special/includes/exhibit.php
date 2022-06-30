@@ -13,10 +13,9 @@ class UCDLibPluginSpecialExhibits {
 
     $this->api = new UCDLibPluginSpecialAPIExhibit( $config );
 
+    // register taxonomies
     $this->curators = new UCDLibPluginSpecialCurators( $config );
     $this->locations = new UCDLibPluginSpecialExhibitLocations( $config );
-
-    // register taxonomies
 
     add_action('init', [$this, 'register']);
     add_action( 'init', [$this, 'register_post_meta'] );
@@ -172,7 +171,7 @@ class UCDLibPluginSpecialExhibits {
     $context['breadcrumbs'] = $crumbs;
 
     $context['config'] = $this->config;
-    $context['sidebar'] = Timber::get_widgets( $this->slug );
+    $context['sidebar'] = trim(Timber::get_widgets( $this->slug ));
     
     return $context;
   }
@@ -476,7 +475,6 @@ class UCDLibPluginSpecialExhibitPage extends UcdThemePost {
     $slug = UCDLibPluginSpecialConfig::$config['postTypes']['exhibit'];
     $this->nextPage = null;
     $children = $this->children($slug);
-    
 
     if ( count($children) ){
       foreach ($children as $child) {

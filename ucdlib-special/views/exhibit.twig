@@ -7,7 +7,7 @@
 {% endblock %}
 
 {% block content_container %}
-<div class="l-container l-basic--flipped">
+<div class="l-container {{sidebar ? 'l-basic--flipped'}}">
   <div class="l-content">
     {% if post.isTopPage %}
       {% if post.exhibitLocations and post.exhibitLocations|length %}
@@ -21,17 +21,23 @@
     {% endif %}
     {{post.content}}
 
-    {% if post.prevPage %}
-      <a href="{{post.prevPage.link}}" class="btn btn--primary">{{post.prevPage.title}}</a>
-    {% endif %}
+    {% if post.prevPage or post.nextPage %}
+      <div class='u-space-mt'>
+      {% if post.prevPage %}
+        <a href="{{post.prevPage.link}}" class="btn btn--seq btn--seq__prev">{{post.prevPage.title}}</a>
+      {% endif %}
 
-    {% if post.nextPage %}
-      <a href="{{post.nextPage.link}}" class="btn btn--primary">{{post.nextPage.title}}</a>
+      {% if post.nextPage %}
+        <a href="{{post.nextPage.link}}" class="btn btn--seq btn--seq__next">{{post.nextPage.title}}</a>
+      {% endif %}
+      </div>
     {% endif %}
   </div>
-  <div class="l-sidebar-second">
-    {{sidebar}}
-  </div>
+  {% if sidebar %}
+    <div class="l-sidebar-second">
+      {{sidebar}}
+    </div>
+  {% endif %}
 </div>
 
 {% endblock %}
