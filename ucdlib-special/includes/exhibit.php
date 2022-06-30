@@ -201,14 +201,16 @@ class UCDLibPluginSpecialExhibits {
 // custom post class when using timber::get_post()
 // is available in context as 'post'
 class UCDLibPluginSpecialExhibitPage extends UcdThemePost {
-  protected $exhibitType;
-  public function exhibitType(){
-    if ( ! empty( $this->exhibitType ) ) {
-      return $this->exhibitType;
-    }
-    $this->exhibitType = $this->meta('exhibitType');
 
-    return $this->exhibitType;
+  protected $exhibitIsHierarchical;
+  public function exhibitIsHierarchical(){
+    if ( ! empty( $this->exhibitIsHierarchical ) ) {
+      return $this->exhibitIsHierarchical;
+    }
+    $slug = UCDLibPluginSpecialConfig::$config['postTypes']['exhibit'];
+    $exhibit = $this->exhibit();
+    $this->exhibitIsHierarchical = count($exhibit->children($slug)) ? true : false;
+    return $this->exhibitIsHierarchical;
   }
 
   protected $isTopPage;
@@ -217,7 +219,7 @@ class UCDLibPluginSpecialExhibitPage extends UcdThemePost {
       return $this->isTopPage;
     }
     $exhibit = $this->exhibit();
-    $this->isTopPage = $exhibit ? false : true;
+    $this->isTopPage = $exhibit->id == $this->id ? true : false;
     return $this->isTopPage;
   }
 
@@ -231,7 +233,7 @@ class UCDLibPluginSpecialExhibitPage extends UcdThemePost {
     if (count( $ancestors )) {
       $this->exhibit = end($ancestors);
     } else {
-      $this->exhibit = false;
+      $this->exhibit = $this;
     }
     return $this->exhibit;
   }
@@ -242,11 +244,7 @@ class UCDLibPluginSpecialExhibitPage extends UcdThemePost {
       return $this->exhibitTitle;
     }
     $ancestor = $this->exhibit();
-    if ( $ancestor ) {
-      $this->exhibitTitle = $ancestor->title();
-    } else {
-      $this->exhibitTitle = $this->title();
-    }
+    $this->exhibitTitle = $this->exhibit()->title();
     return $this->exhibitTitle;
   }
 
@@ -255,12 +253,7 @@ class UCDLibPluginSpecialExhibitPage extends UcdThemePost {
     if ( ! empty( $this->exhibitId ) ) {
       return $this->exhibitId;
     }
-    $ancestor = $this->exhibit();
-    if ( $ancestor ) {
-      $this->exhibitId = $ancestor->id;
-    } else {
-      $this->exhibitId = $this->id;
-    }
+    $this->exhibitId = $this->exhibit()->id;
     return $this->exhibitId;
   }
 
@@ -269,12 +262,7 @@ class UCDLibPluginSpecialExhibitPage extends UcdThemePost {
     if ( ! empty( $this->exhibitIsOnline ) ) {
       return $this->exhibitIsOnline;
     }
-    $ancestor = $this->exhibit();
-    if ( $ancestor ) {
-      $this->exhibitIsOnline = $ancestor->meta('isOnline');
-    } else {
-      $this->exhibitIsOnline = $this->meta('isOnline');
-    }
+    $this->exhibitIsOnline = $this->exhibit()->meta('isOnline');
     return $this->exhibitIsOnline;
   }
 
@@ -283,12 +271,7 @@ class UCDLibPluginSpecialExhibitPage extends UcdThemePost {
     if ( ! empty( $this->exhibitIsPhysical ) ) {
       return $this->exhibitIsPhysical;
     }
-    $ancestor = $this->exhibit();
-    if ( $ancestor ) {
-      $this->exhibitIsPhysical = $ancestor->meta('isPhysical');
-    } else {
-      $this->exhibitIsPhysical = $this->meta('isPhysical');
-    }
+    $this->exhibitIsPhysical = $this->exhibit()->meta('isPhysical');
     return $this->exhibitIsPhysical;
   }
 
@@ -297,12 +280,7 @@ class UCDLibPluginSpecialExhibitPage extends UcdThemePost {
     if ( ! empty( $this->exhibitIsPermanent ) ) {
       return $this->exhibitIsPermanent;
     }
-    $ancestor = $this->exhibit();
-    if ( $ancestor ) {
-      $this->exhibitIsPermanent = $ancestor->meta('isPermanent');
-    } else {
-      $this->exhibitIsPermanent = $this->meta('isPermanent');
-    }
+    $this->exhibitIsPermanent = $this->exhibit()->meta('isPermanent');
     return $this->exhibitIsPermanent;
   }
 
@@ -311,12 +289,7 @@ class UCDLibPluginSpecialExhibitPage extends UcdThemePost {
     if ( ! empty( $this->exhibitDateFrom ) ) {
       return $this->exhibitDateFrom;
     }
-    $ancestor = $this->exhibit();
-    if ( $ancestor ) {
-      $this->exhibitDateFrom = $ancestor->meta('dateFrom');
-    } else {
-      $this->exhibitDateFrom = $this->meta('dateFrom');
-    }
+    $this->exhibitDateFrom = $this->exhibit()->meta('dateFrom');
     return $this->exhibitDateFrom;
   }
 
@@ -325,12 +298,7 @@ class UCDLibPluginSpecialExhibitPage extends UcdThemePost {
     if ( ! empty( $this->exhibitDateTo ) ) {
       return $this->exhibitDateTo;
     }
-    $ancestor = $this->exhibit();
-    if ( $ancestor ) {
-      $this->exhibitDateTo = $ancestor->meta('dateTo');
-    } else {
-      $this->exhibitDateTo = $this->meta('dateTo');
-    }
+    $this->exhibitDateTo = $this->exhibit()->meta('dateTo');
     return $this->exhibitDateTo;
   }
 
@@ -354,12 +322,7 @@ class UCDLibPluginSpecialExhibitPage extends UcdThemePost {
     if ( ! empty( $this->exhibitCurators ) ) {
       return $this->exhibitCurators;
     }
-    $ancestor = $this->exhibit();
-    if ( $ancestor ) {
-      $this->exhibitCurators = $ancestor->meta('curators');
-    } else {
-      $this->exhibitCurators = $this->meta('curators');
-    }
+    $this->exhibitCurators = $this->exhibit()->meta('curators');
     return $this->exhibitCurators;
   }
 
@@ -368,12 +331,7 @@ class UCDLibPluginSpecialExhibitPage extends UcdThemePost {
     if ( ! empty( $this->exhibitLocationDirections ) ) {
       return $this->exhibitLocationDirections;
     }
-    $ancestor = $this->exhibit();
-    if ( $ancestor ) {
-      $this->exhibitLocationDirections = $ancestor->meta('locationDirections');
-    } else {
-      $this->exhibitLocationDirections = $this->meta('locationDirections');
-    }
+    $this->exhibitLocationDirections = $this->exhibit()->meta('locationDirections');
     return $this->exhibitLocationDirections;
   }
 
@@ -382,12 +340,7 @@ class UCDLibPluginSpecialExhibitPage extends UcdThemePost {
     if ( ! empty( $this->exhibitCuratorOrgs ) ) {
       return $this->exhibitCuratorOrgs;
     }
-    $ancestor = $this->exhibit();
-    if ( $ancestor ) {
-      $this->exhibitCuratorOrgs = $ancestor->curatorOrgs();
-    } else {
-      $this->exhibitCuratorOrgs = $this->curatorOrgs();
-    }
+    $this->exhibitCuratorOrgs = $this->exhibit()->curatorOrgs();
     return $this->exhibitCuratorOrgs;
   }
 
@@ -406,12 +359,7 @@ class UCDLibPluginSpecialExhibitPage extends UcdThemePost {
     if ( ! empty( $this->exhibitLocations ) ) {
       return $this->exhibitLocations;
     }
-    $ancestor = $this->exhibit();
-    if ( $ancestor ) {
-      $this->exhibitLocations = $ancestor->locations();
-    } else {
-      $this->exhibitLocations = $this->locations();
-    }
+    $this->exhibitLocations = $this->exhibit()->locations();
     return $this->exhibitLocations;
   }
 
@@ -430,12 +378,7 @@ class UCDLibPluginSpecialExhibitPage extends UcdThemePost {
     if ( ! empty( $this->exhibitLocationMap ) ) {
       return $this->exhibitLocationMap;
     }
-    $ancestor = $this->exhibit();
-    if ( $ancestor ) {
-      $this->exhibitLocationMap = $ancestor->locationMap();
-    } else {
-      $this->exhibitLocationMap = $this->locationMap();
-    }
+    $this->exhibitLocationMap = $this->locationMap();
     return $this->exhibitLocationMap;
   }
 
@@ -458,7 +401,7 @@ class UCDLibPluginSpecialExhibitPage extends UcdThemePost {
     $this->siblings = [];
     if ( $this->parent() ){
       $siblings = [];
-      foreach ($this->parent()->children() as $s) {
+      foreach ($this->parent()->children($slug) as $s) {
         $siblings[] = $s;
       }
       $this->siblings = $siblings;
