@@ -413,6 +413,7 @@ class UCDLibPluginDirectoryPeople {
 
     // set author and link account
     update_post_meta($profile->ID, 'wp_user_id', $user->ID);
+    update_post_meta($profile->ID, 'username', $kerberos);
     wp_update_post( [
       'ID' => $profile->ID,
       'post_author' => $user->ID
