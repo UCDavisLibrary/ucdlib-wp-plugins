@@ -310,9 +310,7 @@ class UCDLibPluginSpecialExhibitPage extends UcdThemePost {
       $end = $this->exhibitDateTo();
       $end = substr($end, 0, 4) . '-' .  substr($end, 4, 2) . '-' . substr($end, 6, 2) . 'T00:00:00';
       $end = new DateTime($end, $tz);
-      //echo $end->format('Y-m-d\TH:i:s.u');
       $now = new DateTime('today', $tz);
-      //echo $now->format('Y-m-d\TH:i:s.u');
       $this->exhibitIsPast = $now > $end;
     } 
 
@@ -425,7 +423,7 @@ class UCDLibPluginSpecialExhibitPage extends UcdThemePost {
     if ( ! empty( $this->exhibitLocationMap ) ) {
       return $this->exhibitLocationMap;
     }
-    $this->exhibitLocationMap = $this->locationMap();
+    $this->exhibitLocationMap = $this->exhibit()->locationMap();
     return $this->exhibitLocationMap;
   }
 
@@ -436,6 +434,12 @@ class UCDLibPluginSpecialExhibitPage extends UcdThemePost {
     }
     $mapId = $this->meta('locationMap');
     $this->locationMap = [ 'id' => $mapId ];
+    if ( $mapId ) {
+      $map = Timber::get_image($mapId);
+      if ( $map ) {
+        $this->locationMap['url'] = $map->src();
+      }
+    }
     return $this->locationMap;
   }
 
