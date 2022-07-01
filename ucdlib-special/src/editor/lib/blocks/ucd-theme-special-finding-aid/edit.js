@@ -7,6 +7,11 @@ export default ( props ) => {
   const meta = SelectUtils.meta();
   const editPost = useDispatch( 'core/editor' ).editPost;
 
+  const onFindingAidChange = (findingAid) => {
+    // findingAid => {editPost({meta: {findingAid}})}
+    // TODO
+  }
+
   return html`
   <div ...${ blockProps }>
     <${BlockControls} group="block">
@@ -21,7 +26,7 @@ export default ( props ) => {
           href=${meta.findingAid.linkURL}
           title="Online Archive of California (OAC)"
           value="Online Archive of California (OAC)"
-          onChange="${findingAid => {editPost({meta: {findingAid}})}}"
+          onChange=${onFindingAidChange}
         />
     </div>
   </div>

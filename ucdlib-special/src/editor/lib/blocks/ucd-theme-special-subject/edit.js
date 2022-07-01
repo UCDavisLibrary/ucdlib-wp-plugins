@@ -7,6 +7,10 @@ export default ( props ) => {
   const meta = SelectUtils.meta();
   const editPost = useDispatch( 'core/editor' ).editPost;
 
+  const onSubjectChange = () => {
+    // TODO
+  }
+
   return html`
   <div ...${ blockProps }>
     <${BlockControls} group="block">
@@ -15,12 +19,16 @@ export default ( props ) => {
 
     <div>
       <h4>Subject</h4>
-      <${RichText}
-          tagName="a"
+
+      ${meta.subject.map((sub) => {
+        return <RichText
+          tagName="p"
           className=""
-          value=${meta.subject}
-          onChange="${subject => {editPost({meta: {subject}})}}"
+          value={sub}
+          onChange={onSubjectChange}
         />
+      })}      
+
     </div>
   </div>
   `

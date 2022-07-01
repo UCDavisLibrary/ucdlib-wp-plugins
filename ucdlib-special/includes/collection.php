@@ -28,9 +28,7 @@ class UCDLibPluginSpecialCollections {
   public function register(){
     // new posts will start with this template
     $template = [
-      ['ucd-theme/layout-basic', ['sideBarLocation' => 'right', 'modifier' => 'flipped'], [
-        ['core/pattern', ['slug' => "$this->slug/collection"]]
-      ]]
+      ['core/pattern', ['slug' => "ucdlib-special/collection"]]
     ];
     
     $labels = array(

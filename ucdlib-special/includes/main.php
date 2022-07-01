@@ -33,14 +33,14 @@ class UCDLibPluginSpecial {
     // custom server-side "dynamic" blocks
     $this->blocks = new UCDLibPluginSpecialBlocks( $this->config );
 
+    // Sets up block patterns for special collections
+    $this->patterns = new UCDLibPluginSpecialPatterns( $configs);
+
     // 'special-collection' post type
     $this->collection = new UCDLibPluginSpecialCollections( $this->config );
 
     // register our API endpoints at /wp-json/ucdlib-special
     $this->api = new UCDLibPluginSpecialAPI( $configs);
-
-    // Sets up block patterns for special collections
-    $this->patterns = new UCDLibPluginSpecialPatterns( $configs);
 
     // register meta-data from the form
     $this->metaData = new UCDLibPluginSpecialMetaData( $this->config );

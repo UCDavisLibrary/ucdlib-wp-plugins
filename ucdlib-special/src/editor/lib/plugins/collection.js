@@ -24,7 +24,7 @@ const runController = (recordId, meta, editPost) => {
   perma["task"].then(function(result) {
     // @id causes issues in php, replace with id
     const links = result.links.map((r) => { return { id: r['@id'], linkType: r.linkType, linkURL: r.linkURL, displayLabel: r.displayLabel }});
-    const findingAid = links.filter(r => r.displayLabel === 'OAC finding aid')
+    const findingAid = links.filter(r => r.linkURL.includes('oac.cdlib.org/findaid'));
     
     editPost(
       {meta:
