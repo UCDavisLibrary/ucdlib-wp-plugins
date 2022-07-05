@@ -17,7 +17,9 @@
         "@ucd-lib/plugin-search-public": "file:../../../ucdlib-search/src/public",
         "@ucd-lib/plugin-special-public": "file:../../../ucdlib-special/src/public",
         "@ucd-lib/theme-sass": "^5.0.16",
-        "normalize-scss": "^7.0.1"
+        "jquery": "^3.6.0",
+        "normalize-scss": "^7.0.1",
+        "slick-carousel": "^1.8.1"
     },
     "devDependencies": {
         "@ucd-lib/cork-app-build": "^0.3.0",
