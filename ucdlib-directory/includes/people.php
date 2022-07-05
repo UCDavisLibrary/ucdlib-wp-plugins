@@ -443,4 +443,19 @@ class UCDLibPluginDirectoryPerson extends UcdThemePost {
     $this->name_last = $this->meta('name_last');
     return $this->name_last;
   }
+
+  protected $department;
+  public function department(){
+    if ( ! empty( $this->department ) ) {
+      return $this->department;
+    }
+
+    $this->department = null;
+    $departmentId = $this->meta('position_dept');
+    if ( $departmentId ) {
+      $this->department = Timber::get_post($departmentId);
+    }
+
+    return $this->department;
+  }
 }

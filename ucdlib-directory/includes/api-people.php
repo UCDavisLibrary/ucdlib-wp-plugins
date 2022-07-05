@@ -101,15 +101,33 @@ class UCDLibPluginDirectoryAPIPeople {
 
     
     $out = [
+      'id' => $profile->ID,
       'nameLast' => $profile->name_last(),
       'nameFirst' => $profile->name_first(),
+      'link' => $profile->link(),
       'contactWebsite' => $profile->meta('contactWebsite'),
       'contactEmail' => $profile->meta('contactEmail'),
       'contactPhone' => $profile->meta('contactPhone'),
       'contactAppointmentUrl' => $profile->meta('contactAppointmentUrl'),
       'positionTitle' => $profile->meta('position_title')
-
     ];
+
+    $pic = $profile->thumbnail();
+    if ( $pic ) {
+      $out['photo'] = ['id' => $pic->ID, 'link' => $pic->src()];
+    } else {
+      $out['photo'] = new ArrayObject();
+    }
+
+    $dept = $profile->department();
+    if ( $dept ) {
+      $out['department'] = [
+        'id' => $dept->ID,
+        'title' => $dept->title()
+      ];
+    } else {
+      $out['department'] = new ArrayObject();
+    }
 
     return rest_ensure_response($out);
 
