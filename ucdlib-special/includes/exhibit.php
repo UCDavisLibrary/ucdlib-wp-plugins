@@ -139,6 +139,12 @@ class UCDLibPluginSpecialExhibits {
       'default' => 0,
       'type' => 'number',
     ) );
+    register_post_meta( $slug, 'curationNotes', array(
+      'show_in_rest' => true,
+      'single' => true,
+      'default' => '',
+      'type' => 'string',
+    ) );
 
   }
 
