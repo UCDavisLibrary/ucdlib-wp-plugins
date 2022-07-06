@@ -35,6 +35,10 @@
   }
 }
 
+.location-alert {
+  margin-top: .25rem;
+}
+
 .teaser--location {
   margin-bottom: 2rem;
   --list-pipe-pipe: #4c4c4c;
@@ -68,7 +72,7 @@
     --category-brand: #ffbf00;
   }
   .teaser--location--featured {
-    background-color: #f7fafd;
+    background-color: #ebf3fa;
     padding: 1.5rem;
   }
   .vm-teaser__figure {
