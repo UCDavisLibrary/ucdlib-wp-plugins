@@ -1,8 +1,9 @@
-{% if attributes.libraries and not attributes.hide %}
+{% set p = siteContext.post %}
+{% if p.libraries %}
   <div class="u-space-bottom">
     <span class="icon icon--location">
     {% apply spaceless %}
-      {% for library in attributes.libraries %}
+      {% for library in p.libraries %}
         <span>{{library.name}}</span>
         {% if not loop.last and loop.length > 1 %}
           <span>, </span>

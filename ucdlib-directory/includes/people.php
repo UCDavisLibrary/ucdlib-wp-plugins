@@ -137,12 +137,13 @@ class UCDLibPluginDirectoryPeople {
       array_splice($crumbs, 1, 0, [['title' => $directory_page->title(), 'link' => $directory_page->link()]] );
     }
     $context['breadcrumbs'] = $crumbs;
-    
+    $context['sidebar'] = trim(Timber::get_widgets( 'single-author' ));
+
     return $context;
   }
 
   public function set_template($templates, $context){
-    if ( $context['post']->post_type !== 'person' ) return $templates;
+    if ( $context['post']->post_type !== $this->slug ) return $templates;
     
     $templates = array_merge( array("@" . $this->config['slug'] . "/person.twig"), $templates );
     return $templates;
@@ -442,6 +443,80 @@ class UCDLibPluginDirectoryPerson extends UcdThemePost {
     }
     $this->name_last = $this->meta('name_last');
     return $this->name_last;
+  }
+
+  protected $positionTitle;
+  public function positionTitle(){
+    if ( ! empty( $this->positionTitle ) ) {
+      return $this->positionTitle;
+    }
+    $this->positionTitle = $this->meta('position_title');
+    return $this->positionTitle;
+  }
+
+  protected $pronouns;
+  public function pronouns(){
+    if ( ! empty( $this->pronouns ) ) {
+      return $this->pronouns;
+    }
+    if ( $this->meta('hide_pronouns')) {
+      $this->pronouns = '';
+    } else {
+      $this->pronouns = $this->meta('pronouns');
+    }
+    return $this->pronouns;
+  }
+
+  protected $bio;
+  public function bio(){
+    if ( ! empty( $this->bio ) ) {
+      return $this->bio;
+    }
+    if ( $this->meta('hide_bio')) {
+      $this->bio = '';
+    } else {
+      $this->bio = $this->meta('bio');
+    }
+    return $this->bio;
+  }
+
+  protected $libraries;
+  public function libraries(){
+    if ( ! empty( $this->libraries ) ) {
+      return $this->libraries;
+    }
+    if ( $this->meta('hide_libraries')) {
+      $this->libraries = [];
+    } else {
+      $this->libraries = $this->terms(['taxonomy' => 'library', 'orderby' => 'name', 'order' => 'ASC']);
+    }
+    return $this->libraries;
+  }
+
+  protected $directoryTags;
+  public function directoryTags(){
+    if ( ! empty( $this->directoryTags ) ) {
+      return $this->directoryTags;
+    }
+    if ( $this->meta('hide_tags')) {
+      $this->directoryTags = [];
+    } else {
+      $this->directoryTags = $this->terms(['taxonomy' => 'directory-tag', 'orderby' => 'name', 'order' => 'ASC']);
+    }
+    return $this->directoryTags;
+  }
+
+  protected $expertiseAreas;
+  public function expertiseAreas(){
+    if ( ! empty( $this->expertiseAreas ) ) {
+      return $this->expertiseAreas;
+    }
+    if ( $this->meta('hide_expertise_areas')) {
+      $this->expertiseAreas = [];
+    } else {
+      $this->expertiseAreas = $this->terms(['taxonomy' => 'expertise-areas', 'orderby' => 'name', 'order' => 'ASC']);
+    }
+    return $this->expertiseAreas;
   }
 
   protected $department;
