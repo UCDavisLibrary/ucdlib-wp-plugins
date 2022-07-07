@@ -1,7 +1,6 @@
-import { html, SelectUtils } from "@ucd-lib/brand-theme-editor/lib/utils";
+import { html, SelectUtils, UCDIcons } from "@ucd-lib/brand-theme-editor/lib/utils";
 import { useBlockProps, BlockControls, RichText } from '@wordpress/block-editor';
 import { ToolbarButton } from '@wordpress/components';
-import { undo } from '@wordpress/icons';
 import { useDispatch } from "@wordpress/data";
 
 export default ( props ) => {
@@ -9,22 +8,23 @@ export default ( props ) => {
   const meta = SelectUtils.meta();
   const editPost = useDispatch( 'core/editor' ).editPost;
 
-  const onRevertClicked = (e) => {
-    editPost({meta: {inclusiveDates: meta.originalData.inclusiveDates}});
+  const onUndoClicked = (e) => {
+    editPost({meta: {inclusiveDates: meta.fetchedData.inclusiveDates}});
   } 
 
   return html`
   <div ...${ blockProps }>
     <${BlockControls} group="block">
       <${ToolbarButton} 
-        icon=${html`${undo}`} 
-        onClick=${onRevertClicked}
-        label="Revert"
+        icon=${UCDIcons.render('undo')}
+        onClick=${onUndoClicked}
+        label="Restore Inclusive Dates to Default"
+        disabled=${!meta.fetchedData || meta.inclusiveDates === meta.fetchedData.inclusiveDates}
       />
     </${BlockControls}>
 
     <div>
-      <h4>Inclusive Dates</h4>
+      <h4>Inclusive Dates ${meta.fetchedData && meta.inclusiveDates !== meta.fetchedData.inclusiveDates ? html`<span className="strawberry">*</span>` : ''}</h4>
       <${RichText}
           tagName="p"
           className=""

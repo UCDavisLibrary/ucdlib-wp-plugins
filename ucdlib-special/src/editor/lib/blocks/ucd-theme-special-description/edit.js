@@ -1,9 +1,7 @@
-import { html, SelectUtils } from "@ucd-lib/brand-theme-editor/lib/utils";
+import { html, SelectUtils, UCDIcons } from "@ucd-lib/brand-theme-editor/lib/utils";
 import { useBlockProps, BlockControls, RichText } from '@wordpress/block-editor';
 import { ToolbarButton } from '@wordpress/components';
-import { undo, redo } from '@wordpress/icons';
 import { useDispatch } from "@wordpress/data";
-import { ApiController } from "../../plugins/controller";
 
 export default ( props ) => {
   const blockProps = useBlockProps();
@@ -11,30 +9,22 @@ export default ( props ) => {
   const editPost = useDispatch( 'core/editor' ).editPost;
 
   const onUndoClicked = (e) => {
-    // TODO revert to previously set description, if fetched clicked
-    editPost({meta: {description: meta.originalData.description}});
-  } 
-
-  const onRedoClicked = (e) => {
-    // TODO reapply description last fetched
+    editPost({meta: {description: meta.fetchedData.description}});
   } 
 
   return html`
   <div ...${ blockProps }>
     <${BlockControls} group="block">
       <${ToolbarButton} 
-        icon=${html`${undo}`} 
+        icon=${UCDIcons.render('undo')}
         onClick=${onUndoClicked}
-        label="Undo"
-      />
-      <${ToolbarButton} 
-        icon=${html`${redo}`} 
-        onClick=${onRedoClicked}
-        label="Redo"
+        label="Restore Description to Default"
+        disabled=${!meta.fetchedData || meta.description === meta.fetchedData.description}
       />
     </${BlockControls}>
 
     <div>
+      <h4>Description ${meta.fetchedData && meta.description !== meta.fetchedData.description ? html`<span className="strawberry">*</span>` : ''}</h4>
       <${RichText}
           tagName="p"
           className=""

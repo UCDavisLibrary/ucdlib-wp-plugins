@@ -1,7 +1,6 @@
-import { html, SelectUtils } from "@ucd-lib/brand-theme-editor/lib/utils";
+import { html, SelectUtils, UCDIcons } from "@ucd-lib/brand-theme-editor/lib/utils";
 import { useBlockProps, BlockControls, RichText } from '@wordpress/block-editor';
 import { ToolbarButton } from '@wordpress/components';
-import { undo } from '@wordpress/icons';
 import { useDispatch } from "@wordpress/data";
 
 export default ( props ) => {
@@ -9,22 +8,23 @@ export default ( props ) => {
   const meta = SelectUtils.meta();
   const editPost = useDispatch( 'core/editor' ).editPost;
 
-  const onRevertClicked = (e) => {
-    editPost({meta: {extent: meta.originalData.extent}});
+  const onUndoClicked = (e) => {
+    editPost({meta: {extent: meta.fetchedData.extent}});
   } 
 
   return html`
   <div ...${ blockProps }>
     <${BlockControls} group="block">
       <${ToolbarButton} 
-        icon=${html`${undo}`} 
-        onClick=${onRevertClicked}
-        label="Revert"
+        icon=${UCDIcons.render('undo')}
+        onClick=${onUndoClicked}
+        label="Restore Extent to Default"
+        disabled=${!meta.fetchedData || meta.extent === meta.fetchedData.extent}
       />
     </${BlockControls}>
 
     <div>
-      <h4>Extent</h4>
+      <h4>Extent ${meta.fetchedData && meta.extent !== meta.fetchedData.extent ? html`<span className="strawberry">*</span>` : ''}</h4>      
       <${RichText}
           tagName="p"
           className=""
