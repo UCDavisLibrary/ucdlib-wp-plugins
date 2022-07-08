@@ -2,6 +2,8 @@
 require_once( __DIR__ . '/block-transformations.php' );
 require_once( __DIR__ . '/tax-az.php' );
 require_once( __DIR__ . '/tax-subject.php' );
+require_once( __DIR__ . '/api.php' );
+
 require_once( get_template_directory() . "/includes/classes/post.php");
 
 // the "collection" post type
@@ -11,6 +13,8 @@ class UCDLibPluginSpecialCollections {
     $this->slug = $config->postTypes['collection'];
     $this->manuscriptSlug = 'manuscript';
     $this->UASlug = 'university-archive';
+    $this->api = new UCDLibPluginSpecialAPI( $config );
+
 
     // register taxonomies
     $this->taxAZ = new UCDLibPluginSpecialTaxAZ( $config );

@@ -65,7 +65,61 @@ class UCDLibPluginSpecialMetaData {
       'type' => 'string',
       'default' => ''
     ) );
+    register_post_meta( '', 'author', array(
+      'show_in_rest' => true,
+      'single' => true,
+      'type' => 'string',
+      'default' => ''
+    ) );
+    register_post_meta( '', 'language', array(
+      'show_in_rest' => true,
+      'single' => true,
+      'type' => 'string',
+      'default' => ''
+    ) );
     register_post_meta( '', 'description', array(
+      'show_in_rest' => true,
+      'single' => true,
+      'type' => 'string',
+      'default' => ''
+    ) );
+    register_post_meta( '', 'material', array(
+      'show_in_rest' => true,
+      'single' => true,
+      'type' => 'string',
+      'default' => ''
+    ) );
+    register_post_meta( '', 'original', array(
+      'show_in_rest' => true,
+      'single' => true,
+      'type' => 'string',
+      'default' => ''
+    ) );
+    register_post_meta( '', 'photographer', array(
+      'show_in_rest' => true,
+      'single' => true,
+      'type' => 'string',
+      'default' => ''
+    ) );
+    register_post_meta( '', 'location', array(
+      'show_in_rest' => true,
+      'single' => true,
+      'type' => 'string',
+      'default' => ''
+    ) );
+    register_post_meta( '', 'repository', array(
+      'show_in_rest' => true,
+      'single' => true,
+      'type' => 'string',
+      'default' => ''
+    ) );
+    register_post_meta( '', 'shelf', array(
+      'show_in_rest' => true,
+      'single' => true,
+      'type' => 'string',
+      'default' => ''
+    ) );
+    register_post_meta( '', 'source', array(
       'show_in_rest' => true,
       'single' => true,
       'type' => 'string',
@@ -88,6 +142,12 @@ class UCDLibPluginSpecialMetaData {
       'default' => ['id' => '', 'linkType' => '', 'linkURL' => '', 'displayLabel' => '']
     ) );
     register_post_meta( '', 'inclusiveDates', array(
+      'show_in_rest' => true,
+      'single' => true,
+      'type' => 'string',
+      'default' => ''
+    ) );
+    register_post_meta( '', 'title', array(
       'show_in_rest' => true,
       'single' => true,
       'type' => 'string',
