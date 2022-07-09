@@ -8,7 +8,7 @@ class UCDLibPluginSpecialMetaData {
   }
 
   public function register_post_meta(){
-    register_post_meta( '', 'originalData', array(
+    register_post_meta( '', 'fetchedData', array(
       'show_in_rest' => [
         'schema' => [
           'type' => 'object',
@@ -16,7 +16,16 @@ class UCDLibPluginSpecialMetaData {
             "creator" => ['type' => 'string'],
             "callNumber"=> ['type' => 'string'],
             "inclusiveDates" => ['type' => 'string'],
-            "findingAid" => ['type' => 'object'],
+            "findingAid" => [
+              'type' => 'object',
+              'properties' => [
+                "id" => ['type' => 'string'],
+                "linkType" => ['type' => 'string'],
+                "linkURL" => ['type' => 'string'],
+                "linkTitle" => ['type' => 'string'],
+                "displayLabel" =>  ['type' => 'string'],
+              ]
+            ],
             "description" => ['type' => 'string'],
             "extent" => ['type' => 'string'],
             "links" => ['type' => 'array'],
@@ -31,7 +40,7 @@ class UCDLibPluginSpecialMetaData {
         "creator" => '',
         "callNumber"=> '',
         "inclusiveDates" => '',
-        "findingAid" => ['id' => '', 'linkType' => '', 'linkURL' => '', 'displayLabel' => ''],
+        "findingAid" => ['id' => '', 'linkType' => '', 'linkURL' => '', 'linkTitle' => '', 'displayLabel' => ''],
         "description" => '',
         "extent" => '',
         "links" => array(
@@ -133,13 +142,14 @@ class UCDLibPluginSpecialMetaData {
             "id" => ['type' => 'string'],
             "linkType" => ['type' => 'string'],
             "linkURL" => ['type' => 'string'],
+            "linkTitle" => ['type' => 'string'],
             "displayLabel" =>  ['type' => 'string'],
           ]
         ]
       ],
       'single' => true,
       'type' => 'object',
-      'default' => ['id' => '', 'linkType' => '', 'linkURL' => '', 'displayLabel' => '']
+      'default' => ['id' => '', 'linkType' => '', 'linkURL' => '', 'linkTitle' => '', 'displayLabel' => '']
     ) );
     register_post_meta( '', 'inclusiveDates', array(
       'show_in_rest' => true,
