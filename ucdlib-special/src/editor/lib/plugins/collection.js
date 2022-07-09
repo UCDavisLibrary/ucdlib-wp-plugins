@@ -43,7 +43,6 @@ const runController = (recordId, meta, editPost) => {
           },
           creator: result.author ? result.author[0] : '', 
           callNumber: result.callNumber,
-          creator: result.corp ? result.corp[0] : '',
           inclusiveDates: result.date ? result.date[0] : '',
           findingAid: findingAid ? findingAid[0] : null,
           description: result.description.join(' '),

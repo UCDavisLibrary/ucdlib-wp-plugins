@@ -166,6 +166,40 @@ class UCDLibPluginSpecialCollections {
 // is available in context as 'post'
 class UCDLibPluginSpecialCollection extends UcdThemePost {
   
+  protected $core_data;
+  public function core_data(){
+    if ( ! empty( $this->core_data ) ) {
+      return $this->core_data;
+    }
+    $out = array(
+      'id' => $this->ID,
+      'title' => $this->title(),
+      'collectionType' => $this->collectionType(),
+      'callNumber' => $this->callNumber(),
+      'biography' => $this->biography(),
+      'almaRecordId' => $this->almaRecordId(),
+      'creator' => $this->creator(),
+      'author' => $this->author(),
+      'language' => $this->language(),
+      'description' => $this->description(),
+      'marterial' => $this->marterial(),
+      'original' => $this->original(),
+      'photographer' => $this->photographer(),
+      'location' => $this->location(),
+      'repository' => $this->repository(),
+      'shelf' => $this->shelf(),
+      'source' => $this->source(),
+      'date' => $this->date(),
+      'extent' => $this->extent(),
+      'finding_aid' => $this->finding_aid(),
+      'subject' => $this->subject(),
+      'links' => $this->links(),
+    );
+
+    $this->core_data = $out;
+    return $this->core_data;
+  }
+
   protected $collectionType;
   public function collectionType(){
     if ( ! empty( $this->collectionType ) ) {
@@ -176,4 +210,225 @@ class UCDLibPluginSpecialCollection extends UcdThemePost {
 
     return $this->collectionType;
   }
+
+  protected $callNumber;
+  public function callNumber(){
+    if ( ! empty( $this->callNumber ) ) {
+      return $this->callNumber;
+    }
+    $callNumber = $this->meta('callNumber');
+    $this->callNumber = $callNumber;
+
+    return $this->callNumber;
+  }
+
+  protected $biography;
+  public function biography(){
+    if ( ! empty( $this->biography ) ) {
+      return $this->biography;
+    }
+    $biography = $this->meta('biography');
+    $this->biography = $biography;
+
+    return $this->biography;
+  }
+
+  protected $almaRecordId;
+  public function almaRecordId(){
+    if ( ! empty( $this->almaRecordId ) ) {
+      return $this->almaRecordId;
+    }
+    $almaRecordId = $this->meta('almaRecordId');
+    $this->almaRecordId = $almaRecordId;
+
+    return $this->almaRecordId;
+  }
+
+  protected $creator;
+  public function creator(){
+    if ( ! empty( $this->creator ) ) {
+      return $this->creator;
+    }
+    $creator = $this->meta('creator');
+    $this->creator = $creator;
+
+    return $this->creator;
+  }
+
+  protected $author;
+  public function author(){
+    if ( ! empty( $this->author ) ) {
+      return $this->author;
+    }
+    $author = $this->meta('author');
+    $this->author = $author;
+
+    return $this->author;
+  }
+
+  protected $language;
+  public function language(){
+    if ( ! empty( $this->language ) ) {
+      return $this->language;
+    }
+    $language = $this->meta('language');
+    $this->language = $language;
+
+    return $this->language;
+  }
+
+  protected $description;
+  public function description(){
+    if ( ! empty( $this->description ) ) {
+      return $this->description;
+    }
+    $description = $this->meta('description');
+    $this->description = $description;
+
+    return $this->description;
+  }
+
+  protected $marterial;
+  public function marterial(){
+    if ( ! empty( $this->marterial ) ) {
+      return $this->marterial;
+    }
+    $marterial = $this->meta('marterial');
+    $this->marterial = $marterial;
+
+    return $this->marterial;
+  }
+
+  protected $original;
+  public function original(){
+    if ( ! empty( $this->original ) ) {
+      return $this->original;
+    }
+    $original = $this->meta('original');
+    $this->original = $original;
+
+    return $this->original;
+  }
+
+  protected $photographer;
+  public function photographer(){
+    if ( ! empty( $this->photographer ) ) {
+      return $this->photographer;
+    }
+    $photographer = $this->meta('photographer');
+    $this->photographer = $photographer;
+
+    return $this->photographer;
+  }
+
+  protected $location;
+  public function location(){
+    if ( ! empty( $this->location ) ) {
+      return $this->location;
+    }
+    $location = $this->meta('location');
+    $this->location = $location;
+
+    return $this->location;
+  }
+
+  protected $repository;
+  public function repository(){
+    if ( ! empty( $this->repository ) ) {
+      return $this->repository;
+    }
+    $repository = $this->meta('repository');
+    $this->repository = $repository;
+
+    return $this->repository;
+  }
+
+  protected $shelf;
+  public function shelf(){
+    if ( ! empty( $this->shelf ) ) {
+      return $this->shelf;
+    }
+    $shelf = $this->meta('shelf');
+    $this->shelf = $shelf;
+
+    return $this->shelf;
+  }
+
+  protected $source;
+  public function source(){
+    if ( ! empty( $this->source ) ) {
+      return $this->source;
+    }
+    $source = $this->meta('source');
+    $this->source = $source;
+
+    return $this->source;
+  }
+
+  protected $title;
+  public function title(){
+    if ( ! empty( $this->title ) ) {
+      return $this->title;
+    }
+    $title = $this->meta('title');
+    $this->title = $title;
+
+    return $this->title;
+  }
+
+  protected $date;
+  public function date(){
+    if ( ! empty( $this->date ) ) {
+      return $this->date;
+    }
+    $date = $this->meta('inclusiveDates');
+    $this->date = $date;
+
+    return $this->date;
+  }
+
+  protected $extent;
+  public function extent(){
+    if ( ! empty( $this->extent ) ) {
+      return $this->extent;
+    }
+    $extent = $this->meta('extent');
+    $this->extent = $extent;
+
+    return $this->extent;
+  }
+
+  protected $finding_aid;
+  public function finding_aid(){
+    if ( ! empty( $this->finding_aid ) ) {
+      return $this->finding_aid;
+    }
+    $finding_aid = $this->meta('finding_aid');
+    $this->finding_aid = $finding_aid;
+
+    return $this->finding_aid;
+  }
+
+  protected $subject;
+  public function subject(){
+    if ( ! empty( $this->subject ) ) {
+      return $this->subject;
+    }
+    $subject = $this->meta('subject');
+    $this->subject = $subject;
+
+    return $this->subject;
+  }
+
+  protected $links;
+  public function links(){
+    if ( ! empty( $this->links ) ) {
+      return $this->links;
+    }
+    $links = $this->meta('links');
+    $this->links = $links;
+
+    return $this->links;
+  }
+
 }
