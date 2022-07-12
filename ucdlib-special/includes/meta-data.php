@@ -92,7 +92,7 @@ class UCDLibPluginSpecialMetaData {
       'type' => 'string',
       'default' => ''
     ) );
-    register_post_meta( '', 'marterial', array(
+    register_post_meta( '', 'material', array(
       'show_in_rest' => true,
       'single' => true,
       'type' => 'string',

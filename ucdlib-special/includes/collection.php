@@ -182,14 +182,14 @@ class UCDLibPluginSpecialCollection extends UcdThemePost {
       'author' => $this->author(),
       'language' => $this->language(),
       'description' => $this->description(),
-      'marterial' => $this->marterial(),
+      'material' => $this->material(),
       'original' => $this->original(),
       'photographer' => $this->photographer(),
       'location' => $this->location(),
       'repository' => $this->repository(),
       'shelf' => $this->shelf(),
       'source' => $this->source(),
-      'date' => $this->date(),
+      // 'date' => $this->date(),
       'extent' => $this->extent(),
       'finding_aid' => $this->finding_aid(),
       'subject' => $this->subject(),
@@ -288,15 +288,15 @@ class UCDLibPluginSpecialCollection extends UcdThemePost {
     return $this->description;
   }
 
-  protected $marterial;
-  public function marterial(){
-    if ( ! empty( $this->marterial ) ) {
-      return $this->marterial;
+  protected $material;
+  public function material(){
+    if ( ! empty( $this->material ) ) {
+      return $this->material;
     }
-    $marterial = $this->meta('marterial');
-    $this->marterial = $marterial;
+    $material = $this->meta('material');
+    $this->material = $material;
 
-    return $this->marterial;
+    return $this->material;
   }
 
   protected $original;
@@ -376,16 +376,16 @@ class UCDLibPluginSpecialCollection extends UcdThemePost {
     return $this->title;
   }
 
-  protected $date;
-  public function date(){
-    if ( ! empty( $this->date ) ) {
-      return $this->date;
-    }
-    $date = $this->meta('inclusiveDates');
-    $this->date = $date;
+  // protected $date;
+  // public function date(){
+  //   if ( ! empty( $this->date ) ) {
+  //     return $this->date;
+  //   }
+  //   $date = $this->meta('inclusiveDates');
+  //   $this->date = $date;
 
-    return $this->date;
-  }
+  //   return $this->date;
+  // }
 
   protected $extent;
   public function extent(){

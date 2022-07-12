@@ -7,17 +7,17 @@ class UCDLibPluginSpecialAPI {
   }
 
   public function register_endpoints(){
-    register_rest_route($this->config['slug'], 'collection', array(
+    register_rest_route('ucdlib-special', 'collections', array(
       'methods' => 'GET',
       'callback' => array($this, 'collections'),
       'permission_callback' => function (){return true;}
     ) );
-    register_rest_route($this->config['slug'], 'collection/(?P<id>\d+)', array(
+    register_rest_route('ucdlib-special', 'collection/(?P<id>\d+)', array(
         'methods' => 'GET',
         'callback' => array($this, 'collection'),
         'permission_callback' => function (){return true;}
     ) );
-    register_rest_route($this->config['slug'], 'collection_pnx/(?P<id>\d+)', array(
+    register_rest_route('ucdlib-special', 'collection_pnx/(?P<id>\d+)', array(
         'methods' => 'GET',
         'callback' => array($this, 'collection_pnx'),
         'permission_callback' => function (){return true;}
@@ -30,7 +30,7 @@ class UCDLibPluginSpecialAPI {
 
 
     $collections = Timber::get_posts( [
-      'post_type' => $this->config['postTypeSlug'],
+      'post_type' => 'collection',
       'orderby' => 'menu_order',
       'order' => 'ASC',
       'nopaging' => true,
@@ -51,11 +51,12 @@ class UCDLibPluginSpecialAPI {
 
   // Endpoint callback for a single collection
   public function collection($request){
-    $fields = $request['fields'];
+
+
     $collectionId = $request['id'];
 
     $collection = Timber::get_posts( [
-      'post_type' => $this->config['postTypeSlug'],
+      'post_type' => 'collection',
       'p' => $collectionId,
     ] );
 
@@ -67,7 +68,7 @@ class UCDLibPluginSpecialAPI {
     $out = $collection->core_data();
 
 
-    return rest_ensure_response($out);
+    return WP_REST_Response($out);
   }
 
   // Endpoint callback for the PNX that is changes
