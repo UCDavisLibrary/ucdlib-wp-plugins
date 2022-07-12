@@ -7,7 +7,7 @@ class UCDLibPluginSpecialAPI {
   }
 
   public function register_endpoints(){
-    register_rest_route('ucdlib-special', 'collections', array(
+    register_rest_route('ucdlib-special', 'collection', array(
       'methods' => 'GET',
       'callback' => array($this, 'collections'),
       'permission_callback' => function (){return true;}
