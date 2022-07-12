@@ -5,7 +5,7 @@
   {% set label = label ? ' ' ~ label %}
   {% set more_text = 'More' ~ label ~ ' Info' %}
   <div>
-    <div class="u-space-mb--small">
+    <div class="u-space-mb">
       <h3 class="vm-teaser__title"><a href="{{location.link}}">{{location.title}}</a></h3>
       {% set display_address =  location.meta('display_address') %}
       {% if display_address %}
@@ -14,7 +14,7 @@
         </div>
       {% endif %}
       {% if location.meta('has_alert') %}
-        <div>
+        <div class='location-alert'>
           <span class="icon-ucdlib">
             <ucdlib-icon icon='ucd-public:fa-circle-exclamation'></ucdlib-icon>
             <span>{{location.meta('alert_text')}}</span>
@@ -23,7 +23,7 @@
       {% endif %}
     </div>
     {% if location.meta('has_operating_hours') %}
-      <ucdlib-hours-today-simple class="u-space-mb--small" api-host='{{site_url}}' location='{{location.id}}'></ucdlib-hours-today-simple>
+      <ucdlib-hours-today-simple class="u-space-mb" api-host='{{site_url}}' location='{{location.id}}'></ucdlib-hours-today-simple>
     {% endif %}
     <div>
       <a href="{{location.link}}" class="icon icon--circle-arrow-right">{{more_text}}</a>

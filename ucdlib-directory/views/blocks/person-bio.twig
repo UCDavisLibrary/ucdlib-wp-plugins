@@ -1,3 +1,4 @@
-{% if attributes.bio and not attributes.hide %}
-<p>{{attributes.bio}}</p>
+{% set p = siteContext.post %}
+{% if p.bio %}
+<p>{{p.bio}}</p>
 {% endif %}

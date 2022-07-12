@@ -17,7 +17,17 @@ class UCDLibPluginSpecialBlocks extends UCDThemeBlockRenderer {
      *    'transform' => ['{{method1}}', '{{method2}}']
      *  ]
      */
-    $this->registry = [];
+    $this->registry = [
+      "$this->slug/exhibit-subnav" => [
+        'twig' => $this->twigPath('exhibit-subnav')
+      ],
+      "$this->slug/exhibit-curators" => [
+        'twig' => $this->twigPath('exhibit-curators')
+      ],
+      "$this->slug/exhibit-location" => [
+        'twig' => $this->twigPath('exhibit-location')
+      ]
+    ];
 
     add_action('block_categories_all', array($this, 'addCategories'), 10,2);
     

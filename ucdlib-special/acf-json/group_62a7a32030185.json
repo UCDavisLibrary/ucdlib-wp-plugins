@@ -65,6 +65,28 @@
             "multiple": 0,
             "return_format": "id",
             "ui": 1
+        },
+        {
+            "key": "field_62b5fceb17d33",
+            "label": "Exhibits Page",
+            "name": "asc_exhibits_page",
+            "type": "post_object",
+            "instructions": "Lander for Exhibits",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "post_type": [
+                "page"
+            ],
+            "taxonomy": "",
+            "allow_null": 0,
+            "multiple": 0,
+            "return_format": "id",
+            "ui": 1
         }
     ],
     "location": [
@@ -83,7 +105,7 @@
     "instruction_placement": "label",
     "hide_on_screen": "",
     "active": true,
-    "description": "",
+    "description": "Special Collections",
     "show_in_rest": 0,
-    "modified": 1655221741
+    "modified": 1656093994
 }

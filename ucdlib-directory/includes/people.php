@@ -1,12 +1,15 @@
 <?php
 
 require_once( get_template_directory() . "/includes/classes/post.php");
+require_once( __DIR__ . '/api-people.php' );
 
 // Sets up the person post type
 class UCDLibPluginDirectoryPeople {
   public function __construct($config){
     $this->config = $config;
     $this->slug = $this->config['postSlugs']['person'];
+
+    $this->api = new UCDLibPluginDirectoryAPIPeople( $config );
 
     add_action( 'init', array($this, 'register') );
     add_filter( 'timber/post/classmap', array($this, 'extend_timber_post') );
@@ -120,6 +123,7 @@ class UCDLibPluginDirectoryPeople {
 
   // add data to view context
   public function set_context($context){
+    if ( $context['post']->post_type !== $this->slug ) return $context;
     $p = $context['post'];
     
     // custom breadcrumbs that include the directory page
@@ -133,12 +137,13 @@ class UCDLibPluginDirectoryPeople {
       array_splice($crumbs, 1, 0, [['title' => $directory_page->title(), 'link' => $directory_page->link()]] );
     }
     $context['breadcrumbs'] = $crumbs;
-    
+    $context['sidebar'] = trim(Timber::get_widgets( 'single-author' ));
+
     return $context;
   }
 
   public function set_template($templates, $context){
-    if ( $context['post']->post_type !== 'person' ) return $templates;
+    if ( $context['post']->post_type !== $this->slug ) return $templates;
     
     $templates = array_merge( array("@" . $this->config['slug'] . "/person.twig"), $templates );
     return $templates;
@@ -409,6 +414,7 @@ class UCDLibPluginDirectoryPeople {
 
     // set author and link account
     update_post_meta($profile->ID, 'wp_user_id', $user->ID);
+    update_post_meta($profile->ID, 'username', $kerberos);
     wp_update_post( [
       'ID' => $profile->ID,
       'post_author' => $user->ID
@@ -421,4 +427,110 @@ class UCDLibPluginDirectoryPeople {
 // where we will fetch postmeta
 class UCDLibPluginDirectoryPerson extends UcdThemePost {
 
+  protected $name_first;
+  public function name_first(){
+    if ( ! empty( $this->name_first ) ) {
+      return $this->name_first;
+    }
+    $this->name_first = $this->meta('name_first');
+    return $this->name_first;
+  }
+
+  protected $name_last;
+  public function name_last(){
+    if ( ! empty( $this->name_last ) ) {
+      return $this->name_last;
+    }
+    $this->name_last = $this->meta('name_last');
+    return $this->name_last;
+  }
+
+  protected $positionTitle;
+  public function positionTitle(){
+    if ( ! empty( $this->positionTitle ) ) {
+      return $this->positionTitle;
+    }
+    $this->positionTitle = $this->meta('position_title');
+    return $this->positionTitle;
+  }
+
+  protected $pronouns;
+  public function pronouns(){
+    if ( ! empty( $this->pronouns ) ) {
+      return $this->pronouns;
+    }
+    if ( $this->meta('hide_pronouns')) {
+      $this->pronouns = '';
+    } else {
+      $this->pronouns = $this->meta('pronouns');
+    }
+    return $this->pronouns;
+  }
+
+  protected $bio;
+  public function bio(){
+    if ( ! empty( $this->bio ) ) {
+      return $this->bio;
+    }
+    if ( $this->meta('hide_bio')) {
+      $this->bio = '';
+    } else {
+      $this->bio = $this->meta('bio');
+    }
+    return $this->bio;
+  }
+
+  protected $libraries;
+  public function libraries(){
+    if ( ! empty( $this->libraries ) ) {
+      return $this->libraries;
+    }
+    if ( $this->meta('hide_libraries')) {
+      $this->libraries = [];
+    } else {
+      $this->libraries = $this->terms(['taxonomy' => 'library', 'orderby' => 'name', 'order' => 'ASC']);
+    }
+    return $this->libraries;
+  }
+
+  protected $directoryTags;
+  public function directoryTags(){
+    if ( ! empty( $this->directoryTags ) ) {
+      return $this->directoryTags;
+    }
+    if ( $this->meta('hide_tags')) {
+      $this->directoryTags = [];
+    } else {
+      $this->directoryTags = $this->terms(['taxonomy' => 'directory-tag', 'orderby' => 'name', 'order' => 'ASC']);
+    }
+    return $this->directoryTags;
+  }
+
+  protected $expertiseAreas;
+  public function expertiseAreas(){
+    if ( ! empty( $this->expertiseAreas ) ) {
+      return $this->expertiseAreas;
+    }
+    if ( $this->meta('hide_expertise_areas')) {
+      $this->expertiseAreas = [];
+    } else {
+      $this->expertiseAreas = $this->terms(['taxonomy' => 'expertise-areas', 'orderby' => 'name', 'order' => 'ASC']);
+    }
+    return $this->expertiseAreas;
+  }
+
+  protected $department;
+  public function department(){
+    if ( ! empty( $this->department ) ) {
+      return $this->department;
+    }
+
+    $this->department = null;
+    $departmentId = $this->meta('position_dept');
+    if ( $departmentId ) {
+      $this->department = Timber::get_post($departmentId);
+    }
+
+    return $this->department;
+  }
 }
