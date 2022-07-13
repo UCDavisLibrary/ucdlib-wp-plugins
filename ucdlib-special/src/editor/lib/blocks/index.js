@@ -5,6 +5,9 @@ import specialBiography from './ucd-theme-special-biography';
 import specialInclusiveDates from './ucd-theme-special-inclusive-dates';
 import specialExtent from './ucd-theme-special-extent';
 import specialSubject from './ucd-theme-special-subject';
+import exibitCurators from "./ucdlib-special-exhibit-curators";
+import exhibitLocation from "./ucdlib-special-exhibit-location";
+import exhibitSubnav from "./ucdlib-special-exhibit-subnav";
 
 export default [
     special,
@@ -13,5 +16,8 @@ export default [
     specialBiography,
     specialInclusiveDates,
     specialExtent,
-    specialSubject
+    specialSubject,
+    exibitCurators,
+    exhibitLocation,
+    exhibitSubnav
 ];

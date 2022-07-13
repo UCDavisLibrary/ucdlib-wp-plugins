@@ -6,7 +6,7 @@ class UCDLibPluginLocationsPatterns {
     $this->config = $config;
     $this->slug = $config['slug'];
 
-    add_action( 'init', [$this, 'register']);
+    add_action( 'init', [$this, 'register'], 20);
   }
 
   public function register(){

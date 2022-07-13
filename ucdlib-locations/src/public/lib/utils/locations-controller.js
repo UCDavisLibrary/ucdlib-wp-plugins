@@ -90,11 +90,11 @@ export class LocationsController{
         }
         .appt-link svg {
           display: inline-block;
-          min-width: .75rem;
+          min-width: 1rem;
           min-height: .75rem;
-          width: .75rem;
+          width: 1rem;
           height: .75rem;
-          margin-right: 0.5rem;
+          margin-right: 0.55rem;
           color: #73abdd;
         }
         a.icon--circle-arrow-right::before {

@@ -21,6 +21,14 @@ class UCDLibPluginLocationsBlocks extends UCDThemeBlockRenderer {
       "$this->slug/address" => [
         'twig' => $this->twigPath('address'),
         'transform' => ['getAddress']
+      ],
+      "$this->slug/teasers" => [
+        'twig' => $this->twigPath('teasers'),
+        'transform' => ['addIcons']
+      ],
+      "$this->slug/teaser" => [
+        'twig' => $this->twigPath('teaser'),
+        'transform' => ['getLocation', 'getSiteUrl']
       ]
     ];
 

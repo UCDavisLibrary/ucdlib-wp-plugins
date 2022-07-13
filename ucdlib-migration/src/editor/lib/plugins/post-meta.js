@@ -1,4 +1,4 @@
-import { createElement, useState, useEffect } from "@wordpress/element";
+import { useState, useEffect } from "@wordpress/element";
 import { PluginDocumentSettingPanel } from '@wordpress/edit-post';
 import { useDispatch, useSelect } from "@wordpress/data";
 import { 
@@ -9,9 +9,8 @@ import {
   Modal } from '@wordpress/components';
 import apiFetch from '@wordpress/api-fetch';
 import { addQueryArgs, getPath } from '@wordpress/url';
-import htm from 'htm';
+import { html } from '@ucd-lib/brand-theme-editor/lib/utils';
 
-const html = htm.bind( createElement );
 const name = 'ucdlib-migration-meta';
 
 const Edit = () => {

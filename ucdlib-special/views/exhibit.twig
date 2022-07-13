@@ -1,0 +1,43 @@
+{% from getUcdMacro('links') import breadcrumbs as render_crumbs %}
+
+{% extends getUcdTemplate('base') %}
+
+{% block breadcrumbs %}
+  {{render_crumbs(breadcrumbs)}}
+{% endblock %}
+
+{% block content_container %}
+<div class="l-container {{sidebar ? 'l-basic--flipped'}}">
+  <div class="l-content">
+    {% if post.isTopPage %}
+      {% if post.exhibitLocations and post.exhibitLocations|length %}
+        <h2 class='heading--secondary'>{{post.exhibitLocations[0].name}}</h2>
+      {% endif %}
+      {% if post.exhibitIsPhysical and post.exhibitIsPermanent %}
+        <h2 class='heading--secondary'>Permanent Exhibit</h2>
+      {% elseif post.exhibitIsPhysical and post.exhibitDateRange %}
+        <h2 class='heading--secondary'>{{post.exhibitDateRange}}</h2>
+      {% endif %}
+    {% endif %}
+    {{post.content}}
+
+    {% if post.prevPage or post.nextPage %}
+      <div class='btn--seq-container'>
+      {% if post.prevPage %}
+        <a href="{{post.prevPage.link}}" class="btn btn--seq btn--seq__prev">{{post.prevPage.title}}</a>
+      {% endif %}
+
+      {% if post.nextPage %}
+        <a href="{{post.nextPage.link}}" class="btn btn--seq btn--seq__next">{{post.nextPage.title}}</a>
+      {% endif %}
+      </div>
+    {% endif %}
+  </div>
+  {% if sidebar %}
+    <div class="l-sidebar-second">
+      {{sidebar}}
+    </div>
+  {% endif %}
+</div>
+
+{% endblock %}

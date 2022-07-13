@@ -3,6 +3,27 @@ require_once( __DIR__ . '/utils.php' );
 require_once( get_template_directory() . "/includes/classes/post.php");
 
 class UCDLibPluginLocationsLocation extends UcdThemePost {
+
+  protected $link;
+  public function link(){
+    if ( !empty($this->link) ){
+      return $this->link;
+    }
+    if ( $this->meta('has_redirect') ){
+      $redirect = $this->meta('redirect');
+      $p = Timber::get_post($redirect['postId']);
+      if ( $p && $p->id != $this->id) {
+        $this->link = $p->link();
+      }
+      else {
+        $this->link = $redirect['url'];
+      }
+
+    } else {
+      $this->link = get_permalink($this->id);
+    }
+    return $this->link;
+  }
   
   protected $core_data;
   public function core_data(){

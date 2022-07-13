@@ -1,0 +1,17 @@
+{% from getUcdMacro('menus') import subnav %}
+{% set post = siteContext.post %}
+{% if post and post.exhibitIsHierarchical %}
+
+  {% set kwargs = {
+    items: [{title: 'Introduction', link: post.exhibit.link}]|merge(post.exhibit.children),
+    oBox: false,
+    panel: false
+    } 
+  %}
+  <aside class="o-box panel">
+    <h2 class='heading--highlight u-space-mb'>{{'Exhibit: '~ post.exhibit.title}}</h2>
+    {{ subnav( kwargs ) }}
+  </aside>
+  
+
+{% endif %}

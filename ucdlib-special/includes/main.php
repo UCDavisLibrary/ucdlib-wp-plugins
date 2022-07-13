@@ -7,6 +7,7 @@ require_once( __DIR__ . '/config.php' );
 require_once( __DIR__ . '/api.php' );
 require_once( __DIR__ . '/patterns.php' );
 require_once( __DIR__ . '/meta-data.php' );
+require_once( __DIR__ . '/exhibit.php' );
 
 // primary class for special collections plugin
 // all actions and filters are applied here
@@ -46,6 +47,10 @@ class UCDLibPluginSpecial {
     $this->metaData = new UCDLibPluginSpecialMetaData( $this->config );
 
     add_filter( 'timber/special', array($this, 'add_timber_special') );
+    // 'exhibit' post type
+    $this->collection = new UCDLibPluginSpecialExhibits( $this->config );
+
+    add_filter( 'timber/locations', array($this, 'add_timber_locations') );
 
   }
 

@@ -5,6 +5,7 @@ require_once( get_template_directory() . '/includes/classes/block-renderer.php' 
 // Set up server-side rendering for gutenberg directory blocks
 class UCDLibPluginDirectoryBlocks extends UCDThemeBlockRenderer {
   public function __construct($config){
+    parent::__construct();
     $this->config = $config;
 
     add_action('block_categories_all', array($this, 'addCategories'), 10,2);
@@ -12,11 +13,10 @@ class UCDLibPluginDirectoryBlocks extends UCDThemeBlockRenderer {
     
   }
   public static $transformationClass = 'UCDLibPluginDirectoryBlockTransformations';
-
+  
   public static $registry = [
     'ucdlib-directory/bio' => [
-      'twig' => '@ucdlib-directory/blocks/person-bio.twig', 
-      'transform' => ['getBio']
+      'twig' => '@ucdlib-directory/blocks/person-bio.twig'
     ],
     'ucdlib-directory/contact' => [
       'twig' => '@ucdlib-directory/blocks/person-contact.twig',
@@ -26,24 +26,19 @@ class UCDLibPluginDirectoryBlocks extends UCDThemeBlockRenderer {
       'twig' => '@ucdlib-directory/blocks/person-name.twig'
     ],
     'ucdlib-directory/title' => [
-      'twig' => '@ucdlib-directory/blocks/person-title.twig', 
-      'transform' => ['getPosition']
+      'twig' => '@ucdlib-directory/blocks/person-title.twig'
     ],
     'ucdlib-directory/pronouns' => [
-      'twig' => '@ucdlib-directory/blocks/person-pronouns.twig', 
-      'transform' => ['getPronouns']
+      'twig' => '@ucdlib-directory/blocks/person-pronouns.twig'
     ],
     'ucdlib-directory/library-locations' => [
-      'twig' => '@ucdlib-directory/blocks/person-library-locations.twig',
-      'transform' => ['getLibraries']
+      'twig' => '@ucdlib-directory/blocks/person-library-locations.twig'
     ],
     'ucdlib-directory/tags' => [
-      'twig' => '@ucdlib-directory/blocks/person-tags.twig',
-      'transform' => ['getDirectoryTags']
+      'twig' => '@ucdlib-directory/blocks/person-tags.twig'
     ],
     'ucdlib-directory/expertise-areas' => [
-      'twig' => '@ucdlib-directory/blocks/person-expertise-areas.twig',
-      'transform' => ['getExpertiseAreas']
+      'twig' => '@ucdlib-directory/blocks/person-expertise-areas.twig'
     ]
   ];
 
