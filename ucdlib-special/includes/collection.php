@@ -190,7 +190,7 @@ class UCDLibPluginSpecialCollection extends UcdThemePost {
       'repository' => $this->repository(),
       'shelf' => $this->shelf(),
       'source' => $this->source(),
-      // 'date' => $this->date(),
+      'dates' => $this->dates(),
       'extent' => $this->extent(),
       'finding_aid' => $this->finding_aid(),
       'subject' => $this->subject(),
@@ -377,16 +377,16 @@ class UCDLibPluginSpecialCollection extends UcdThemePost {
     return $this->title;
   }
 
-  // protected $date;
-  // public function date(){
-  //   if ( ! empty( $this->date ) ) {
-  //     return $this->date;
-  //   }
-  //   $date = $this->meta('inclusiveDates');
-  //   $this->date = $date;
+  protected $dates;
+  public function dates(){
+    if ( ! empty( $this->dates ) ) {
+      return $this->dates;
+    }
+    $dates = $this->meta('inclusiveDates');
+    $this->dates = $dates;
 
-  //   return $this->date;
-  // }
+    return $this->dates;
+  }
 
   protected $extent;
   public function extent(){
