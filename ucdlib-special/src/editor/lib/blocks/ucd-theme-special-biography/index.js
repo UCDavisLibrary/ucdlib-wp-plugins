@@ -13,6 +13,12 @@ const settings = {
     'html': false,
     'customClassName': false
   },
+  attributes: {
+    biography: {
+      type: 'string',
+      default: ''
+    },
+  },
   edit: Edit,
 };
 

@@ -3,6 +3,7 @@ import { useBlockProps, BlockControls, RichText } from '@wordpress/block-editor'
 import { useDispatch } from "@wordpress/data";
 
 export default ( props ) => {
+  const { attributes, setAttributes } = props;
   const blockProps = useBlockProps();
   const meta = SelectUtils.meta();
   const editPost = useDispatch( 'core/editor' ).editPost;
@@ -18,7 +19,7 @@ export default ( props ) => {
           tagName="p"
           className=""
           value=${meta.biography}
-          onChange="${biography => {editPost({meta: {biography}})}}"
+          onChange="${biography => { editPost({meta: {biography}}); setAttributes({biography})} }"
         />
     </div>
   </div>

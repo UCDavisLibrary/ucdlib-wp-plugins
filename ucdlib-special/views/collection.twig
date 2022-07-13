@@ -2,13 +2,29 @@
 
 {% block content_container %}
 <div class="l-container l-basic--flipped">
-  <h1>Testing from twig</h1>
   <div class="l-content">
-    {{post.content}}
+
+    <h4>Description</h4>
+    <p>{{post.meta('description')}}</p>
+
+
+    <h4>Finding Aid</h4>
+    <a href="{{post.meta('findingAid').linkURL}}" target="_blank">{{post.meta('findingAid').linkTitle}}</a>
+
+    <h4>Biography</h4>
+    <p>{{post.meta('biography')}}</p>
+
+    <h4>Inclusive Dates</h4>
+    <p>{{post.meta('inclusiveDates')}}</p>
+
+    <h4>Subject</h4>
+    {% for sub in post.meta('subject') %}
+      <p>{{sub}}</p>
+    {% endfor %}
+    
   </div>
   <div class="l-sidebar-second">
     {{sidebar}}
-  </div>
+  </div>  
 </div>
-
 {% endblock %}

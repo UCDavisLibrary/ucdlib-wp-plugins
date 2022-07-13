@@ -21,24 +21,6 @@ class UCDLibPluginSpecialBlocks extends UCDThemeBlockRenderer {
       "$this->slug/collection" => [
         'twig' => $this->twigPath('collection'),
       ],
-      "$this->slug/special-biography" => [
-        'twig' => $this->twigPath('special-biography'),
-      ],
-      "$this->slug/special-description" => [
-        'twig' => $this->twigPath('special-description'),
-      ],
-      "$this->slug/special-extent" => [
-        'twig' => $this->twigPath('special-extent'),
-      ],
-      "$this->slug/special-finding-aid" => [
-        'twig' => $this->twigPath('special-finding-aid'),
-      ],
-      "$this->slug/special-inclusive-dates" => [
-        'twig' => $this->twigPath('special-inclusive-dates'),
-      ],
-      "$this->slug/special-subject" => [
-        'twig' => $this->twigPath('special-subject'),
-      ],
       "$this->slug/exhibit-subnav" => [
         'twig' => $this->twigPath('exhibit-subnav')
       ],
