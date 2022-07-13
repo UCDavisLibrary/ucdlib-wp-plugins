@@ -46,7 +46,6 @@ class UCDLibPluginSpecial {
     // register meta-data from the form
     $this->metaData = new UCDLibPluginSpecialMetaData( $this->config );
 
-    add_filter( 'timber/special', array($this, 'add_timber_special') );
     // 'exhibit' post type
     $this->collection = new UCDLibPluginSpecialExhibits( $this->config );
 
@@ -57,7 +56,7 @@ class UCDLibPluginSpecial {
   /**
    * Adds twig files under the @ucdlib-special namespace
    */
-  public function add_timber_special($paths){
+  public function add_timber_locations($paths){
     $paths[$this->config->slug] = array(WP_PLUGIN_DIR . "/" . $this->config->slug . '/views');
     return $paths;
   }

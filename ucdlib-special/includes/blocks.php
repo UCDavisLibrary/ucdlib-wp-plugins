@@ -38,6 +38,7 @@ class UCDLibPluginSpecialBlocks extends UCDThemeBlockRenderer {
       ],
       "$this->slug/special-subject" => [
         'twig' => $this->twigPath('special-subject'),
+      ],
       "$this->slug/exhibit-subnav" => [
         'twig' => $this->twigPath('exhibit-subnav')
       ],
