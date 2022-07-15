@@ -10,6 +10,7 @@
         "@lit-labs/react": "^1.0.5",
         "@lit-labs/task": "^1.1.2",
         "@ucd-lib/brand-theme-editor": "file:../../../../ucdlib-theme-wp/src/editor",
+        "@ucd-lib/theme-sass": "^5.0.14",
         "@wordpress/api-fetch": "^6.0.1",
         "@wordpress/blocks": "^11.5.1",
         "@wordpress/components": "^15.0.0",

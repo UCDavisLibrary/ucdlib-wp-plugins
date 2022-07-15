@@ -1,22 +1,22 @@
-import special from './ucd-theme-special';
-import specialDescription from './ucd-theme-special-description';
-import specialFindingAid from './ucd-theme-special-finding-aid';
-import specialBiography from './ucd-theme-special-biography';
-import specialInclusiveDates from './ucd-theme-special-inclusive-dates';
-import specialExtent from './ucd-theme-special-extent';
-import specialSubject from './ucd-theme-special-subject';
+import specialDescription from './ucdlib-special-description';
+import specialFindingAid from './ucdlib-special-finding-aid';
+import specialBiography from './ucdlib-special-biography';
+import specialInclusiveDates from './ucdlib-special-inclusive-dates';
+import specialExtent from './ucdlib-special-extent';
+import specialSubject from './ucdlib-special-subject';
+import specialBrowseBy from './ucdlib-special-browse-by';
 import exibitCurators from "./ucdlib-special-exhibit-curators";
 import exhibitLocation from "./ucdlib-special-exhibit-location";
 import exhibitSubnav from "./ucdlib-special-exhibit-subnav";
 
 export default [
-    special,
     specialDescription,
     specialFindingAid,
     specialBiography,
     specialInclusiveDates,
     specialExtent,
     specialSubject,
+    specialBrowseBy,
     exibitCurators,
     exhibitLocation,
     exhibitSubnav

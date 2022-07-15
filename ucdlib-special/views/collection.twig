@@ -24,6 +24,13 @@
     {% for sub in post.meta('subject') %}
       <p>{{sub}}</p>
     {% endfor %}
+
+    {# {{post.post_content}} #}
+
+    {{dump(post)}}
+
+    <img src="{{ post.thumbnail }}" class="my-thumb-class" alt="Image for {{ post.title }}" />
+
     
   </div>
   <div class="l-sidebar-second">
