@@ -7,7 +7,7 @@ let config = {
     '../../../../ucdlib-locations/src/public/node_modules'
   ],
   themeInDocker: '../../../../themes/ucdlib-theme-wp/',
-  themeInRepo: '../../../../ucdlib-theme-wp/',
+  themeInRepo: '../../../../../ucdlib-theme-wp/',
   isDockerEnv: process.env.WORDPRESS_DB_HOST ? true: false,
   loaderOptions: {
     css: {
@@ -38,6 +38,5 @@ if ( config.isDockerEnv ) {
   config.themePublicJs = config.themeInRepo + "src/public/";
 }
 config.clientModules.push(config.themePublicJs + "node_modules");
-
 
 module.exports = config;
