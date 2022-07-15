@@ -4,11 +4,10 @@ let config = {
   fileName: 'ucdlib.js',
   clientModules: [
     'node_modules',
-    '../../../../ucdlib-locations/src/public/node_modules'
+    '../../../../ucdlib-locations/src/public/node_modules',
+    '../../../../../themes/ucdlib-theme-wp/src/public/node_modules',
+    '../../../../../ucdlib-theme-wp/src/public/node_modules'
   ],
-  themeInDocker: '../../../../themes/ucdlib-theme-wp/',
-  themeInRepo: '../../../../../ucdlib-theme-wp/',
-  isDockerEnv: process.env.WORDPRESS_DB_HOST ? true: false,
   loaderOptions: {
     css: {
       loader: 'css-loader',
@@ -31,12 +30,5 @@ let config = {
   },
   assetsPath: "../../../assets/"
 };
-
-if ( config.isDockerEnv ) {
-  config.themePublicJs = config.themeInDocker + "src/public/";
-} else {
-  config.themePublicJs = config.themeInRepo + "src/public/";
-}
-config.clientModules.push(config.themePublicJs + "node_modules");
 
 module.exports = config;
