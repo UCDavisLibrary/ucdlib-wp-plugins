@@ -2,6 +2,7 @@
 
 require_once( get_template_directory() . "/includes/classes/post.php");
 require_once( __DIR__ . '/api-people.php' );
+require_once( __DIR__ . '/utils.php' );
 
 // Sets up the person post type
 class UCDLibPluginDirectoryPeople {
@@ -201,55 +202,7 @@ class UCDLibPluginDirectoryPeople {
       'default' => '',
       'type' => 'string',
     ) );
-    register_post_meta( $slug, 'contactWebsite', array(
-      'show_in_rest' => [
-        'schema' => [
-          'items' => [
-            'type' => 'object',
-            'properties' => [
-              'type' => ['type' => 'string'],
-              'value' => ['type' => 'string'],
-              'label' => ['type' => 'string']
-            ]
-          ]
-        ]
-      ],
-      'single' => true,
-      'type' => 'array',
-      'default' => []
-    ) );
-    register_post_meta( $slug, 'contactEmail', array(
-      'show_in_rest' => [
-        'schema' => [
-          'items' => [
-            'type' => 'object',
-            'properties' => [
-              'value' => ['type' => 'string'],
-              'label' => ['type' => 'string']
-            ]
-          ]
-        ]
-      ],
-      'single' => true,
-      'type' => 'array',
-      'default' => []
-    ) );
-    register_post_meta( $slug, 'contactPhone', array(
-      'show_in_rest' => [
-        'schema' => [
-          'items' => [
-            'type' => 'object',
-            'properties' => [
-              'value' => ['type' => 'string'],
-              'label' => ['type' => 'string']
-            ]
-          ]
-        ]
-      ],
-      'single' => true,
-      'type' => 'array',
-      'default' => []
-    ) );
+    UCDLibPluginDirectoryUtils::registerContactMeta($slug);
     register_post_meta( $slug, 'contactAppointmentUrl', array(
       'show_in_rest' => true,
       'single' => true,
@@ -533,6 +486,15 @@ class UCDLibPluginDirectoryPerson extends UcdThemePost {
     return $this->expertiseAreas;
   }
 
+  protected $departmentId;
+  public function departmentId(){
+    if ( ! empty( $this->departmentId ) ) {
+      return $this->departmentId;
+    }
+    $this->departmentId = $this->meta('position_dept');
+    return $this->departmentId;
+  }
+
   protected $department;
   public function department(){
     if ( ! empty( $this->department ) ) {
@@ -540,11 +502,35 @@ class UCDLibPluginDirectoryPerson extends UcdThemePost {
     }
 
     $this->department = null;
-    $departmentId = $this->meta('position_dept');
+    $departmentId = $this->departmentId();
     if ( $departmentId ) {
       $this->department = Timber::get_post($departmentId);
     }
 
     return $this->department;
+  }
+
+  protected $contactInfo;
+  public function contactInfo(){
+    if ( ! empty( $this->contactInfo ) ) {
+      return $this->contactInfo;
+    }
+    $this->contactInfo = [];
+
+
+    $attrs['hide'] = $this->meta('hide_contact');
+    $attrs['websites'] = $this->meta('contactWebsite');
+    $attrs['emails'] = $this->meta('contactEmail');
+    $attrs['phones'] = $this->meta('contactPhone');
+    $attrs['appointmentUrl'] = $this->meta('contactAppointmentUrl');
+    $attrs = UCDLibPluginDirectoryUtils::formatContactList($attrs);
+    
+    foreach ($attrs['icons'] as $icon) {
+      $this->iconsUsed[] = $icon;
+    }
+
+    
+    $this->contactInfo = $attrs;
+    return $this->contactInfo;
   }
 }

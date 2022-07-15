@@ -1,15 +1,6 @@
-{% set p = siteContext.post %}
-{% if p.libraries %}
+{% from "@ucdlib-directory/macros/person.twig" import library_locations %}
+{% if siteContext.post.libraries %}
   <div class="u-space-bottom">
-    <span class="icon icon--location">
-    {% apply spaceless %}
-      {% for library in p.libraries %}
-        <span>{{library.name}}</span>
-        {% if not loop.last and loop.length > 1 %}
-          <span>, </span>
-        {% endif %}
-      {% endfor %}
-    {% endapply %}
-    </span> 
+    {{ library_locations(siteContext.post) }}
   </div>
 {% endif %}

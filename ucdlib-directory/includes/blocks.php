@@ -19,8 +19,7 @@ class UCDLibPluginDirectoryBlocks extends UCDThemeBlockRenderer {
       'twig' => '@ucdlib-directory/blocks/person-bio.twig'
     ],
     'ucdlib-directory/contact' => [
-      'twig' => '@ucdlib-directory/blocks/person-contact.twig',
-      'transform' => ['getContactInfo']
+      'twig' => '@ucdlib-directory/blocks/person-contact.twig'
     ],
     'ucdlib-directory/name' => [
       'twig' => '@ucdlib-directory/blocks/person-name.twig'
@@ -30,6 +29,10 @@ class UCDLibPluginDirectoryBlocks extends UCDThemeBlockRenderer {
     ],
     'ucdlib-directory/pronouns' => [
       'twig' => '@ucdlib-directory/blocks/person-pronouns.twig'
+    ],
+    'ucdlib-directory/results' => [
+      'twig' => '@ucdlib-directory/blocks/directory-results.twig',
+      'transform' => ['getDirectoryResults']
     ],
     'ucdlib-directory/library-locations' => [
       'twig' => '@ucdlib-directory/blocks/person-library-locations.twig'

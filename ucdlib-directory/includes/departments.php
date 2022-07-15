@@ -1,6 +1,7 @@
 <?php
 
 require_once( __DIR__ . '/utils.php' );
+require_once( get_template_directory() . "/includes/classes/post.php");
 
 // Sets up the department post type
 class UCDLibPluginDirectoryDepartments {
@@ -112,6 +113,39 @@ class UCDLibPluginDirectoryDepartments {
 
 // custom methods to be called in templates
 // where we will fetch postmeta
-class UCDLibPluginDirectoryDepartment extends Timber\Post {
+class UCDLibPluginDirectoryDepartment extends UcdThemePost {
+
+  protected $description;
+  public function description(){
+    if ( ! empty( $this->description ) ) {
+      return $this->description;
+    }
+    $this->description = $this->meta('description');
+    return $this->description;
+  }
+
+  protected $contactInfo;
+  public function contactInfo(){
+    if ( ! empty( $this->contactInfo ) ) {
+      return $this->contactInfo;
+    }
+    $this->contactInfo = [];
+
+
+    $attrs['hide'] = false;
+    $attrs['websites'] = $this->meta('contactWebsite');
+    $attrs['emails'] = $this->meta('contactEmail');
+    $attrs['phones'] = $this->meta('contactPhone');
+    $attrs['appointmentUrl'] = '';
+    $attrs = UCDLibPluginDirectoryUtils::formatContactList($attrs);
+    
+    foreach ($attrs['icons'] as $icon) {
+      $this->iconsUsed[] = $icon;
+    }
+
+    
+    $this->contactInfo = $attrs;
+    return $this->contactInfo;
+  }
 
 }
