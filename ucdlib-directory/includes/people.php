@@ -341,12 +341,26 @@ class UCDLibPluginDirectoryPeople {
       $user = $user[0];
       wp_redirect($user->link());
       exit;
-    } else {
-      status_header(404);
-      $views = $GLOBALS['UcdSite']->views;
-      $templates = array( $views->getTemplate('404'));
-      Timber::render( $templates, [] );
     }
+
+    $user = Timber::get_posts([
+      'post_type' => $slug,
+      'meta_key' => 'username',
+      'meta_value' => $author->user_login,
+      'posts_per_page' => 1
+    ]);
+    if ( count($user) ) {
+      $user = $user[0];
+      wp_redirect($user->link());
+      exit;
+    }
+
+    $context = Timber::context();
+    status_header(404);
+    $views = $GLOBALS['UcdSite']->views;
+    $templates = array( $views->getTemplate('404'));
+    Timber::render( $templates, $context );
+    exit;
 
   }
 
