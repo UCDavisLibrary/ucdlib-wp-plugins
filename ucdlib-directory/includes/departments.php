@@ -12,6 +12,7 @@ class UCDLibPluginDirectoryDepartments {
     add_action( 'init', array($this, 'register') );
     add_action( 'init', [$this, 'register_post_meta'] );
     add_filter( 'timber/post/classmap', array($this, 'extend_timber_post') );
+    add_filter( 'query_vars', [$this, 'register_query_vars'] );
   }
 
   // register 'department' non-public post type
@@ -108,6 +109,11 @@ class UCDLibPluginDirectoryDepartments {
       UCDLibPluginDirectoryUtils::registerContactMeta($slug);
 
     }
+
+    public function register_query_vars( $qvars ) {
+      $qvars[] =  $this->slug;
+      return $qvars;
+  }
 
 }
 

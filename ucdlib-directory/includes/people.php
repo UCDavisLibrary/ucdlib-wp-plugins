@@ -19,6 +19,7 @@ class UCDLibPluginDirectoryPeople {
     add_filter( 'manage_' . $this->slug . '_posts_columns', array($this, 'customize_admin_list_columns') );
     add_action( 'manage_' . $this->slug  . '_posts_custom_column', array($this, 'add_admin_list_column'), 10, 2);
     add_filter( 'post_row_actions', array($this, 'add_admin_list_user_link') , 10, 2);
+    add_filter( 'query_vars', [$this, 'register_query_vars'] );
 
     add_action( 'ucd-cas/login', array($this, 'transfer_ownership'), 10, 2 );
     add_action( 'ucd-theme/template/author', array($this, 'redirect_author'));
@@ -148,6 +149,11 @@ class UCDLibPluginDirectoryPeople {
     
     $templates = array_merge( array("@" . $this->config['slug'] . "/person.twig"), $templates );
     return $templates;
+  }
+
+  public function register_query_vars( $qvars ) {
+    $qvars[] =  'q';
+    return $qvars;
   }
 
   // register metadata for the person post type
@@ -524,7 +530,7 @@ class UCDLibPluginDirectoryPerson extends UcdThemePost {
     $attrs['phones'] = $this->meta('contactPhone');
     $attrs['appointmentUrl'] = $this->meta('contactAppointmentUrl');
     $attrs = UCDLibPluginDirectoryUtils::formatContactList($attrs);
-    
+
     foreach ($attrs['icons'] as $icon) {
       $this->iconsUsed[] = $icon;
     }

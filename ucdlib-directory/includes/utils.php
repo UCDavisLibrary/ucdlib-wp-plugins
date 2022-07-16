@@ -1,6 +1,19 @@
 <?php
 
 class UCDLibPluginDirectoryUtils {
+  public static function explodeQueryVar($queryVar, $asInt=true, $delim=','){
+    $q = get_query_var($queryVar, '');
+    $q = explode($delim, $q);
+    if ( $asInt ) {
+      $q = array_map(function($id){return intval($id);}, $q);
+    } else {
+      $q = array_map('strtolower', $q);
+    }
+    $q = array_filter($q, function($v){return $v;});
+    return $q;
+  }
+
+
   public static function registerContactMeta($postType){
     register_post_meta( $postType, 'contactWebsite', array(
       'show_in_rest' => [
@@ -55,7 +68,7 @@ class UCDLibPluginDirectoryUtils {
       'default' => []
     ) );
   }
-  
+
   public static function formatContactList($attrs){
     $contact = [];
     $defaultIcon = 'ucd-public:fa-network-wired';
