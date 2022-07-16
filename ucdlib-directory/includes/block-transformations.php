@@ -103,29 +103,29 @@ class UCDLibPluginDirectoryBlockTransformations {
       unset($personQuery['s']);
       $peopleWithExpertiseArea = Timber::get_posts($personQuery);
       
-      if ( count($peopleWithExpertiseArea) )
-      $combined = [];
-      foreach ($people as $person) {
-        $combined[] = $person;
-      }
-      foreach ($peopleWithExpertiseArea as $person) {
-        $combined[] = $person;
-      }
-      $people = $combined;
-      if ( $orderby == 'department' ) {
-        usort($people, function($a, $b){
-          if ( $a->menu_order == $b->menu_order ) {
+      if ( count($peopleWithExpertiseArea) ) {
+        $combined = [];
+        foreach ($people as $person) {
+          $combined[] = $person;
+        }
+        foreach ($peopleWithExpertiseArea as $person) {
+          $combined[] = $person;
+        }
+        $people = $combined;
+        if ( $orderby == 'department' ) {
+          usort($people, function($a, $b){
+            if ( $a->menu_order == $b->menu_order ) {
+              return strcmp($a->name_last(), $b->name_last());
+            }
+            return ($a->menu_order < $b->menu_order) ? -1 : 1;
+          });
+        } else {
+          usort($people, function($a, $b){
             return strcmp($a->name_last(), $b->name_last());
-          }
-          return ($a->menu_order < $b->menu_order) ? -1 : 1;
-        });
-      } else {
-        usort($people, function($a, $b){
-          return strcmp($a->name_last(), $b->name_last());
-        });
+          });
+        }
       }
     }
-
 
     if ( $orderby == 'name' ) {
       $attrs['people'] = $people;
