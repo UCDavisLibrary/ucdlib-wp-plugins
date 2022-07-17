@@ -7,9 +7,11 @@ export default class UcdlibDirectoryFilters extends LitElement {
     return {
       widgetTitle: {type: String, attribute: 'widget-title'},
       keyKeyword: {type: String},
+      keyOrderby: {type: String},
       url: {state: true},
       db: {state: true},
       keyword: {state: true},
+      orderby: {state: true},
       dbName: {type: String, attribute: 'db-name'},
       dbStoreName: {type: String, attribute: 'db-store-name'},
       dbVersion: {type: Number, attribute: 'db-version'},
@@ -29,9 +31,11 @@ export default class UcdlibDirectoryFilters extends LitElement {
 
     // default url param keys
     this.keyKeyword = 'q';
+    this.keyOrderby = 'orderby';
 
     // input state
     this.keyword = '';
+    this.orderby = '';
 
     // for remembering visibility on mobile
     this.showOnMobile = false;
@@ -42,7 +46,7 @@ export default class UcdlibDirectoryFilters extends LitElement {
   }
 
   willUpdate(props){
-    let urlArgs = ['keyKeyword'];
+    let urlArgs = ['keyKeyword', 'keyOrderby'];
     urlArgs = urlArgs.map(a => props.has(a) && this[a]).filter(v => v);
     if ( urlArgs.length ) this.parseLocation();
   }
@@ -94,6 +98,7 @@ export default class UcdlibDirectoryFilters extends LitElement {
     const params = new URLSearchParams(window.location.search);
 
     this.keyword = params.get(this.keyKeyword) || '' ;
+    this.orderby = params.get(this.keyOrderby) || '' ;
   }
 
   _setDb(event){
@@ -131,6 +136,9 @@ export default class UcdlibDirectoryFilters extends LitElement {
     const params = new URLSearchParams();
     if ( this.keyword ) {
       params.set(this.keyKeyword, this.keyword);
+    }
+    if ( this.orderby ) {
+      params.set(this.keyOrderby, this.orderby);
     }
 
     //console.log(this.url + '?' + params.toString());

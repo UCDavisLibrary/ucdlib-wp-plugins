@@ -16,7 +16,7 @@ export function styles() {
       display: block;
     }
     .main {
-      padding: 2rem;
+      padding: 1rem;
     }
     .section-header {
       display: flex;
@@ -41,6 +41,9 @@ export function styles() {
     }
     .hide {
       display: none;
+    }
+    .flex {
+      display: flex;
     }
     .panel--mobile-collapse .panel__title:focus {
       background-color: #13639e;
@@ -89,7 +92,9 @@ return html`
       </h5>
       <div class="field-container">
         <label for="keyword">Name or Keyword</label>
-        <input id='keyword' .value=${this.keyword} type="text" @input=${e => this.keyword = e.target.value}>
+        <div class='flex'>
+          <input id='keyword' .value=${this.keyword} type="text" @input=${e => this.keyword = e.target.value}>
+        </div>
       </div>
       <input type="submit" class="btn btn--primary-input btn--block" .value="Apply Filter">
     </form>

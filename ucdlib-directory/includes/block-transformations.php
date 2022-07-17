@@ -59,12 +59,12 @@ class UCDLibPluginDirectoryBlockTransformations {
     // filter by department
     $deptQueryVar = UCDLibPluginDirectoryUtils::explodeQueryVar('department');
     if ( count($deptQueryVar) ){
-      $personQuery['meta_query'] = [
+      $personQuery['meta_query'] = [[
         'key' => 'position_dept',
         'value' => $deptQueryVar,
         'compare' => 'IN',
         'type' => 'NUMERIC'
-      ];
+      ]];
     }
 
     // filter by directory tag/subject area
