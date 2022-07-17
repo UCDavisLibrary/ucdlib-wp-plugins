@@ -1,3 +1,4 @@
+import directoryFilters from "./ucdlib-directory-filters";
 import directoryResults from "./ucdlib-directory-results";
 import metaDescription from "./ucdlib-directory-description";
 import personBio from "./ucdlib-directory-bio";
@@ -10,6 +11,7 @@ import personTags from "./ucdlib-directory-tags";
 import personExpertiseAreas from "./ucdlib-directory-expertise-areas";
 
 export default [
+  directoryFilters,
   directoryResults,
   metaDescription,
   personBio,
