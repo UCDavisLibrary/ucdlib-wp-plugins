@@ -15,6 +15,7 @@ class UCDLibPluginDirectoryDirectoryTags {
     add_action($this->slug . '_edit_form_fields', array($this, 'render_term_meta'), 4, 1);
     add_action('edited_' . $this->slug, array($this, 'save_term_meta'), 10, 1);
     add_action('create_' . $this->slug, array($this, 'save_term_meta'), 10, 2);
+    add_filter( 'query_vars', [$this, 'register_query_vars'] );
 
   }
 
@@ -85,6 +86,11 @@ class UCDLibPluginDirectoryDirectoryTags {
     $label = 'Subjects and Directory Tags';
     add_submenu_page($this->config['slug'], $label, $label, 'edit_posts', "edit-tags.php?taxonomy=$this->slug",false );
   }
+
+  public function register_query_vars( $qvars ) {
+    $qvars[] =  $this->slug;
+    return $qvars;
+}
 
   // expand plugin menu when on taxonomy admin page
   public function expand_parent_menu($parent_file){

@@ -9,6 +9,7 @@ class UCDLibPluginDirectoryLibraries {
     add_action( 'init', array($this, 'register') );
     add_action( 'admin_menu', array($this, 'add_to_menu'));
     add_action( 'parent_file',  array($this, 'expand_parent_menu') );
+    add_filter( 'query_vars', [$this, 'register_query_vars'] );
   }
 
   // register taxonomy
@@ -49,6 +50,11 @@ class UCDLibPluginDirectoryLibraries {
     $label = 'Library Filters';
     add_submenu_page($this->config['slug'], $label, $label, 'edit_posts', "edit-tags.php?taxonomy=$this->slug",false );
   }
+
+  public function register_query_vars( $qvars ) {
+    $qvars[] =  $this->slug;
+    return $qvars;
+}
 
   // expand plugin menu when on taxonomy admin page
   public function expand_parent_menu($parent_file){

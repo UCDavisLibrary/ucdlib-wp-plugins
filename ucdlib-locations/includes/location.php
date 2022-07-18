@@ -9,20 +9,31 @@ class UCDLibPluginLocationsLocation extends UcdThemePost {
     if ( !empty($this->link) ){
       return $this->link;
     }
-    if ( $this->meta('has_redirect') ){
-      $redirect = $this->meta('redirect');
-      $p = Timber::get_post($redirect['postId']);
-      if ( $p && $p->id != $this->id) {
-        $this->link = $p->link();
-      }
-      else {
-        $this->link = $redirect['url'];
-      }
+    if ( $this->meta('has_redirect') && $this->redirectLink() ){
+      $this->link = $this->redirectLink();
 
     } else {
       $this->link = get_permalink($this->id);
     }
     return $this->link;
+  }
+
+  protected $redirectLink;
+  public function redirectLink(){
+    if ( !empty($this->redirectLink) ){
+      return $this->redirectLink;
+    }
+    $redirect = $this->meta('redirect');
+    $this->redirectLink = false;
+    $p = Timber::get_post($redirect['postId']);
+    if ( $p && $p->id != $this->id) {
+      $this->redirectLink = $p->link();
+    }
+    else {
+      $this->redirectLink = $redirect['url'];
+    }
+
+    return $this->redirectLink;
   }
   
   protected $core_data;

@@ -13,8 +13,11 @@ class UCDLibPluginLocationsPostTypes {
   // alter context before calling the location view
   public function getLocationContext($context){
     if ( $context['post']->post_type !== 'location' ) return $context;
-
-    $context['foo'] = "I'm a location page. Damn glad to meet ya.";
+    $p = $context['post'];
+    if ( $p->meta('has_redirect') && $p->redirectLink() ){
+      wp_redirect( $p->redirectLink() );
+      exit;
+    }
 
     return $context;
   }

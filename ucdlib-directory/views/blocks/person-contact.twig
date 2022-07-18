@@ -1,11 +1,2 @@
-{% if attributes.contact and not attributes.hide %}
-<ul class="list--pipe u-space-mb">
-  {% for contact in attributes.contact %}
-    <li>
-      <a class="icon-ucdlib" href="{{contact.link}}">
-        <ucdlib-icon icon="{{contact.icon}}"></ucdlib-icon><div>{{contact.label}}</div>
-      </a>
-    </li>
-  {% endfor %}
-</ul>
-{% endif %}
+{% from "@ucdlib-directory/macros/person.twig" import contact %}
+{{ contact(siteContext.post, 'u-space-mb') }}
