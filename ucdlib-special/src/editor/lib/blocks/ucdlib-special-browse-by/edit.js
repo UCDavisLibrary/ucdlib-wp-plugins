@@ -72,21 +72,25 @@ export default ( props ) => {
       <${HorizontalRule} style=${{ borderTop: '4px dotted' }} className="secondary" />
 
       <div style=${{ display: attributes.subjectChecked ? 'block' : 'none' }}>   
-        <p>Subject areas represented within the collections correspond to the breadth, diversity, and focus of instruction offered at the University of California at Davis.</p>
+        <div style=${{ maxWidth: '85%' }}>  
+          <p>Subject areas represented within the collections correspond to the breadth, diversity, and focus of instruction offered at the University of California at Davis.</p>
+        </div>
       </div>
 
-      <div style=${{ display: attributes.subjectChecked ? 'none' : 'block' }}>        
-        ${letters.map((letter, index) => {
-          return html`
-            <ucd-wp-manuscript-button-link 
-              ref=${buttonLinkRef}
-              alt-style=${letter === 'A' ? 'alt' : 'alt3'}
-              text=${letter}
-              style=${{ padding: '0 .25rem', display: 'inline-block', height: '57px' }}>
-              <div slot="text" contentEditable="true" style=${{width: '100%'}}></div>
-            </ucd-wp-manuscript-button-link>
-            `
-        })}  
+      <div style=${{ display: attributes.subjectChecked ? 'none' : 'block' }}>      
+        <div style=${{ maxWidth: '85%' }}>  
+          ${letters.map((letter, index) => {
+            return html`
+              <ucd-wp-manuscript-button-link 
+                ref=${buttonLinkRef}
+                alt-style=${letter === 'A' ? 'alt' : 'alt3'}
+                text=${letter}
+                style=${{ padding: '0 .25rem', display: 'inline-block', height: '57px' }}>
+                <div slot="text" contentEditable="true" style=${{width: '100%'}}></div>
+              </ucd-wp-manuscript-button-link>
+              `
+          })}  
+        </div>
         <${HorizontalRule} style=${{ borderTop: '4px dotted', marginTop: '3.6rem' }} className="secondary" />
       </div>
 

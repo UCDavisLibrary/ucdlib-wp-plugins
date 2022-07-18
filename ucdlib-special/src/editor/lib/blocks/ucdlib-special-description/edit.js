@@ -24,7 +24,7 @@ export default ( props ) => {
     </${BlockControls}>
 
     <div>
-      <h4>Description ${meta.fetchedData && meta.description !== meta.fetchedData.description ? html`<span className="strawberry">*</span>` : ''}</h4>
+      <h3>Collection Number: ${meta.callNumber} ${meta.fetchedData && meta.description !== meta.fetchedData.description ? html`<span className="strawberry">*</span>` : ''}</h3>
       <${RichText}
           tagName="p"
           className=""
