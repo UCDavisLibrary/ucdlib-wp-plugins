@@ -28,6 +28,10 @@
   </article>
 {% endmacro %}
 
+{% macro no_results() %}
+  <div class='alert'>Sorry, no people match your search.</div>
+{% endmacro %}
+
 {% macro library_locations(person) %}
   {% if person.libraries %}
     <span class="icon icon--location">

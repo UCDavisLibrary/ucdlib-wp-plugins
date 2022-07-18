@@ -37,6 +37,9 @@ class UCDLibPluginDirectoryBlocks extends UCDThemeBlockRenderer {
       'twig' => '@ucdlib-directory/blocks/directory-results.twig',
       'transform' => ['getDirectoryResults']
     ],
+    'ucdlib-directory/sort' => [
+      'twig' => '@ucdlib-directory/blocks/directory-sort.twig'
+    ],
     'ucdlib-directory/library-locations' => [
       'twig' => '@ucdlib-directory/blocks/person-library-locations.twig'
     ],
