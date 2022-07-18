@@ -5,6 +5,23 @@ require_once( __DIR__ . '/utils.php' );
 // See 'transform' property in $registry array in blocks class.
 class UCDLibPluginDirectoryBlockTransformations {
 
+  public static function getDirectoryUrl( $attrs ){
+    $transient = 'directory_page_link';
+    if ( false === ( $link = get_transient( $transient ) ) ) {
+      $slug = 'ucdlib-directory';
+      $p = get_field('directory_page', $slug);
+      if ( $p ) {
+        $p = Timber::get_post($p);
+        if ( $p ) {
+          $link = $p->link();
+        }
+      }
+      set_transient( $transient, $link, 24 * HOUR_IN_SECONDS );
+    }
+    $attrs['directory_page_link'] = $link;
+    return $attrs;
+  }
+
   /**
    * Gets people/departments based on url query parameters
    */

@@ -1,10 +1,10 @@
 import { html, css } from 'lit';
 
+import '@ucd-lib/theme-elements/brand/ucd-theme-slim-select/ucd-theme-slim-select.js'
+
 import buttonStyles from "@ucd-lib/theme-sass/2_base_class/_buttons.css.js";
 import formStyles from "@ucd-lib/theme-sass/1_base_html/_forms.css.js";
 import headerStyles from "@ucd-lib/theme-sass/1_base_html/_headings.css.js";
-//import listStyles from "@ucd-lib/theme-sass/1_base_html/_lists.css.js";
-//import listClassesStyles from "@ucd-lib/theme-sass/2_base_class/_lists.css.js";
 import formsClassesStyles from "@ucd-lib/theme-sass/2_base_class/_forms.css.js";
 import panelStyles from "@ucd-lib/theme-sass/4_component/_panel.css.js";
 import oBox from "@ucd-lib/theme-sass/3_objects/_index.css";
@@ -18,10 +18,14 @@ export function styles() {
     .main {
       padding: 1rem;
     }
+    input {
+      padding-top: 0;
+      padding-bottom: 0;
+    }
     .section-header {
       display: flex;
       align-items: center;
-      margin-bottom: .5rem;
+      margin-bottom: 1rem;
     }
     .section-header svg {
       height: 1em;
@@ -96,7 +100,42 @@ return html`
           <input id='keyword' .value=${this.keyword} type="text" @input=${e => this.keyword = e.target.value}>
         </div>
       </div>
-      <input type="submit" class="btn btn--primary-input btn--block" .value="Apply Filter">
+      <div class="${this.filterError ? 'hide' : ''}">
+        <div class="field-container">
+          <label for="library">Library</label>
+          <ucd-theme-slim-select class='flex' @change=${e => this.onSlimSelectChange(e, 'library')}>
+            <select id='library' multiple>
+              <option data-placeholder="true">Select Library</option>
+              ${this.filterOptions.library.map(opt => html`
+                <option ?selected=${this.library.includes(opt.id)} value=${opt.id}>${opt.name}</option>
+              `)}
+            </select>
+          </ucd-theme-slim-select>
+        </div>
+        <div class="field-container">
+          <label for="department">Department</label>
+          <ucd-theme-slim-select class='flex' @change=${e => this.onSlimSelectChange(e, 'department')}>
+            <select id='department' multiple>
+              <option data-placeholder="true">Select Department</option>
+              ${this.filterOptions.department.map(opt => html`
+                <option ?selected=${this.department.includes(opt.id)} value=${opt.id}>${opt.name}</option>
+              `)}
+            </select>
+          </ucd-theme-slim-select>
+        </div>
+        <div class="field-container">
+          <label for="subject-area">Subject Area</label>
+          <ucd-theme-slim-select class='flex' @change=${e => this.onSlimSelectChange(e, 'directoryTag')}>
+            <select id='subject-area' multiple>
+              <option data-placeholder="true">Select Subject Area</option>
+              ${this.filterOptions['directory-tag']['subjectArea'].map(opt => html`
+                <option ?selected=${this.directoryTag.includes(opt.id)} value=${opt.id}>${opt.name}</option>
+              `)}
+            </select>
+          </ucd-theme-slim-select>
+        </div>
+      </div>
+      <input type="submit" class="btn btn--primary-input btn--block" value="Apply Filter">
     </form>
   </div>
 
