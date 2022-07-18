@@ -22,6 +22,9 @@ export function styles() {
       padding-top: 0;
       padding-bottom: 0;
     }
+    .btn--primary-input {
+      font-size: 1rem;
+    }
     .section-header {
       display: flex;
       align-items: center;
