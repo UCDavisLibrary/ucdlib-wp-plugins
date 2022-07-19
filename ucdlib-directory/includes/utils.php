@@ -92,7 +92,8 @@ class UCDLibPluginDirectoryUtils {
             'value' => $email['value'],
             'link' => 'mailto:' . $email['value'],
             'label' => array_key_exists('label', $email) && $email['label'] ? $email['label'] : $email['value'],
-            'icon' => $icons['email']
+            'icon' => $icons['email'],
+            'additionalText' => array_key_exists('additionalText', $email) ? $email['additionalText'] : ''
           ];
         }
       }
@@ -114,7 +115,8 @@ class UCDLibPluginDirectoryUtils {
             'value' => $phone['value'],
             'link' => 'tel:' .  $phone['value'],
             'label' => $label,
-            'icon' => $icons['phone']
+            'icon' => $icons['phone'],
+            'additionalText' => array_key_exists('additionalText', $phone) ? $phone['additionalText'] : ''
           ];
         }
       }
@@ -139,7 +141,8 @@ class UCDLibPluginDirectoryUtils {
             'value' => $website['value'],
             'link' => $website['value'],
             'label' => array_key_exists('label', $website) && $website['label'] ? $website['label'] : $website['value'],
-            'icon' => $icon
+            'icon' => $icon,
+            'additionalText' => array_key_exists('additionalText', $website) ? $website['additionalText'] : ''
           ];
         }
       }

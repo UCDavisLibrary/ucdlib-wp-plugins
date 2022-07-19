@@ -55,6 +55,9 @@
           <a class="icon-ucdlib" href="{{contact.link}}">
             <ucdlib-icon icon="{{contact.icon}}"></ucdlib-icon><div>{{contact.label}}</div>
           </a>
+          {% if contact.additionalText %}
+            <span>&nbsp;({{contact.additionalText}})</span>
+          {% endif %}
         </li>
       {% endfor %}
     </ul>

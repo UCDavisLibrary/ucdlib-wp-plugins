@@ -10,6 +10,7 @@ import personPronouns from "./ucdlib-directory-pronouns";
 import personLibraryLocations from "./ucdlib-directory-library-locations"
 import personTags from "./ucdlib-directory-tags";
 import personExpertiseAreas from "./ucdlib-directory-expertise-areas";
+import serviceResults from "./ucdlib-directory-service-results";
 
 export default [
   directoryFilters,
@@ -23,5 +24,6 @@ export default [
   personPronouns,
   personLibraryLocations,
   personTags,
-  personExpertiseAreas
+  personExpertiseAreas,
+  serviceResults
 ]

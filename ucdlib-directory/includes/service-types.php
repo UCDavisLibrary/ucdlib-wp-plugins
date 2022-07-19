@@ -9,7 +9,7 @@ class UCDLibPluginDirectoryServiceTypes {
     add_action( 'init', array($this, 'register') );
     add_action( 'admin_menu', array($this, 'add_to_menu'));
     add_action( 'parent_file',  array($this, 'expand_parent_menu') );
-
+    add_filter( 'query_vars', [$this, 'register_query_vars'] );
   }
 
   // register taxonomy
@@ -33,7 +33,7 @@ class UCDLibPluginDirectoryServiceTypes {
       'description' => 'Controlled list of categories for Library services',
       'public' => false,
       'publicly_queryable' => false,
-      'hierarchical' => false,
+      'hierarchical' => true,
       'show_ui' => true,
       'show_in_nav_menus' => false,
       'show_in_rest' => true,
@@ -54,6 +54,11 @@ class UCDLibPluginDirectoryServiceTypes {
     $label = 'Service Types';
     add_submenu_page($this->config['slug'], $label, $label, 'edit_posts', "edit-tags.php?taxonomy=$this->slug",false );
   }
+
+  public function register_query_vars( $qvars ) {
+    $qvars[] =  $this->slug;
+    return $qvars;
+}
 
   // expand plugin menu when on taxonomy admin page
   public function expand_parent_menu($parent_file){

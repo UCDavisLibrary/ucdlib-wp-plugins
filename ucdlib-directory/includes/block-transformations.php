@@ -22,6 +22,65 @@ class UCDLibPluginDirectoryBlockTransformations {
     return $attrs;
   }
 
+  public static function getServiceResults( $attrs=[] ){
+    $serviceQuery = [
+      'post_type' => 'service',
+      'orderby' => 'menu_order title',
+      'order' => 'ASC',
+      'posts_per_page' => -1
+    ];
+    $tax_query = [];
+
+    // keyword search
+    $kwQueryVar = UCDLibPluginDirectoryUtils::explodeQueryVar('q', false, ' ');
+    if ( count( $kwQueryVar ) ) $serviceQuery['s'] = implode(' ', $kwQueryVar);
+
+    // filter by library location
+    $libQueryVar = UCDLibPluginDirectoryUtils::explodeQueryVar('library');
+    if ( count($libQueryVar) ){
+      $tax_query[] = [
+        'taxonomy' => 'library',
+        'field' => 'term_id',
+        'terms' => $libQueryVar,
+        'operator' => 'IN'
+      ];
+    }
+
+    // filter by service type
+    $serviceTypeQueryVar = UCDLibPluginDirectoryUtils::explodeQueryVar('service-type');
+    if ( count($serviceTypeQueryVar) ){
+      $tax_query[] = [
+        'taxonomy' => 'service-type',
+        'field' => 'term_id',
+        'terms' => $serviceTypeQueryVar,
+        'operator' => 'IN'
+      ];
+    }
+
+    if ( count($tax_query) ){
+      $serviceQuery['tax_query'] = $tax_query;
+    }
+
+    $serviceTypesWithServices = [];
+    $services = Timber::get_posts($serviceQuery);
+    foreach ($services as $service) {
+      $terms = $service->terms('service-type');
+      if ( !$terms || !count($terms) ) continue;
+      foreach ($terms as $term) {
+        if ( !array_key_exists($term->ID, $serviceTypesWithServices)) {
+          $serviceTypesWithServices[$term->ID] = ['term' => $term, 'services' => []];
+        }
+        $serviceTypesWithServices[$term->ID]['services'][] = $service;
+      }
+    }
+    usort($serviceTypesWithServices, function($a, $b){
+      return strcmp($a['term']->name, $b['term']->name);
+    });
+    $attrs['serviceTypes'] = $serviceTypesWithServices;
+    return $attrs;
+
+  }
+
   /**
    * Gets people/departments based on url query parameters
    */
