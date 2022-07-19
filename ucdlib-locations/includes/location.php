@@ -24,12 +24,15 @@ class UCDLibPluginLocationsLocation extends UcdThemePost {
       return $this->redirectLink;
     }
     $redirect = $this->meta('redirect');
-    $this->redirectLink = false;
-    $p = Timber::get_post($redirect['postId']);
-    if ( $p && $p->id != $this->id) {
-      $this->redirectLink = $p->link();
+    $this->redirectLink = '';
+    if ( !is_array($redirect)) return $this->redirectLink;
+    if ( $redirect['postId'] ){
+      $p = Timber::get_post(intval($redirect['postId']));
+      if ( $p && $p->id != $this->id) {
+        $this->redirectLink = $p->link();
+      }
     }
-    else {
+    elseif ($redirect['url']) {
       $this->redirectLink = $redirect['url'];
     }
 
@@ -61,17 +64,7 @@ class UCDLibPluginLocationsLocation extends UcdThemePost {
     $out['labels']['short'] = $this->meta('label_short');
     $out['labels']['room_number'] = $this->meta('room_number');
 
-    $out['links']['native'] = $this->link();
-    $out['links']['custom'] = '';
-    $custom_url = $this->meta('redirect');
-    if ( $custom_url['postId'] ) {
-      $p = Timber::get_post( $custom_url['postId'] );
-      if ( $p ) $out['links']['custom'] = $p->link();
-    } else if ( $custom_url['url'] ) {
-      $out['links']['custom'] = $custom_url['url'];
-    } 
-    $out['links']['redirect_to_custom_url'] = $this->meta('has_redirect') ? true : false;
-    $out['links']['link'] = $out['links']['custom'] ? $out['links']['custom'] : $out['links']['native'];
+    $out['links']['link'] = $this->link();
     $hoursPage = get_field('link_all_hours', $this->post_type);
     if ( $hoursPage ) {
       $out['links']['hoursPage'] = get_permalink( $hoursPage );
