@@ -1,22 +1,20 @@
 import { LitElement } from 'lit';
 import { MobileVisibilityController } from '../controllers/mobile-visibility.js';
-import {render, styles} from "./ucdlib-directory-filters.tpl.js";
+import {render, styles} from "./ucdlib-directory-service-filters.tpl.js";
 
-export default class UcdlibDirectoryFilters extends LitElement {
+export default class UcdlibDirectoryServiceFilters extends LitElement {
 
   static get properties() {
     return {
       widgetTitle: {type: String, attribute: 'widget-title'},
       keyKeyword: {type: String},
-      keyOrderby: {type: String},
       keyLibrary: {type: String},
-      keyDepartment: {type: String},
-      keyDirectoryTag: {type: String},
-      url: {state: true},
+      keyServiceType: {type: String},
       keyword: {state: true},
-      orderby: {state: true},
       library: {state: true},
-      filterOptions: {state: true},
+      serviceType: {state: true},
+      url: {state: true},
+      filterOptions: {state: true}
     }
   }
 
@@ -27,37 +25,29 @@ export default class UcdlibDirectoryFilters extends LitElement {
   constructor() {
     super();
     this.render = render.bind(this);
-    this.mobileVisibility = new MobileVisibilityController(this, 'UCDLibDirectoryFilters');
+    this.mobileVisibility = new MobileVisibilityController(this, 'UCDLibDirectoryServiceFilters');
 
-    this.widgetTitle = 'Directory Filters';
+    this.widgetTitle = 'Library Service Filters';
 
     // default url param keys
     this.keyKeyword = 'q';
-    this.keyOrderby = 'orderby';
     this.keyLibrary = 'library';
-    this.keyDepartment = 'department';
-    this.keyDirectoryTag = 'directory-tag';
+    this.keyServiceType = 'service-type';
 
     // input state
     this.keyword = '';
-    this.orderby = '';
     this.library = [];
-    this.department = [];
-    this.directoryTag = [];
+    this.serviceType = [];
 
     this.filterOptions = {
       library: [],
-      department: [],
-      'directory-tag': {
-        subjectArea : [],
-        tag: []
-      }
+      'service-type': []
     };
     this.filterError = true;
   }
 
   willUpdate(props){
-    let urlArgs = ['keyKeyword', 'keyOrderby', 'keyLibrary', 'keyDepartment', 'keyDirectoryTag'];
+    let urlArgs = ['keyKeyword', 'keyLibrary', 'keyServiceType'];
     urlArgs = urlArgs.map(a => props.has(a) && this[a]).filter(v => v);
     if ( urlArgs.length ) this.parseLocation();
   }
@@ -67,12 +57,25 @@ export default class UcdlibDirectoryFilters extends LitElement {
      this.getFilters();
   }
 
+  async getFilters(){
+    try {
+      const request = await fetch('/wp-json/ucdlib-directory/service-filters');
+      const data = await request.json();
+      this.filterError = false;
+      this.filterOptions = data;
+    } catch (error) {
+      this.filterError = true;
+      this.library = [];
+      this.serviceType = [];
+      console.error(error);
+    }
+  }
+
   parseLocation() {
     this.url = window.location.origin + window.location.pathname;
     const params = new URLSearchParams(window.location.search);
 
     this.keyword = params.get(this.keyKeyword) || '' ;
-    this.orderby = params.get(this.keyOrderby) || '' ;
 
     if (  params.get(this.keyLibrary) ) {
       this.library = params.get(this.keyLibrary).split(',').map(id => parseInt(id));
@@ -80,38 +83,16 @@ export default class UcdlibDirectoryFilters extends LitElement {
       this.library = [];
     }
 
-    if (  params.get(this.keyDepartment) ) {
-      this.department = params.get(this.keyDepartment).split(',').map(id => parseInt(id));
+    if (  params.get(this.keyServiceType) ) {
+      this.serviceType = params.get(this.keyServiceType).split(',').map(id => parseInt(id));
     } else {
-      this.department = [];
-    }
-
-    if (  params.get(this.keyDirectoryTag) ) {
-      this.directoryTag = params.get(this.keyDirectoryTag).split(',').map(id => parseInt(id));
-    } else {
-      this.directoryTag = [];
+      this.serviceType = [];
     }
   }
 
   onSlimSelectChange(e, prop) {
     const values = e.detail;
     this[prop] = values.map(v => parseInt(v.value));
-  }
-
-  async getFilters(){
-    try {
-      const request = await fetch('/wp-json/ucdlib-directory/filters');
-      const data = await request.json();
-      this.filterError = false;
-      this.filterOptions = data;
-    } catch (error) {
-      this.filterError = true;
-      this.library = [];
-      this.department = [];
-      this.directoryTag = [];
-      console.error(error);
-    }
-    
   }
 
   _onVisibilityKeyUp(e){
@@ -135,21 +116,13 @@ export default class UcdlibDirectoryFilters extends LitElement {
     if ( this.keyword ) {
       params.set(this.keyKeyword, this.keyword);
     }
-    if ( this.orderby ) {
-      params.set(this.keyOrderby, this.orderby);
-    }
     if ( this.library.length ){
       params.set(this.keyLibrary, this.library.join(','));
     }
-    if ( this.department.length ){
-      params.set(this.keyDepartment, this.department.join(','));
+    if ( this.serviceType.length ){
+      params.set(this.keyServiceType, this.serviceType.join(','));
     }
 
-    if ( this.directoryTag.length ){
-      params.set(this.keyDirectoryTag, this.directoryTag.join(','));
-    }
-
-    //console.log(this.url + '?' + params.toString());
     let queryString = params.toString();
     if ( queryString ) {
       window.location = this.url + '?' + params.toString();
@@ -161,4 +134,4 @@ export default class UcdlibDirectoryFilters extends LitElement {
 
 }
 
-customElements.define('ucdlib-directory-filters', UcdlibDirectoryFilters);
+customElements.define('ucdlib-directory-service-filters', UcdlibDirectoryServiceFilters);

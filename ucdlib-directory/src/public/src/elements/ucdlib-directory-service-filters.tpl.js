@@ -1,5 +1,4 @@
 import { html, css } from 'lit';
-
 import '@ucd-lib/theme-elements/brand/ucd-theme-slim-select/ucd-theme-slim-select.js'
 
 import buttonStyles from "@ucd-lib/theme-sass/2_base_class/_buttons.css.js";
@@ -67,16 +66,16 @@ export function styles() {
     }
   `;
 
-return [
-  buttonStyles,
-  formStyles,
-  headerStyles,
-  formsClassesStyles,
-  oBox,
-  panelStyles,
-  brandStyles,
-  elementStyles
-];
+  return [
+    buttonStyles,
+    formStyles,
+    headerStyles,
+    formsClassesStyles,
+    panelStyles,
+    oBox,
+    brandStyles,
+    elementStyles
+  ];
 }
 
 export function render() { 
@@ -116,23 +115,12 @@ return html`
           </ucd-theme-slim-select>
         </div>
         <div class="field-container">
-          <label for="department">Department</label>
-          <ucd-theme-slim-select class='flex' @change=${e => this.onSlimSelectChange(e, 'department')}>
-            <select id='department' multiple>
-              <option data-placeholder="true">Select Department</option>
-              ${this.filterOptions.department.map(opt => html`
-                <option ?selected=${this.department.includes(opt.id)} value=${opt.id}>${opt.name}</option>
-              `)}
-            </select>
-          </ucd-theme-slim-select>
-        </div>
-        <div class="field-container">
-          <label for="subject-area">Subject Area</label>
-          <ucd-theme-slim-select class='flex' @change=${e => this.onSlimSelectChange(e, 'directoryTag')}>
-            <select id='subject-area' multiple>
-              <option data-placeholder="true">Select Subject Area</option>
-              ${this.filterOptions['directory-tag']['subjectArea'].map(opt => html`
-                <option ?selected=${this.directoryTag.includes(opt.id)} value=${opt.id}>${opt.name}</option>
+          <label for="service-type">Service Type</label>
+          <ucd-theme-slim-select class='flex' @change=${e => this.onSlimSelectChange(e, 'serviceType')}>
+            <select id='service-type' multiple>
+              <option data-placeholder="true">Select Service Type</option>
+              ${this.filterOptions['service-type'].map(opt => html`
+                <option ?selected=${this.serviceType.includes(opt.id)} value=${opt.id}>${opt.name}</option>
               `)}
             </select>
           </ucd-theme-slim-select>
