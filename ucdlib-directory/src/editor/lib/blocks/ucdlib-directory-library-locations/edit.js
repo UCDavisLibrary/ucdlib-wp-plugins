@@ -12,7 +12,8 @@ export default ( props ) => {
 
   // get metadata
   const libraryIds = SelectUtils.editedPostAttribute('library');
-  const libraries = SelectUtils.terms('library');
+  const query = {per_page: -1, orderby: 'count', order: 'desc', context: 'view'};
+  const libraries = SelectUtils.terms('library', query);
   const meta = SelectUtils.editedPostAttribute('meta');
   const hideLibraries = meta.hide_libraries ? meta.hide_libraries : false;
 

@@ -22,6 +22,7 @@ class UCDLibPluginDirectoryPeople {
     add_filter( 'post_row_actions', array($this, 'add_admin_list_user_link') , 10, 2);
     add_filter( 'query_vars', [$this, 'register_query_vars'] );
     add_action( 'admin_notices', [$this, 'addNoticeToUserSettings']);
+    add_action( 'admin_bar_menu', [$this, 'modfifyAdminBar'] );
 
     add_action( 'ucd-cas/login', array($this, 'transfer_ownership'), 10, 2 );
     add_action( 'ucd-theme/template/author', array($this, 'redirect_author'));
@@ -304,6 +305,25 @@ class UCDLibPluginDirectoryPeople {
           $menu[$i][0] = 'Account Settings';
         }
       }
+  }
+
+  public function modfifyAdminBar($admin_bar){
+    $accountLink = $admin_bar->get_node( 'edit-profile' );
+    if ( $accountLink ) {
+      $accountLink->title = 'Account Settings';
+      $admin_bar->add_node($accountLink);
+    }
+    $profileLink = $admin_bar->get_node('user-info');
+    if ( $profileLink ){
+      $profileLink->href = $this->get_profile_editor_page();
+      $admin_bar->add_node($profileLink);
+    }
+    $myAccountLink = $admin_bar->get_node('my-account');{
+      if ( $myAccountLink ) {
+        $myAccountLink->href = $this->get_profile_editor_page();
+        $admin_bar->add_node($myAccountLink);
+      }
+    }
   }
 
   // prints notice on native user profile, telling users about their public profile
