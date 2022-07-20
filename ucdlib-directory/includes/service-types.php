@@ -15,6 +15,7 @@ class UCDLibPluginDirectoryServiceTypes {
   // register taxonomy
   public function register(){
     $slug = $this->config['taxSlugs']['service-type'];
+    $people = $this->config['postSlugs']['personPlural'];
     $labels = [
       'name'              => _x( 'Service Types', 'taxonomy general name' ),
       'singular_name'     => _x( 'Service Type', 'taxonomy singular name' ),
@@ -37,6 +38,12 @@ class UCDLibPluginDirectoryServiceTypes {
       'show_ui' => true,
       'show_in_nav_menus' => false,
       'show_in_rest' => true,
+      'capabilities' => [
+        'manage_terms'  => $this->config['capabilities']['manage_directory'],
+        'edit_terms'    => $this->config['capabilities']['manage_directory'],
+        'delete_terms'  => $this->config['capabilities']['manage_directory'],
+        'assign_terms'  => "edit_$people"
+      ],
       'show_admin_column' => true,
       'meta_box_cb' => 'post_categories_meta_box'
     ];

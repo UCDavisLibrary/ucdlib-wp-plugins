@@ -68,6 +68,8 @@ class UCDLibPluginDirectoryDepartments {
       'show_in_rest' => true,
       'show_in_nav_menus' => false,
       'show_in_menu' => $this->config['slug'],
+      'capability_type' => $this->slug,
+      'map_meta_cap' => true,
       'menu_position' => 30,
       'template' => $template,
       'template_lock' => 'all',

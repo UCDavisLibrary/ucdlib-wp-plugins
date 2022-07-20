@@ -29,7 +29,7 @@ class UCDLibPluginDirectoryACF {
       'menu_slug' => $this->menuSlug,
       'post_id' => $this->config['slug'],
       'updated_message' => 'Directory settings updated',
-      'capability' => 'activate_plugins'
+      'capability' => $this->config['capabilities']['manage_directory']
     ));
   }
 

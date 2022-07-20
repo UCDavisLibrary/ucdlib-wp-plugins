@@ -28,7 +28,7 @@ class UCDLibPluginSpecialACF {
       'menu_slug' => $this->menuSlug,
       'post_id' => $this->config->slug,
       'updated_message' => 'Settings updated',
-      'capability' => 'activate_plugins'
+      'capability' => $this->config->capabilities['manage_collections']
     ));
   }
 

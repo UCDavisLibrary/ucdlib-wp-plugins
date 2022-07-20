@@ -70,6 +70,8 @@ class UCDLibPluginDirectoryServices {
       'menu_icon' => 'dashicons-info',
       'template' => $template,
       'template_lock' => 'all',
+      'capability_type' => $this->slug,
+      'map_meta_cap' => true,
       'supports' => array(
         'title', 
         'editor', 

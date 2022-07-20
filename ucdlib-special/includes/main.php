@@ -50,7 +50,8 @@ class UCDLibPluginSpecial {
     $this->collection = new UCDLibPluginSpecialExhibits( $this->config );
 
     add_filter( 'timber/locations', array($this, 'add_timber_locations') );
-
+    register_activation_hook($this->config->entryPoint, [$this, 'onActivation'] );
+    register_deactivation_hook($this->config->entryPoint, [$this, 'onDeactivation'] );
   }
 
   /**
@@ -59,6 +60,24 @@ class UCDLibPluginSpecial {
   public function add_timber_locations($paths){
     $paths[$this->config->slug] = array(WP_PLUGIN_DIR . "/" . $this->config->slug . '/views');
     return $paths;
+  }
+
+  public function onActivation(){
+    $capabilities = $this->config->capabilities;
+
+    // admin needs everything
+    $role = get_role( 'administrator' );
+    foreach ($capabilities as $capability) {
+      $role->add_cap( $capability ); 
+    }
+
+    add_role('exhibit_manager', 'Exhibit Manager', [$capabilities['manage_exhibits'] => true]);
+    add_role('collection_manager', 'Special Collection Manager', [$capabilities['manage_collections'] => true]);
+  }
+
+  public function onDeactivation(){
+    remove_role('exhibit_manager');
+    remove_role('collection_manager');
   }
 
 }

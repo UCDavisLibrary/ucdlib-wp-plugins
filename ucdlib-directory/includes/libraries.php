@@ -14,6 +14,7 @@ class UCDLibPluginDirectoryLibraries {
 
   // register taxonomy
   public function register(){
+    $people = $this->config['postSlugs']['personPlural'];
     $labels = [
       'name'              => _x( 'Libraries', 'taxonomy general name' ),
       'singular_name'     => _x( 'Library', 'taxonomy singular name' ),
@@ -34,6 +35,12 @@ class UCDLibPluginDirectoryLibraries {
       'show_ui' => true,
       'show_in_nav_menus' => false,
       'show_in_rest' => true,
+      'capabilities' => [
+        'manage_terms'  => $this->config['capabilities']['manage_directory'],
+        'edit_terms'    => $this->config['capabilities']['manage_directory'],
+        'delete_terms'  => $this->config['capabilities']['manage_directory'],
+        'assign_terms'  => "edit_$people"
+      ],
       'show_admin_column' => true,
       'meta_box_cb' => 'post_categories_meta_box'
     ];

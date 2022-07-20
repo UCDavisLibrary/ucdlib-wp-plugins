@@ -34,6 +34,13 @@ class UCDLibPluginSpecialTaxSubject {
       'show_in_nav_menus' => false,
       'show_in_rest' => true,
       'show_admin_column' => false,
+      'show_in_menu' => true,
+      'capabilities' => [
+        'manage_terms'  => $this->config->capabilities['manage_collections'],
+        'edit_terms'    => $this->config->capabilities['manage_collections'],
+        'delete_terms'  => $this->config->capabilities['manage_collections'],
+        'assign_terms'  => "edit_posts"
+      ],
     ];
 
     register_taxonomy(
