@@ -38,8 +38,6 @@ class UCDLibPluginSpecialPatterns {
       <!-- wp:ucd-theme/special-extent /-->
       <!-- wp:ucd-theme/special-subject /-->
       <!-- /wp:ucd-theme/column -->
-      <!-- wp:ucd-theme/column {\"layoutClass\":\"l-sidebar-first\",\"forbidWidthEdit\":true} -->
-      <!-- /wp:ucd-theme/column -->
       <!-- /wp:ucd-theme/layout-basic -->
     ";
   }

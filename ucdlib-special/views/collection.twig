@@ -1,35 +1,45 @@
 {% extends getUcdTemplate('base') %}
 
+{% block hero_image %}
+{% endblock %}
+
 {% block content_container %}
+
 <div class="l-container l-basic--flipped">
   <div class="l-content">
 
-    <h3>Collection Number: {{post.meta('callNumber')}}</h3>
-    <p>{{post.meta('description')}}</p>
+    {% if post.thumbnail %}
+      <div class="u-align--left u-width--one-third no-margin  ">
+        <div class="aspect--520x580">
+          <img src='{{post.thumbnail.src}}' alt='Picture of special collection'>
+        </div>
+      </div>
 
+      <div class="u-align--right u-width--two-thirds no-margin">
+      {% else %}
+      <div>
+    {% endif %}
+    
+      <h3>Collection Number: {{post.meta('callNumber')}}</h3>
+      <p>{{post.meta('description')}}</p>
 
-    <h4>Finding Aid</h4>
-    <a href="{{post.meta('findingAid').linkURL}}" target="_blank">{{post.meta('findingAid').linkTitle}}</a>
+      <h4>Finding Aid</h4>
+      <a href="{{post.meta('findingAid').linkURL}}" target="_blank">{{post.meta('findingAid').linkTitle}}</a>
 
-    <h4>Biography</h4>
-    <p>{{post.meta('biography')}}</p>
+      <h4>Biography</h4>
+      <p>{{post.meta('biography')}}</p>
 
-    <h4>Inclusive Dates</h4>
-    <p>{{post.meta('inclusiveDates')}}</p>
+      <h4>Inclusive Dates</h4>
+      <p>{{post.meta('inclusiveDates')}}</p>
 
-    <h4>Extent</h4>
-    <p>{{post.meta('extent')}}</p>
+      <h4>Extent</h4>
+      <p>{{post.meta('extent')}}</p>
 
-    <h4>Subject</h4>
-    {% for sub in post.meta('subject') %}
-      <p>{{sub}}</p>
-    {% endfor %}
-
-    {# {{post.post_content}} #}
-
-    {# {{dump(post)}} #}
-
-    {# <img src="{{ post.thumbnail }}" class="my-thumb-class" alt="Image for {{ post.title }}" /> #}
+      <h4>Subject</h4>
+      {% for sub in post.meta('subject') %}
+        <p>{{sub}}</p>
+      {% endfor %}
+    </div>
 
     
   </div>
