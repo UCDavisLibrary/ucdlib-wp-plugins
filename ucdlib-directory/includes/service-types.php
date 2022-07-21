@@ -40,7 +40,7 @@ class UCDLibPluginDirectoryServiceTypes {
       'show_in_rest' => true,
       'capabilities' => [
         'manage_terms'  => $this->config['capabilities']['manage_directory'],
-        'edit_terms'    => $this->config['capabilities']['manage_directory'],
+        'edit_terms'    => "edit_$people",
         'delete_terms'  => $this->config['capabilities']['manage_directory'],
         'assign_terms'  => "edit_$people"
       ],

@@ -33,9 +33,13 @@ class UCDLibPluginDirectoryBlocks extends UCDThemeBlockRenderer {
     'ucdlib-directory/pronouns' => [
       'twig' => '@ucdlib-directory/blocks/person-pronouns.twig'
     ],
+    'ucdlib-directory/query' => [
+      'twig' => '@ucdlib-directory/blocks/directory-results.twig',
+      'transform' => ['setDefaultQueryAttributes', 'getDirectoryResults']
+    ],
     'ucdlib-directory/results' => [
       'twig' => '@ucdlib-directory/blocks/directory-results.twig',
-      'transform' => ['getDirectoryResults']
+      'transform' => ['queryArgsToAttributes', 'getDirectoryResults']
     ],
     'ucdlib-directory/sort' => [
       'twig' => '@ucdlib-directory/blocks/directory-sort.twig'

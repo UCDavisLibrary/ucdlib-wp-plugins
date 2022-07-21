@@ -1,4 +1,5 @@
 import directoryFilters from "./ucdlib-directory-filters";
+import directoryQuery from "./ucdlib-directory-query";
 import directoryResults from "./ucdlib-directory-results";
 import directorySort from "./ucdlib-directory-sort";
 import metaDescription from "./ucdlib-directory-description";
@@ -15,6 +16,7 @@ import serviceResults from "./ucdlib-directory-service-results";
 
 export default [
   directoryFilters,
+  directoryQuery,
   directoryResults,
   directorySort,
   metaDescription,

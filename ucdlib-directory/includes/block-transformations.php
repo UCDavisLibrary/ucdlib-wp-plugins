@@ -81,6 +81,26 @@ class UCDLibPluginDirectoryBlockTransformations {
 
   }
 
+  // converts directory url query args to attributes
+  public static function queryArgsToAttributes($attrs){
+    $attrs['orderby'] = get_query_var('orderby', '');
+    $attrs['q'] = UCDLibPluginDirectoryUtils::explodeQueryVar('q', false, ' ');
+    $attrs['library'] = UCDLibPluginDirectoryUtils::explodeQueryVar('library');
+    $attrs['department'] = UCDLibPluginDirectoryUtils::explodeQueryVar('department');
+    $attrs['directoryTag'] = UCDLibPluginDirectoryUtils::explodeQueryVar('directory-tag');
+    return $attrs;
+  }
+
+  public static function setDefaultQueryAttributes( $attrs ){
+    if ( !array_key_exists('orderby', $attrs) ) $attrs['orderby'] = 'department';
+    $vars = ['q', 'library', 'department', 'directoryTag'];
+    foreach ($vars as $var) {
+      if ( !array_key_exists($var, $attrs) ) $attrs[$var] = [];
+    }
+    
+    return $attrs;
+  }
+
   /**
    * Gets people/departments based on url query parameters
    */
@@ -93,9 +113,10 @@ class UCDLibPluginDirectoryBlockTransformations {
     ];
     $tax_query = [];
     $expertiseAreas = [];
+    $hideDepartments = array_key_exists('hideDepartments', $attrs) && $attrs['hideDepartments'] != 'false';
 
     // set order of results
-    $orderby = get_query_var('orderby') == 'name' ? 'name' : 'department';
+    $orderby = $attrs['orderby'] == 'name' ? 'name' : 'department';
     if ( $orderby == 'department' ){
       $personQuery['orderby'] = 'menu_order meta_value';
     } else {
@@ -103,7 +124,7 @@ class UCDLibPluginDirectoryBlockTransformations {
     }
 
     // keyword search. needs to search both name and areas of expertise taxonomy
-    $kwQueryVar = UCDLibPluginDirectoryUtils::explodeQueryVar('q', false, ' ');
+    $kwQueryVar =  array_filter($attrs['q'], function($x){return $x;});
     if ( count( $kwQueryVar ) ){
       $personQuery['s'] = implode(' ', $kwQueryVar);
 
@@ -122,7 +143,7 @@ class UCDLibPluginDirectoryBlockTransformations {
     }
 
     // filter by library location
-    $libQueryVar = UCDLibPluginDirectoryUtils::explodeQueryVar('library');
+    $libQueryVar = $attrs['library'];
     if ( count($libQueryVar) ){
       $tax_query[] = [
         'taxonomy' => 'library',
@@ -133,7 +154,7 @@ class UCDLibPluginDirectoryBlockTransformations {
     }
 
     // filter by department
-    $deptQueryVar = UCDLibPluginDirectoryUtils::explodeQueryVar('department');
+    $deptQueryVar = $attrs['department'];
     if ( count($deptQueryVar) ){
       $personQuery['meta_query'] = [[
         'key' => 'position_dept',
@@ -144,7 +165,7 @@ class UCDLibPluginDirectoryBlockTransformations {
     }
 
     // filter by directory tag/subject area
-    $tagQueryVar = UCDLibPluginDirectoryUtils::explodeQueryVar('directory-tag');
+    $tagQueryVar = $attrs['directoryTag'];
     if ( count($tagQueryVar) ){
       $tax_query[] = [
         'taxonomy' => 'directory-tag',
@@ -202,8 +223,9 @@ class UCDLibPluginDirectoryBlockTransformations {
         }
       }
     }
-
-    if ( $orderby == 'name' ) {
+    if ( $hideDepartments ){
+      $attrs['people'] = $people;
+    } else if ( $orderby == 'name' ) {
       $attrs['people'] = $people;
     } else {
       $deptQuery = [

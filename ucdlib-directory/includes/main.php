@@ -131,6 +131,8 @@ class UCDLibPluginDirectory {
 
     $capabilities = $this->config['capabilities'];
     $people = $this->config['postSlugs']['personPlural'];
+    $depts = $this->config['postSlugs']['department'] . 's';
+    $services = $this->config['postSlugs']['service'] . 's';
 
     // admin
     $role = get_role( 'administrator' );
@@ -142,23 +144,31 @@ class UCDLibPluginDirectory {
     $role = get_role( 'editor' );
     $role->add_cap( "edit_$people" );
     $role->add_cap( "edit_published_$people" ); 
-    $role->add_cap( "publish_$people" ); 
+    $role->add_cap( "publish_$people" );
+    $role->add_cap( "edit_$depts" );
+    $role->add_cap( "edit_$services" );
 
     // author 
     $role = get_role( 'author' );
     $role->add_cap( "edit_$people" );
     $role->add_cap( "edit_published_$people" ); 
     $role->add_cap( "publish_$people" ); 
+    $role->add_cap( "edit_$depts" );
+    $role->add_cap( "edit_$services" );
 
     // contributor
     $role = get_role( 'contributor' );
     $role->add_cap( "edit_$people" );
-    $role->add_cap( "edit_published_$people" ); 
+    $role->add_cap( "edit_published_$people" );
+    $role->add_cap( "edit_$depts" );
+    $role->add_cap( "edit_$services" );
 
     // subscriber
     $role = get_role( 'subscriber' );
     $role->add_cap( "edit_$people" );
-    $role->add_cap( "edit_published_$people" ); 
+    $role->add_cap( "edit_published_$people" );
+    $role->add_cap( "edit_$depts" );
+    $role->add_cap( "edit_$services" );
     
     add_role('directory_manager', 'Directory Manager', $capabilities);
 
