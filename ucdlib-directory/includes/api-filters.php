@@ -40,6 +40,7 @@ class UCDLibPluginDirectoryAPIFilters {
         'name' => $t->name
       ];
     }, (array)$terms);
+    $out[$slug] = array_values($out[$slug]);
 
     return rest_ensure_response($out);
   }
@@ -66,6 +67,7 @@ class UCDLibPluginDirectoryAPIFilters {
         ];
       }
     }
+    $out = array_values($out);
 
     return $out;
   }
@@ -90,6 +92,7 @@ class UCDLibPluginDirectoryAPIFilters {
         'name' => $t->post_title
       ];
     }, (array)$departments);
+    $out[$slug] = array_values($out[$slug]);
 
     $slug = $this->config['taxSlugs']['directory'];
     $out[$slug] = [

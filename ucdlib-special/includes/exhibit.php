@@ -301,6 +301,15 @@ class UCDLibPluginSpecialExhibitPage extends UcdThemePost {
     return $this->exhibitIsPermanent;
   }
 
+  protected $exhibitHero;
+  public function exhibitHero(){
+    if ( ! empty( $this->exhibitHero ) ) {
+      return $this->exhibitHero;
+    }
+    $this->exhibitHero = $this->exhibit()->thumbnail();
+    return $this->exhibitHero;
+  }
+
   protected $exhibitIsPast;
   public function exhibitIsPast(){
     if ( ! empty( $this->exhibitIsPast ) ) {
