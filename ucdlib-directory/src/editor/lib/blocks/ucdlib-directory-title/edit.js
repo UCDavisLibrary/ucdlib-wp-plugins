@@ -25,7 +25,7 @@ export default ( props ) => {
   }, [meta.position_title])
 
   const departments = useSelect((select) => {
-    let depts = select('core').getEntityRecords('postType', 'department', {per_page: 100, orderby: 'title', order: 'asc'});
+    let depts = select('core').getEntityRecords('postType', 'department', {per_page: 100, orderby: 'title', order: 'asc', 'context': 'view'});
     depts = depts ? depts : [];
     return depts
   })

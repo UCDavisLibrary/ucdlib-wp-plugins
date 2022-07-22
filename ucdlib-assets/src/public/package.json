@@ -14,9 +14,11 @@
     "dependencies": {
         "@ucd-lib/brand-theme": "file:../../../../ucdlib-theme-wp/src/public",
         "@ucd-lib/plugin-locations-public": "file:../../../ucdlib-locations/src/public",
+        "@ucd-lib/plugin-directory-public": "file:../../../ucdlib-directory/src/public",
         "@ucd-lib/plugin-search-public": "file:../../../ucdlib-search/src/public",
         "@ucd-lib/plugin-special-public": "file:../../../ucdlib-special/src/public",
         "@ucd-lib/theme-sass": "^5.0.16",
+        "jquery": "^3.6.0",
         "normalize-scss": "^7.0.1",
         "slick-carousel": "^1.8.1"
     },

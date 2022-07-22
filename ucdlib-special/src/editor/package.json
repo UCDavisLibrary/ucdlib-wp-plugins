@@ -7,6 +7,10 @@
     "author": "",
     "license": "ISC",
     "dependencies": {
-        "@ucd-lib/brand-theme-editor": "file:../../../../ucdlib-theme-wp/src/editor"
+        "@lit-labs/react": "^1.0.5",
+        "@lit-labs/task": "^1.1.2",
+        "@ucd-lib/brand-theme-editor": "file:../../../../ucdlib-theme-wp/src/editor",
+        "@ucd-lib/theme-sass": "^5.0.14",
+        "lit": "^2.2.6"
     }
 }

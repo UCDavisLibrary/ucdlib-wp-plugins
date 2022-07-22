@@ -1,0 +1,19 @@
+{% from "@ucdlib-directory/macros/person.twig" import contact %}
+{% if attributes.serviceTypes|length %}
+  {% for serviceType in attributes.serviceTypes %}
+    <div>
+      <h2>{{serviceType.term.name}}</h2>
+      {% for service in serviceType.services %}
+        <div class='u-space-mb--large'>
+          <div><strong>{{service.title}}</strong></div>
+          {% if service.description %}
+            <div>{{service.description}}</div>
+          {% endif %}
+          {{contact(service, 'text--smaller vm-teaser--person__contact')}}
+        </div>
+      {% endfor %}
+    </div>
+  {% endfor %}
+{% else %}
+    <div class='alert'>Sorry, no services match your search.</div>
+{% endif %}

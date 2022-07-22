@@ -19,8 +19,10 @@ class UCDLibPluginDirectoryBlocks extends UCDThemeBlockRenderer {
       'twig' => '@ucdlib-directory/blocks/person-bio.twig'
     ],
     'ucdlib-directory/contact' => [
-      'twig' => '@ucdlib-directory/blocks/person-contact.twig',
-      'transform' => ['getContactInfo']
+      'twig' => '@ucdlib-directory/blocks/person-contact.twig'
+    ],
+    'ucdlib-directory/filters' => [
+      'twig' => '@ucdlib-directory/blocks/directory-filters.twig'
     ],
     'ucdlib-directory/name' => [
       'twig' => '@ucdlib-directory/blocks/person-name.twig'
@@ -31,11 +33,30 @@ class UCDLibPluginDirectoryBlocks extends UCDThemeBlockRenderer {
     'ucdlib-directory/pronouns' => [
       'twig' => '@ucdlib-directory/blocks/person-pronouns.twig'
     ],
+    'ucdlib-directory/query' => [
+      'twig' => '@ucdlib-directory/blocks/directory-results.twig',
+      'transform' => ['setDefaultQueryAttributes', 'getDirectoryResults']
+    ],
+    'ucdlib-directory/results' => [
+      'twig' => '@ucdlib-directory/blocks/directory-results.twig',
+      'transform' => ['queryArgsToAttributes', 'getDirectoryResults']
+    ],
+    'ucdlib-directory/sort' => [
+      'twig' => '@ucdlib-directory/blocks/directory-sort.twig'
+    ],
+    'ucdlib-directory/service-filters' => [
+      'twig' => '@ucdlib-directory/blocks/service-filters.twig'
+    ],
+    'ucdlib-directory/service-results' => [
+      'twig' => '@ucdlib-directory/blocks/service-results.twig',
+      'transform' => ['getServiceResults']
+    ],
     'ucdlib-directory/library-locations' => [
       'twig' => '@ucdlib-directory/blocks/person-library-locations.twig'
     ],
     'ucdlib-directory/tags' => [
-      'twig' => '@ucdlib-directory/blocks/person-tags.twig'
+      'twig' => '@ucdlib-directory/blocks/person-tags.twig',
+      'transform' => 'getDirectoryUrl'
     ],
     'ucdlib-directory/expertise-areas' => [
       'twig' => '@ucdlib-directory/blocks/person-expertise-areas.twig'

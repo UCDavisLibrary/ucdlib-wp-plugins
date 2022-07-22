@@ -9,10 +9,12 @@ class UCDLibPluginDirectoryLibraries {
     add_action( 'init', array($this, 'register') );
     add_action( 'admin_menu', array($this, 'add_to_menu'));
     add_action( 'parent_file',  array($this, 'expand_parent_menu') );
+    add_filter( 'query_vars', [$this, 'register_query_vars'] );
   }
 
   // register taxonomy
   public function register(){
+    $people = $this->config['postSlugs']['personPlural'];
     $labels = [
       'name'              => _x( 'Libraries', 'taxonomy general name' ),
       'singular_name'     => _x( 'Library', 'taxonomy singular name' ),
@@ -33,6 +35,12 @@ class UCDLibPluginDirectoryLibraries {
       'show_ui' => true,
       'show_in_nav_menus' => false,
       'show_in_rest' => true,
+      'capabilities' => [
+        'manage_terms'  => $this->config['capabilities']['manage_directory'],
+        'edit_terms'    => $this->config['capabilities']['manage_directory'],
+        'delete_terms'  => $this->config['capabilities']['manage_directory'],
+        'assign_terms'  => "edit_$people"
+      ],
       'show_admin_column' => true,
       'meta_box_cb' => 'post_categories_meta_box'
     ];
@@ -49,6 +57,11 @@ class UCDLibPluginDirectoryLibraries {
     $label = 'Library Filters';
     add_submenu_page($this->config['slug'], $label, $label, 'edit_posts', "edit-tags.php?taxonomy=$this->slug",false );
   }
+
+  public function register_query_vars( $qvars ) {
+    $qvars[] =  $this->slug;
+    return $qvars;
+}
 
   // expand plugin menu when on taxonomy admin page
   public function expand_parent_menu($parent_file){

@@ -1,0 +1,13 @@
+{
+    "name": "@ucd-lib/plugin-directory-public",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "private": true,
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "@ucd-lib/theme-elements": "^0.0.17",
+        "lit": "^2.2.4"
+    }
+}

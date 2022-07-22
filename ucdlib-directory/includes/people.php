@@ -2,12 +2,14 @@
 
 require_once( get_template_directory() . "/includes/classes/post.php");
 require_once( __DIR__ . '/api-people.php' );
+require_once( __DIR__ . '/utils.php' );
 
 // Sets up the person post type
 class UCDLibPluginDirectoryPeople {
   public function __construct($config){
     $this->config = $config;
     $this->slug = $this->config['postSlugs']['person'];
+    $this->slugPlural = $this->config['postSlugs']['personPlural'];
 
     $this->api = new UCDLibPluginDirectoryAPIPeople( $config );
 
@@ -18,6 +20,9 @@ class UCDLibPluginDirectoryPeople {
     add_filter( 'manage_' . $this->slug . '_posts_columns', array($this, 'customize_admin_list_columns') );
     add_action( 'manage_' . $this->slug  . '_posts_custom_column', array($this, 'add_admin_list_column'), 10, 2);
     add_filter( 'post_row_actions', array($this, 'add_admin_list_user_link') , 10, 2);
+    add_filter( 'query_vars', [$this, 'register_query_vars'] );
+    add_action( 'admin_notices', [$this, 'addNoticeToUserSettings']);
+    add_action( 'admin_bar_menu', [$this, 'modfifyAdminBar'] );
 
     add_action( 'ucd-cas/login', array($this, 'transfer_ownership'), 10, 2 );
     add_action( 'ucd-theme/template/author', array($this, 'redirect_author'));
@@ -104,6 +109,8 @@ class UCDLibPluginDirectoryPeople {
       'rewrite'			  => array(
 			  'with_front'	  => false,
 		  ),
+      'capability_type' => [$this->slug, $this->slugPlural],
+      'map_meta_cap' => true,
       'template' => $template,
       //'template_lock' => 'all',
       'supports' => array(
@@ -147,6 +154,11 @@ class UCDLibPluginDirectoryPeople {
     
     $templates = array_merge( array("@" . $this->config['slug'] . "/person.twig"), $templates );
     return $templates;
+  }
+
+  public function register_query_vars( $qvars ) {
+    $qvars[] =  'q';
+    return $qvars;
   }
 
   // register metadata for the person post type
@@ -201,55 +213,7 @@ class UCDLibPluginDirectoryPeople {
       'default' => '',
       'type' => 'string',
     ) );
-    register_post_meta( $slug, 'contactWebsite', array(
-      'show_in_rest' => [
-        'schema' => [
-          'items' => [
-            'type' => 'object',
-            'properties' => [
-              'type' => ['type' => 'string'],
-              'value' => ['type' => 'string'],
-              'label' => ['type' => 'string']
-            ]
-          ]
-        ]
-      ],
-      'single' => true,
-      'type' => 'array',
-      'default' => []
-    ) );
-    register_post_meta( $slug, 'contactEmail', array(
-      'show_in_rest' => [
-        'schema' => [
-          'items' => [
-            'type' => 'object',
-            'properties' => [
-              'value' => ['type' => 'string'],
-              'label' => ['type' => 'string']
-            ]
-          ]
-        ]
-      ],
-      'single' => true,
-      'type' => 'array',
-      'default' => []
-    ) );
-    register_post_meta( $slug, 'contactPhone', array(
-      'show_in_rest' => [
-        'schema' => [
-          'items' => [
-            'type' => 'object',
-            'properties' => [
-              'value' => ['type' => 'string'],
-              'label' => ['type' => 'string']
-            ]
-          ]
-        ]
-      ],
-      'single' => true,
-      'type' => 'array',
-      'default' => []
-    ) );
+    UCDLibPluginDirectoryUtils::registerContactMeta($slug);
     register_post_meta( $slug, 'contactAppointmentUrl', array(
       'show_in_rest' => true,
       'single' => true,
@@ -295,11 +259,16 @@ class UCDLibPluginDirectoryPeople {
 
   }
 
-  // add an admin menu item that takes user to their person page
-  public function add_shortcut_to_profile(){
+  // get link to current user's editor profile
+  protected $get_profile_editor_page;
+  public function get_profile_editor_page(){
+    if ( ! empty( $this->get_profile_editor_page ) ) {
+      return $this->get_profile_editor_page;
+    }
+
     $slug = $this->config['postSlugs']['person'];
     $profile_page = "post-new.php?post_type=$slug&is_own_profile";
-    
+
     $user = Timber::get_posts([
       'post_type' => $slug,
       'meta_key' => 'wp_user_id',
@@ -311,6 +280,14 @@ class UCDLibPluginDirectoryPeople {
       $profile_page = "post.php?post=$user->id&action=edit&is_own_profile";
     }
 
+    $this->get_profile_editor_page = $profile_page;
+    return $this->get_profile_editor_page;
+  }
+
+  // add an admin menu item that takes user to their person page
+  public function add_shortcut_to_profile(){
+    $profile_page = $this->get_profile_editor_page();
+
     add_menu_page( 
       __( 'Your Profile', 'textdomain' ),
       'Your Profile',
@@ -320,6 +297,43 @@ class UCDLibPluginDirectoryPeople {
       'dashicons-admin-users',
       20
       ); 
+
+      // change name of default profile menu
+      global $menu;
+      foreach ($menu as $i => $topMenu) {
+        if ( $topMenu[0] == 'Profile') {
+          $menu[$i][0] = 'Account Settings';
+        }
+      }
+  }
+
+  public function modfifyAdminBar($admin_bar){
+    $accountLink = $admin_bar->get_node( 'edit-profile' );
+    if ( $accountLink ) {
+      $accountLink->title = 'Account Settings';
+      $admin_bar->add_node($accountLink);
+    }
+    $profileLink = $admin_bar->get_node('user-info');
+    if ( $profileLink ){
+      $profileLink->href = $this->get_profile_editor_page();
+      $admin_bar->add_node($profileLink);
+    }
+    $myAccountLink = $admin_bar->get_node('my-account');{
+      if ( $myAccountLink ) {
+        $myAccountLink->href = $this->get_profile_editor_page();
+        $admin_bar->add_node($myAccountLink);
+      }
+    }
+  }
+
+  // prints notice on native user profile, telling users about their public profile
+  public function addNoticeToUserSettings(){
+    global $pagenow;
+    $admin_pages = [ 'profile.php' ];
+    if ( in_array( $pagenow, $admin_pages ) ) {
+      $context = ['profile' => $this->get_profile_editor_page()];
+      Timber::render('@' . $this->config['slug'] . '/admin/profile-notice.twig', $context);
+    }
   }
 
   // redirects native wp author page to person post type
@@ -341,12 +355,26 @@ class UCDLibPluginDirectoryPeople {
       $user = $user[0];
       wp_redirect($user->link());
       exit;
-    } else {
-      status_header(404);
-      $views = $GLOBALS['UcdSite']->views;
-      $templates = array( $views->getTemplate('404'));
-      Timber::render( $templates, [] );
     }
+
+    $user = Timber::get_posts([
+      'post_type' => $slug,
+      'meta_key' => 'username',
+      'meta_value' => $author->user_login,
+      'posts_per_page' => 1
+    ]);
+    if ( count($user) ) {
+      $user = $user[0];
+      wp_redirect($user->link());
+      exit;
+    }
+
+    $context = Timber::context();
+    status_header(404);
+    $views = $GLOBALS['UcdSite']->views;
+    $templates = array( $views->getTemplate('404'));
+    Timber::render( $templates, $context );
+    exit;
 
   }
 
@@ -519,6 +547,15 @@ class UCDLibPluginDirectoryPerson extends UcdThemePost {
     return $this->expertiseAreas;
   }
 
+  protected $departmentId;
+  public function departmentId(){
+    if ( ! empty( $this->departmentId ) ) {
+      return $this->departmentId;
+    }
+    $this->departmentId = $this->meta('position_dept');
+    return $this->departmentId;
+  }
+
   protected $department;
   public function department(){
     if ( ! empty( $this->department ) ) {
@@ -526,11 +563,35 @@ class UCDLibPluginDirectoryPerson extends UcdThemePost {
     }
 
     $this->department = null;
-    $departmentId = $this->meta('position_dept');
+    $departmentId = $this->departmentId();
     if ( $departmentId ) {
       $this->department = Timber::get_post($departmentId);
     }
 
     return $this->department;
+  }
+
+  protected $contactInfo;
+  public function contactInfo(){
+    if ( ! empty( $this->contactInfo ) ) {
+      return $this->contactInfo;
+    }
+    $this->contactInfo = [];
+
+
+    $attrs['hide'] = $this->meta('hide_contact');
+    $attrs['websites'] = $this->meta('contactWebsite');
+    $attrs['emails'] = $this->meta('contactEmail');
+    $attrs['phones'] = $this->meta('contactPhone');
+    $attrs['appointmentUrl'] = $this->meta('contactAppointmentUrl');
+    $attrs = UCDLibPluginDirectoryUtils::formatContactList($attrs);
+
+    foreach ($attrs['icons'] as $icon) {
+      $this->iconsUsed[] = $icon;
+    }
+
+    
+    $this->contactInfo = $attrs;
+    return $this->contactInfo;
   }
 }

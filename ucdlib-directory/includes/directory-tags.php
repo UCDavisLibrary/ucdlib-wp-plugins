@@ -15,11 +15,13 @@ class UCDLibPluginDirectoryDirectoryTags {
     add_action($this->slug . '_edit_form_fields', array($this, 'render_term_meta'), 4, 1);
     add_action('edited_' . $this->slug, array($this, 'save_term_meta'), 10, 1);
     add_action('create_' . $this->slug, array($this, 'save_term_meta'), 10, 2);
+    add_filter( 'query_vars', [$this, 'register_query_vars'] );
 
   }
 
   // register taxonomy
   public function register(){
+    $people = $this->config['postSlugs']['personPlural'];
     $labels = [
       'name'              => _x( 'Directory Tags', 'taxonomy general name' ),
       'singular_name'     => _x( 'Directory Tag', 'taxonomy singular name' ),
@@ -42,6 +44,12 @@ class UCDLibPluginDirectoryDirectoryTags {
       'show_ui' => true,
       'show_in_nav_menus' => false,
       'show_in_rest' => true,
+      'capabilities' => [
+        'manage_terms'  => $this->config['capabilities']['manage_directory'],
+        'edit_terms'    => $this->config['capabilities']['manage_directory'],
+        'delete_terms'  => $this->config['capabilities']['manage_directory'],
+        'assign_terms'  => "edit_$people"
+      ],
       'show_admin_column' => true,
       'meta_box_cb' => 'post_categories_meta_box'
     ];
@@ -85,6 +93,11 @@ class UCDLibPluginDirectoryDirectoryTags {
     $label = 'Subjects and Directory Tags';
     add_submenu_page($this->config['slug'], $label, $label, 'edit_posts', "edit-tags.php?taxonomy=$this->slug",false );
   }
+
+  public function register_query_vars( $qvars ) {
+    $qvars[] =  $this->slug;
+    return $qvars;
+}
 
   // expand plugin menu when on taxonomy admin page
   public function expand_parent_menu($parent_file){

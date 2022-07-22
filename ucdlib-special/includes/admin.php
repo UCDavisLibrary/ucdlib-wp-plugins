@@ -23,7 +23,7 @@ class UCDLibPluginSpecialAdmin {
     add_menu_page( 
       __( 'Archives and Special Collections', 'textdomain' ),
       'Archives and Special Collections',
-      'manage_options',
+      'edit_posts',
       $this->config->slug,
       '',
       'dashicons-media-document',

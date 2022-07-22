@@ -14,6 +14,10 @@ class UCDLibPluginSpecialConfig {
       'subject' => 'collection-subject',
       'curator' => 'curator',
       'location' => 'exhibit-location'
+    ],
+    'capabilities' => [
+      'manage_exhibits' => 'manage_exhibits',
+      'manage_collections' => 'manage_collections'
     ]
     ];
 
@@ -21,6 +25,7 @@ class UCDLibPluginSpecialConfig {
     $this->slug = self::$config['slug'];
     $this->postTypes = self::$config['postTypes'];
     $this->taxonomies = self::$config['taxonomies'];
+    $this->capabilities = self::$config['capabilities'];
 
     $this->entryPoint = plugin_dir_path( __DIR__ ) . $this->slug . '.php';
     // Get version number from entrypoint doc string

@@ -16,13 +16,13 @@ export function styles() {
       align-items: center;
       padding: 5px 10px;
       border-radius: 20px;
-      background-color: #3DAE2B;
+      background-color:#3dae2b;
     }
     .user-icons.user-icons--2 {
-      background-color: #DAAA00;
+      background-color:#ffbf00;
     }
     .user-icons.user-icons--3 {
-      background-color: #F18A00;
+      background-color: #f18a00;
     }
     .user-icons.user-icons--4 {
       background-color: #F93549;
