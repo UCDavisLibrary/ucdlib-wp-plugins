@@ -1,0 +1,43 @@
+{% macro highlight(exhibit, kwargs) %}
+  {% set classes = 'hero-banner hero-banner--exhibit' %}
+
+  {% if kwargs.brandColor %}
+    {% set color = kwargs.brandColor %}
+  {% elseif exhibit.exhibitBrandColor %}
+    {% set color = exhibit.exhibitBrandColor %}
+  {% endif %}
+
+  {% if color %}
+    {% set classes = classes ~ ' category-brand--' ~  color %}
+  {% endif %}
+  {% if kwargs.classes %}
+    {% set classes = classes ~ ' ' ~ kwargs.classes %}
+  {% endif %}
+
+  <section class='{{classes}}'>
+    <div class="hero-banner__image u-background-image" style={{exhibit.exhibitHero ? "background-image:url("~exhibit.exhibitHero.src~")": ''}}></div>
+    {% if color %}
+      <div class="hero-banner__film"></div>
+    {% endif %}
+    <div class="hero-banner__body">
+      <div class="hero-banner__title">{{exhibit.exhibitTitle}}</div>
+      <div class="hero-banner__summary">
+        {% if exhibit.exhibitIsPhysical %}
+          <div>
+            <div>{{exhibit.exhibitLocationLabel}}</div>
+            {% if exhibit.exhibitIsPermanent %}
+              <div>Permanent Exhibit</div>
+            {% else %}
+              <div>{{exhibit.exhibitDateRange}}</div>
+            {% endif %}
+          </div>
+        {% elseif exhibit.exhibitIsOnline %}
+          <div>Online Exhibit</div>
+        {% endif %}
+      </div>
+      <div class="hero-banner__button-group">
+        <a class="hero-banner__button" href='{{exhibit.exhibitLink}}'>Exhibit Details</a>
+      </div>
+    </div>
+  </section>
+{% endmacro %}

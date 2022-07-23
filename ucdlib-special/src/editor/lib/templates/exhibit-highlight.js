@@ -13,8 +13,8 @@ function exhibitHighlight({
   let color = '';
   if ( brandColor ) {
     color = brandColor;
-  } else if( exhibit.brandColor ){
-    color = exhibit.brandColor;
+  } else if( exhibit.exhibitBrandColor ){
+    color = exhibit.exhibitBrandColor;
   }
 
   const imgSrc = exhibit.exhibitHero.src || '';

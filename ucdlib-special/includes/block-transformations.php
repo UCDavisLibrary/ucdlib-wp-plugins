@@ -24,5 +24,12 @@ class UCDLibPluginSpecialBlockTransformations {
     $attrs['dept_page_link'] = $link;
     return $attrs;
   }
+
+  public static function getExhibit($attrs){
+    if ( array_key_exists('exhibitId', $attrs) && $attrs['exhibitId']){
+      $attrs['exhibit'] = Timber::get_post($attrs['exhibitId']);
+    }
+    return $attrs;
+  }
 }
 ?>

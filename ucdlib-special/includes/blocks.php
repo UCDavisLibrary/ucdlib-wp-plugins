@@ -21,15 +21,19 @@ class UCDLibPluginSpecialBlocks extends UCDThemeBlockRenderer {
       "$this->slug/collection" => [
         'twig' => $this->twigPath('collection'),
       ],
-      "$this->slug/exhibit-subnav" => [
-        'twig' => $this->twigPath('exhibit-subnav')
-      ],
       "$this->slug/exhibit-curators" => [
         'twig' => $this->twigPath('exhibit-curators')
       ],
+      "$this->slug/exhibit-highlight" => [
+        'twig' => $this->twigPath('exhibit-highlight'),
+        'transform' => ['getExhibit']
+      ],
       "$this->slug/exhibit-location" => [
         'twig' => $this->twigPath('exhibit-location')
-      ]
+      ],
+      "$this->slug/exhibit-subnav" => [
+        'twig' => $this->twigPath('exhibit-subnav')
+      ],
     ];
 
     add_action('block_categories_all', array($this, 'addCategories'), 10,2);

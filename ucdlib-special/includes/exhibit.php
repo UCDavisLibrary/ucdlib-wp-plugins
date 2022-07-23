@@ -274,6 +274,15 @@ class UCDLibPluginSpecialExhibitPage extends UcdThemePost {
     return $this->exhibitId;
   }
 
+  protected $exhibitLink;
+  public function exhibitLink(){
+    if ( ! empty( $this->exhibitLink ) ) {
+      return $this->exhibitLink;
+    }
+    $this->exhibitLink = $this->exhibit()->link;
+    return $this->exhibitLink;
+  }
+
   protected $exhibitIsOnline;
   public function exhibitIsOnline(){
     if ( ! empty( $this->exhibitIsOnline ) ) {
@@ -350,6 +359,15 @@ class UCDLibPluginSpecialExhibitPage extends UcdThemePost {
     return $this->exhibitDateTo;
   }
 
+  protected $exhibitBrandColor;
+  public function exhibitBrandColor(){
+    if ( ! empty( $this->exhibitBrandColor ) ) {
+      return $this->exhibitBrandColor;
+    }
+    $this->exhibitBrandColor = $this->exhibit()->meta('ucd_brand_color');
+    return $this->exhibitBrandColor;
+  }
+
   protected $exhibitDateRange;
   public function exhibitDateRange(){
     if ( ! empty( $this->exhibitDateRange ) ) {
@@ -421,6 +439,18 @@ class UCDLibPluginSpecialExhibitPage extends UcdThemePost {
     }
     $this->exhibitLocations = $this->exhibit()->locations();
     return $this->exhibitLocations;
+  }
+
+  protected $exhibitLocationLabel;
+  public function exhibitLocationLabel(){
+    if ( ! empty( $this->exhibitLocationLabel ) ) {
+      return $this->exhibitLocationLabel;
+    }
+    $this->exhibitLocationLabel = '';
+    if ( count($this->exhibitLocations()) ) {
+      $this->exhibitLocationLabel = $this->exhibitLocations()[0]->name;
+    }
+    return $this->exhibitLocationLabel;
   }
 
   protected $locations;

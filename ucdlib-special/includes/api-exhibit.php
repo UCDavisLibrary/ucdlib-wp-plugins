@@ -74,7 +74,7 @@ class UCDLibPluginSpecialAPIExhibit {
       'exhibitLocations' => $post->exhibitLocations(),
       'exhibitLocationDirections' => $post->exhibitLocationDirections(),
       'exhibitLocationMap' => $post->exhibitLocationMap(),
-      'brandColor' => $post->meta('ucd_brand_color')
+      'exhibitBrandColor' => $post->exhibitBrandColor()
     ];
     $hero = $post->exhibitHero();
     if ( $hero ) {
