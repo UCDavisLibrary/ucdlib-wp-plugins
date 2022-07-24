@@ -13,6 +13,7 @@ export default ( props ) => {
     {value: 'current', label: 'Current'},
     {value: 'past', label: 'Past'},
     {value: 'permanent', label: 'Permanent'},
+    {value: 'current_permanent', label: 'Current or Permanent'}
   ];
 
   const sortOptions = [
