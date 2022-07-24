@@ -31,6 +31,10 @@ class UCDLibPluginSpecialBlocks extends UCDThemeBlockRenderer {
       "$this->slug/exhibit-location" => [
         'twig' => $this->twigPath('exhibit-location')
       ],
+      "$this->slug/exhibit-query" => [
+        'twig' => $this->twigPath('exhibit-query'),
+        'transform' => ['getExhibits']
+      ],
       "$this->slug/exhibit-subnav" => [
         'twig' => $this->twigPath('exhibit-subnav')
       ],

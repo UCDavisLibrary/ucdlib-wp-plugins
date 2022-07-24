@@ -1,6 +1,7 @@
 <?php
 
 require_once( __DIR__ . '/config.php' );
+require_once( __DIR__ . '/exhibit-utils.php' );
 
 // Contains methods that transform the attributes of a block (mostly fetching additional data)
 // See 'transform' property in $registry array in blocks class.
@@ -29,6 +30,11 @@ class UCDLibPluginSpecialBlockTransformations {
     if ( array_key_exists('exhibitId', $attrs) && $attrs['exhibitId']){
       $attrs['exhibit'] = Timber::get_post($attrs['exhibitId']);
     }
+    return $attrs;
+  }
+
+  public static function getExhibits( $attrs ){
+    $attrs['exhibits'] = UCDLibPluginSpecialExhibitUtils::getExhibits($attrs);
     return $attrs;
   }
 }

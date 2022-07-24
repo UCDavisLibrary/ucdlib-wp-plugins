@@ -14,6 +14,10 @@
     {% set classes = classes ~ ' ' ~ kwargs.classes %}
   {% endif %}
 
+  {% if not color and not exhibit.exhibitHero %}
+    {% set classes = classes ~ ' hero-banner--no-background' %}
+  {% endif %}
+
   <section class='{{classes}}'>
     <div class="hero-banner__image u-background-image" style={{exhibit.exhibitHero ? "background-image:url("~exhibit.exhibitHero.src~")": ''}}></div>
     {% if color %}

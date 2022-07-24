@@ -1,0 +1,7 @@
+ {% from '@ucdlib-special/macros/exhibit.twig' import highlight %}
+{% if attributes.exhibits|length %}
+  {% for exhibit in attributes.exhibits %}
+    {{highlight(exhibit, {classes: 'o-box u-space-mb' })}}
+  {% endfor %}
+{% else %}
+{% endif %}
