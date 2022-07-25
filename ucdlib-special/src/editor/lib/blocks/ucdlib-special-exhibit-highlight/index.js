@@ -20,7 +20,7 @@ const settings = {
     },
     brandColor: {
       type: "string",
-      default: ""
+      default: "primary"
     },
   },
   edit: Edit

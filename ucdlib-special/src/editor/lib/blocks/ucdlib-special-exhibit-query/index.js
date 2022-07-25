@@ -22,9 +22,29 @@ const settings = {
       type: 'string',
       default: 'highlight'
     },
+    templateTeaserOptions: {
+      type: 'object',
+      default: {}
+    },
     orderby: {
       type: 'string',
       default: 'date'
+    },
+    isOnline: {
+      type: 'boolean',
+      default: false
+    },
+    curatorOrg: {
+      type: 'array',
+      default: []
+    },
+    curator: {
+      type: 'array',
+      default: []
+    },
+    postsPerPage: {
+      type: 'number',
+      default: 10
     }
   },
   edit: Edit

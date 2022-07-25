@@ -5,6 +5,8 @@
     {% set color = kwargs.brandColor %}
   {% elseif exhibit.exhibitBrandColor %}
     {% set color = exhibit.exhibitBrandColor %}
+  {% else %}
+    {% set color = 'primary' %}
   {% endif %}
 
   {% if color %}
@@ -18,7 +20,7 @@
     {% set classes = classes ~ ' hero-banner--no-background' %}
   {% endif %}
 
-  <section class='{{classes}}'>
+  <article class='{{classes}}'>
     <div class="hero-banner__image u-background-image" style={{exhibit.exhibitHero ? "background-image:url("~exhibit.exhibitHero.src~")": ''}}></div>
     {% if color %}
       <div class="hero-banner__film"></div>
@@ -43,5 +45,36 @@
         <a class="hero-banner__button" href='{{exhibit.exhibitLink}}'>Exhibit Details</a>
       </div>
     </div>
-  </section>
+  </article>
+{% endmacro %}
+
+{% macro teaser(exhibit, kwargs) %}
+  {% set opts = kwargs.options %}
+  {% set showLocation = exhibit.exhibitLocationLabel and not opts.hideLocation %}
+  {% set showDates = (exhibit.exhibitIsPermanent or exhibit.exhibitDateRange) and not opts.hideDates %}
+  {% set showByline = showLocation or showDates %}
+  <article class='vm-teaser vm-teaser--exhibit'>
+    {% if exhibit.teaser_image %}
+      <div class="vm-teaser__figure category" style="width:20%;max-width:135px;" role='image' aria-label='{{exhibit.teaser_image.alt}}'>
+        <a href="{{href}}" style="display:block;background-image:url({{exhibit.teaser_image.src}})" class="aspect--1x1 u-background-image">
+        </a>
+      </div>
+    {% endif %}
+    <div class="vm-teaser__body">
+      <h3 class="vm-teaser__title"><a href="{{exhibit.link}}">{{exhibit.title}}</a></h3>
+      {% if exhibit.exhibitCuratorOrgs|length and not opts.hideCuratorOrgs %}
+        <div class='vm-teaser--exhibit__curators'>Curated by {{exhibit.exhibitCuratorOrgs|map(e => e.name)|join(', ')}}</div>
+      {% endif %}
+      {% if showByline %}
+        <ul class="vm-teaser__byline">
+          {% if showLocation %}
+            <li>{{exhibit.exhibitLocationLabel}}</li>
+          {% endif %}
+          {% if showDates %}
+            <li>{{exhibit.exhibitIsPermanent ? 'Ongoing' : exhibit.exhibitDateRange}}</li>
+          {% endif %}
+        </ul>
+      {% endif %}
+    </div>
+  </article>
 {% endmacro %}
