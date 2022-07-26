@@ -22,9 +22,19 @@ export default ( props ) => {
         disabled=${!meta.fetchedData || meta.description === meta.fetchedData.description}
       />
     </${BlockControls}>
-
     <div>
-      <h3>Collection Number: ${meta.callNumber} ${meta.fetchedData && meta.description !== meta.fetchedData.description ? html`<span className="strawberry">*</span>` : ''}</h3>
+      <h3>
+        Collection Number: 
+        <${RichText}
+          tagName="span"
+          className=""
+          style=${{ paddingLeft: '.5rem', paddingRight: '.5rem' }}
+          value=${meta.callNumber}
+          onChange="${callNumber => {editPost({meta: {callNumber}})}}"
+        />
+        ${meta.fetchedData && meta.description !== meta.fetchedData.description ? html`<span className="strawberry">*</span>` : ''}
+      </h3>
+      
       <${RichText}
           tagName="p"
           className=""
