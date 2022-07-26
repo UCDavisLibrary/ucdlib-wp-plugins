@@ -45,6 +45,10 @@ const settings = {
     postsPerPage: {
       type: 'number',
       default: 10
+    },
+    noResultsText: {
+      type: 'string',
+      default: ''
     }
   },
   edit: Edit

@@ -1,6 +1,6 @@
 import { html, SelectUtils } from "@ucd-lib/brand-theme-editor/lib/utils";
 import { useBlockProps, InspectorControls } from '@wordpress/block-editor';
-import { PanelBody, SelectControl, ToggleControl, FormTokenField, RangeControl } from '@wordpress/components';
+import { PanelBody, SelectControl, ToggleControl, FormTokenField, RangeControl, TextareaControl } from '@wordpress/components';
 import { decodeEntities } from "@wordpress/html-entities";
 import { useEffect, useState } from '@wordpress/element';
 import apiFetch from '@wordpress/api-fetch';
@@ -173,6 +173,12 @@ export default ( props ) => {
         value=${attributes.postsPerPage}
         onChange=${postsPerPage => setAttributes({postsPerPage})}
       />
+      <${TextareaControl} 
+        label='No Exhibits Text'
+        help='Will display if no exhibits match your query'
+        value=${attributes.noResultsText}
+        onChange=${noResultsText => setAttributes({noResultsText})}
+      /> 
     </${PanelBody}>
   </${InspectorControls}>
     <div className='alert'>A list of exhibits based on your query will display here.</div>

@@ -7,5 +7,6 @@
       {{highlight(exhibit, {classes: 'o-box u-space-mb' })}}
     {% endif %}
   {% endfor %}
-{% else %}
+{% elseif attributes.noResultsText %}
+  <p>{{ attributes.noResultsText }}</p>
 {% endif %}
