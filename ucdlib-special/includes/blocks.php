@@ -30,6 +30,10 @@ class UCDLibPluginSpecialBlocks extends UCDThemeBlockRenderer {
         'twig' => $this->twigPath('exhibit-online'),
         'transform' => ['getOnlineExhibits']
       ],
+      "$this->slug/exhibit-past" => [
+        'twig' => $this->twigPath('exhibit-past'),
+        'transform' => ['getPastExhibits']
+      ],
       "$this->slug/exhibit-query" => [
         'twig' => $this->twigPath('exhibit-query'),
         'transform' => ['hideExhibitExcerpt', 'getExhibits']

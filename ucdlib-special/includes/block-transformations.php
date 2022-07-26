@@ -45,6 +45,34 @@ class UCDLibPluginSpecialBlockTransformations {
     return $attrs;
   }
 
+  public static function getPastExhibits( $attrs ){
+    $attrs['orderby'] = 'start_date';
+    $attrs['postsPerPage'] = 20;
+    $attrs['status'] = 'past';
+    
+    $attrs['exhibits'] = UCDLibPluginSpecialExhibitUtils::getExhibits($attrs);
+
+    $attrs['found_posts'] = $attrs['exhibits']->found_posts;
+    
+    // group by year
+    $years = [];
+    foreach ($attrs['exhibits'] as $exhibit) {
+      $start = substr($exhibit->exhibitDateFrom(), 0, 4);
+      if ( !array_key_exists($start, $years)){
+        $years[$start] = [];
+      }
+      $years[$start][] = $exhibit;
+    }
+    $attrs['years'] = $years;
+
+    $attrs['teaserOptions'] = [
+      'hideExcerpt' => true,
+      'hideLocation' => true
+    ];
+
+    return $attrs;
+  }
+
   public static function getOnlineExhibits( $attrs ){
     $attrs['orderby'] = get_query_var('orderby', 'title');
     $attrs['curatorOrg'] = UCDLibPluginSpecialExhibitUtils::explodeQueryVar('curator');
