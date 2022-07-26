@@ -11,11 +11,6 @@ class UCDLibPluginSpecialBlocks extends UCDThemeBlockRenderer {
 
     /**
      * list custom blocks here for server-side rendering. e.g.:
-     * 
-     *  "$this->slug/{{yourBlockSlug}}" => [
-     *    'twig' => $this->twigPath({{nameOfTwigFile}}),
-     *    'transform' => ['{{method1}}', '{{method2}}']
-     *  ]
      */
     $this->registry = [
       "$this->slug/collection" => [
@@ -31,9 +26,13 @@ class UCDLibPluginSpecialBlocks extends UCDThemeBlockRenderer {
       "$this->slug/exhibit-location" => [
         'twig' => $this->twigPath('exhibit-location')
       ],
+      "$this->slug/exhibit-online" => [
+        'twig' => $this->twigPath('exhibit-online'),
+        'transform' => ['getOnlineExhibits']
+      ],
       "$this->slug/exhibit-query" => [
         'twig' => $this->twigPath('exhibit-query'),
-        'transform' => ['getExhibits']
+        'transform' => ['hideExhibitExcerpt', 'getExhibits']
       ],
       "$this->slug/exhibit-subnav" => [
         'twig' => $this->twigPath('exhibit-subnav')

@@ -63,7 +63,7 @@
     <div class="vm-teaser__body">
       <h3 class="vm-teaser__title"><a href="{{exhibit.link}}">{{exhibit.title}}</a></h3>
       {% if exhibit.exhibitCuratorOrgs|length and not opts.hideCuratorOrgs %}
-        <div class='vm-teaser--exhibit__curators'>Curated by {{exhibit.exhibitCuratorOrgs|map(e => e.name)|join(', ')}}</div>
+        <div class='vm-teaser--exhibit__curators {{not showByline ? 'vm-teaser__byline'}}'>Curated by {{exhibit.exhibitCuratorOrgs|map(e => e.name)|join(', ')}}</div>
       {% endif %}
       {% if showByline %}
         <ul class="vm-teaser__byline">
@@ -74,6 +74,9 @@
             <li>{{exhibit.exhibitIsPermanent ? 'Ongoing' : exhibit.exhibitDateRange}}</li>
           {% endif %}
         </ul>
+      {% endif %}
+      {% if not opts.hideExcerpt and exhibit.excerpt %}
+        <div class="vm-teaser__summary">{{ exhibit.excerpt({words: 25}) }}</div>
       {% endif %}
     </div>
   </article>

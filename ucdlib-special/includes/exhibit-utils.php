@@ -3,7 +3,8 @@
 class UCDLibPluginSpecialExhibitUtils {
   public static function getExhibits($query){
     $wp_query = [
-      'post_type' => 'exhibit'
+      'post_type' => 'exhibit',
+      'post_parent' => 0
     ];
     $meta_query = [];
     $tax_query = [];
@@ -139,5 +140,17 @@ class UCDLibPluginSpecialExhibitUtils {
     //var_dump( $wp_query );
     $exhibits = Timber::get_posts($wp_query);
     return $exhibits;
+  }
+
+  public static function explodeQueryVar($queryVar, $asInt=true, $delim=','){
+    $q = get_query_var($queryVar, '');
+    $q = explode($delim, $q);
+    if ( $asInt ) {
+      $q = array_map(function($id){return intval($id);}, $q);
+    } else {
+      $q = array_map('strtolower', $q);
+    }
+    $q = array_filter($q, function($v){return $v;});
+    return $q;
   }
 }

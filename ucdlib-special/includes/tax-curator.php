@@ -8,7 +8,7 @@ class UCDLibPluginSpecialCurators {
 
     add_action( 'init', array($this, 'register') );
     add_filter( 'rest_prepare_taxonomy', [ $this, 'hide_metabox'], 10, 3);
-
+    add_filter( 'query_vars', [$this, 'register_query_vars'] );
   }
 
   // register taxonomy
@@ -52,6 +52,11 @@ class UCDLibPluginSpecialCurators {
       $args
     );
     
+  }
+
+  public function register_query_vars( $qvars ) {
+    $qvars[] =  $this->slug;
+    return $qvars;
   }
 
   // hides taxonomy box on exhibit pages

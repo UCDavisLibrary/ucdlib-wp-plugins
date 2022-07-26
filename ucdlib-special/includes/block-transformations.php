@@ -37,5 +37,21 @@ class UCDLibPluginSpecialBlockTransformations {
     $attrs['exhibits'] = UCDLibPluginSpecialExhibitUtils::getExhibits($attrs);
     return $attrs;
   }
+
+  public static function hideExhibitExcerpt( $attrs ) {
+    if ( !array_key_exists('templateTeaserOptions', $attrs) ){
+      $attrs['templateTeaserOptions']['hideExcerpt'] = true;
+    }
+    return $attrs;
+  }
+
+  public static function getOnlineExhibits( $attrs ){
+    $attrs['orderby'] = get_query_var('orderby', 'title');
+    $attrs['curatorOrg'] = UCDLibPluginSpecialExhibitUtils::explodeQueryVar('curator');
+    $attrs['isOnline'] = true;
+    $attrs['postsPerPage'] = -1;
+    $attrs['exhibits'] = UCDLibPluginSpecialExhibitUtils::getExhibits($attrs);
+    return $attrs;
+  }
 }
 ?>

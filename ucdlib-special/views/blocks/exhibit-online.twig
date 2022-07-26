@@ -1,0 +1,13 @@
+ {% from '@ucdlib-special/macros/exhibit.twig' import teaser %}
+ <div>
+  <ucdlib-special-exhibit-online-sort></ucdlib-special-exhibit-online-sort>
+  <hr class="dotted secondary y1">
+  {% if attributes.exhibits|length %}
+    {% for exhibit in attributes.exhibits %}
+      {{ teaser(exhibit, {options: {hideLocation: true, hideDates: true}}) }}
+    {% endfor %}
+  {% else %}
+    <p>Sorry, no online exhibits found!</p>
+  {% endif %}
+
+ </div>

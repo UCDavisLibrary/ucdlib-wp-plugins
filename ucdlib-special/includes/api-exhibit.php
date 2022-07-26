@@ -20,6 +20,11 @@ class UCDLibPluginSpecialAPIExhibit {
       'callback' => array($this, 'epcb_exhibits'),
       'permission_callback' => function (){return true;}
     ) );
+    register_rest_route($this->config->slug, 'exhibit-filters', array(
+      'methods' => 'GET',
+      'callback' => array($this, 'epcb_exhibits_filters'),
+      'permission_callback' => function (){return true;}
+    ) );
   }
 
   public function epcb_exhibits(){
@@ -37,6 +42,27 @@ class UCDLibPluginSpecialAPIExhibit {
         'title' => $post->title()
       ];
     }
+    return rest_ensure_response($out);
+  }
+
+  public function epcb_exhibits_filters(){
+    $out = [];
+
+    $slug = $this->config->taxonomies['curator'];
+    $terms = Timber::get_terms([
+      'taxonomy' => $slug,
+      'orderby'  => 'name',
+      'order'    => 'ASC',
+      'hide_empty' => true
+    ]);
+    $out[$slug] = array_map(function($t) {
+      return [
+        'id' => $t->ID,
+        'name' => $t->name
+      ];
+    }, (array)$terms);
+    $out[$slug] = array_values($out[$slug]);
+
     return rest_ensure_response($out);
   }
 

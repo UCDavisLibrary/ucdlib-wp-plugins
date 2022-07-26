@@ -8,6 +8,7 @@ import specialBrowseBy from './ucdlib-special-browse-by';
 import exibitCurators from "./ucdlib-special-exhibit-curators";
 import exhibitHighlight from "./ucdlib-special-exhibit-highlight"
 import exhibitLocation from "./ucdlib-special-exhibit-location";
+import exhibitOnline from "./ucdlib-special-exhibit-online";
 import exhibitQuery from "./ucdlib-special-exhibit-query";
 import exhibitSubnav from "./ucdlib-special-exhibit-subnav";
 
@@ -22,6 +23,7 @@ export default [
     exibitCurators,
     exhibitHighlight,
     exhibitLocation,
+    exhibitOnline,
     exhibitQuery,
     exhibitSubnav
 ];
