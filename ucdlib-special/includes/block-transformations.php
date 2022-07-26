@@ -49,10 +49,11 @@ class UCDLibPluginSpecialBlockTransformations {
     $attrs['orderby'] = 'start_date';
     $attrs['postsPerPage'] = 20;
     $attrs['status'] = 'past';
+    $attrs['curatorOrg'] = UCDLibPluginSpecialExhibitUtils::explodeQueryVar('curator');
+    $attrs['paged'] = ( get_query_var('paged') ) ? get_query_var('paged') : 1;
+    $attrs['exhibitStart'] = get_query_var('exhibit_start', '');
     
     $attrs['exhibits'] = UCDLibPluginSpecialExhibitUtils::getExhibits($attrs);
-
-    $attrs['found_posts'] = $attrs['exhibits']->found_posts;
     
     // group by year
     $years = [];

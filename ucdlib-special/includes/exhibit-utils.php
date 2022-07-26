@@ -9,6 +9,29 @@ class UCDLibPluginSpecialExhibitUtils {
     $meta_query = [];
     $tax_query = [];
 
+    if ( array_key_exists('paged', $query) ){
+      $wp_query['paged'] = $query['paged'];
+    }
+
+    if ( array_key_exists('exhibitStart', $query) && $query['exhibitStart']){
+      $s = $query['exhibitStart'];
+      $meta_query[] = [
+        'relation' => 'AND',
+        [
+          'key' => 'dateFrom',
+          'value' => $s . '-01-01',
+          'compare' => '>=',
+          'type' => 'DATE'
+        ],
+        [
+          'key' => 'dateFrom',
+          'value' => $s . '-12-31',
+          'compare' => '<=',
+          'type' => 'DATE'
+        ],
+      ];
+    }
+
     if ( array_key_exists('status', $query) ){
       $tz = new DateTimeZone("America/Los_Angeles");
       $today = (new DateTime('today', $tz))->format('Y-m-d');
@@ -152,5 +175,36 @@ class UCDLibPluginSpecialExhibitUtils {
     }
     $q = array_filter($q, function($v){return $v;});
     return $q;
+  }
+
+  public static function getExhibitYears(){
+    $years = [];
+    $wp_query = [
+      'post_type' => 'exhibit',
+      'post_parent' => 0,
+      'posts_per_page' => 1,
+      'orderby' => 'meta_value',
+      'order' => 'ASC',
+      'meta_type' => 'DATE',
+      'meta_key' => 'dateFrom'
+    ];
+    $oldestExhibit = Timber::get_posts($wp_query);
+    if ( !$oldestExhibit->found_posts ) return $years;
+    $oldestExhibit = $oldestExhibit[0];
+    $oldestYear = intval(substr($oldestExhibit->exhibitDateFrom(), 0, 4));
+
+    $wp_query['order'] = 'DESC';
+    $newestExhibit = Timber::get_posts($wp_query);
+    if ( !$newestExhibit->found_posts ) return $years;
+    $newestExhibit = $newestExhibit[0];
+    $newestYear = intval(substr($newestExhibit->exhibitDateFrom(), 0, 4));
+
+    $year = $newestYear;
+    while ($year >= $oldestYear) {
+      $years[] = $year;
+      $year -= 1;
+    }
+
+    return $years;
   }
 }
