@@ -40,8 +40,9 @@ class UCDLibPluginSpecialBlockTransformations {
 
   public static function hideExhibitExcerpt( $attrs ) {
     if ( !array_key_exists('templateTeaserOptions', $attrs) ){
-      $attrs['templateTeaserOptions']['hideExcerpt'] = true;
-    }
+      $attrs['templateTeaserOptions'] = [];
+    } 
+    $attrs['templateTeaserOptions']['hideExcerpt'] = true;
     return $attrs;
   }
 
