@@ -1,5 +1,6 @@
 <?php
 require_once( __DIR__ . '/block-transformations.php' );
+require_once( __DIR__ . '/config.php' );
 require_once( __DIR__ . '/tax-az.php' );
 require_once( __DIR__ . '/tax-subject.php' );
 require_once( __DIR__ . '/api.php' );
@@ -83,7 +84,7 @@ class UCDLibPluginSpecialCollections {
       'menu_icon' => 'dashicons-media-document',
       'rewrite'			  => $rewrite,
       'template' => $template,
-      //'template_lock' => 'all',
+      'template_lock' => 'all',
       'supports' => array(
         'title', 
         'editor', 
