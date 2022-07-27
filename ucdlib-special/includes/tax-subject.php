@@ -28,6 +28,7 @@ class UCDLibPluginSpecialTaxSubject {
       'labels' => $labels,
       'description' => 'Manuscript subject areas',
       'public' => true,
+      'rewrite' => ['with_front' => false],
       'publicly_queryable' => true,
       'hierarchical' => true,
       'show_ui' => true,
