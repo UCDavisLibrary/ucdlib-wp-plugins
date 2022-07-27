@@ -186,7 +186,18 @@ class UCDLibPluginSpecialExhibitUtils {
       'orderby' => 'meta_value',
       'order' => 'ASC',
       'meta_type' => 'DATE',
-      'meta_key' => 'dateFrom'
+      'meta_key' => 'dateFrom',
+      'meta_query' => [
+        [
+          'key' => 'dateFrom',
+          'compare' => 'EXISTS'
+        ],
+        [
+          'key' => 'dateFrom',
+          'compare' => '!=',
+          'value' => ''
+        ]
+      ]
     ];
     $oldestExhibit = Timber::get_posts($wp_query);
     if ( !$oldestExhibit->found_posts ) return $years;
