@@ -8,7 +8,6 @@ import { TextControl, SelectControl, Button } from "@wordpress/components";
 import { html, SelectUtils } from "@ucd-lib/brand-theme-editor/lib/utils";
 import { useState } from '@wordpress/element';
 
-
 const name = 'ucdlib-special-collection';
 
 const runController = (recordId, meta, editPost) => { 
@@ -17,7 +16,7 @@ const runController = (recordId, meta, editPost) => {
   }
   let perma = null;
 
-  let url = "http://localhost:3000/wp-json/ucdlib-special/collection_pnx/";
+  let url = "/wp-json/ucdlib-special/collection_pnx/";
   let requestUrl = url + recordId;
 
   perma = new ApiController(requestUrl);

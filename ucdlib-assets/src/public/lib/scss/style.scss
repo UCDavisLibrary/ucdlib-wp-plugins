@@ -121,4 +121,21 @@
     color: rgb(119, 119, 119);
   }
 }
+.hero-banner.hero-banner--exhibit {
+  .hero-banner__summary {
+    font-size: 1.2rem;
+    line-height: 1.3;
+    margin-top: .5rem;
+  }
 
+  &.hero-banner--no-background {
+    background-color: #022851;
+  }
+}
+.vm-teaser--exhibit {
+  .vm-teaser--exhibit__curators {
+    font-style: italic;
+    font-size: 0.875rem;
+    color: #4c4c4c;
+  }
+}

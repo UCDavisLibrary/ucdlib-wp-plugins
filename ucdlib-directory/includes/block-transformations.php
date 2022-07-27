@@ -114,6 +114,21 @@ class UCDLibPluginDirectoryBlockTransformations {
     $tax_query = [];
     $expertiseAreas = [];
     $hideDepartments = array_key_exists('hideDepartments', $attrs) && $attrs['hideDepartments'] != 'false';
+    $meta_query = [
+      [
+        'relation' => 'OR',
+        [
+          'key' => 'pastEmployee',
+          'compare' => 'NOT EXISTS'
+        ],
+        [
+          'key' => 'pastEmployee',
+          'value' => false,
+          'compare' => '=',
+          'type' => 'BINARY'
+        ],
+      ]
+    ];
 
     // set order of results
     $orderby = $attrs['orderby'] == 'name' ? 'name' : 'department';
@@ -156,12 +171,12 @@ class UCDLibPluginDirectoryBlockTransformations {
     // filter by department
     $deptQueryVar = $attrs['department'];
     if ( count($deptQueryVar) ){
-      $personQuery['meta_query'] = [[
+      $meta_query[] = [
         'key' => 'position_dept',
         'value' => $deptQueryVar,
         'compare' => 'IN',
         'type' => 'NUMERIC'
-      ]];
+      ];
     }
 
     // filter by directory tag/subject area
@@ -181,6 +196,11 @@ class UCDLibPluginDirectoryBlockTransformations {
         $tax_query['relation'] = 'AND';
       }
       $personQuery['tax_query'] = $tax_query;
+    }
+
+    if ( count($meta_query) ){
+      $meta_query['relation'] = 'AND';
+      $personQuery['meta_query'] = $meta_query;
     }
     $people = Timber::get_posts($personQuery);
 

@@ -19,7 +19,8 @@ const Edit = () => {
   const hideDirectoryTags = meta.hide_tags ? true : false;
   const hideExpertiseAreas = meta.hide_expertise_areas ? true : false; 
   const hideBio = meta.hide_bio ? true : false; 
-  const { editPost } = useDispatch( 'core/editor', [ hidePronouns, hideLibraries, hideDirectoryTags, hideExpertiseAreas, hideBio ] );
+  const pastEmployee = meta.pastEmployee | false;
+  const { editPost } = useDispatch( 'core/editor', [ hidePronouns, hideLibraries, hideDirectoryTags, hideExpertiseAreas, hideBio, pastEmployee ] );
 
 
   return html`
@@ -29,6 +30,11 @@ const Edit = () => {
           className=${name}
           icon=${html`<ucdlib-icon style=${{marginLeft: '8px', width: '18px', minWidth: '18px'}} icon="ucd-public:fa-user-gear"></ucdlib-icon>`}
           title="Profile Settings">
+          <${ToggleControl} 
+            label="No Longer Employed at Library"
+            checked=${pastEmployee}
+            onChange=${() => editPost({meta: { pastEmployee: !pastEmployee}})}
+          />
           <${ToggleControl} 
             label="Hide Pronouns"
             checked=${hidePronouns}

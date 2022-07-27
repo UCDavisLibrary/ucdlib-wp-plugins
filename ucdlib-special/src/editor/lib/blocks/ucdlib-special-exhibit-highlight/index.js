@@ -6,7 +6,7 @@ const settings = {
   api_version: 2,
 	title: "Exhibit Highlight",
 	description: "Display a preview of a single existing exhibit",
-	icon: UCDIcons.renderPublic('fa-immage'),
+	icon: UCDIcons.renderPublic('fa-image'),
 	category: 'ucdlib-special',
 	keywords: [ 'feature', 'image', 'picture'],
   supports: {
@@ -14,9 +14,13 @@ const settings = {
     "customClassName": false
   },
   attributes: {
+    exhibitId: {
+      type: 'number',
+      default: 0
+    },
     brandColor: {
       type: "string",
-      default: ""
+      default: "primary"
     },
   },
   edit: Edit

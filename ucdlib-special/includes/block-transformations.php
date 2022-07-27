@@ -1,6 +1,7 @@
 <?php
 
 require_once( __DIR__ . '/config.php' );
+require_once( __DIR__ . '/exhibit-utils.php' );
 
 // Contains methods that transform the attributes of a block (mostly fetching additional data)
 // See 'transform' property in $registry array in blocks class.
@@ -22,6 +23,63 @@ class UCDLibPluginSpecialBlockTransformations {
       set_transient( $transient, $link, 24 * HOUR_IN_SECONDS );
     }
     $attrs['dept_page_link'] = $link;
+    return $attrs;
+  }
+
+  public static function getExhibit($attrs){
+    if ( array_key_exists('exhibitId', $attrs) && $attrs['exhibitId']){
+      $attrs['exhibit'] = Timber::get_post($attrs['exhibitId']);
+    }
+    return $attrs;
+  }
+
+  public static function getExhibits( $attrs ){
+    $attrs['exhibits'] = UCDLibPluginSpecialExhibitUtils::getExhibits($attrs);
+    return $attrs;
+  }
+
+  public static function hideExhibitExcerpt( $attrs ) {
+    if ( !array_key_exists('templateTeaserOptions', $attrs) ){
+      $attrs['templateTeaserOptions']['hideExcerpt'] = true;
+    }
+    return $attrs;
+  }
+
+  public static function getPastExhibits( $attrs ){
+    $attrs['orderby'] = 'start_date';
+    $attrs['postsPerPage'] = 20;
+    $attrs['status'] = 'past';
+    $attrs['curatorOrg'] = UCDLibPluginSpecialExhibitUtils::explodeQueryVar('curator');
+    $attrs['paged'] = ( get_query_var('paged') ) ? get_query_var('paged') : 1;
+    $attrs['exhibitStart'] = get_query_var('exhibit_start', '');
+    
+    $attrs['exhibits'] = UCDLibPluginSpecialExhibitUtils::getExhibits($attrs);
+    
+    // group by year
+    $years = [];
+    foreach ($attrs['exhibits'] as $exhibit) {
+      $start = substr($exhibit->exhibitDateFrom(), 0, 4);
+      if ( !array_key_exists($start, $years)){
+        $years[$start] = [];
+      }
+      $years[$start][] = $exhibit;
+    }
+    $attrs['years'] = $years;
+
+    $attrs['teaserOptions'] = [
+      'hideExcerpt' => true,
+      'hideLocation' => true
+    ];
+
+    return $attrs;
+  }
+
+  public static function getOnlineExhibits( $attrs ){
+    $attrs['orderby'] = get_query_var('orderby', 'title');
+    $attrs['curatorOrg'] = UCDLibPluginSpecialExhibitUtils::explodeQueryVar('curator');
+    $attrs['isOnline'] = true;
+    $attrs['postsPerPage'] = -1;
+    $attrs['exhibits'] = UCDLibPluginSpecialExhibitUtils::getExhibits($attrs);
     return $attrs;
   }
 }

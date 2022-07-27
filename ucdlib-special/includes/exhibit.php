@@ -21,6 +21,7 @@ class UCDLibPluginSpecialExhibits {
     add_action( 'init', [$this, 'register_post_meta'] );
     add_action( 'widgets_init', [$this, 'register_sidebar'] );
     add_filter( 'timber/post/classmap', array($this, 'extend_timber_post') );
+    add_filter( 'query_vars', [$this, 'register_query_vars'] );
     
 
     add_filter( 'ucd-theme/context/single', array($this, 'set_context') );
@@ -146,6 +147,11 @@ class UCDLibPluginSpecialExhibits {
       'type' => 'string',
     ) );
 
+  }
+
+  public function register_query_vars( $qvars ) {
+    $qvars[] =  'exhibit_start';
+    return $qvars;
   }
 
   // Tell Timber to always load our custom person class when returned by a query
@@ -274,6 +280,15 @@ class UCDLibPluginSpecialExhibitPage extends UcdThemePost {
     return $this->exhibitId;
   }
 
+  protected $exhibitLink;
+  public function exhibitLink(){
+    if ( ! empty( $this->exhibitLink ) ) {
+      return $this->exhibitLink;
+    }
+    $this->exhibitLink = $this->exhibit()->link;
+    return $this->exhibitLink;
+  }
+
   protected $exhibitIsOnline;
   public function exhibitIsOnline(){
     if ( ! empty( $this->exhibitIsOnline ) ) {
@@ -299,6 +314,15 @@ class UCDLibPluginSpecialExhibitPage extends UcdThemePost {
     }
     $this->exhibitIsPermanent = $this->exhibit()->meta('isPermanent');
     return $this->exhibitIsPermanent;
+  }
+
+  protected $exhibitHero;
+  public function exhibitHero(){
+    if ( ! empty( $this->exhibitHero ) ) {
+      return $this->exhibitHero;
+    }
+    $this->exhibitHero = $this->exhibit()->thumbnail();
+    return $this->exhibitHero;
   }
 
   protected $exhibitIsPast;
@@ -339,6 +363,15 @@ class UCDLibPluginSpecialExhibitPage extends UcdThemePost {
     }
     $this->exhibitDateTo = $this->exhibit()->meta('dateTo');
     return $this->exhibitDateTo;
+  }
+
+  protected $exhibitBrandColor;
+  public function exhibitBrandColor(){
+    if ( ! empty( $this->exhibitBrandColor ) ) {
+      return $this->exhibitBrandColor;
+    }
+    $this->exhibitBrandColor = $this->exhibit()->meta('ucd_brand_color');
+    return $this->exhibitBrandColor;
   }
 
   protected $exhibitDateRange;
@@ -412,6 +445,18 @@ class UCDLibPluginSpecialExhibitPage extends UcdThemePost {
     }
     $this->exhibitLocations = $this->exhibit()->locations();
     return $this->exhibitLocations;
+  }
+
+  protected $exhibitLocationLabel;
+  public function exhibitLocationLabel(){
+    if ( ! empty( $this->exhibitLocationLabel ) ) {
+      return $this->exhibitLocationLabel;
+    }
+    $this->exhibitLocationLabel = '';
+    if ( count($this->exhibitLocations()) ) {
+      $this->exhibitLocationLabel = $this->exhibitLocations()[0]->name;
+    }
+    return $this->exhibitLocationLabel;
   }
 
   protected $locations;

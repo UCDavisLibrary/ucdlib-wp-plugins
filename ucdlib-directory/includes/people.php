@@ -207,6 +207,12 @@ class UCDLibPluginDirectoryPeople {
       'default' => '',
       'type' => 'string',
     ) );
+    register_post_meta( $slug, 'pastEmployee', array(
+      'show_in_rest' => true,
+      'single' => true,
+      'default' => false,
+      'type' => 'boolean',
+    ) );
     register_post_meta( $slug, 'bio', array(
       'show_in_rest' => true,
       'single' => true,
