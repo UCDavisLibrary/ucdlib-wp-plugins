@@ -88,7 +88,14 @@ class UCDLibPluginAssetsForminator {
         $li = $dom->createElement('li');
         $li->appendChild($input);
         $li->appendChild($label);
-        $ul->appendChild($li);
+
+        $firstLi = $ul->firstChild;
+        if ( $firstLi ) {
+          $ul->insertBefore($li, $firstLi);
+        } else {
+          $ul->appendChild($li);
+        }
+        
       }
       $baseDiv->appendChild($ul);
       return $dom->saveHTML();
