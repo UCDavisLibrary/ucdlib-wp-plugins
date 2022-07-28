@@ -5,7 +5,8 @@
   {% set kwargs = {
     items: [{title: 'Introduction', link: post.exhibit.link}]|merge(post.exhibit.children),
     oBox: false,
-    panel: false
+    panel: false,
+    show_children: post.showGrandchildrenInNav
     } 
   %}
   <aside class="o-box panel">

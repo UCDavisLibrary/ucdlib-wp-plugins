@@ -11,20 +11,21 @@
   <div class="l-content">
     {% if post.isTopPage %}
       {% if post.exhibitLocations and post.exhibitLocations|length %}
-        <h2 class='heading--secondary'>{{post.exhibitLocations[0].name}}</h2>
+        <h2 class='heading--secondary exhibit-header-intro'>{{post.exhibitLocations[0].name}}</h2>
       {% endif %}
       {% if post.exhibitIsPhysical and post.exhibitIsPermanent %}
-        <h2 class='heading--secondary'>Permanent Exhibit</h2>
+        <h2 class='heading--secondary exhibit-header-intro'>Permanent Exhibit</h2>
       {% elseif post.exhibitIsPhysical and post.exhibitDateRange %}
-        <h2 class='heading--secondary'>{{post.exhibitDateRange}}</h2>
+        <h2 class='heading--secondary exhibit-header-intro'>{{post.exhibitDateRange}}</h2>
       {% endif %}
     {% endif %}
     {{post.content}}
 
-    {% if post.prevPage or post.nextPage %}
-      <div class='btn--seq-container'>
+    {% if (post.showGrandchildrenInNav or not post.isDeepPage) and (post.prevPage or post.nextPage) %}
+      <hr class="dotted secondary y2">
+      <div class='btn--seq-container {{not post.prevPage ? 'btn--seq-container-first'}}'>
       {% if post.prevPage %}
-        <a href="{{post.prevPage.link}}" class="btn btn--seq btn--seq__prev">{{post.prevPage.title}}</a>
+        <a href="{{post.prevPage.link}}" class="btn btn--seq btn--seq__prev">{{post.prevPage.isTopPage ? 'Introduction' : post.prevPage.title}}</a>
       {% endif %}
 
       {% if post.nextPage %}
