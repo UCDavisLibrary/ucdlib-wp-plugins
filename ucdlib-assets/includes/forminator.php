@@ -90,11 +90,7 @@ class UCDLibPluginAssetsForminator {
         $li->appendChild($label);
 
         $firstLi = $ul->firstChild;
-        if ( $firstLi ) {
-          $ul->insertBefore($li, $firstLi);
-        } else {
-          $ul->appendChild($li);
-        }
+        $ul->insertBefore($li, $firstLi);
         
       }
       $baseDiv->appendChild($ul);
