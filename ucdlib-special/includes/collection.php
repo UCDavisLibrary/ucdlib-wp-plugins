@@ -33,7 +33,12 @@ class UCDLibPluginSpecialCollections {
   public function register(){
     // new posts will start with this template
     $template = [
-      ['core/pattern', ['slug' => "ucdlib-special/collection"]]
+      ['ucd-theme/special-description'],
+      ['ucd-theme/special-finding-aid'],
+      ['ucd-theme/special-inclusive-dates'],
+      ['ucd-theme/special-extent'],
+      ['ucd-theme/special-subject'],
+      ['ucd-theme/special-additional-info'],
     ];
     
     $labels = array(
@@ -88,7 +93,7 @@ class UCDLibPluginSpecialCollections {
       'supports' => array(
         'title', 
         'editor', 
-        'author', 
+        // 'author', 
         'thumbnail', 
         // 'excerpt', 
         //'revisions',
