@@ -5,7 +5,6 @@ require_once( __DIR__ . '/blocks.php' );
 require_once( __DIR__ . '/collection.php' );
 require_once( __DIR__ . '/config.php' );
 require_once( __DIR__ . '/api.php' );
-require_once( __DIR__ . '/patterns.php' );
 require_once( __DIR__ . '/meta-data.php' );
 require_once( __DIR__ . '/exhibit.php' );
 
@@ -33,9 +32,6 @@ class UCDLibPluginSpecial {
 
     // custom server-side "dynamic" blocks
     $this->blocks = new UCDLibPluginSpecialBlocks( $this->config );
-
-    // Sets up block patterns for special collections
-    $this->patterns = new UCDLibPluginSpecialPatterns( $configs);
 
     // 'special-collection' post type
     $this->collection = new UCDLibPluginSpecialCollections( $this->config );
