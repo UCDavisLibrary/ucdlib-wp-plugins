@@ -461,6 +461,45 @@ class UCDLibPluginDirectoryPeople {
 // where we will fetch postmeta
 class UCDLibPluginDirectoryPerson extends UcdThemePost {
 
+  protected $user;
+  public function user(){
+    if ( ! empty( $this->user ) ) {
+      return $this->user;
+    }
+    $this->user = null;
+    $ids = [
+      ['user' => 'id', 'profile' => 'wp_user_id'],
+      ['user' => 'login', 'profile' => 'username']
+    ];
+
+    foreach ($ids as $id) {
+      $meta = $this->meta($id['profile']);
+      if ( !$meta ) continue;
+      $this->user = get_user_by( $id['user'], $meta );
+      if ( $this->user ) break;
+    }
+
+    return $this->user;
+  }
+
+  protected $email;
+  public function email(){
+    if ( ! empty( $this->email ) ) {
+      return $this->email;
+    }
+    $this->email = '';
+    if ( $this->user() ) {
+      $this->email = $this->user()->get('user_email');
+    } else {
+      $emails = $this->meta('contactEmail');
+      if ( is_array($emails) && count($emails) ) {
+        $this->email = $emails[0]['value'];
+      }
+    }
+
+    return $this->email;
+  }
+
   protected $name_first;
   public function name_first(){
     if ( ! empty( $this->name_first ) ) {
