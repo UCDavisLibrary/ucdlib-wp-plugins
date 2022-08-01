@@ -20,25 +20,56 @@
       <div>
     {% endif %}
     
-      <h3>Collection Number: {{post.meta('callNumber')}}</h3>
+    <h3>Collection Number: {{post.meta('callNumber')}}</h3>
+    
+    {% if post.meta('description')|length > 0 %}
       <p>{{post.meta('description')}}</p>
-
+    {% endif %}
+    
+    {% if post.meta('findingAid')|length > 0 %}
       <h4>Finding Aid</h4>
       <a href="{{post.meta('findingAid').linkURL}}" target="_blank">{{post.meta('findingAid').linkTitle}}</a>
-
-      <h4>Biography</h4>
-      <p>{{post.meta('biography')}}</p>
-
+    {% endif %}
+    
+    {% if post.meta('inclusiveDates')|length > 0 %}
       <h4>Inclusive Dates</h4>
       <p>{{post.meta('inclusiveDates')}}</p>
+    {% endif %}
 
+    {% if post.meta('extent')|length > 0 %}
       <h4>Extent</h4>
       <p>{{post.meta('extent')}}</p>
+    {% endif %}
+
 
       <h4>Subject</h4>
       {% for sub in post.meta('subject') %}
         <p>{{sub}}</p>
       {% endfor %}
+      
+      
+      {# <ol>
+        {% for key, value in _context  %}
+          <li>{{ key }}</li>
+        {% endfor %}
+      </ol> #}
+      {# <code>
+      {{ dump() }}
+      </code> #}
+      {{ subject }}
+
+      
+      {% set headerRendered = false %}
+      {% for col in post.meta('links') %}
+        {% if col.linkType == 'referenceInfo' and col.linkURL|length > 0 and col.displayLabel|length > 0 %}
+          {% if not headerRendered %}
+            <h4>Additional Collection Info</h4>
+            {% set headerRendered = true %}
+          {% endif %}
+          <p><a href="{{col.linkURL}}" target="_blank">{{col.displayLabel}}</a></p>
+        {% endif %}
+      {% endfor %}
+      
     </div>
 
     

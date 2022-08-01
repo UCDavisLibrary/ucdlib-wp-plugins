@@ -30,8 +30,14 @@ export default ( props ) => {
 
   let isModified = false;
   if (meta.fetchedData) {
-    isModified = !Object.keys(meta.findingAid)
-      .every(key => meta.fetchedData.findingAid.hasOwnProperty(key) && meta.fetchedData.findingAid[key] === meta.findingAid[key]);
+    if (meta.fetchedData.findingAid.linkTitle || meta.fetchedData.findingAid.linkURL) {
+      isModified = !Object.keys(meta.findingAid)
+        .every(key => meta.fetchedData.findingAid.hasOwnProperty(key) && meta.fetchedData.findingAid[key] === meta.findingAid[key]);
+    } else if (meta.findingAid.linkTitle || meta.findingAid.linkURL) {
+      // isModified = !Object.values(meta.findingAid)
+      //   .every(value => value === '' || !value);
+      isModified = true;
+    }
   }
 
   return html`
