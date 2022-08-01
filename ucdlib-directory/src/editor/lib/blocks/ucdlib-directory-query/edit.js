@@ -53,7 +53,7 @@ export default ( props ) => {
       <div className='directory-query-inspector-controls'>
         <${TextControl} 
           value=${attributes.q.join(' ')}
-          label='Name or Keyword'
+          label='Name'
           onChange=${ v => {setAttributes({q: v.split(' ')})}}
         />
         <${SelectControl}
