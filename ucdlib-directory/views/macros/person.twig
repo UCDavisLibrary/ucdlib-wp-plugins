@@ -49,14 +49,14 @@
 
 {% macro contact(person, class) %}
   {% if person.contactInfo.contact and not person.contactInfo.hide %}
-    <ul class="list--pipe {{class ? class}}">
+    <ul class="contact-info list--pipe {{class ? class}}">
       {% for contact in person.contactInfo.contact %}
         <li>
           <a class="icon-ucdlib" href="{{contact.link}}">
             <ucdlib-icon icon="{{contact.icon}}"></ucdlib-icon><div>{{contact.label}}</div>
           </a>
           {% if contact.additionalText %}
-            <span>&nbsp;({{contact.additionalText}})</span>
+            <span class='additional-text'>&nbsp;({{contact.additionalText}})</span>
           {% endif %}
         </li>
       {% endfor %}

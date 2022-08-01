@@ -10,7 +10,7 @@
         {% if department.post.description %}
           <p class='text-bold u-space-mb--small'>{{department.post.description}}</p>
         {% endif %}
-        {{contact(department.post, 'text--smaller text-bold vm-teaser--person__contact')}}
+        {{contact(department.post, 'contact-info--department text--smaller text-bold vm-teaser--person__contact')}}
       </div>
       <div>
         {% for person in department.people %}
