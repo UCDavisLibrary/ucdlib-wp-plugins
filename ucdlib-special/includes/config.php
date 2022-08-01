@@ -19,7 +19,7 @@ class UCDLibPluginSpecialConfig {
       'manage_exhibits' => 'manage_exhibits',
       'manage_collections' => 'manage_collections'
     ]
-    ];
+  ];
 
   public function __construct(){
     $this->slug = self::$config['slug'];
