@@ -42,23 +42,11 @@
     {% endif %}
 
 
+    {% if post.terms('collection-subject')|length > 0 %}
       <h4>Subject</h4>
-      {% for sub in post.meta('subject') %}
-        <p>{{sub}}</p>
-      {% endfor %}
-      
-      
-      {# <ol>
-        {% for key, value in _context  %}
-          <li>{{ key }}</li>
-        {% endfor %}
-      </ol> #}
-      {# <code>
-      {{ dump() }}
-      </code> #}
-      {{ subject }}
+      {{ post.terms('collection-subject')|join('<br>') }}
+    {% endif %}
 
-      
       {% set headerRendered = false %}
       {% for col in post.meta('links') %}
         {% if col.linkType == 'referenceInfo' and col.linkURL|length > 0 and col.displayLabel|length > 0 %}
