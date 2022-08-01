@@ -25,7 +25,7 @@ class UCDLibPluginDirectoryAPIPeople {
           'description' => 'The type of term being used for query',
           "type" => "string",
           "default" => "email",
-          'enum' => ["email", "kerberos"]
+          'enum' => ["email", "kerberos", "uid", 'pid']
         ]
       ]
     ) );
@@ -38,27 +38,30 @@ class UCDLibPluginDirectoryAPIPeople {
     $profile = false;
     $userFields = [
       'email' => 'email',
-      'kerberos' => 'login'
+      'kerberos' => 'login',
+      'uid' => 'id'
     ];
 
     // check if user account exists
-    $user = get_user_by( $userFields[$field], $term );
-    if ( $user ) {
-      $profileFields = [
-        ['user' => $user->ID, 'profile' => 'wp_user_id'],
-        ['user' => $user->user_login, 'profile' => 'username']
-      ];
-      
-      foreach ($profileFields as $fields) {
-        $profiles = Timber::get_posts([
-          'post_type' =>$this->config['postSlugs']['person'],
-          'meta_key' => $fields['profile'],
-          'meta_value' => $fields['user'],
-          'posts_per_page' => 1
-        ]);
-        if ( count($profiles) ){
-          $profile = $profiles[0];
-          break;
+    if ( in_array($field, array_keys($userFields))){
+      $user = get_user_by( $userFields[$field], $term );
+      if ( $user ) {
+        $profileFields = [
+          ['user' => $user->ID, 'profile' => 'wp_user_id'],
+          ['user' => $user->user_login, 'profile' => 'username']
+        ];
+        
+        foreach ($profileFields as $fields) {
+          $profiles = Timber::get_posts([
+            'post_type' =>$this->config['postSlugs']['person'],
+            'meta_key' => $fields['profile'],
+            'meta_value' => $fields['user'],
+            'posts_per_page' => 1
+          ]);
+          if ( count($profiles) ){
+            $profile = $profiles[0];
+            break;
+          }
         }
       }
     }
@@ -92,6 +95,11 @@ class UCDLibPluginDirectoryAPIPeople {
         if ( count($profiles) ){
           $profile = $profiles[0];
         }
+      } elseif ( $field == 'pid' ){
+        $pid = intval($term);
+        if ( $pid ){
+          $profile = Timber::get_post($pid);
+        }
       }
     }
 
@@ -99,9 +107,10 @@ class UCDLibPluginDirectoryAPIPeople {
       return new WP_Error( 'rest_not_found', 'This person does not exist.', array( 'status' => 404 ) );
     }
 
-    
     $out = [
       'id' => $profile->ID,
+      'uid' => $profile->user() ? $profile->user()->ID : null,
+      'email' => $profile->email(),
       'nameLast' => $profile->name_last(),
       'nameFirst' => $profile->name_first(),
       'link' => $profile->link(),

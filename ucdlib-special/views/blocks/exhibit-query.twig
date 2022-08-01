@@ -1,0 +1,12 @@
+ {% from '@ucdlib-special/macros/exhibit.twig' import highlight, teaser %}
+{% if attributes.exhibits|length %}
+  {% for exhibit in attributes.exhibits %}
+    {% if attributes.template == 'teaser' %}
+      {{ teaser(exhibit, {options: attributes.templateTeaserOptions}) }}
+    {% else %}
+      {{highlight(exhibit, {classes: 'o-box u-space-mb' })}}
+    {% endif %}
+  {% endfor %}
+{% elseif attributes.noResultsText %}
+  <p>{{ attributes.noResultsText }}</p>
+{% endif %}

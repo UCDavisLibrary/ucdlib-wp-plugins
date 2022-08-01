@@ -11,25 +11,36 @@ class UCDLibPluginSpecialBlocks extends UCDThemeBlockRenderer {
 
     /**
      * list custom blocks here for server-side rendering. e.g.:
-     * 
-     *  "$this->slug/{{yourBlockSlug}}" => [
-     *    'twig' => $this->twigPath({{nameOfTwigFile}}),
-     *    'transform' => ['{{method1}}', '{{method2}}']
-     *  ]
      */
     $this->registry = [
       "$this->slug/collection" => [
         'twig' => $this->twigPath('collection'),
       ],
-      "$this->slug/exhibit-subnav" => [
-        'twig' => $this->twigPath('exhibit-subnav')
-      ],
       "$this->slug/exhibit-curators" => [
         'twig' => $this->twigPath('exhibit-curators')
       ],
+      "$this->slug/exhibit-highlight" => [
+        'twig' => $this->twigPath('exhibit-highlight'),
+        'transform' => ['getExhibit']
+      ],
       "$this->slug/exhibit-location" => [
         'twig' => $this->twigPath('exhibit-location')
-      ]
+      ],
+      "$this->slug/exhibit-online" => [
+        'twig' => $this->twigPath('exhibit-online'),
+        'transform' => ['getOnlineExhibits']
+      ],
+      "$this->slug/exhibit-past" => [
+        'twig' => $this->twigPath('exhibit-past'),
+        'transform' => ['getPastExhibits']
+      ],
+      "$this->slug/exhibit-query" => [
+        'twig' => $this->twigPath('exhibit-query'),
+        'transform' => ['hideExhibitExcerpt', 'getExhibits']
+      ],
+      "$this->slug/exhibit-subnav" => [
+        'twig' => $this->twigPath('exhibit-subnav')
+      ],
     ];
 
     add_action('block_categories_all', array($this, 'addCategories'), 10,2);

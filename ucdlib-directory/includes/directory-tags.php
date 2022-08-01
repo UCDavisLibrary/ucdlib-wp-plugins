@@ -21,6 +21,7 @@ class UCDLibPluginDirectoryDirectoryTags {
 
   // register taxonomy
   public function register(){
+    $people = $this->config['postSlugs']['personPlural'];
     $labels = [
       'name'              => _x( 'Directory Tags', 'taxonomy general name' ),
       'singular_name'     => _x( 'Directory Tag', 'taxonomy singular name' ),
@@ -43,6 +44,12 @@ class UCDLibPluginDirectoryDirectoryTags {
       'show_ui' => true,
       'show_in_nav_menus' => false,
       'show_in_rest' => true,
+      'capabilities' => [
+        'manage_terms'  => $this->config['capabilities']['manage_directory'],
+        'edit_terms'    => $this->config['capabilities']['manage_directory'],
+        'delete_terms'  => $this->config['capabilities']['manage_directory'],
+        'assign_terms'  => "edit_$people"
+      ],
       'show_admin_column' => true,
       'meta_box_cb' => 'post_categories_meta_box'
     ];

@@ -15,15 +15,21 @@ class UCDLibPluginDirectoryAPIFilters {
       'callback' => array($this, 'epcb_filters'),
       'permission_callback' => function (){return true;}
     ) );
+    register_rest_route($this->config['slug'], 'service-filters', array(
+      'methods' => 'GET',
+      'callback' => array($this, 'epcb_service_filters'),
+      'permission_callback' => function (){return true;}
+    ) );
   }
 
-
-  // Endpoint callback for a single exhibit page
-  public function epcb_filters($request){
+  public function epcb_service_filters($request){
     $out = [];
 
     $slug = $this->config['taxSlugs']['library'];
-    $libraries = Timber::get_terms([
+    $out[$slug] = $this->getLibraries($this->config['postSlugs']['service']);
+
+    $slug = $this->config['taxSlugs']['service-type'];
+    $terms = Timber::get_terms([
       'taxonomy' => $slug,
       'orderby'  => 'name',
       'order'    => 'ASC',
@@ -33,7 +39,45 @@ class UCDLibPluginDirectoryAPIFilters {
         'id' => $t->ID,
         'name' => $t->name
       ];
-    }, $libraries);
+    }, (array)$terms);
+    $out[$slug] = array_values($out[$slug]);
+
+    return rest_ensure_response($out);
+  }
+
+  public function getLibraries($postType=''){
+    $out = [];
+
+    $slug = $this->config['taxSlugs']['library'];
+    $libraries = Timber::get_terms([
+      'taxonomy' => $slug,
+      'orderby'  => 'name',
+      'order'    => 'ASC',
+    ]);
+    foreach ($libraries as $library) {
+
+      $include = true;
+      if ( $postType ){
+        $include = count($library->posts(['post_type' => $postType, 'posts_per_page' => 1])) > 0;
+      }
+      if ( $include ) {
+        $out[] = [
+          'id' => $library->ID,
+          'name' => $library->name
+        ];
+      }
+    }
+    $out = array_values($out);
+
+    return $out;
+  }
+
+
+  public function epcb_filters($request){
+    $out = [];
+
+    $slug = $this->config['taxSlugs']['library'];
+    $out[$slug] = $this->getLibraries($this->config['postSlugs']['person']);
 
     $slug = $this->config['postSlugs']['department'];
     $departments = Timber::get_posts([
@@ -48,6 +92,7 @@ class UCDLibPluginDirectoryAPIFilters {
         'name' => $t->post_title
       ];
     }, (array)$departments);
+    $out[$slug] = array_values($out[$slug]);
 
     $slug = $this->config['taxSlugs']['directory'];
     $out[$slug] = [

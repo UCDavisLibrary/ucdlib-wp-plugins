@@ -7,10 +7,10 @@ class UCDLibPluginSpecialCurators {
     $this->slug = $config->taxonomies['curator'];
 
     add_action( 'init', array($this, 'register') );
-    add_action( 'admin_menu', array($this, 'add_to_menu'));
-    add_action( 'parent_file',  array($this, 'expand_parent_menu') );
     add_filter( 'rest_prepare_taxonomy', [ $this, 'hide_metabox'], 10, 3);
 
+    add_filter( 'ucd-theme/context/taxonomy', array($this, 'set_context') );
+    add_filter( 'ucd-theme/templates/taxonomy', array($this, 'set_template'), 10, 2 );
   }
 
   // register taxonomy
@@ -26,19 +26,27 @@ class UCDLibPluginSpecialCurators {
       'update_item'       => __( 'Update Curator Organization' ),
       'add_new_item'      => __( 'Add New Curator Organization' ),
       'new_item_name'     => __( 'New Curator Organization' ),
-      'menu_name'         => __( 'Exhibit Curator Orgs' ),
+      'menu_name'         => __( 'Curator Orgs' ),
     ];
     $args = [
       'labels' => $labels,
       'description' => 'Controlled list of curator organizations for exhibits',
-      'public' => false,
-      'publicly_queryable' => false,
+      'public' => true,
+      'publicly_queryable' => true,
+      'rewrite' => ['with_front' => false],
       'hierarchical' => true,
+      'show_in_menu' => true,
       'show_ui' => true,
       'show_in_nav_menus' => false,
       'show_in_rest' => true,
       'show_admin_column' => true,
-      'meta_box_cb' => false
+      'meta_box_cb' => false,
+      'capabilities' => [
+        'manage_terms'  => $this->config->capabilities['manage_exhibits'],
+        'edit_terms'    => $this->config->capabilities['manage_exhibits'],
+        'delete_terms'  => $this->config->capabilities['manage_exhibits'],
+        'assign_terms'  => "edit_posts"
+      ],
     ];
 
     register_taxonomy(
@@ -47,20 +55,6 @@ class UCDLibPluginSpecialCurators {
       $args
     );
     
-  }
-
-  // add to plugin admin menu
-  public function add_to_menu(){
-    $label = 'Exhibit Curator Orgs';
-    add_submenu_page($this->config->slug, $label, $label, 'edit_posts', "edit-tags.php?taxonomy=$this->slug",false );
-  }
-
-  // expand plugin menu when on taxonomy admin page
-  public function expand_parent_menu($parent_file){
-    if ( get_current_screen()->taxonomy == $this->slug ) {
-      $parent_file = $this->config->slug;
-    }
-    return $parent_file;
   }
 
   // hides taxonomy box on exhibit pages
@@ -76,6 +70,32 @@ class UCDLibPluginSpecialCurators {
 
     return $response;
 
+  }
+
+  // add data to view context
+  public function set_context($context){
+    if ( $context['term']->taxonomy !== $this->slug ) return $context;
+    // put exhibits lander in breadcrumbs
+    $exhibitsLander = get_field('asc_exhibits_page', $this->config->slug);
+    if ( $exhibitsLander ){
+      $exhibitsLander = Timber::get_post($exhibitsLander);
+      if ( $exhibitsLander ) {
+        $exhibitsLanderCrumbs = $exhibitsLander->breadcrumbs();
+        if ( $exhibitsLanderCrumbs && count($exhibitsLanderCrumbs) ){
+          $context['breadcrumbs'] = array_merge($exhibitsLanderCrumbs, [['title' => $context['term']->name]]);
+        }
+      }
+    }
+    
+    return $context;
+  }
+  
+  // set the twig to call
+  public function set_template($templates, $context){
+    if ( $context['term']->taxonomy !== $this->slug ) return $templates;
+    
+    $templates = array_merge( array("@" . $this->config->slug . "/curator.twig"), $templates );
+    return $templates;
   }
 
 }

@@ -118,7 +118,7 @@ const Edit = () => {
     }
     peoplePosts.forEach(p => {
       p.name = `${p.name_first} ${p.name_last}`.trim();
-      if ( name && p.id ) {
+      if ( p.name && p.id ) {
         out.names.push(p.name);
         out.byId[p.id] = p;
         out.byName[p.name] = p

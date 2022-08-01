@@ -14,6 +14,7 @@ class UCDLibPluginDirectoryAreasOfExpertise {
 
   // register taxonomy
   public function register(){
+    $people = $this->config['postSlugs']['personPlural'];
     $labels = [
       'name'              => _x( 'Areas of Expertise', 'taxonomy general name' ),
       'singular_name'     => _x( 'Area of Expertise', 'taxonomy singular name' ),
@@ -34,6 +35,12 @@ class UCDLibPluginDirectoryAreasOfExpertise {
       'show_ui' => true,
       'show_in_nav_menus' => false,
       'show_in_rest' => true,
+      'capabilities' => [
+        'manage_terms'  => $this->config['capabilities']['manage_directory'],
+        'edit_terms'    => "edit_$people",
+        'delete_terms'  => $this->config['capabilities']['manage_directory'],
+        'assign_terms'  => "edit_$people"
+      ],
       //'show_admin_column' => true
     ];
 

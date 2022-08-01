@@ -7,8 +7,6 @@ class UCDLibPluginSpecialExhibitLocations {
     $this->slug = $config->taxonomies['location'];
 
     add_action( 'init', array($this, 'register') );
-    add_action( 'admin_menu', array($this, 'add_to_menu'));
-    add_action( 'parent_file',  array($this, 'expand_parent_menu') );
     add_filter( 'rest_prepare_taxonomy', [ $this, 'hide_metabox'], 10, 3);
 
   }
@@ -35,6 +33,13 @@ class UCDLibPluginSpecialExhibitLocations {
       'publicly_queryable' => false,
       'hierarchical' => true,
       'show_ui' => true,
+      'show_in_menu' => true,
+      'capabilities' => [
+        'manage_terms'  => $this->config->capabilities['manage_exhibits'],
+        'edit_terms'    => $this->config->capabilities['manage_exhibits'],
+        'delete_terms'  => $this->config->capabilities['manage_exhibits'],
+        'assign_terms'  => "edit_posts"
+      ],
       'show_in_nav_menus' => false,
       'show_in_rest' => true,
       'show_admin_column' => true,
@@ -47,20 +52,6 @@ class UCDLibPluginSpecialExhibitLocations {
       $args
     );
     
-  }
-
-  // add to plugin admin menu
-  public function add_to_menu(){
-    $label = 'Exhibit Locations';
-    add_submenu_page($this->config->slug, $label, $label, 'edit_posts', "edit-tags.php?taxonomy=$this->slug",false );
-  }
-
-  // expand plugin menu when on taxonomy admin page
-  public function expand_parent_menu($parent_file){
-    if ( get_current_screen()->taxonomy == $this->slug ) {
-      $parent_file = $this->config->slug;
-    }
-    return $parent_file;
   }
 
   // hides taxonomy box on exhibit pages

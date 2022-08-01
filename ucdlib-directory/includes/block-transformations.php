@@ -22,45 +22,18 @@ class UCDLibPluginDirectoryBlockTransformations {
     return $attrs;
   }
 
-  /**
-   * Gets people/departments based on url query parameters
-   */
-  public static function getDirectoryResults( $attrs=[] ){
-    $personQuery = [
-      'post_type' => 'person',
-      'meta_key' => 'name_last',
+  public static function getServiceResults( $attrs=[] ){
+    $serviceQuery = [
+      'post_type' => 'service',
+      'orderby' => 'menu_order title',
       'order' => 'ASC',
       'posts_per_page' => -1
     ];
     $tax_query = [];
-    $expertiseAreas = [];
 
-    // set order of results
-    $orderby = get_query_var('orderby') == 'name' ? 'name' : 'department';
-    if ( $orderby == 'department' ){
-      $personQuery['orderby'] = 'menu_order meta_value';
-    } else {
-      $personQuery['orderby'] = 'meta_value';
-    }
-
-    // keyword search. needs to search both name and areas of expertise taxonomy
+    // keyword search
     $kwQueryVar = UCDLibPluginDirectoryUtils::explodeQueryVar('q', false, ' ');
-    if ( count( $kwQueryVar ) ){
-      $personQuery['s'] = implode(' ', $kwQueryVar);
-
-      foreach ($kwQueryVar as $kw) {
-        $terms = get_terms([
-          'taxonomy' => 'expertise-areas',
-          'fields' => 'ids',
-          'search' => $kw,
-          'hide_empty' => true
-        ]);
-        foreach ($terms as $term) {
-          if ( !in_array($term, $expertiseAreas) ) $expertiseAreas[] = $term;
-        }
-      }
-
-    }
+    if ( count( $kwQueryVar ) ) $serviceQuery['s'] = implode(' ', $kwQueryVar);
 
     // filter by library location
     $libQueryVar = UCDLibPluginDirectoryUtils::explodeQueryVar('library');
@@ -73,19 +46,144 @@ class UCDLibPluginDirectoryBlockTransformations {
       ];
     }
 
+    // filter by service type
+    $serviceTypeQueryVar = UCDLibPluginDirectoryUtils::explodeQueryVar('service-type');
+    if ( count($serviceTypeQueryVar) ){
+      $tax_query[] = [
+        'taxonomy' => 'service-type',
+        'field' => 'term_id',
+        'terms' => $serviceTypeQueryVar,
+        'operator' => 'IN'
+      ];
+    }
+
+    if ( count($tax_query) ){
+      $serviceQuery['tax_query'] = $tax_query;
+    }
+
+    $serviceTypesWithServices = [];
+    $services = Timber::get_posts($serviceQuery);
+    foreach ($services as $service) {
+      $terms = $service->terms('service-type');
+      if ( !$terms || !count($terms) ) continue;
+      foreach ($terms as $term) {
+        if ( !array_key_exists($term->ID, $serviceTypesWithServices)) {
+          $serviceTypesWithServices[$term->ID] = ['term' => $term, 'services' => []];
+        }
+        $serviceTypesWithServices[$term->ID]['services'][] = $service;
+      }
+    }
+    usort($serviceTypesWithServices, function($a, $b){
+      return strcmp($a['term']->name, $b['term']->name);
+    });
+    $attrs['serviceTypes'] = $serviceTypesWithServices;
+    return $attrs;
+
+  }
+
+  // converts directory url query args to attributes
+  public static function queryArgsToAttributes($attrs){
+    $attrs['orderby'] = get_query_var('orderby', '');
+    $attrs['q'] = UCDLibPluginDirectoryUtils::explodeQueryVar('q', false, ' ');
+    $attrs['library'] = UCDLibPluginDirectoryUtils::explodeQueryVar('library');
+    $attrs['department'] = UCDLibPluginDirectoryUtils::explodeQueryVar('department');
+    $attrs['directoryTag'] = UCDLibPluginDirectoryUtils::explodeQueryVar('directory-tag');
+    return $attrs;
+  }
+
+  public static function setDefaultQueryAttributes( $attrs ){
+    if ( !array_key_exists('orderby', $attrs) ) $attrs['orderby'] = 'department';
+    $vars = ['q', 'library', 'department', 'directoryTag'];
+    foreach ($vars as $var) {
+      if ( !array_key_exists($var, $attrs) ) $attrs[$var] = [];
+    }
+    
+    return $attrs;
+  }
+
+  /**
+   * Gets people/departments based on url query parameters
+   */
+  public static function getDirectoryResults( $attrs=[] ){
+    $personQuery = [
+      'post_type' => 'person',
+      'meta_key' => 'name_last',
+      'order' => 'ASC',
+      'posts_per_page' => -1
+    ];
+    $tax_query = [];
+    $expertiseAreas = [];
+    $hideDepartments = array_key_exists('hideDepartments', $attrs) && $attrs['hideDepartments'] != 'false';
+    $meta_query = [
+      [
+        'relation' => 'OR',
+        [
+          'key' => 'pastEmployee',
+          'compare' => 'NOT EXISTS'
+        ],
+        [
+          'key' => 'pastEmployee',
+          'value' => false,
+          'compare' => '=',
+          'type' => 'BINARY'
+        ],
+      ]
+    ];
+
+    // set order of results
+    $orderby = $attrs['orderby'] == 'name' ? 'name' : 'department';
+    if ( $orderby == 'department' ){
+      $personQuery['orderby'] = 'menu_order meta_value';
+    } else {
+      $personQuery['orderby'] = 'meta_value';
+    }
+
+    // keyword search. needs to search both name and areas of expertise taxonomy
+    $kwQueryVar =  array_filter($attrs['q'], function($x){return $x;});
+    if ( count( $kwQueryVar ) ){
+      $nameQuery = [
+        'relation' => 'OR'
+      ];
+      foreach ($kwQueryVar as $name) {
+        $nameQuery[] = [
+          'key' => 'name_last',
+          'value' => $name,
+          'compare' => 'LIKE',
+        ];
+        $nameQuery[] = [
+          'key' => 'name_first',
+          'value' => $name,
+          'compare' => 'LIKE',
+        ];
+      }
+      $meta_query[] = $nameQuery;
+      //$personQuery['s'] = implode(' ', $kwQueryVar);
+    }
+
+    // filter by library location
+    $libQueryVar = $attrs['library'];
+    if ( count($libQueryVar) ){
+      $tax_query[] = [
+        'taxonomy' => 'library',
+        'field' => 'term_id',
+        'terms' => $libQueryVar,
+        'operator' => 'IN'
+      ];
+    }
+
     // filter by department
-    $deptQueryVar = UCDLibPluginDirectoryUtils::explodeQueryVar('department');
+    $deptQueryVar = $attrs['department'];
     if ( count($deptQueryVar) ){
-      $personQuery['meta_query'] = [[
+      $meta_query[] = [
         'key' => 'position_dept',
         'value' => $deptQueryVar,
         'compare' => 'IN',
         'type' => 'NUMERIC'
-      ]];
+      ];
     }
 
     // filter by directory tag/subject area
-    $tagQueryVar = UCDLibPluginDirectoryUtils::explodeQueryVar('directory-tag');
+    $tagQueryVar = $attrs['directoryTag'];
     if ( count($tagQueryVar) ){
       $tax_query[] = [
         'taxonomy' => 'directory-tag',
@@ -102,49 +200,16 @@ class UCDLibPluginDirectoryBlockTransformations {
       }
       $personQuery['tax_query'] = $tax_query;
     }
+
+    if ( count($meta_query) ){
+      $meta_query['relation'] = 'AND';
+      $personQuery['meta_query'] = $meta_query;
+    }
     $people = Timber::get_posts($personQuery);
 
-    // keyword search returned expertise areas
-    // perform new peopel search and merge results with those already performed
-    if ( count($expertiseAreas) ){
-      $tax_query[] = [
-        'taxonomy' => 'expertise-areas',
-        'field' => 'term_id',
-        'terms' => $expertiseAreas,
-        'operator' => 'IN'
-      ];
-      if ( count($tax_query) > 1){
-        $tax_query['relation'] = 'AND';
-      }
-      $personQuery['tax_query'] = $tax_query;
-      unset($personQuery['s']);
-      $peopleWithExpertiseArea = Timber::get_posts($personQuery);
-      
-      if ( count($peopleWithExpertiseArea) ) {
-        $combined = [];
-        foreach ($people as $person) {
-          $combined[] = $person;
-        }
-        foreach ($peopleWithExpertiseArea as $person) {
-          $combined[] = $person;
-        }
-        $people = $combined;
-        if ( $orderby == 'department' ) {
-          usort($people, function($a, $b){
-            if ( $a->menu_order == $b->menu_order ) {
-              return strcmp($a->name_last(), $b->name_last());
-            }
-            return ($a->menu_order < $b->menu_order) ? -1 : 1;
-          });
-        } else {
-          usort($people, function($a, $b){
-            return strcmp($a->name_last(), $b->name_last());
-          });
-        }
-      }
-    }
-
-    if ( $orderby == 'name' ) {
+    if ( $hideDepartments ){
+      $attrs['people'] = $people;
+    } else if ( $orderby == 'name' ) {
       $attrs['people'] = $people;
     } else {
       $deptQuery = [
