@@ -43,7 +43,9 @@
 
     {% if post.terms('collection-subject')|length > 0 %}
       <h4>Subject</h4>
-      {{ post.terms('collection-subject')|join('<br>') }}
+      {% for subject in post.terms('collection-subject') %}
+        <p><a href="/collection-subject/{{subject|lower|replace({' ' : '-'})}}">{{subject}}</a></p>    
+      {% endfor %}
     {% endif %}
 
     {% if post.referenceInfoLinks %}
@@ -54,7 +56,6 @@
     {% endif %}
       
     </div>
-
     
   </div>
   <div class="l-sidebar-second">
