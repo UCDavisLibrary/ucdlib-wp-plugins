@@ -13,6 +13,7 @@ require_once( __DIR__ . '/exhibit.php' );
 class UCDLibPluginSpecial {
   public function __construct(){
     $this->slug = "ucdlib-special";
+    $collection = 'collection';
 
     $configs = array(
       'slug' => $this->slug,
@@ -24,6 +25,18 @@ class UCDLibPluginSpecial {
     // config values. slugs and what not.
     $this->config = new UCDLibPluginSpecialConfig();
 
+    // capabilities for each custom post type
+    $config['capabilities']["delete_others_$collection"] = "delete_others_$collection";
+    $config['capabilities']["delete_$collection"] = "delete_$collection";
+    $config['capabilities']["delete_private_$collection"] = "delete_private_$collection";
+    $config['capabilities']["delete_published_$collection"] = "delete_published_$collection";
+    $config['capabilities']["edit_others_$collection"] = "edit_others_$collection";
+    $config['capabilities']["edit_$collection"] = "edit_$collection";
+    $config['capabilities']["edit_private_$collection"] = "edit_private_$collection";
+    $config['capabilities']["edit_published_$collection"] = "edit_published_$collection";
+    $config['capabilities']["publish_$collection"] = "publish_$collection";
+    $config['capabilities']["read_private_$collection"] = "read_private_$collection";
+    
     // advanced custom fields config. handles plugin settings menu
     $this->acf = new UCDLibPluginSpecialACF( $this->config );
 
@@ -43,7 +56,7 @@ class UCDLibPluginSpecial {
     $this->metaData = new UCDLibPluginSpecialMetaData( $this->config );
 
     // 'exhibit' post type
-    $this->collection = new UCDLibPluginSpecialExhibits( $this->config );
+    $this->exhibit = new UCDLibPluginSpecialExhibits( $this->config );
 
     add_filter( 'timber/locations', array($this, 'add_timber_locations') );
     register_activation_hook($this->config->entryPoint, [$this, 'onActivation'] );

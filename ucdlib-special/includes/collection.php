@@ -90,6 +90,8 @@ class UCDLibPluginSpecialCollections {
       'rewrite'			  => $rewrite,
       'template' => $template,
       'template_lock' => 'all',
+      'capability_type' => 'collection',
+      'map_meta_cap' => true,
       'supports' => array(
         'title', 
         'editor', 
@@ -134,7 +136,6 @@ class UCDLibPluginSpecialCollections {
     $p = $context['post'];
     $context['config'] = $this->config;
     $context['sidebar'] = Timber::get_widgets( $p->collectionType() );
-    
     return $context;
   }
 
