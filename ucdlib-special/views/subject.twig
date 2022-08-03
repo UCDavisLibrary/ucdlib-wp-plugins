@@ -1,0 +1,41 @@
+{% extends getUcdTemplate('base') %}
+
+{% from '@ucdlib-special/macros/subject.twig' import teaser %}
+{% from getUcdMacro('links') import pagination %}
+
+{% block content_container %}
+
+{# {{ dump(exhibitsLanderCrumbs) }} #}
+<div class="l-container {{sidebar ? 'l-basic--flipped'}}">
+  <div class="l-content">
+
+    <div class="panel o-box">
+        {% if posts %}
+            <div class="panel panel--intro o-box">
+            <h2 class="panel__title">{{term.subjectHeading}}</h2>
+            <section>
+                <p>{{term.description}}</p>
+            </section>
+            </div>
+
+            <ul class="list--arrow">
+            {% for post in posts %}
+                <li style="margin-bottom: 1em;">
+                    {{ teaser(post) }}
+                </li>
+            {% endfor %}
+            </ul>
+        {{ pagination({"pagination": posts.pagination}) }}
+        
+        {% else %}
+        <div class="alert">No {{title}} posts found!</div>
+        {% endif %}
+    </div>
+    </div>
+    {% if sidebar %}
+        <div class="l-sidebar-second">
+        {{sidebar}}
+        </div>
+    {% endif %}
+    </div>
+{% endblock %}
