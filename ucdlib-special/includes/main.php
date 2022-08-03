@@ -23,7 +23,7 @@ class UCDLibPluginSpecial {
 
     // config values. slugs and what not.
     $this->config = new UCDLibPluginSpecialConfig();
-
+    
     // advanced custom fields config. handles plugin settings menu
     $this->acf = new UCDLibPluginSpecialACF( $this->config );
 
@@ -43,7 +43,7 @@ class UCDLibPluginSpecial {
     $this->metaData = new UCDLibPluginSpecialMetaData( $this->config );
 
     // 'exhibit' post type
-    $this->collection = new UCDLibPluginSpecialExhibits( $this->config );
+    $this->exhibit = new UCDLibPluginSpecialExhibits( $this->config );
 
     add_filter( 'timber/locations', array($this, 'add_timber_locations') );
     register_activation_hook($this->config->entryPoint, [$this, 'onActivation'] );
@@ -69,6 +69,11 @@ class UCDLibPluginSpecial {
 
     add_role('exhibit_manager', 'Exhibit Manager', [$capabilities['manage_exhibits'] => true]);
     add_role('collection_manager', 'Special Collection Manager', [$capabilities['manage_collections'] => true]);
+
+    $role = get_role( 'collection_manager' );
+    foreach ($capabilities as $capability) {
+      $role->add_cap( $capability ); 
+    }
   }
 
   public function onDeactivation(){
