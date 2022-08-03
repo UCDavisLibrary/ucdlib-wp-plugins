@@ -98,7 +98,7 @@ return html`
         <span>${this.widgetTitle}</span>
       </h5>
       <div class="field-container">
-        <label for="keyword">Name or Keyword</label>
+        <label for="keyword">Name</label>
         <div class='flex'>
           <input id='keyword' .value=${this.keyword} type="text" @input=${e => this.keyword = e.target.value}>
         </div>
@@ -127,13 +127,21 @@ return html`
           </ucd-theme-slim-select>
         </div>
         <div class="field-container">
-          <label for="subject-area">Subject Area</label>
+          <label for="subject-area">Expertise</label>
           <ucd-theme-slim-select class='flex' @change=${e => this.onSlimSelectChange(e, 'directoryTag')}>
             <select id='subject-area' multiple>
-              <option data-placeholder="true">Select Subject Area</option>
-              ${this.filterOptions['directory-tag']['subjectArea'].map(opt => html`
-                <option ?selected=${this.directoryTag.includes(opt.id)} value=${opt.id}>${opt.name}</option>
-              `)}
+              <option data-placeholder="true">Select Expertise</option>
+              <optgroup label="Academic Subjects">
+                ${this.filterOptions['directory-tag']['subjectArea'].map(opt => html`
+                  <option ?selected=${this.directoryTag.includes(opt.id)} value=${opt.id}>${opt.name}</option>
+                `)}
+              </optgroup>
+              <optgroup label="Other Expertise">
+                ${this.filterOptions['directory-tag']['tag'].map(opt => html`
+                  <option ?selected=${this.directoryTag.includes(opt.id)} value=${opt.id}>${opt.name}</option>
+                `)}
+              </optgroup>
+
             </select>
           </ucd-theme-slim-select>
         </div>

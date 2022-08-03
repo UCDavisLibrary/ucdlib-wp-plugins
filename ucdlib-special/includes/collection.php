@@ -1,5 +1,6 @@
 <?php
 require_once( __DIR__ . '/block-transformations.php' );
+require_once( __DIR__ . '/config.php' );
 require_once( __DIR__ . '/tax-az.php' );
 require_once( __DIR__ . '/tax-subject.php' );
 require_once( __DIR__ . '/api.php' );
@@ -32,7 +33,12 @@ class UCDLibPluginSpecialCollections {
   public function register(){
     // new posts will start with this template
     $template = [
-      ['core/pattern', ['slug' => "ucdlib-special/collection"]]
+      ['ucd-theme/special-description'],
+      ['ucd-theme/special-finding-aid'],
+      ['ucd-theme/special-inclusive-dates'],
+      ['ucd-theme/special-extent'],
+      ['ucd-theme/special-subject'],
+      ['ucd-theme/special-additional-info'],
     ];
     
     $labels = array(
@@ -83,11 +89,11 @@ class UCDLibPluginSpecialCollections {
       'menu_icon' => 'dashicons-media-document',
       'rewrite'			  => $rewrite,
       'template' => $template,
-      //'template_lock' => 'all',
+      'template_lock' => 'all',
       'supports' => array(
         'title', 
         'editor', 
-        'author', 
+        // 'author', 
         'thumbnail', 
         // 'excerpt', 
         //'revisions',

@@ -226,6 +226,15 @@ class UCDLibPluginSpecialExhibitPage extends UcdThemePost {
     return $this->children;
   }
 
+  protected $showGrandchildrenInNav;
+  public function showGrandchildrenInNav(){
+    if ( ! empty( $this->showGrandchildrenInNav ) ) {
+      return $this->showGrandchildrenInNav;
+    }
+    $this->showGrandchildrenInNav = false;
+    return $this->showGrandchildrenInNav;
+  }
+
   protected $exhibitIsHierarchical;
   public function exhibitIsHierarchical(){
     if ( ! empty( $this->exhibitIsHierarchical ) ) {
@@ -244,6 +253,11 @@ class UCDLibPluginSpecialExhibitPage extends UcdThemePost {
     $exhibit = $this->exhibit();
     $this->isTopPage = $exhibit->id == $this->id ? true : false;
     return $this->isTopPage;
+  }
+
+  protected $isDeepPage;
+  public function isDeepPage(){
+    return count( $this->ancestors) >=2 ;
   }
 
   // returns top-level exhibit page
@@ -518,21 +532,33 @@ class UCDLibPluginSpecialExhibitPage extends UcdThemePost {
 
     $this->nextPage = null;
     $children = $this->children();
+    $parent = $this->parent();
 
-    if ( count($children) ){
+    if ( ($this->showGrandchildrenInNav() || $this->isTopPage()) && count($children) ){
       foreach ($children as $child) {
         $this->nextPage = $child;
         break;
       }
     } elseif ( count($this->siblings()) ) {
+      $is_last = true;
       $found_self = false;
       foreach ($this->siblings() as $sibling) {
         if ( $found_self ) {
           $this->nextPage = $sibling;
+          $is_last = false;
           break;
         }
         if ( $sibling->id == $this->id ) $found_self = true;
-
+      }
+      if ( $is_last && $parent && count($parent->siblings())) {
+        $found_parent = false;
+        foreach ($parent->siblings() as $sibling) {
+          if ( $found_parent ) {
+            $this->nextPage = $sibling;
+            break;
+          }
+          if ( $sibling->id == $parent->id ) $found_parent = true;
+        }
       }
     }
     return $this->nextPage;
@@ -552,7 +578,11 @@ class UCDLibPluginSpecialExhibitPage extends UcdThemePost {
       }
       if ( $sibling->id == $this->id ) $found_self = true;
     }
-    if ( !$this->prevPage && $this->parent() ) {
+    if ( $this->showGrandchildrenInNav() && $this->prevPage && count($this->prevPage->children()) ){
+      $parentChildren = (array)$this->prevPage->children();
+      $this->prevPage = end($parentChildren);
+    }
+    else if ( !$this->prevPage && $this->parent() ) {
       $this->prevPage = $this->parent();
     }
 

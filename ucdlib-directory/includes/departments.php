@@ -26,7 +26,8 @@ class UCDLibPluginDirectoryDepartments {
         'ucdlib-directory/contact', 
         [
           'placeholder' => 'Department contact info...',
-          'allowAppointment' => false
+          'allowAppointment' => false,
+          'allowAdditionalText' => true
         ]
       ]
     ];
@@ -72,7 +73,7 @@ class UCDLibPluginDirectoryDepartments {
       'map_meta_cap' => true,
       'menu_position' => 30,
       'template' => $template,
-      'template_lock' => 'all',
+      'template_lock' => 'insert',
       'supports' => array(
         'title', 
         'editor', 

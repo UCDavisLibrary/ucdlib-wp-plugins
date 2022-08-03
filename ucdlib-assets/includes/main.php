@@ -60,6 +60,9 @@ class UCDLibPluginAssets {
     add_action( 'wp_enqueue_scripts', array($this, "deregister_public"), 1000);
     add_action( 'enqueue_block_editor_assets', array($this, "enqueue_block_editor_assets"), 3);
     add_action( 'enqueue_block_editor_assets', array($this, "deregister_block_editor_assets"), 1000);
+    add_filter( 'timber/locations', array($this, 'add_timber_locations') );
+    add_filter( 'timber/context', array( $this, 'addGoogleAnalytics' ) );
+    //add_action('wp_head', [$this, 'addGoogleAnalytics']);
 
     add_action( 'after_setup_theme', array($this, 'enqueue_editor_css'));
     // add_filter( 'mce_css', array($this, 'enqueue_editor_css') );
@@ -173,6 +176,16 @@ class UCDLibPluginAssets {
         wp_deregister_style( $s['slug'] );
       }
     }
+  }
+
+  public function add_timber_locations($paths){
+    $paths[$this->config['slug']] = array(WP_PLUGIN_DIR . "/" . $this->config['slug'] . '/views');
+    return $paths;
+  }
+
+  public function addGoogleAnalytics($context){
+    $context['twigHooks']['base']['postHead'][] = '@' . $this->config['slug'] . '/google-analytics.twig';
+    return $context;
   }
 
 }

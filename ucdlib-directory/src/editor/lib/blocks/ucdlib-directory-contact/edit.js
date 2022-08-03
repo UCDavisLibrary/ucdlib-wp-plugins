@@ -1,6 +1,7 @@
 import { html, SelectUtils } from "@ucd-lib/brand-theme-editor/lib/utils";
 import { ContactListEdit, ContactListDisplay } from "@ucd-lib/brand-theme-editor/lib/block-components";
-import { useBlockProps } from '@wordpress/block-editor';
+import { ToggleControl, PanelBody } from '@wordpress/components';
+import { useBlockProps, InspectorControls } from '@wordpress/block-editor';
 import { useDispatch } from "@wordpress/data";
 import { createRef } from "@wordpress/element";
 
@@ -60,8 +61,16 @@ export default ( props ) => {
         allowAppointment=${attributes.allowAppointment}
         allowAdditionalText=${attributes.allowAdditionalText}
       />
+      <${InspectorControls}>
+        <${PanelBody} title="Query Filters">
+          <${ToggleControl} 
+            label="Show Additional Text Field"
+            checked=${attributes.allowAdditionalText}
+            onChange=${() => setAttributes({allowAdditionalText: !attributes.allowAdditionalText})}
+          /> 
+        </${PanelBody}>
+      </${InspectorControls}> 
     </div>
-
   `}
 
   </div>
