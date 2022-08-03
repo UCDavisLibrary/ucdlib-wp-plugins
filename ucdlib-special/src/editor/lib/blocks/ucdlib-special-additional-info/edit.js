@@ -92,12 +92,13 @@ export default ( props ) => {
       <h4>Additional Collection Info ${isModified ? html`<span className="strawberry">*</span>` : ''}</h4>
       ${meta.links.map((link, index) => {
         if (link.linkType === 'referenceInfo') {
+          const value = `<a href="${link.linkURL}" data-rich-text-format-boundary="true">${link.displayLabel || link.linkURL}</a>`;
           return <RichText
             tagName="a"
             className=""
             href={link.linkURL}
             title={link.displayLabel}
-            value={link.displayLabel || link.linkURL}
+            value={value}
             key={index}
             style={{ display: 'block' }}
             onChange={(link) => onAdditionalInfoChange(link, index)}

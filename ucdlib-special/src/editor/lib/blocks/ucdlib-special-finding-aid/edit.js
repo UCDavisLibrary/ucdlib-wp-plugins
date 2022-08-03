@@ -40,6 +40,8 @@ export default ( props ) => {
     }
   }
 
+  const value = `<a href="${meta.findingAid.linkURL}" data-rich-text-format-boundary="true">${meta.findingAid.linkTitle || meta.findingAid.linkURL}</a>`
+
   return html`
   <div ...${ blockProps }>
     <${BlockControls} group="block">
@@ -58,7 +60,7 @@ export default ( props ) => {
           className=""
           href=${meta.findingAid.linkURL}
           title=${meta.findingAid.linkTitle}
-          value=${meta.findingAid.linkTitle || meta.findingAid.linkURL}
+          value=${value}
           onChange=${(findingAid) => onFindingAidChange(findingAid)}
         />
     </div>
