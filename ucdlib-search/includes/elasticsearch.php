@@ -40,11 +40,23 @@ class UCDLibPluginSearchElasticsearch {
       $this->currentPage = get_query_var('paged') ? get_query_var('paged') : 1;
       $this->pageSize = get_option('posts_per_page');
       $this->searchQuery = get_search_query();
+      $authors = get_query_var('authors');
+      if ( $authors ) {
+        $authors = array_map(function($a){
+          $a = trim($a);
+          if ( strpos($a, '@') === false ) {
+            $a = $a . '@ucdavis.edu';
+          }
+          return $a;}, 
+          explode(',', $authors ));
+      }
+      $this->authors =  $authors ? $authors : [];
       
       // stop wp from throwing a 404 when no posts are returned
       $query->set( 'posts_per_page', 1 );
       $query->set( 'paged', 1);
       $query->set( 's', '' );
+      $query->set( 'author', '' );
     }
   }
 
@@ -263,16 +275,71 @@ class UCDLibPluginSearchElasticsearch {
       ]
     ];
 
-    // add any filters
+    // add filter context
+    $documentTypes = [];
+    $documentSubTypes = [];
+    $documentTypeFilter = [];
+    $authorFilter = [];
+
+    // type/subtype facets
     $facets = array_filter($this->typeFacets(), function($f){return $f['isSelected'];});
     if ( count($facets) ){
-      $documentTypes = [];
       foreach ($facets as $facet) {
+
+        // use subtype instead of type
+        if ( array_key_exists('documentSubType', $facet) ){
+          foreach ($facet['documentSubType'] as $termField => $t) {
+            if ( !array_key_exists($termField, $documentSubTypes) ) {
+              $documentSubTypes[$termField] = [];
+            }
+            foreach ($t as $tt) {
+              $documentSubTypes[$termField][] = $tt;
+            }
+          }
+          continue;
+        }
+
         foreach ($facet['documentType'] as $dt) {
           $documentTypes[] = $dt;
         }
       }
-      $params['body']['query']['bool']['filter'] = ['terms' => ['type' =>  $documentTypes]];
+    }
+    if ( count($documentTypes) || count($documentSubTypes) ){
+      $documentTypeFilter = ['bool' => ['should' => []]];
+      if ( count($documentTypes) ) {
+        $documentTypeFilter['bool']['should'][] = ['terms' => ['type' => $documentTypes]];
+      }
+      
+      if ( count($documentSubTypes) ){
+        foreach ($documentSubTypes as $termField => $t) {
+          $documentTypeFilter['bool']['should'][] = ['terms' => [$termField => $t] ];
+        }
+      }
+    }
+
+    // check for author filters
+    if ( count($this->authors) ){
+      $authorFilter = ['terms' => ['authors' => []]];
+      foreach ($this->authors as $author) {
+        $authorFilter['terms']['authors'][] = $author;
+      }
+    }
+
+    // put together filter context
+    if ( 
+      count( $documentTypeFilter) || 
+      count( $authorFilter )
+      ){
+      $filterContext = ['bool' => ['must' => []]];
+      if ( count($documentTypeFilter) ) {
+        $filterContext['bool']['must'][] = $documentTypeFilter;
+      }
+      if ( count( $authorFilter ) ){
+        $filterContext['bool']['must'][] = $authorFilter;
+        $filterContext['bool']['must'][] = ['term' => ['ucd_hide_author' => false]];
+      }
+      $params['body']['query']['bool']['filter'] = $filterContext;
+      //echo '<pre>' . var_dump($filterContext) . '</pre>';
     }
 
     // add sort

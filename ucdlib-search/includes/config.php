@@ -15,7 +15,7 @@ class UCDLibPluginSearchConfig {
       'showByline' => true
     ],
     [
-      'documentType' => ['page', 'library'],
+      'documentType' => ['page', 'location'],
       'label' => 'Information Page',
       'labelPlural' => 'Information Pages',
       'source' => 'wordpress',
@@ -37,6 +37,40 @@ class UCDLibPluginSearchConfig {
       'source' => 'libguides',
       'urlArg' => 'database',
       'defaultImage' => 'search-databases.jpg'
+    ],
+    [
+      'documentType' => ['person'],
+      'label' => 'Person',
+      'labelPlural' => 'People',
+      'source' => 'wordpress',
+      'urlArg' => 'person',
+      'defaultImage' => 'search-people.jpg'
+    ],
+    [
+      'documentType' => ['collection'],
+      'documentSubType' => ['collectionType' => ['manuscript']],
+      'label' => 'Manuscript',
+      'labelPlural' => 'Manuscripts',
+      'source' => 'wordpress',
+      'urlArg' => 'manuscript',
+      'defaultImage' => 'search-manuscript.jpg'
+    ],
+    [
+      'documentType' => ['collection'],
+      'documentSubType' => ['collectionType' => ['university-archive']],
+      'label' => 'University Archive',
+      'labelPlural' => 'University Archives',
+      'source' => 'wordpress',
+      'urlArg' => 'university-archive',
+      'defaultImage' => 'search-universityarchives.jpg'
+    ],
+    [
+      'documentType' => ['exhibit'],
+      'label' => 'Exhibit',
+      'labelPlural' => 'Exhibits',
+      'source' => 'wordpress',
+      'urlArg' => 'exhibit',
+      'defaultImage' => 'search-exhibits.jpg'
     ],
   ];
 
@@ -79,6 +113,21 @@ class UCDLibPluginSearchConfig {
         "exclude" => ['_'],
       ]
     ];
+  }
+
+  public function getFacetFromDocument($document){
+    $src = $document['_source'];
+    $type = $src['type'];
+    foreach ($this->facets as $facet) {
+      if ( in_array($type, $facet['documentType']) ) {
+        if ( !array_key_exists('documentSubType', $facet) ) return $facet;
+        foreach ($facet['documentSubType'] as $docIndex => $indexValues) {
+          if ( !array_key_exists($docIndex, $src)) continue;
+          if ( in_array($src[$docIndex], $indexValues) ) return $facet;
+        }
+      }
+    }
+    return false;
   }
 
   public function getFacet($value, $by='urlArg'){

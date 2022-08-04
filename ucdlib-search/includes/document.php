@@ -8,7 +8,7 @@ class UCDLibPluginSearchDocument {
     $this->config = $config;
     $this->document = $document;
 
-    $this->type = $this->config->getFacet($document['_source']['type'], 'documentType');
+    $this->type = $this->config->getFacetFromDocument($document);
     if ( $this->type['source'] == 'wordpress' ){
       $this->post = Timber::get_post($document['_source']['id']);
     } else {
