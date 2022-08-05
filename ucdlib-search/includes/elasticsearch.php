@@ -40,17 +40,17 @@ class UCDLibPluginSearchElasticsearch {
       $this->currentPage = get_query_var('paged') ? get_query_var('paged') : 1;
       $this->pageSize = get_option('posts_per_page');
       $this->searchQuery = get_search_query();
-      $authors = get_query_var('authors');
-      if ( $authors ) {
-        $authors = array_map(function($a){
+      $this->authorsQuery = get_query_var('authors');
+      $this->authors = [];
+      if ( $this->authorsQuery ) {
+        $this->authors = array_map(function($a){
           $a = trim($a);
           if ( strpos($a, '@') === false ) {
             $a = $a . '@ucdavis.edu';
           }
           return $a;}, 
-          explode(',', $authors ));
+          explode(',', $this->authorsQuery ));
       }
-      $this->authors =  $authors ? $authors : [];
       
       // stop wp from throwing a 404 when no posts are returned
       $query->set( 'posts_per_page', 1 );
@@ -121,6 +121,8 @@ class UCDLibPluginSearchElasticsearch {
     $context['currentPage'] = $this->currentPage;
     $context['pageSize'] = $this->pageSize;
     $context['search_query'] = $this->searchQuery;
+    $context['authors'] = $this->authors;
+    $context['authorsQuery'] = $this->authorsQuery;
     $context['title'] = 'Search Our Website';
     $context['typeFacets'] = $this->typeFacets();
     $context['sortOptions'] = $this->sortOptions();
@@ -141,11 +143,13 @@ class UCDLibPluginSearchElasticsearch {
 
       // filter suggest
       $suggest = ['score' => 0, 'highlighted' => '', 'text' => ''];
-      foreach ($results['suggest'] as $key => $value) {
-        foreach($value as $item) {
-          foreach($item['options'] as $option) {
-            if( $option['score'] > $suggest['score'] ) {
-              $suggest = $option;
+      if ( array_key_exists('suggest', $results )) {
+        foreach ($results['suggest'] as $key => $value) {
+          foreach($value as $item) {
+            foreach($item['options'] as $option) {
+              if( $option['score'] > $suggest['score'] ) {
+                $suggest = $option;
+              }
             }
           }
         }
@@ -195,85 +199,90 @@ class UCDLibPluginSearchElasticsearch {
         'from' => ($this->currentPage - 1) * $this->pageSize,
         'query' => [
           'bool' => [
-            'must' => [
-              'multi_match' => [
-                'query' => $this->searchQuery,
-                'fields' => ['content', 'description', 'title^3', 'altTitles^3', 'tags.text^2']
-              ],
-            ]
-          ]
-        ],
-        'highlight' => [
-          'order' => 'score',
-          'fields' => [
-            '*' => new stdClass()
-          ]
-        ],
-        'suggest' => [
-          'text' => $this->searchQuery,
-          'title_phrase' => [
-            'phrase' => [
-              'field' => 'title.trigram',
-              'size' => 1,
-              'gram_size' => 3,
-              'direct_generator' => [ [
-                'field' => 'title.trigram',
-                'suggest_mode' => 'always'
-              ], [
-                "field" => "title.reverse",
-                "suggest_mode" => "always",
-                "pre_filter" => "reverse",
-                "post_filter" => "reverse"
-              ] ],
-              'highlight' => [
-                "pre_tag" => "<em>",
-                "post_tag" => "</em>"
-              ]
-            ]
-          ],
-          'description_phrase' => [
-            'phrase' => [
-              'field' => 'description.trigram',
-              'size' => 1,
-              'gram_size' => 3,
-              'direct_generator' => [ [
-                'field' => 'description.trigram',
-                'suggest_mode' => 'always'
-              ], [
-                "field" => "description.reverse",
-                "suggest_mode" => "always",
-                "pre_filter" => "reverse",
-                "post_filter" => "reverse"
-              ] ],
-              'highlight' => [
-                "pre_tag" => "<em>",
-                "post_tag" => "</em>"
-              ]
-            ]
-          ],
-          'content_phrase' => [
-            'phrase' => [
-              'field' => 'content.trigram',
-              'size' => 1,
-              'gram_size' => 3,
-              'direct_generator' => [ [
-                'field' => 'content.trigram',
-                'suggest_mode' => 'always'
-              ], [
-                "field" => "content.reverse",
-                "suggest_mode" => "always",
-                "pre_filter" => "reverse",
-                "post_filter" => "reverse"
-              ] ],
-              'highlight' => [
-                "pre_tag" => "<em>",
-                "post_tag" => "</em>"
-              ]
-            ]
+            'must' => []
           ]
         ]
       ]
     ];
+
+    // add keyword search
+    if ( $this->searchQuery ){
+      $params['body']['query']['bool']['must']['multi_match'] = [
+        'query' => $this->searchQuery,
+        'fields' => ['content', 'description', 'title^3', 'altTitles^3', 'tags.text^2']
+      ];
+
+      $params['body']['highlight'] = [
+        'order' => 'score',
+        'fields' => [
+          '*' => new stdClass()
+        ]
+      ];
+
+      $params['body']['suggest'] = [
+        'text' => $this->searchQuery,
+        'title_phrase' => [
+          'phrase' => [
+            'field' => 'title.trigram',
+            'size' => 1,
+            'gram_size' => 3,
+            'direct_generator' => [ [
+              'field' => 'title.trigram',
+              'suggest_mode' => 'always'
+            ], [
+              "field" => "title.reverse",
+              "suggest_mode" => "always",
+              "pre_filter" => "reverse",
+              "post_filter" => "reverse"
+            ] ],
+            'highlight' => [
+              "pre_tag" => "<em>",
+              "post_tag" => "</em>"
+            ]
+          ]
+        ],
+        'description_phrase' => [
+          'phrase' => [
+            'field' => 'description.trigram',
+            'size' => 1,
+            'gram_size' => 3,
+            'direct_generator' => [ [
+              'field' => 'description.trigram',
+              'suggest_mode' => 'always'
+            ], [
+              "field" => "description.reverse",
+              "suggest_mode" => "always",
+              "pre_filter" => "reverse",
+              "post_filter" => "reverse"
+            ] ],
+            'highlight' => [
+              "pre_tag" => "<em>",
+              "post_tag" => "</em>"
+            ]
+          ]
+        ],
+        'content_phrase' => [
+          'phrase' => [
+            'field' => 'content.trigram',
+            'size' => 1,
+            'gram_size' => 3,
+            'direct_generator' => [ [
+              'field' => 'content.trigram',
+              'suggest_mode' => 'always'
+            ], [
+              "field" => "content.reverse",
+              "suggest_mode" => "always",
+              "pre_filter" => "reverse",
+              "post_filter" => "reverse"
+            ] ],
+            'highlight' => [
+              "pre_tag" => "<em>",
+              "post_tag" => "</em>"
+            ]
+          ]
+        ]
+      ];
+    }
 
     // add filter context
     $documentTypes = [];
