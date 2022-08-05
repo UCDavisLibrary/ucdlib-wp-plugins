@@ -1,14 +1,25 @@
 <?php
 
 require_once( __DIR__ . '/document.php' );
+require_once( __DIR__ . '/config.php' );
 
 /**
  * Class for hijacking the main wp search, and returning results from elasticsearch.
  */
 class UCDLibPluginSearchElasticsearch {
-  public function __construct( $config, $doHooks=true ){
+  public function __construct( $config=false, $doHooks=true ){
+    if ( !$config ) {
+      $config = new UCDLibPluginSearchConfig();
+    } 
     $this->config = $config;
+    
     $this->client = $this->createClient();
+
+    $this->currentPage = 0;
+    $this->pageSize = get_option('posts_per_page');
+    $this->authorsQuery = '';
+    $this->setAuthors();
+
 
     if ( $doHooks ){
       add_action( 'pre_get_posts', array($this, 'interceptWpSearch') );
@@ -38,25 +49,28 @@ class UCDLibPluginSearchElasticsearch {
 
       // save original search status for ES query
       $this->currentPage = get_query_var('paged') ? get_query_var('paged') : 1;
-      $this->pageSize = get_option('posts_per_page');
       $this->searchQuery = get_search_query();
       $this->authorsQuery = get_query_var('authors');
-      $this->authors = [];
-      if ( $this->authorsQuery ) {
-        $this->authors = array_map(function($a){
-          $a = trim($a);
-          if ( strpos($a, '@') === false ) {
-            $a = $a . '@ucdavis.edu';
-          }
-          return $a;}, 
-          explode(',', $this->authorsQuery ));
-      }
+      $this->setAuthors();
       
       // stop wp from throwing a 404 when no posts are returned
       $query->set( 'posts_per_page', 1 );
       $query->set( 'paged', 1);
       $query->set( 's', '' );
       $query->set( 'author', '' );
+    }
+  }
+
+  public function setAuthors(){
+    $this->authors = [];
+    if ( $this->authorsQuery ) {
+      $this->authors = array_map(function($a){
+        $a = trim($a);
+        if ( strpos($a, '@') === false ) {
+          $a = $a . '@ucdavis.edu';
+        }
+        return $a;}, 
+        explode(',', $this->authorsQuery ));
     }
   }
 
@@ -361,5 +375,37 @@ class UCDLibPluginSearchElasticsearch {
     $response = $this->client->search($params);
   
   return $response;
+  }
+
+  public function getAuthorTypeAggs($email){
+    $params = [
+      'index' => $this->config->elasticsearch['indexAlias'],
+      'body'  => [
+        'size' => 0,
+        'from' => 0,
+        'query' => [
+          'bool' => [
+            'filter' => [
+              'bool' => [
+                'must' => [
+                  ['term' => ['ucd_hide_author' => false]],
+                  ['term' => ['authors' => $email]]
+                ]
+              ]
+            ]
+          ]
+        ],
+        'aggs' => [
+          'types' => [
+            'terms' => [
+              'field' => 'type'
+            ]
+          ]
+        ]
+      ]
+    ];
+
+    $response = $this->client->search($params);
+    return $response;
   }
 }

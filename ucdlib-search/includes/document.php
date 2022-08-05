@@ -78,6 +78,9 @@ class UCDLibPluginSearchDocument {
     }
     if ( !array_key_exists('content', $this->document['_source'])) return '';
     $content = $this->document['_source']['content'];
+    if ( is_array($content) ){
+      $content = implode(' ', $content);
+    }
     if ( !$content ) return '';
     $content = explode(' ', $content);
     return implode(' ', array_slice($content, 0, $words));

@@ -33,7 +33,7 @@ export default ( props ) => {
       contactWebsite: d.websites
     };
     if ( attributes.allowAppointment ) {
-      meta.contactAppointmentUrl = appointment;
+      meta.contactAppointmentUrl = d.appointment;
     }
 
     editPost({meta});
@@ -58,6 +58,7 @@ export default ( props ) => {
         phones=${phones}
         emails=${emails}
         websites=${websites}
+        appointment=${appointment}
         allowAppointment=${attributes.allowAppointment}
         allowAdditionalText=${attributes.allowAdditionalText}
       />

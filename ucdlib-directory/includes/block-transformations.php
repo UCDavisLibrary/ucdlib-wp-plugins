@@ -238,7 +238,11 @@ class UCDLibPluginDirectoryBlockTransformations {
 
   public static function widgetIcons( $attrs ){
     $attrs['icons'] = [
-      'ucd-public:fa-calendar-check'
+      'ucd-public:fa-calendar-check',
+      'ucd-public:fa-newspaper',
+      'ucd-public:fa-image',
+      'ucd-public:fa-book-atlas',
+      'ucd-public:fa-info'
     ];
     return $attrs;
   }
