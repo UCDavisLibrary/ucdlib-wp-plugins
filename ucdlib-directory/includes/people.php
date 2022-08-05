@@ -616,6 +616,15 @@ class UCDLibPluginDirectoryPerson extends UcdThemePost {
     return $this->department;
   }
 
+  protected $appointmentLink;
+  public function appointmentLink(){
+    if ( ! empty( $this->appointmentLink ) ) {
+      return $this->appointmentLink;
+    }
+    $this->appointmentLink = $this->meta('contactAppointmentUrl');
+    return $this->appointmentLink;
+  }
+
   protected $contactInfo;
   public function contactInfo(){
     if ( ! empty( $this->contactInfo ) ) {

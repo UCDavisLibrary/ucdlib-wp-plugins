@@ -24,6 +24,10 @@ class UCDLibPluginDirectoryBlocks extends UCDThemeBlockRenderer {
     'ucdlib-directory/filters' => [
       'twig' => '@ucdlib-directory/blocks/directory-filters.twig'
     ],
+    'ucdlib-directory/meet' => [
+      'twig' => '@ucdlib-directory/blocks/person-meet.twig',
+      'transform' => ['widgetIcons']
+    ],
     'ucdlib-directory/name' => [
       'twig' => '@ucdlib-directory/blocks/person-name.twig'
     ],

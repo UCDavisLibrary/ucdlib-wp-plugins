@@ -1,0 +1,8 @@
+{% from getUcdMacro('links') import focal_link %}
+{% set p = siteContext.post %}
+{% if p.appointmentLink %}
+  <div class='o-box u-space-mb'>
+    <h2 class='heading--h5'>Meet with {{p.name_first}}</h2>
+    {{ focal_link({text: 'Book an Appointment', href: p.appointmentLink, icon: 'ucd-public:fa-calendar-check', brandColor: 'secondary'}) }}
+  </div>
+{% endif %}

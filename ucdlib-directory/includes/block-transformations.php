@@ -235,5 +235,12 @@ class UCDLibPluginDirectoryBlockTransformations {
     }
     return $attrs;
   }
+
+  public static function widgetIcons( $attrs ){
+    $attrs['icons'] = [
+      'ucd-public:fa-calendar-check'
+    ];
+    return $attrs;
+  }
 }
 ?>

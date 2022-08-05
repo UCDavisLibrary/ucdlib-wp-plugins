@@ -5,6 +5,7 @@ import directorySort from "./ucdlib-directory-sort";
 import metaDescription from "./ucdlib-directory-description";
 import personBio from "./ucdlib-directory-bio";
 import personContact from "./ucdlib-directory-contact";
+import personMeet from './ucdlib-directory-meet';
 import personName from "./ucdlib-directory-name";
 import personTitle from "./ucdlib-directory-title";
 import personPronouns from "./ucdlib-directory-pronouns";
@@ -22,6 +23,7 @@ export default [
   metaDescription,
   personBio,
   personContact,
+  personMeet,
   personName,
   personTitle,
   personPronouns,
