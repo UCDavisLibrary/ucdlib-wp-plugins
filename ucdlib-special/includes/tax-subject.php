@@ -133,8 +133,10 @@ class UCDLibPluginSpecialTaxSubject {
   }
 
   function sort_by_ascending($query){
+    if ( $query->is_main_query() && is_tax($this->slug) && !is_admin() ) {
       $query->set('orderby', 'title' );
       $query->set('order', 'ASC' );
+    }
   }
 
   // edit with Appearance>>Widgets
