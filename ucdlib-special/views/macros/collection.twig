@@ -1,0 +1,31 @@
+{% macro teaser(collection) %}
+  <article class='vm-teaser vm-teaser--collection'>
+    {% if collection.teaser_image %}
+        <div class="vm-teaser__figure" style="width:20%;max-width:135px;" role='image' aria-label='{{collection.teaser_image.alt}}'>
+          <a href="{{collection.link}}" style="display:block;background-image:url({{collection.teaser_image.src}})" class="aspect--1x1 u-background-image">
+        </a>
+      </div>
+    {% endif %}
+    <div class="vm-teaser__body">
+      <h3 class="vm-teaser__title"><a href="{{collection.link}}">{{collection.title}}</a></h3>
+      {% if exhibit.excerpt %}
+        <div class="vm-teaser__summary">{{ exhibit.excerpt({words: 50}) }}</div>
+      {% endif %}
+    </div>
+  </article>
+{% endmacro %}
+
+{% macro no_results() %}
+  <div class='alert'>Sorry, no collection available to display.</div>
+{% endmacro %}
+
+{% macro az(collection) %}
+  {% if person.libraries %}
+    <ul class="list--arrow">
+      {% for col in collection %}
+        <li><span><a href="{{col.link}}">{{col.title}}</a></span><span>({{col.callNumber}})</span></li>
+      {% endfor %}
+    </ul> 
+  {% endif %}
+{% endmacro %}
+
