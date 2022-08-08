@@ -141,20 +141,23 @@ class UCDLibPluginDirectoryBlockTransformations {
     // keyword search. needs to search both name and areas of expertise taxonomy
     $kwQueryVar =  array_filter($attrs['q'], function($x){return $x;});
     if ( count( $kwQueryVar ) ){
-      $personQuery['s'] = implode(' ', $kwQueryVar);
-
-      foreach ($kwQueryVar as $kw) {
-        $terms = get_terms([
-          'taxonomy' => 'expertise-areas',
-          'fields' => 'ids',
-          'search' => $kw,
-          'hide_empty' => true
-        ]);
-        foreach ($terms as $term) {
-          if ( !in_array($term, $expertiseAreas) ) $expertiseAreas[] = $term;
-        }
+      $nameQuery = [
+        'relation' => 'OR'
+      ];
+      foreach ($kwQueryVar as $name) {
+        $nameQuery[] = [
+          'key' => 'name_last',
+          'value' => $name,
+          'compare' => 'LIKE',
+        ];
+        $nameQuery[] = [
+          'key' => 'name_first',
+          'value' => $name,
+          'compare' => 'LIKE',
+        ];
       }
-
+      $meta_query[] = $nameQuery;
+      //$personQuery['s'] = implode(' ', $kwQueryVar);
     }
 
     // filter by library location
@@ -204,45 +207,6 @@ class UCDLibPluginDirectoryBlockTransformations {
     }
     $people = Timber::get_posts($personQuery);
 
-    // keyword search returned expertise areas
-    // perform new peopel search and merge results with those already performed
-    if ( count($expertiseAreas) ){
-      $tax_query[] = [
-        'taxonomy' => 'expertise-areas',
-        'field' => 'term_id',
-        'terms' => $expertiseAreas,
-        'operator' => 'IN'
-      ];
-      if ( count($tax_query) > 1){
-        $tax_query['relation'] = 'AND';
-      }
-      $personQuery['tax_query'] = $tax_query;
-      unset($personQuery['s']);
-      $peopleWithExpertiseArea = Timber::get_posts($personQuery);
-      
-      if ( count($peopleWithExpertiseArea) ) {
-        $combined = [];
-        foreach ($people as $person) {
-          $combined[] = $person;
-        }
-        foreach ($peopleWithExpertiseArea as $person) {
-          $combined[] = $person;
-        }
-        $people = $combined;
-        if ( $orderby == 'department' ) {
-          usort($people, function($a, $b){
-            if ( $a->menu_order == $b->menu_order ) {
-              return strcmp($a->name_last(), $b->name_last());
-            }
-            return ($a->menu_order < $b->menu_order) ? -1 : 1;
-          });
-        } else {
-          usort($people, function($a, $b){
-            return strcmp($a->name_last(), $b->name_last());
-          });
-        }
-      }
-    }
     if ( $hideDepartments ){
       $attrs['people'] = $people;
     } else if ( $orderby == 'name' ) {

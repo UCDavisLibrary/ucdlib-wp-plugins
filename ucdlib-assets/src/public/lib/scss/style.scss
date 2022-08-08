@@ -31,6 +31,11 @@
     font-size: .9em;
   }
 }
+.contact-info.contact-info--department {
+  .additional-text {
+    font-weight: 500;
+  }
+}
 
 // move to locations plugin
 
@@ -138,4 +143,8 @@
     font-size: 0.875rem;
     color: #4c4c4c;
   }
+}
+h2.exhibit-header-intro {
+  margin-bottom: .25rem;
+  margin-top: 0;
 }

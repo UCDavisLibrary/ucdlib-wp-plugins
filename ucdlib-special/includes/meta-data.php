@@ -8,7 +8,7 @@ class UCDLibPluginSpecialMetaData {
   }
 
   public function register_post_meta(){
-    register_post_meta( '', 'fetchedData', array(
+    register_post_meta( $this->config->postTypes['collection'], 'fetchedData', array(
       'show_in_rest' => [
         'schema' => [
           'type' => 'object',
@@ -50,91 +50,85 @@ class UCDLibPluginSpecialMetaData {
         "title" => '',
       ]      
     ) );
-    register_post_meta( '', 'almaRecordId', array(
+    register_post_meta( $this->config->postTypes['collection'], 'almaRecordId', array(
       'show_in_rest' => true,
       'single' => true,
       'type' => 'string',
       'default' => ''
     ) );
-    register_post_meta( '', 'callNumber', array(
+    register_post_meta( $this->config->postTypes['collection'], 'callNumber', array(
       'show_in_rest' => true,
       'single' => true,
       'type' => 'string',
       'default' => ''
     ) );
-    register_post_meta( '', 'biography', array(
+    register_post_meta( $this->config->postTypes['collection'], 'creator', array(
       'show_in_rest' => true,
       'single' => true,
       'type' => 'string',
       'default' => ''
     ) );
-    register_post_meta( '', 'creator', array(
+    register_post_meta( $this->config->postTypes['collection'], 'author', array(
       'show_in_rest' => true,
       'single' => true,
       'type' => 'string',
       'default' => ''
     ) );
-    register_post_meta( '', 'author', array(
+    register_post_meta( $this->config->postTypes['collection'], 'language', array(
       'show_in_rest' => true,
       'single' => true,
       'type' => 'string',
       'default' => ''
     ) );
-    register_post_meta( '', 'language', array(
+    register_post_meta( $this->config->postTypes['collection'], 'description', array(
       'show_in_rest' => true,
       'single' => true,
       'type' => 'string',
       'default' => ''
     ) );
-    register_post_meta( '', 'description', array(
+    register_post_meta( $this->config->postTypes['collection'], 'material', array(
       'show_in_rest' => true,
       'single' => true,
       'type' => 'string',
       'default' => ''
     ) );
-    register_post_meta( '', 'material', array(
+    register_post_meta( $this->config->postTypes['collection'], 'original', array(
       'show_in_rest' => true,
       'single' => true,
       'type' => 'string',
       'default' => ''
     ) );
-    register_post_meta( '', 'original', array(
+    register_post_meta( $this->config->postTypes['collection'], 'photographer', array(
       'show_in_rest' => true,
       'single' => true,
       'type' => 'string',
       'default' => ''
     ) );
-    register_post_meta( '', 'photographer', array(
+    register_post_meta( $this->config->postTypes['collection'], 'location', array(
       'show_in_rest' => true,
       'single' => true,
       'type' => 'string',
       'default' => ''
     ) );
-    register_post_meta( '', 'location', array(
+    register_post_meta( $this->config->postTypes['collection'], 'repository', array(
       'show_in_rest' => true,
       'single' => true,
       'type' => 'string',
       'default' => ''
     ) );
-    register_post_meta( '', 'repository', array(
+    register_post_meta( $this->config->postTypes['collection'], 'shelf', array(
       'show_in_rest' => true,
       'single' => true,
       'type' => 'string',
       'default' => ''
     ) );
-    register_post_meta( '', 'shelf', array(
+    register_post_meta( $this->config->postTypes['collection'], 'source', array(
       'show_in_rest' => true,
       'single' => true,
       'type' => 'string',
       'default' => ''
     ) );
-    register_post_meta( '', 'source', array(
-      'show_in_rest' => true,
-      'single' => true,
-      'type' => 'string',
-      'default' => ''
-    ) );
-    register_post_meta( '', 'findingAid', array(
+    register_post_meta( $this->config->postTypes['collection'], 'findingAid', array(
       'show_in_rest' => [
         'schema' => [
           'type' => 'object',
@@ -151,25 +145,25 @@ class UCDLibPluginSpecialMetaData {
       'type' => 'object',
       'default' => ['id' => '', 'linkType' => '', 'linkURL' => '', 'linkTitle' => '', 'displayLabel' => '']
     ) );
-    register_post_meta( '', 'inclusiveDates', array(
+    register_post_meta( $this->config->postTypes['collection'], 'inclusiveDates', array(
       'show_in_rest' => true,
       'single' => true,
       'type' => 'string',
       'default' => ''
     ) );
-    register_post_meta( '', 'title', array(
+    register_post_meta( $this->config->postTypes['collection'], 'title', array(
       'show_in_rest' => true,
       'single' => true,
       'type' => 'string',
       'default' => ''
     ) );
-    register_post_meta( '', 'extent', array(
+    register_post_meta( $this->config->postTypes['collection'], 'extent', array(
       'show_in_rest' => true,
       'single' => true,
       'type' => 'string',
       'default' => ''
     ) );
-    register_post_meta( '', 'subject', array(
+    register_post_meta( $this->config->postTypes['collection'], 'subject', array(
       'show_in_rest' => [
         'schema' => [
           'type' => 'array',
@@ -180,7 +174,7 @@ class UCDLibPluginSpecialMetaData {
       'type' => 'array',
       'default' => []
     ) );
-    register_post_meta( '', 'links', array(
+    register_post_meta( $this->config->postTypes['collection'], 'links', array(
       'type'  => 'array',
       'show_in_rest' => array(
           'schema' => array(

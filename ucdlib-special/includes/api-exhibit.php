@@ -1,5 +1,7 @@
 <?php
 
+require_once( __DIR__ . '/exhibit-utils.php' );
+
 class UCDLibPluginSpecialAPIExhibit {
 
   public function __construct( $config ){
@@ -62,6 +64,8 @@ class UCDLibPluginSpecialAPIExhibit {
       ];
     }, (array)$terms);
     $out[$slug] = array_values($out[$slug]);
+
+    $out['exhibit_start'] =  UCDLibPluginSpecialExhibitUtils::getExhibitYears();
 
     return rest_ensure_response($out);
   }

@@ -40,8 +40,9 @@ class UCDLibPluginSpecialBlockTransformations {
 
   public static function hideExhibitExcerpt( $attrs ) {
     if ( !array_key_exists('templateTeaserOptions', $attrs) ){
-      $attrs['templateTeaserOptions']['hideExcerpt'] = true;
-    }
+      $attrs['templateTeaserOptions'] = [];
+    } 
+    $attrs['templateTeaserOptions']['hideExcerpt'] = true;
     return $attrs;
   }
 
@@ -49,10 +50,11 @@ class UCDLibPluginSpecialBlockTransformations {
     $attrs['orderby'] = 'start_date';
     $attrs['postsPerPage'] = 20;
     $attrs['status'] = 'past';
+    $attrs['curatorOrg'] = UCDLibPluginSpecialExhibitUtils::explodeQueryVar('curator');
+    $attrs['paged'] = ( get_query_var('paged') ) ? get_query_var('paged') : 1;
+    $attrs['exhibitStart'] = get_query_var('exhibit_start', '');
     
     $attrs['exhibits'] = UCDLibPluginSpecialExhibitUtils::getExhibits($attrs);
-
-    $attrs['found_posts'] = $attrs['exhibits']->found_posts;
     
     // group by year
     $years = [];

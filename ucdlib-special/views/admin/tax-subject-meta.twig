@@ -1,0 +1,25 @@
+{% macro label() %}
+  <label for="subjectHeading">Subject Heading</label>
+{% endmacro %}
+
+
+{% macro input(subjectHeading) %}
+  <input type="text" size="40" value="{{subjectHeading}}" id="subjectHeading" name="subjectHeading">
+  <p class="description">The heading to display at the top of the list of collections in this subject</p>
+{% endmacro %}
+
+{% if current_filter ends with 'edit_form_fields' %}
+  <tr class="form-field">
+    <th valign="top" scope="row">{{_self.label()}}</th>
+      <td>
+        {{_self.input(subjectHeading)}}
+      </td>
+  </tr> 
+
+{% elseif current_filter ends with 'add_form_fields' %}
+  <div class="form-field">
+    {{_self.label()}}
+    {{_self.input(subjectHeading)}}
+  </div>  
+
+{% endif %}
