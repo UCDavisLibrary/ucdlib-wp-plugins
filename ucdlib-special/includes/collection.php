@@ -27,6 +27,7 @@ class UCDLibPluginSpecialCollections {
 
     add_filter( 'ucd-theme/context/single', array($this, 'set_context') );
     add_filter( 'ucd-theme/templates/single', array($this, 'set_template'), 10, 2 );
+    add_filter( 'timber/post/classmap', array($this, 'extend_timber_post') );
   }
 
   // registers the post type
@@ -90,6 +91,8 @@ class UCDLibPluginSpecialCollections {
       'rewrite'			  => $rewrite,
       'template' => $template,
       'template_lock' => 'all',
+      'capability_type' => 'collection',
+      'map_meta_cap' => true,
       'supports' => array(
         'title', 
         'editor', 
@@ -134,7 +137,6 @@ class UCDLibPluginSpecialCollections {
     $p = $context['post'];
     $context['config'] = $this->config;
     $context['sidebar'] = Timber::get_widgets( $p->collectionType() );
-    
     return $context;
   }
 
@@ -183,7 +185,6 @@ class UCDLibPluginSpecialCollection extends UcdThemePost {
       'title' => $this->title(),
       'collectionType' => $this->collectionType(),
       'callNumber' => $this->callNumber(),
-      'biography' => $this->biography(),
       'almaRecordId' => $this->almaRecordId(),
       'creator' => $this->creator(),
       'author' => $this->author(),
@@ -201,6 +202,7 @@ class UCDLibPluginSpecialCollection extends UcdThemePost {
       'finding_aid' => $this->finding_aid(),
       'subject' => $this->subject(),
       'links' => $this->links(),
+      'referenceInfoLinks' => $this->referenceInfoLinks()
     );
 
     $this->core_data = $out;
@@ -227,17 +229,6 @@ class UCDLibPluginSpecialCollection extends UcdThemePost {
     $this->callNumber = $callNumber;
 
     return $this->callNumber;
-  }
-
-  protected $biography;
-  public function biography(){
-    if ( ! empty( $this->biography ) ) {
-      return $this->biography;
-    }
-    $biography = $this->meta('biography');
-    $this->biography = $biography;
-
-    return $this->biography;
   }
 
   protected $almaRecordId;
@@ -436,6 +427,25 @@ class UCDLibPluginSpecialCollection extends UcdThemePost {
     $this->links = $links;
 
     return $this->links;
+  }
+
+  protected $referenceInfoLinks;
+  public function referenceInfoLinks(){
+    if ( ! empty( $this->referenceInfoLinks ) ) {
+      return $this->referenceInfoLinks;
+    }
+
+    $referenceInfoLinks = [];    
+    $links = $this->meta('links');
+
+    foreach ($links as $link) {
+      if ($link['linkType'] == 'referenceInfo' && strlen($link['linkURL']) > 0 && strlen($link['displayLabel']) > 0) {
+        array_push($referenceInfoLinks, $link);
+      }
+    }
+
+    $this->referenceInfoLinks = $referenceInfoLinks;
+    return $this->referenceInfoLinks;
   }
 
 }

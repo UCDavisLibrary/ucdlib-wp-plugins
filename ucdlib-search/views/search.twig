@@ -20,6 +20,7 @@
    <ucdlib-search-filter
     url="{{site.site_url}}"
     keyword="{{search_query}}"
+    authors="{{authorsQuery}}"
    ></ucdlib-search-filter>
   </div>
   <div class="l-content">
@@ -28,6 +29,9 @@
         url="{{site.site_url}}"
         keyword="{{search_query}}"
       ></ucdlib-search-input>
+      {% if authors %}
+       <ucdlib-search-filter-authors url="{{site.site_url}}" class='u-space-mt'></ucdlib-search-filter-authors>
+      {% endif %}
     </div>
     <div class="panel o-box u-space-pt--flush">
 
@@ -38,9 +42,9 @@
       {# at least one result found #}
       {% elseif found_posts %}
 
-        <h5 class="search-results-message">{{ found_posts }} results for "{{ search_query }}"</h5>
+        <h5 class="search-results-message">{{ found_posts }} results {{search_query ? 'for "' ~ search_query ~ '"'}}</h5>
         {% if hasSuggestion %}
-          <h5 class="search-results-message">Did you mean: <a href="?s={{suggest.text|url_encode}}">{{suggest.highlighted}}</a> </h5>
+          <h5 class="search-results-message">Similar keyword: <a href="?s={{suggest.text|url_encode}}">{{suggest.highlighted}}</a> </h5>
         {% endif %}
 
         <div class="search-results u-space-mt--large">
@@ -62,16 +66,25 @@
       
       {# no results #}
       {% else %}
-        <h5 class="search-results-message">Sorry, we're having trouble finding "{{search_query}}"</h5>
+        {% if not authors or (authors and search_query) %}
+          <h5 class="search-results-message">Sorry, we're having trouble finding "{{search_query}}"</h5>
+        {% else %}
+          <h5 class="search-results-message">No results</h5>
+        {% endif %}
         {% if hasSuggestion %}
-            <h5 class="search-results-message">Did you mean: <a href="?s={{suggest.text|url_encode}}">{{suggest.highlighted}}</a> </h5>
+            <h5 class="search-results-message">Similar keyword: <a href="?s={{suggest.text|url_encode}}">{{suggest.highlighted}}</a> </h5>
         {% endif %}
 
         <h5>Suggestions:</h5>
         <ul class="list--arrow">
-          <li>Check for typos and spelling errors</li>
-          <li>Try for generic keywords</li>
-          <li>Try different keywords</li>
+          {% if not authors or (authors and search_query) %}
+            <li>Check for typos and spelling errors</li>
+            <li>Try for generic keywords</li>
+            <li>Try different keywords</li>
+          {% endif %}
+          {% if authors %}
+            <li>Remove the author filter</li>
+          {% endif %}
           {% set selectedTypeFacets = typeFacets|filter(f => f.isSelected) %}
           {% if selectedTypeFacets and selectedTypeFacets|length != typeFacets|length %}
             <li>Broaden your search filters to include more content types</li>

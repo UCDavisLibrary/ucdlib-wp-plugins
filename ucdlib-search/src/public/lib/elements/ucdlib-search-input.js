@@ -9,6 +9,7 @@ export default class UcdlibSearchInput extends LitElement {
       keyword: {type: String},
       keyKeyword: {type: String},
       keyFilters: {type: String},
+      keyAuthors: {type: String},
       keySort: {type: String}
     }
   }
@@ -26,6 +27,7 @@ export default class UcdlibSearchInput extends LitElement {
     this.keyKeyword = "s";
     this.keyFilters = "type";
     this.keySort = 'sortby';
+    this.keyAuthors = 'authors';
 
     this.locationParams = new URLSearchParams(window.location.search);
   }
@@ -38,6 +40,9 @@ export default class UcdlibSearchInput extends LitElement {
     }
     if ( this.locationParams.has(this.keySort)  ){
       params.append(this.keySort, this.locationParams.get(this.keySort));
+    }
+    if ( this.locationParams.has(this.keyAuthors)  ){
+      params.append(this.keyAuthors, this.locationParams.get(this.keyAuthors));
     }
     window.location = this.url + '?' + params.toString();
   }

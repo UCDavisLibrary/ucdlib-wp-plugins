@@ -29,6 +29,7 @@ class UCDLibPluginSearch {
   public function registerQueryVar( $vars ){
     $vars[] = 'type';
     $vars[] = 'sortby';
+    $vars[] = 'authors';
     return $vars;
   }
 

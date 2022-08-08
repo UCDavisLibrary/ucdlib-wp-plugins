@@ -29,7 +29,7 @@
         </div>
       {% endif %}
 
-      {% if p.exhibitIsPast %}
+      {% if p.exhibitIsPast and p.exhibitIsOnline %}
         <div class='previous-display'>
           Previously on display {{p.exhibitDateRange}} in the {{p.exhibitLocations[0].name}}
         </div>
