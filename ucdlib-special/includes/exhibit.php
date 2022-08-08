@@ -26,6 +26,7 @@ class UCDLibPluginSpecialExhibits {
 
     add_filter( 'ucd-theme/context/single', array($this, 'set_context') );
     add_filter( 'ucd-theme/templates/single', array($this, 'set_template'), 10, 2 );
+    add_filter( 'ucd-theme/block-settings', [$this, 'setThemeBlockSettings']);
   }
 
   // registers the post type
@@ -80,7 +81,7 @@ class UCDLibPluginSpecialExhibits {
         'editor', 
         'author', 
         'thumbnail', 
-        // 'excerpt', 
+        'excerpt', 
         //'revisions',
         'page-attributes',
         'custom-fields'
@@ -152,6 +153,27 @@ class UCDLibPluginSpecialExhibits {
   public function register_query_vars( $qvars ) {
     $qvars[] =  'exhibit_start';
     return $qvars;
+  }
+
+  public function setThemeBlockSettings($settings){
+    if ( is_admin() ) {
+      global $pagenow;
+      if (
+        'post.php' === $pagenow &&
+        isset($_GET['post']) && 
+        get_post_type( $_GET['post'] ) == $this->slug
+        ){
+          $settings['pageColors'] = 'hero-banner';
+        } else if ( 
+        'post-new.php' === $pagenow &&
+        isset($_GET['post_type']) &&
+        $_GET['post_type'] == $this->slug
+      ) {
+        $settings['pageColors'] = 'hero-banner';
+      }
+    }
+    
+    return $settings;
   }
 
   // Tell Timber to always load our custom person class when returned by a query

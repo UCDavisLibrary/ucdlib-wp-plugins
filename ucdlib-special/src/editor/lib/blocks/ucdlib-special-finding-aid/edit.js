@@ -30,9 +30,17 @@ export default ( props ) => {
 
   let isModified = false;
   if (meta.fetchedData) {
-    isModified = !Object.keys(meta.findingAid)
-      .every(key => meta.fetchedData.findingAid.hasOwnProperty(key) && meta.fetchedData.findingAid[key] === meta.findingAid[key]);
+    if (meta.fetchedData.findingAid.linkTitle || meta.fetchedData.findingAid.linkURL) {
+      isModified = !Object.keys(meta.findingAid)
+        .every(key => meta.fetchedData.findingAid.hasOwnProperty(key) && meta.fetchedData.findingAid[key] === meta.findingAid[key]);
+    } else if (meta.findingAid.linkTitle || meta.findingAid.linkURL) {
+      // isModified = !Object.values(meta.findingAid)
+      //   .every(value => value === '' || !value);
+      isModified = true;
+    }
   }
+
+  const value = `<a href="${meta.findingAid.linkURL}" data-rich-text-format-boundary="true">${meta.findingAid.linkTitle || meta.findingAid.linkURL}</a>`
 
   return html`
   <div ...${ blockProps }>
@@ -52,7 +60,7 @@ export default ( props ) => {
           className=""
           href=${meta.findingAid.linkURL}
           title=${meta.findingAid.linkTitle}
-          value=${meta.findingAid.linkTitle || meta.findingAid.linkURL}
+          value=${value}
           onChange=${(findingAid) => onFindingAidChange(findingAid)}
         />
     </div>

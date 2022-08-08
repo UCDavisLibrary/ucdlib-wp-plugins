@@ -17,9 +17,19 @@ class UCDLibPluginSpecialConfig {
     ],
     'capabilities' => [
       'manage_exhibits' => 'manage_exhibits',
-      'manage_collections' => 'manage_collections'
+      'manage_collections' => 'manage_collections',
+      'delete_others_collections' => 'delete_others_collections',
+      'delete_collections' => 'delete_collections',
+      'delete_private_collections' => 'delete_private_collections',
+      'delete_published_collections' => 'delete_published_collections',
+      'edit_others_collections' => 'edit_others_collections',
+      'edit_collections' => 'edit_collections',
+      'edit_private_collections' => 'edit_private_collections',
+      'edit_published_collections' => 'edit_published_collections',
+      'publish_collections' => 'publish_collections',
+      'read_private_collections' => 'read_private_collections'
     ]
-    ];
+  ];
 
   public function __construct(){
     $this->slug = self::$config['slug'];

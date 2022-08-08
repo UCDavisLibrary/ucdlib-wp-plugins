@@ -6,8 +6,7 @@ export default ( ) => {
 
   return html`
   <div ...${ blockProps }>
-    <h4>Subject</h4>
-    <div className='alert'>Manuscript Subjects should be chosen in the right-hand Collection settings menu</div>
+    <div className='alert'>A widget that has a link to a person's appointment page will show here.</div>
   </div>
   `
 }

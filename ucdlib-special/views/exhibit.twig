@@ -2,6 +2,12 @@
 
 {% extends getUcdTemplate('base') %}
 
+{% block page_title %}
+  <section>
+    <h1 class="page-title">{{title}}</h1>
+  </section>
+{% endblock %}
+
 {% block breadcrumbs %}
   {{render_crumbs(breadcrumbs)}}
 {% endblock %}
@@ -9,7 +15,7 @@
 {% block content_container %}
 <div class="l-container {{sidebar ? 'l-basic--flipped'}}">
   <div class="l-content">
-    {% if post.isTopPage %}
+    {% if post.isTopPage and ((not post.exhibitIsPast ) or (post.exhibitIsPast and not post.exhibitIsOnline)) %}
       {% if post.exhibitLocations and post.exhibitLocations|length %}
         <h2 class='heading--secondary exhibit-header-intro'>{{post.exhibitLocations[0].name}}</h2>
       {% endif %}

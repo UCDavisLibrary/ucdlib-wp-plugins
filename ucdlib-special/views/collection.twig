@@ -20,27 +20,42 @@
       <div>
     {% endif %}
     
-      <h3>Collection Number: {{post.meta('callNumber')}}</h3>
-      <p>{{post.meta('description')}}</p>
-
+    <h3>Collection Number: {{post.callNumber}}</h3>
+    
+    {% if post.description|length > 0 %}
+      <p>{{post.description}}</p>
+    {% endif %}
+    
+    {% if post.findingAid|length > 0 and post.findingAid.linkURL|length > 0 and post.findingAid.linkTitle|length > 0 %}
       <h4>Finding Aid</h4>
-      <a href="{{post.meta('findingAid').linkURL}}" target="_blank">{{post.meta('findingAid').linkTitle}}</a>
-
-      <h4>Biography</h4>
-      <p>{{post.meta('biography')}}</p>
-
+      <a href="{{post.findingAid.linkURL}}" target="_blank">{{post.findingAid.linkTitle}}</a>
+    {% endif %}
+    
+    {% if post.inclusiveDates|length > 0 %}
       <h4>Inclusive Dates</h4>
-      <p>{{post.meta('inclusiveDates')}}</p>
+      <p>{{post.inclusiveDates}}</p>
+    {% endif %}
 
+    {% if post.extent|length > 0 %}
       <h4>Extent</h4>
-      <p>{{post.meta('extent')}}</p>
+      <p>{{post.extent}}</p>
+    {% endif %}
 
+    {% if post.terms('collection-subject')|length > 0 %}
       <h4>Subject</h4>
-      {% for sub in post.meta('subject') %}
-        <p>{{sub}}</p>
+      {% for subject in post.terms('collection-subject') %}
+        <p><a href="/collection-subject/{{subject|lower|replace({' ' : '-'})}}">{{subject}}</a></p>    
       {% endfor %}
-    </div>
+    {% endif %}
 
+    {% if post.referenceInfoLinks %}
+      <h4>Additional Collection Info</h4>
+      {% for link in post.referenceInfoLinks %}
+        <p><a href="{{link.linkURL}}" target="_blank">{{link.displayLabel}}</a></p>
+      {% endfor %}
+    {% endif %}
+      
+    </div>
     
   </div>
   <div class="l-sidebar-second">
