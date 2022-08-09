@@ -136,6 +136,24 @@ class UCDLibPluginSpecialCollections {
     if ( $context['post']->post_type !== $this->slug ) return $context;
     $p = $context['post'];
     $context['config'] = $this->config;
+
+    // add breadcrumbs
+    $manuscriptLanderCrumbs = [
+      [
+        'link' => '/',
+        'title' => 'Home'
+      ],
+      [
+        'link' => '/archives-and-special-collections',
+        'title' => 'Archives and Special Collections'
+      ], 
+      [
+        'link' => '/archives-and-special-collections/manuscripts',
+        'title' => 'Manuscripts'
+      ]
+    ];
+    $context['breadcrumbs'] = array_merge($manuscriptLanderCrumbs, [['title' => $context['post']->title]]);
+
     $context['sidebar'] = Timber::get_widgets( $p->collectionType() );
     return $context;
   }
