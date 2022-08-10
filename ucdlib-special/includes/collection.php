@@ -25,6 +25,10 @@ class UCDLibPluginSpecialCollections {
     add_action( 'init', [$this, 'register_post_meta'] );
     add_action( 'widgets_init', [$this, 'register_sidebar'] );
 
+    // customize admin view
+    add_filter( 'manage_' . $this->slug . '_posts_columns', array($this, 'customize_admin_list_columns') );
+    add_action( 'manage_' . $this->slug  . '_posts_custom_column', array($this, 'add_admin_list_column'), 10, 2);
+
     add_filter( 'ucd-theme/context/single', array($this, 'set_context') );
     add_filter( 'ucd-theme/templates/single', array($this, 'set_template'), 10, 2 );
     add_filter( 'timber/post/classmap', array($this, 'extend_timber_post') );
@@ -119,6 +123,34 @@ class UCDLibPluginSpecialCollections {
       'default' => $this->manuscriptSlug,
       'type' => 'string',
     ) );
+
+  }
+
+  // customize what is displayed on the admin table that lists all people
+  public function customize_admin_list_columns( $columns ){
+    $cols = [
+      'collectionType' => __('Collection Type', 'textdomain'),
+      'almaRecordId' => __('Alma Record ID', 'textdomain'),
+      'callNumber' => __('Call Number', 'textdomain')
+    ];
+    return array_merge($columns, $cols);
+  }
+
+  // add new columns to the admin table
+  public function add_admin_list_column( $column_key, $post_id ) {
+    if ( $column_key == 'collectionType'){
+      $collectionType = get_post_meta($post_id, 'collectionType', true);
+      if ( $collectionType ) {
+        $collectionType = $collectionType == $this->UASlug ? 'University Archive' : 'Manuscript';
+      }
+      echo (!empty($collectionType)) ? __($collectionType, 'textdomain') : __('-', 'textdomain');
+    } else if ( $column_key == 'almaRecordId' ) {
+      $almaRecordId = get_post_meta($post_id, 'almaRecordId', true);
+      echo (!empty($almaRecordId)) ? __($almaRecordId, 'textdomain') : __('-', 'textdomain');
+    } else if ( $column_key == 'callNumber' ) {
+      $callNumber = get_post_meta($post_id, 'callNumber', true);
+      echo (!empty($callNumber)) ? __($callNumber, 'textdomain') : __('-', 'textdomain');
+    }
 
   }
 
