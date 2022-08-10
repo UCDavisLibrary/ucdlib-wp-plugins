@@ -3,6 +3,7 @@ require_once( __DIR__ . '/assets.php' );
 require_once( __DIR__ . '/blocks.php' );
 require_once( __DIR__ . '/patterns.php' );
 require_once( __DIR__ . '/post-types.php' );
+require_once( __DIR__ . '/sign.php' );
 require_once( __DIR__ . '/acf.php' );
 require_once( __DIR__ . '/api.php' );
 require_once( __DIR__ . '/timber.php' );
@@ -15,6 +16,10 @@ class UCDLibPluginLocations {
     $config = array(
       'slug' => $this->slug,
       'postTypeSlug' => 'location',
+      'postTypes' => [
+        'location' => 'location',
+        'sign' => 'sign'
+      ],
       'entryPath' => plugin_dir_path( __DIR__ ) . $this->slug . '.php',
       'version' => false
     );
@@ -28,6 +33,7 @@ class UCDLibPluginLocations {
     } 
 
     add_action( 'admin_head', array($this, 'admin_head') );
+    add_action( 'admin_menu', array($this, 'add_admin_menu'));
 
     // enqueue all assets
     $this->assets = new UCDLibPluginLocationsAssets($config);
@@ -50,6 +56,9 @@ class UCDLibPluginLocations {
     // register location views and custom Timber class
     $this->timber = new UCDLibPluginLocationsTimber($config);
 
+    // digital signs for locations
+    $this->signs = new UCDLibPluginLocationsSigns( $config );
+
     $this->metaData = new UCDLibPluginLocationsMetaData($config);
 
   }
@@ -63,6 +72,19 @@ class UCDLibPluginLocations {
     <ucdlib-plugin plugin='$this->slug' style='display:none'>
     </ucdlib-plugin>
     ";
+  }
+
+  public function add_admin_menu(){
+
+    add_menu_page( 
+      __( 'Locations', 'textdomain' ),
+      'Locations',
+      "edit_posts",
+      $this->slug,
+      '',
+      'dashicons-location',
+      25
+      ); 
   }
 
 }
