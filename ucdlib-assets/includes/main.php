@@ -141,8 +141,7 @@ class UCDLibPluginAssets {
         $slug,
         $this->config['uris']['js'] . "/dev/ucdlib.js",
         array(),
-        $this->config['bundleVersion'],
-        true
+        $this->config['bundleVersion']
       );
       wp_enqueue_style( 
         $slug,
@@ -155,8 +154,7 @@ class UCDLibPluginAssets {
         $slug,
         $this->config['uris']['js'] . "/dist/ucdlib.js",
         array(),
-        $this->config['bundleVersion'],
-        true
+        $this->config['bundleVersion']
       );
       wp_enqueue_style( 
         $slug,
