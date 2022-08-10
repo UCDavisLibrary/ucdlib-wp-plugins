@@ -3,11 +3,12 @@
 class UCDLibPluginSpecialTaxAZ {
   public function __construct( $config ){
     $this->config = $config;
+    $this->postType = $this->config->postTypes['collection'];
     $this->slug = $config->taxonomies['az'];
 
     add_action( 'init', array($this, 'register') );
     add_action( 'admin_menu', array($this, 'add_to_menu'));
-    add_action( 'parent_file',  array($this, 'expand_parent_menu') );
+    add_filter( 'parent_file',  array($this, 'expand_parent_menu') );
   }
 
   // register taxonomy
@@ -39,7 +40,7 @@ class UCDLibPluginSpecialTaxAZ {
 
     register_taxonomy(
       $slug, 
-      [$this->config->postTypes['collection']],
+      [$this->postType],
       $args
     );
     
@@ -48,7 +49,7 @@ class UCDLibPluginSpecialTaxAZ {
   // add to plugin admin menu
   public function add_to_menu(){
     $label = 'Collections A-Z';
-    add_submenu_page($this->config->slug, $label, $label, 'edit_posts', "edit-tags.php?taxonomy=$this->slug",false );
+    add_submenu_page($this->config->slug, $label, $label, 'edit_posts', "edit-tags.php?taxonomy=$this->slug&post_type=$this->postType",false );
   }
 
   // expand plugin menu when on taxonomy admin page
