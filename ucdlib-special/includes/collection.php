@@ -137,6 +137,25 @@ class UCDLibPluginSpecialCollections {
     $p = $context['post'];
     $context['config'] = $this->config;
     $context['sidebar'] = Timber::get_widgets( $p->collectionType() );
+
+    // put collections lander in breadcrumbs
+    $crumbs = $p->breadcrumbs();
+    if ( $p->collectionType() == $this->UASlug ){
+      $fieldSlug = 'asc_ua_page';
+    } else {
+      $fieldSlug = 'asc_manuscripts_page';
+    }
+    $collectionsLander = get_field($fieldSlug, $this->config->slug);
+    if ( $collectionsLander ){
+      $collectionsLander = Timber::get_post($collectionsLander);
+      if ( $collectionsLander ) {
+        $collectionsLanderCrumbs = $collectionsLander->breadcrumbs();
+        if ( $collectionsLanderCrumbs && count($collectionsLanderCrumbs) ){
+          $crumbs = array_merge($collectionsLanderCrumbs, array_slice($crumbs, 1));
+        }
+      }
+    }
+    $context['breadcrumbs'] = $crumbs;
     return $context;
   }
 

@@ -59,7 +59,9 @@
                 "class": "",
                 "id": ""
             },
-            "post_type": "",
+            "post_type": [
+                "page"
+            ],
             "taxonomy": "",
             "allow_null": 0,
             "multiple": 0,
@@ -107,5 +109,5 @@
     "active": true,
     "description": "Special Collections",
     "show_in_rest": 0,
-    "modified": 1656093994
+    "modified": 1660132537
 }

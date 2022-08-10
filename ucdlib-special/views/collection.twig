@@ -1,6 +1,11 @@
 {% extends getUcdTemplate('base') %}
+{% from getUcdMacro('links') import breadcrumbs as render_crumbs %}
 
 {% block hero_image %}
+{% endblock %}
+
+{% block breadcrumbs %}
+  {{render_crumbs(breadcrumbs)}}
 {% endblock %}
 
 {% block content_container %}
