@@ -8,7 +8,6 @@ class UCDLibPluginSpecialTaxAZ {
 
     add_action( 'init', array($this, 'register') );
     add_action( 'admin_menu', array($this, 'add_to_menu'));
-    add_action( 'parent_file',  array($this, 'expand_parent_menu') );
     add_filter( 'query_vars', [$this, 'register_query_vars'] );
     add_filter( 'parent_file',  array($this, 'expand_parent_menu') );
     add_action( 'save_post_' . $this->postType, [$this, 'assign_on_post_update'], 10, 3 );

@@ -1,33 +1,30 @@
-{% macro teaser(collection) %}
-    {% for col in collection %}
-        {% if col.teaser_image %}
-        <div class="subject-collection-container" href="{{col.slug}}">
-          <div class="collection-image-box">
-              <img src="{{col.teaser_image.src}}" alt="subject-image-{{col.slug}}">
-          </div>
-        {% else %}
-          <div class="subject-collection-container-no-image" href="{{col.slug}}">
-        {% endif %}
-        <div> 
-          <h3><a class="collection-subjects-header-link" href="{{col.slug}}"><em>{{col.title}}<em></a></h3>
-          {% if col.description %}
-            <p style="font-style: normal;">{{ col.description }}</p>
-          {% endif %}
-        </div>
-      </div>
-    {% endfor %}
+{% macro subject_teaser(subject) %}
+{% from getUcdMacro('lists') import media_link %}
+  {% set kwargs = {
+    title: subject.name,
+    href: subject.link,
+    excerpt: subject.teaserText,
+    image: subject.teaserImage
+    } 
+  %}
+  {{ media_link(kwargs) }}
 {% endmacro %}
 
 {% macro no_results() %}
-  <div class='alert'>Sorry, no collection available to display.</div>
+  <div class='alert'>Sorry, no collections available to display.</div>
 {% endmacro %}
 
-{% macro az(collection, letter) %}
-    <h2>{{letter|capitalize}}</h2>
+{% macro az(collections, letter) %}
+  <h2>{{letter|capitalize}}</h2>
+  {% if collections|length %}
     <ul class="list--arrow">
-      {% for col in collection %}
+      {% for col in collections %}
         <li><span><b><a href="{{col.link}}">{{col.title}}</a></b></span><span> ({{col.callNumber}})</span></li>
       {% endfor %}
-    </ul> 
+    </ul>
+  {% else %}
+    {{ _self.no_results() }}
+  {% endif %}
+ 
 {% endmacro %}
 

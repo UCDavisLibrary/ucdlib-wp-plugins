@@ -6,17 +6,17 @@ const settings = {
   api_version: 2,
 	title: "Collection Results",
 	description: "Displays a widget with an collection results",
-	icon: UCDIcons.renderPublic('fa-map-location'),
+	icon: UCDIcons.renderPublic('fa-book'),
 	category: 'ucdlib-special',
-	keywords: [ 'collection'],
+	keywords: [ 'collection', 'manuscript', 'ua', 'university', 'archive'],
   supports: {
     "html": false,
     "customClassName": false
   },
   attributes: {
-    manuscript: {
-      type: "boolean",
-      default: false
+    collectionType: {
+      type: "string",
+      default: ''
     }
   },
   edit: Edit

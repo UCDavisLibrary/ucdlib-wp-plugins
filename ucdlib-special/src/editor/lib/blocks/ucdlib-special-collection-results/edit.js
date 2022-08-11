@@ -1,44 +1,37 @@
-import { html } from "@ucd-lib/brand-theme-editor/lib/utils";
+import { html, UCDIcons } from "@ucd-lib/brand-theme-editor/lib/utils";
+import { ToolbarSelectMenu } from "@ucd-lib/brand-theme-editor/lib/block-components";
 import { useBlockProps, BlockControls } from '@wordpress/block-editor';
-import { ToolbarDropdownMenu } from '@wordpress/components';
-import {
-  more,
-  arrowRight,
-  arrowUp,
-} from '@wordpress/icons';
+
 export default ( props ) => {
   const { attributes, setAttributes } = props;
   const blockProps = useBlockProps();
-  console.log(attributes.manuscript);
 
-  
-  const changeManStatus = () => {
-    setAttributes({'manuscript': true});
-  }
-  const changeUAStatus = () => {
-    setAttributes({'manuscript': false});
-  }
+  const typeOptions = [
+    {
+      title: 'All Collections',
+      slug: ''
+    },
+    {
+      title: 'Manuscripts',
+      slug: 'manuscript'
+    },
+    {
+      title: 'University Archives',
+      slug: 'university-archive'
+    },
+  ];
   return html`
   <div ...${ blockProps }>
     <${BlockControls} group="block">
-        <${ToolbarDropdownMenu} 
-          label="Set Type"
-          controls=${[
-                      {
-                          title: 'Manuscripts',
-                          icon: arrowUp,
-                          onClick: () => changeManStatus(),
-                      },
-                      {
-                          title: 'UA-Collection',
-                          icon: arrowRight,
-                          onClick: () => changeUAStatus(),
-                      }
-                    ]}
-          icon=${html`<span>${more}</span>`}
-        />
+      <${ToolbarSelectMenu} 
+        label='Prefilter Collections'
+        icon=${UCDIcons.renderPublic('fa-filter')}
+        options=${typeOptions}
+        value=${attributes.collectionType}
+        onChange=${v => setAttributes({collectionType: v.slug})}
+      /> 
       </${BlockControls}>
-    <div className='alert'>A widget with the collection results will be rendered, if applicable</div>
+    <div className='alert'>A list of filterable collections will display here.</div>
   </div>
   `
 }

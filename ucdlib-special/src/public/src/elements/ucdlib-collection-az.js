@@ -7,7 +7,7 @@ export default class UcdlibCollectionAZ extends LitElement {
     return {
         url: {type: String},
         keySort: {type: String},
-        noResult: {type: String},
+        noResult: {type: String, attribute: 'no-result'},
         sort: {state: true},
         urlParams: {state: true}
     }
@@ -57,16 +57,19 @@ export default class UcdlibCollectionAZ extends LitElement {
 
   }
 
-  firstUpdated(changedProperties){
+  willUpdate(props){
+    if ( props.has('noResult') )
     this.checksExist();
-    this.requestUpdate();
   }
 
   
   checksExist(){
     let emptyArray = this.noResult.split(",");
     for(let x of emptyArray) {
-      this.alpha.find(o => o.value === x)["exists"] = false;
+      const a = this.alpha.find(o => o.value === x);
+      if ( a ) {
+        a["exists"] = false;
+      }
     }  
   }
 
@@ -74,21 +77,19 @@ export default class UcdlibCollectionAZ extends LitElement {
     this.url = window.location.origin + window.location.pathname;
     this.urlParams = new URLSearchParams(window.location.search);
     this.sort = this.urlParams.get(this.keySort) || this.defaultSort;
-    this.url = this.url + "?collection-tax=az&"
   }
   
   onAlphaInput(v) {
     this.sort = v;
     this.updateUrlParams(this.defaultSort, this.keySort, v);
+    this.urlParams.set('collection-tax', 'az');
     this.updateLocation();
   }
-
-
 
   updateLocation(){
     let queryString = this.urlParams.toString();
     if ( queryString ) {
-      window.location = this.url + this.urlParams.toString();
+      window.location = this.url + '?' + this.urlParams.toString();
     } else {
       window.location = this.url;
     }

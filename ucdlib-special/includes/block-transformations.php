@@ -85,22 +85,30 @@ class UCDLibPluginSpecialBlockTransformations {
   }
 
   
-  // converts az url query args to attributes
+  // converts collection url query args to attributes
   public static function collectionQueryArgsToAttributes($attrs){
-    $attrs['orderby'] = get_query_var('orderby', '');
     $attrs['tax'] =  get_query_var('collection-tax', '');
     $attrs['az'] = get_query_var('collection-az', 'a');
     return $attrs;
   }
-    /**
-   * Gets people/departments based on url query parameters
+  /**
+   * Gets list of collections faceted by subject or az
    */
   public static function getCollectionFiltResults( $attrs=[] ){
+    
+    // set default view based on collection type
+    $collectionType = array_key_exists('collectionType', $attrs) ? $attrs['collectionType'] : '';
+    if ( !$attrs['tax'] && $collectionType == 'manuscript' ){
+      $attrs['tax'] = 'subject';
+    } elseif ( !$attrs['tax'] ){
+      $attrs['tax'] = 'az';
+    }
+
     if ($attrs['tax'] != 'az') {
       $subjects = Timber::get_terms([
         'taxonomy' => 'collection-subject',
         'orderby' => 'name',
-        'hide_empty' => false
+        'hide_empty' => true
       ]);
       $attrs['subjects'] = $subjects;
 
@@ -123,12 +131,19 @@ class UCDLibPluginSpecialBlockTransformations {
             'terms' => $azQueryVar,
         ]]
       ];
+      if ( $collectionType ) {
+        $collectionQuery['meta_query'] = [[
+          'key' => 'collectionType',
+          'value' => $collectionType
+        ]];
+
+      }
       $attrs['collectionResults'] = Timber::get_posts($collectionQuery);
 
       $noAZ = array();
-      foreach ($az as $number) {
-        if($number->count == 0){
-          array_push($noAZ, $number->slug);
+      foreach ($az as $letter) {
+        if($letter->count == 0){
+          array_push($noAZ, $letter->slug);
         }
 
       }
