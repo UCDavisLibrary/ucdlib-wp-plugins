@@ -4,6 +4,7 @@ class UCDLibPluginSpecialTaxSubject {
   public function __construct( $config ){
     $this->config = $config;
     $this->slug = $config->taxonomies['subject'];
+    $this->postType = $this->config->postTypes['collection'];
 
     add_action( 'init', array($this, 'register') );
     add_action( 'admin_menu', array($this, 'add_to_menu'));
@@ -55,7 +56,7 @@ class UCDLibPluginSpecialTaxSubject {
 
     register_taxonomy(
       $slug, 
-      [$this->config->postTypes['collection']],
+      [$this->postType],
       $args
     );
   }
@@ -63,7 +64,7 @@ class UCDLibPluginSpecialTaxSubject {
   // add to plugin admin menu
   public function add_to_menu(){
     $label = 'Manuscript Subjects';
-    add_submenu_page($this->config->slug, $label, $label, 'edit_posts', "edit-tags.php?taxonomy=$this->slug",false );
+    add_submenu_page($this->config->slug, $label, $label, 'edit_posts', "edit-tags.php?taxonomy=$this->slug&post_type=$this->postType",false );
   }
 
   // expand plugin menu when on taxonomy admin page
