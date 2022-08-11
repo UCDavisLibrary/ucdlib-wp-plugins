@@ -1,31 +1,33 @@
 {% macro teaser(collection) %}
-  <article class='vm-teaser vm-teaser--collection'>
-    {% if collection.teaser_image %}
-        <div class="vm-teaser__figure" style="width:20%;max-width:135px;" role='image' aria-label='{{collection.teaser_image.alt}}'>
-          <a href="{{collection.link}}" style="display:block;background-image:url({{collection.teaser_image.src}})" class="aspect--1x1 u-background-image">
-        </a>
+    {% for col in collection %}
+        {% if col.teaser_image %}
+        <div class="subject-collection-container" href="{{col.slug}}">
+          <div class="collection-image-box">
+              <img src="{{col.teaser_image.src}}" alt="subject-image-{{col.slug}}">
+          </div>
+        {% else %}
+          <div class="subject-collection-container-no-image" href="{{col.slug}}">
+        {% endif %}
+        <div> 
+          <h3><a class="collection-subjects-header-link" href="{{col.slug}}"><em>{{col.title}}<em></a></h3>
+          {% if col.description %}
+            <p style="font-style: normal;">{{ col.description }}</p>
+          {% endif %}
+        </div>
       </div>
-    {% endif %}
-    <div class="vm-teaser__body">
-      <h3 class="vm-teaser__title"><a href="{{collection.link}}">{{collection.title}}</a></h3>
-      {% if exhibit.excerpt %}
-        <div class="vm-teaser__summary">{{ exhibit.excerpt({words: 50}) }}</div>
-      {% endif %}
-    </div>
-  </article>
+    {% endfor %}
 {% endmacro %}
 
 {% macro no_results() %}
   <div class='alert'>Sorry, no collection available to display.</div>
 {% endmacro %}
 
-{% macro az(collection) %}
-  {% if person.libraries %}
+{% macro az(collection, letter) %}
+    <h2>{{letter|capitalize}}</h2>
     <ul class="list--arrow">
       {% for col in collection %}
-        <li><span><a href="{{col.link}}">{{col.title}}</a></span><span>({{col.callNumber}})</span></li>
+        <li><span><b><a href="{{col.link}}">{{col.title}}</a></b></span><span> ({{col.callNumber}})</span></li>
       {% endfor %}
     </ul> 
-  {% endif %}
 {% endmacro %}
 

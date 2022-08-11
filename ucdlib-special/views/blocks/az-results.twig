@@ -1,7 +1,0 @@
-{% from "@ucdlib-directory/macros/collection.twig" import az, no_results %}
-{% if attributes.collectionResults|length %}
-          {{teaser(attributes.collectionResults)}}
-{% else %}
-      {{ no_results() }}
-
-{% endif %}

@@ -41,22 +41,25 @@ return html`
   <div class='main radio'>
     <div class='sort-label'>Browse by: </div>
     <div class='container'>
+      <label >
       <input 
-        @input=${() => this.onSortInput('subject')} 
-        id="subject" name="filter-subject" 
+        @input=${() => this.onSortInput('')} 
+        id="subject" name="filter" 
         type="radio" 
-        class="radio" 
-        ?checked=${this.sort == 'subject'}>
-        <label for="filter-subject">Subject</label>
+        class="radio"
+        ?checked=${this.sort == ''}
+        checked>
+        Subject</label>
     </div>
     <div>
+      <label>
       <input 
-        @input=${() => this.onSortInput('a-z')} 
-        id="a-z" name="filter-a-z" 
+        @input=${() => this.onSortInput('az')} 
+        id="a-z" name="filter" 
         type="radio" 
-        class="radio" 
-        ?checked=${this.sort == 'a-z'}>
-        <label for="filter-a-z">A - Z</label>
+        class="radio"
+        ?checked=${this.sort == 'az'}>
+        A - Z</label>
     </div>
   </div>
 `;}

@@ -18,8 +18,8 @@ export default class UcdlibCollectionFilter extends LitElement {
     super();
     this.render = render.bind(this);
     
-    this.keySort = 'orderby';
-    this.defaultSort = 'subject';
+    this.keySort = 'collection-tax';
+    this.defaultSort = '';
     this.sort = this.defaultSort;
   
     this.parseLocation();

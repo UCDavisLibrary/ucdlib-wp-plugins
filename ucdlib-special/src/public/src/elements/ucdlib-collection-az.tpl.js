@@ -19,7 +19,7 @@ export function styles() {
       background-color: #dbeaf7;
       width:50px;
       height:50px;
-      margin: 5 0;
+      margin: 5px 0;
       display: inline-block;
       vertical-align: middle;
       line-height: 50px;
@@ -53,7 +53,7 @@ export function styles() {
         margin: 13px 0; 
         width:320px;
       }
-    }
+    } 
     
   `;
 
@@ -69,7 +69,11 @@ return html`
     <hr class="dotted">
     <div class="alphaContainer">
         ${this.alpha.map((alp, i) => html`
-            <span @click=${() => this.onFilter(alp.value)} class="box"><b>${alp.display}</b></span>
+            ${alp.exists ? html`
+              <span @click=${() => this.onAlphaInput(alp.value)} class="box"><b>${alp.display}</b></span>
+            `: html`
+              <span class="disabled"><b>${alp.display}</b></span>
+            `}
         `)}
     </div>
     <hr class="dotted">

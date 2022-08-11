@@ -1,0 +1,28 @@
+{% from "@ucdlib-special/macros/collection.twig" import az, teaser, no_results %}
+{% if attributes.manuscript %}
+      <ucdlib-collection-filter ></ucdlib-collection-filter>
+     {% if attributes.tax == 'az' %}
+            <ucdlib-collection-az noResult="{{attributes.noAZ}}"></ucdlib-collection-az>
+            {% if attributes.collectionResults|length %}
+                  {{az(attributes.collectionResults, attributes.az)}}
+            {% else %}
+                  {{no_results()}}
+            {% endif %}
+      {% else %}
+            <hr style="border-top:4.5px dotted #ffbf00;margin:20px 0;">
+            <p>Subject areas represented within the collections correspond to the breadth, diversity, and focus of instruction offered at University of California, Davis.</p>
+            {% if attributes.subjects|length %}
+                  {{teaser(attributes.subjects)}}
+            {% else %}
+                  {{no_results()}}
+            {% endif %}
+      {% endif %}
+{% else %}
+      <ucdlib-collection-az noResult="{{attributes.noAZ}}"></ucdlib-collection-az>
+      {% if attributes.collectionResults|length %}
+            {{az(attributes.collectionResults, attributes.az)}}
+      {% else %}
+            {{no_results()}}
+      {% endif %}
+
+{% endif %}

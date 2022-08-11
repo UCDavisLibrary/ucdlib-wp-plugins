@@ -99,3 +99,27 @@ input.forminator-datepicker {
     @include btn--disabled();
   }
 }
+.collection-subjects-header-link{
+  color:#13639e;
+  text-decoration: none;
+}
+.collection-image-box {
+  vertical-align: middle;
+  text-align: center;
+}
+.subject-collection-container{
+  padding:10px 0;
+  display:inline-grid;
+  grid-template-columns: 25% 75%;
+
+}
+.subject-collection-container-no-image{
+  padding:10px 0;
+
+}
+.subject-collection-container:hover {
+  background-color:#fff9e6;
+}
+.subject-collection-container-no-image:hover {
+  background-color:#fff9e6;
+}

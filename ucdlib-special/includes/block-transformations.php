@@ -84,76 +84,61 @@ class UCDLibPluginSpecialBlockTransformations {
     return $attrs;
   }
 
-    // converts directory url query args to attributes
-    public static function queryArgsToAttributesSubject($attrs){
-      $attrs['orderby'] = get_query_var('orderby', '');
-      $attrs['q'] =  get_query_var('q', '');
-      $attrs['subject'] =  get_query_var('collection-subject', '');
-      return $attrs;
-    }
-        // converts directory url query args to attributes
-    public static function queryArgsToAttributesAZ($attrs){
-      $attrs['orderby'] = get_query_var('orderby', '');
-      $attrs['q'] =  get_query_var('q', '');
-      $attrs['az'] =  get_query_var('collection-az', '');
-      return $attrs;
-    }
+  
+  // converts az url query args to attributes
+  public static function collectionQueryArgsToAttributes($attrs){
+    $attrs['orderby'] = get_query_var('orderby', '');
+    $attrs['tax'] =  get_query_var('collection-tax', '');
+    $attrs['az'] = get_query_var('collection-az', 'a');
+    return $attrs;
+  }
     /**
    * Gets people/departments based on url query parameters
    */
   public static function getCollectionFiltResults( $attrs=[] ){
-
-    $collectionQuery = [
-      'post_type' => 'collection',
-      'order' => 'ASC',
-      'posts_per_page' => -1
-    ];
-    $tax_query = [];
-
-
-    // set order of results
-    $orderby = $attrs['orderby'];
-
-    // keyword search
-    $kwQueryVar = $attrs['q'];
-    if ( count( $kwQueryVar ) ) $collectionQuery['s'] = implode(' ', $kwQueryVar);
-    
-
-    // filter by subject
-    $subQueryVar = $attrs['subject'];
-    if ( count($subQueryVar) ){
-      $tax_query[] = [
+    if ($attrs['tax'] != 'az') {
+      $subjects = Timber::get_terms([
         'taxonomy' => 'collection-subject',
-        'field' => 'term_id',
-        'terms' => $subQueryVar,
-        'operator' => 'IN'
-      ];
-    }
+        'orderby' => 'name',
+        'hide_empty' => false
+      ]);
+      $attrs['subjects'] = $subjects;
 
-    // filter by az
-    $azQueryVar = $attrs['az'];
-    if ( count($azQueryVar) ){
-      $tax_query[] = [
+    } else {
+      $az = Timber::get_terms([
         'taxonomy' => 'collection-az',
-        'field' => 'term_id',
-        'terms' => $azQueryVar,
-        'operator' => 'IN'
+        'orderby' => 'name',
+        'count' => true,
+        'hide_empty' => false
+      ]);
+      $attrs['azTerm'] = $az;
+      $azQueryVar = $attrs['az'];
+      $collectionQuery = [
+        'post_type' => 'collection',
+        'order' => 'ASC',
+        'posts_per_page' => -1,
+        'tax_query' =>  [[
+            'taxonomy' => 'collection-az',
+            'field' => 'slug',
+            'terms' => $azQueryVar,
+        ]]
       ];
-    }
+      $attrs['collectionResults'] = Timber::get_posts($collectionQuery);
 
-    // add any taxonomies to collection query
-    if ( count($tax_query) ){
-      if ( count($tax_query) > 1){
-        $tax_query['relation'] = 'AND';
+      $noAZ = array();
+      foreach ($az as $number) {
+        if($number->count == 0){
+          array_push($noAZ, $number->slug);
+        }
+
       }
-      $collectionQuery['tax_query'] = $tax_query;
+      $attrs['noAZ'] = implode(",",$noAZ);
+
     }
-
-    $collectionWithFilters = [];
-    $attr['collectionResults'] = Timber::get_posts($collectionQuery);
-
+ 
+    
     return $attrs;
   }
-}
+
 }
 ?>
