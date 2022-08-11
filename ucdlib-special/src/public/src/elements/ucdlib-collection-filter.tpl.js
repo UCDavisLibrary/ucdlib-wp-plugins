@@ -40,26 +40,24 @@ export function render() {
 return html`
   <div class='main radio'>
     <div class='sort-label'>Browse by: </div>
-    <div class='container'>
-      <label >
-      <input 
-        @input=${() => this.onSortInput('')} 
-        id="subject" name="filter" 
-        type="radio" 
-        class="radio"
-        ?checked=${this.sort == ''}
-        checked>
-        Subject</label>
-    </div>
-    <div>
-      <label>
-      <input 
-        @input=${() => this.onSortInput('az')} 
-        id="a-z" name="filter" 
-        type="radio" 
-        class="radio"
-        ?checked=${this.sort == 'az'}>
-        A - Z</label>
+      <div class='container'>
+        <input 
+          @input=${() => this.onSortInput('')} 
+          type="radio" 
+          id="subject" 
+          name="age" 
+          ?checked=${this.sort == ''}>
+        <label for="subject">Subject</label><br>
+      </div>
+      <div>
+        <input 
+          @input=${() => this.onSortInput('az')} 
+          type="radio" 
+          id="a-z" 
+          name="age" 
+          ?checked=${this.sort == 'az'}>
+        <label for="a-z">A - Z</label><br>
+      </div>
     </div>
   </div>
 `;}
