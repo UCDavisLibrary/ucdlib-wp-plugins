@@ -9,6 +9,7 @@ class UCDLibPluginSpecialTaxAZ {
     add_action( 'init', array($this, 'register') );
     add_action( 'admin_menu', array($this, 'add_to_menu'));
     add_filter( 'parent_file',  array($this, 'expand_parent_menu') );
+    add_action( 'save_post_' . $this->postType, [$this, 'assign_on_post_update'], 10, 3 );
   }
 
   // register taxonomy
@@ -59,5 +60,28 @@ class UCDLibPluginSpecialTaxAZ {
     }
     return $parent_file;
   }
-  
+
+  public function get_first_letter($title){
+    $letters = str_split(strtolower($title));
+    foreach ($letters as $letter) {
+      if ( is_numeric( $letter ) ){
+        return "numeric";
+      }
+      if ( ctype_alpha($letter) ) {
+        return $letter;
+      }
+    }
+  }
+
+  // assigns az term when a collection is updated
+  public function assign_on_post_update($post_id, $post, $update){
+    if ( wp_is_post_revision( $post_id ) ) {
+      return;
+    }
+    if ( !$post->post_title ) return;
+    $letter = $this->get_first_letter($post->post_title);
+    if ( !$letter ) return;
+
+    wp_set_post_terms( $post_id, $letter, $this->slug, false );
+  }
 }
