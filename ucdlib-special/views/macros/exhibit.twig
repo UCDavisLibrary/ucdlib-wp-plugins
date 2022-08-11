@@ -55,8 +55,8 @@
   {% set showByline = showLocation or showDates %}
   <article class='vm-teaser vm-teaser--exhibit'>
     {% if exhibit.teaser_image %}
-      <div class="vm-teaser__figure category" style="width:20%;max-width:135px;" role='image' aria-label='{{exhibit.teaser_image.alt}}'>
-        <a href="{{href}}" style="display:block;background-image:url({{exhibit.teaser_image.src}})" class="aspect--1x1 u-background-image">
+      <div class="vm-teaser__figure category" style="width:20%;max-width:135px;" role='img' aria-label='{{exhibit.teaser_image.alt}}'>
+        <a href="{{exhibit.link}}" style="display:block;background-image:url({{exhibit.teaser_image.src}})" class="aspect--1x1 u-background-image">
         </a>
       </div>
     {% endif %}
