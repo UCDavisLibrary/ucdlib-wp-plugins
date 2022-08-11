@@ -1,0 +1,33 @@
+{% macro teaser(collection) %}
+    {% for col in collection %}
+        {% if col.teaser_image %}
+        <div class="subject-collection-container" href="{{col.slug}}">
+          <div class="collection-image-box">
+              <img src="{{col.teaser_image.src}}" alt="subject-image-{{col.slug}}">
+          </div>
+        {% else %}
+          <div class="subject-collection-container-no-image" href="{{col.slug}}">
+        {% endif %}
+        <div> 
+          <h3><a class="collection-subjects-header-link" href="{{col.slug}}"><em>{{col.title}}<em></a></h3>
+          {% if col.description %}
+            <p style="font-style: normal;">{{ col.description }}</p>
+          {% endif %}
+        </div>
+      </div>
+    {% endfor %}
+{% endmacro %}
+
+{% macro no_results() %}
+  <div class='alert'>Sorry, no collection available to display.</div>
+{% endmacro %}
+
+{% macro az(collection, letter) %}
+    <h2>{{letter|capitalize}}</h2>
+    <ul class="list--arrow">
+      {% for col in collection %}
+        <li><span><b><a href="{{col.link}}">{{col.title}}</a></b></span><span> ({{col.callNumber}})</span></li>
+      {% endfor %}
+    </ul> 
+{% endmacro %}
+
