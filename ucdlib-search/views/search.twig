@@ -1,0 +1,97 @@
+{% extends getUcdTemplate('base') %}
+
+{% from getUcdMacro('links') import pagination %}
+{% from getUcdMacro('links') import breadcrumbs as render_crumbs %}
+{% from '@ucdlib-search/macros/search-result.twig' import search_result %}
+
+{% block breadcrumbs %}
+  {{render_crumbs([{title: 'Home', link: '/'}, {title: 'Search'}])}}
+{% endblock %}
+
+{% block content_container %}
+<div class="l-container l-basic--flipped">
+  <script>
+    window.suggest = {{ suggest|json_encode() }};
+    window.typeFacets = {{ typeFacets|json_encode() }};
+    window.sortOptions = {{ sortOptions|json_encode() }}
+  </script>
+  <div class="l-sidebar-first o-box">
+
+   <ucdlib-search-filter
+    url="{{site.site_url}}"
+    keyword="{{search_query}}"
+    authors="{{authorsQuery}}"
+   ></ucdlib-search-filter>
+  </div>
+  <div class="l-content">
+    <div class="panel o-box u-space-mb--flush">
+      <ucdlib-search-input
+        url="{{site.site_url}}"
+        keyword="{{search_query}}"
+      ></ucdlib-search-input>
+      {% if authors %}
+       <ucdlib-search-filter-authors url="{{site.site_url}}" class='u-space-mt'></ucdlib-search-filter-authors>
+      {% endif %}
+    </div>
+    <div class="panel o-box u-space-pt--flush">
+
+      {# 500 error #}
+      {% if error_in_search %}
+          <div class="alert alert--error">Something went wrong when getting your results. Please try again later.</div>
+      
+      {# at least one result found #}
+      {% elseif found_posts %}
+
+        <h5 class="search-results-message">{{ found_posts }} results {{search_query ? 'for "' ~ search_query ~ '"'}}</h5>
+        {% if hasSuggestion %}
+          <h5 class="search-results-message">Similar keyword: <a href="?s={{suggest.text|url_encode}}">{{suggest.highlighted}}</a> </h5>
+        {% endif %}
+
+        <div class="search-results u-space-mt--large">
+          {% for result in results %}
+            {{ search_result(result) }}
+          {% endfor %}
+        </div>
+        {% if hasPages %}
+          <ucd-theme-pagination
+            class="u-space-mt--large"
+            current-page="{{currentPage}}"
+            max-pages="{{lastPage}}"
+            base-path="{{paginationUrl.path ~ 'page/'}}"
+            query-params="{{paginationUrl.query}}"
+            xs-screen
+            ellipses>
+          </ucd-theme-pagination>
+        {% endif %}
+      
+      {# no results #}
+      {% else %}
+        {% if not authors or (authors and search_query) %}
+          <h5 class="search-results-message">Sorry, we're having trouble finding "{{search_query}}"</h5>
+        {% else %}
+          <h5 class="search-results-message">No results</h5>
+        {% endif %}
+        {% if hasSuggestion %}
+            <h5 class="search-results-message">Similar keyword: <a href="?s={{suggest.text|url_encode}}">{{suggest.highlighted}}</a> </h5>
+        {% endif %}
+
+        <h5>Suggestions:</h5>
+        <ul class="list--arrow">
+          {% if not authors or (authors and search_query) %}
+            <li>Check for typos and spelling errors</li>
+            <li>Try for generic keywords</li>
+            <li>Try different keywords</li>
+          {% endif %}
+          {% if authors %}
+            <li>Remove the author filter</li>
+          {% endif %}
+          {% set selectedTypeFacets = typeFacets|filter(f => f.isSelected) %}
+          {% if selectedTypeFacets and selectedTypeFacets|length != typeFacets|length %}
+            <li>Broaden your search filters to include more content types</li>
+          {% endif %}
+        </ul>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

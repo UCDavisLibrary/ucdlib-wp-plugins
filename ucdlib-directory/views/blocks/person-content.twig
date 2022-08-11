@@ -1,0 +1,39 @@
+{% from getUcdMacro('links') import focal_link %}
+{% set p = siteContext.post %}
+{% if 
+  p.typeAggs and 
+  (p.typeAggs.post or p.typeAggs.page or p.typeAggs.exhibit or p.typeAggs.location or p.typeAggs.libguide ) %}
+  {% set email = '&authors=' ~ p.email|replace({'@ucdavis.edu': ''}) %}
+  <div class='o-box u-space-mb'>
+    <h2 class='heading--h5'>Content by {{p.name_first}}</h2>
+    {% if p.typeAggs.post %}
+      {% set text = 'News Posts (' ~ p.typeAggs.post ~ ')' %}
+      {{ focal_link({text, href: '/?s&type=news' ~ email, icon: 'ucd-public:fa-newspaper', brandColor: 'arboretum'}) }}
+    {% endif %}
+
+    {% if p.typeAggs.exhibit %}
+      {% set text = 'Exhibits (' ~ p.typeAggs.exhibit ~ ')' %}
+      {{ focal_link({text, href: '/?s&type=exhibit' ~ email, icon: 'ucd-public:fa-image', brandColor: 'rec-pool'}) }}
+    {% endif %}
+
+    {% if p.typeAggs.libguide %}
+      {% set text = 'Research Guides (' ~ p.typeAggs.libguide ~ ')' %}
+      {{ focal_link({text, href: '/?s&type=research-guide' ~ email, icon: 'ucd-public:fa-book-atlas', brandColor: 'thiebaud-icing'}) }}
+    {% endif %}
+
+    {#
+    {% if p.typeAggs.page or p.typeAggs.location %}
+      {% set ct = 0 %}
+      {% if p.typeAggs.page %}
+        {% set ct = ct + p.typeAggs.page %}
+      {% endif %}
+      {% if p.typeAggs.location %}
+        {% set ct = ct + p.typeAggs.location %}
+      {% endif %}
+      {% set text = 'Information Pages (' ~ ct ~ ')' %}
+      {{ focal_link({text, href: '/?s&type=info-page' ~ email, icon: 'ucd-public:fa-info', brandColor: 'cabernet'}) }}
+    {% endif %}
+    #}
+
+  </div>
+{% endif %}

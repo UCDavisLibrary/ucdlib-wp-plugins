@@ -1,0 +1,6 @@
+{% from "@ucdlib-directory/macros/person.twig" import library_locations %}
+{% if siteContext.post.libraries %}
+  <div class="u-space-bottom">
+    {{ library_locations(siteContext.post) }}
+  </div>
+{% endif %}

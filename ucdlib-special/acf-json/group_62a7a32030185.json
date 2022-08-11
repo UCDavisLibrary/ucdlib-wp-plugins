@@ -1,0 +1,111 @@
+{
+    "key": "group_62a7a32030185",
+    "title": "Links",
+    "fields": [
+        {
+            "key": "field_62a7a353fab7e",
+            "label": "Department Page",
+            "name": "asc_dept_page",
+            "type": "post_object",
+            "instructions": "Landing page for Archives and Special Collections",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "post_type": [
+                "page"
+            ],
+            "taxonomy": "",
+            "allow_null": 0,
+            "multiple": 0,
+            "return_format": "id",
+            "ui": 1
+        },
+        {
+            "key": "field_62a7a39cfab7f",
+            "label": "Manuscripts Page",
+            "name": "asc_manuscripts_page",
+            "type": "post_object",
+            "instructions": "Lander for manuscripts",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "post_type": [
+                "page"
+            ],
+            "taxonomy": "",
+            "allow_null": 0,
+            "multiple": 0,
+            "return_format": "id",
+            "ui": 1
+        },
+        {
+            "key": "field_62a7a3d6fab80",
+            "label": "University Archives Page",
+            "name": "asc_ua_page",
+            "type": "post_object",
+            "instructions": "Lander for University Archives",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "post_type": "",
+            "taxonomy": "",
+            "allow_null": 0,
+            "multiple": 0,
+            "return_format": "id",
+            "ui": 1
+        },
+        {
+            "key": "field_62b5fceb17d33",
+            "label": "Exhibits Page",
+            "name": "asc_exhibits_page",
+            "type": "post_object",
+            "instructions": "Lander for Exhibits",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "post_type": [
+                "page"
+            ],
+            "taxonomy": "",
+            "allow_null": 0,
+            "multiple": 0,
+            "return_format": "id",
+            "ui": 1
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "options_page",
+                "operator": "==",
+                "value": "ucdlib-special-settings"
+            }
+        ]
+    ],
+    "menu_order": 0,
+    "position": "normal",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": "",
+    "active": true,
+    "description": "Special Collections",
+    "show_in_rest": 0,
+    "modified": 1656093994
+}

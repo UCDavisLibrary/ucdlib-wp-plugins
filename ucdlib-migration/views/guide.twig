@@ -1,0 +1,23 @@
+{% extends getUcdTemplate('base') %}
+
+{% block content %}
+  <script type="text/javascript">
+    var guideRedirectTime = {{redirectTime}};
+    setInterval(guideRedirect, 1000);
+
+    function guideRedirect() {
+      window.guideRedirectTime -= 1;
+      if ( !window.guideRedirectTime ) window.location = '{{redirctUrl}}';
+      document.getElementById('{{counterId}}').innerText = window.guideRedirectTime;
+    }
+
+  </script>
+  <section class="brand-textbox category-brand__background">
+    <p>We recently changed our content management system for building course and subject guides, and this guide does not currently exist in the system.</p>
+    <p>You can <a href="mailto:{{post.author.user_email}}">email the author</a> for assistance with accessing resources originally listed on this guide.</p>
+    <p>You will be automatically redirected to the new content management system in <span id="{{counterId}}">{{redirectTime}}</span> seconds.</p>
+     <p><a href="{{redirctUrl}}" class="btn btn--primary">Redirect Now</a></p>
+  </section>
+
+{% endblock %}
+

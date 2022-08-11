@@ -1,0 +1,53 @@
+{% from "@ucd-cas/macros.twig" import regularTextInput, smallTextInput, checkbox, textArea %}
+
+{% if field.args.short_slug == 'prevent_user_creation' %}
+  {{ checkbox(field) }}
+  <p class="description">
+    If checked, only current site users will be able to login.
+    Otherwise, an account will automatically be created for users 
+    who are either in the specified department list or individually whitelisted 
+    when they login for the first time.
+  </p>
+{% endif %}
+
+{% if field.args.short_slug == 'prevent_deptlist'%}
+  {{ checkbox(field) }}
+  <p class="description">
+  If checked, every CAS authenticated user, regardless of department, will be able to access this site
+  </p>
+{% endif %}
+
+{% if field.args.short_slug == 'deptlist' %}
+  {{ textArea(field, "regular", "5") }}
+  <p class="description">
+  Enter line-separated list of kerberos ids. Library department code is <code>060500</code>
+  </p>
+{% endif %}
+
+{% if field.args.short_slug == 'blacklist' %}
+  {{ textArea(field, "regular", "5") }}
+  <p class="description">
+  Enter line-separated list of kerberos ids.
+  </p>
+{% endif %}
+
+{% if field.args.short_slug == 'whitelist' %}
+  {{ textArea(field, "regular", "5") }}
+  <p class="description">
+  Enter line-separated list of kerberos ids.
+  </p>
+{% endif %}
+
+{% if field.args.short_slug == 'access_denied_message' %}
+  {{ textArea(field, "large", "5") }}
+  <p class="description">
+  Message to display to user if they are denied access to site.
+  </p>
+{% endif %}
+
+{% if field.args.short_slug == 'access_denied_link' %}
+  {{ regularTextInput(field) }}
+  <p class="description">
+  Will display if user is denied access to site if using the ucdlib theme.
+  </p>
+{% endif %}

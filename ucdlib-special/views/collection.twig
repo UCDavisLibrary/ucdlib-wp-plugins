@@ -1,0 +1,65 @@
+{% extends getUcdTemplate('base') %}
+
+{% block hero_image %}
+{% endblock %}
+
+{% block content_container %}
+
+<div class="l-container l-basic--flipped">
+  <div class="l-content">
+
+    {% if post.thumbnail %}
+      <div class="u-align--left u-width--one-third u-space--flush">
+        <div class="aspect--520x580">
+          <img src='{{post.thumbnail.src}}' alt='Picture of special collection'>
+        </div>
+      </div>
+
+      <div class="u-align--right u-width--two-thirds u-space--flush">
+      {% else %}
+      <div>
+    {% endif %}
+    
+    <h3>Collection Number: {{post.callNumber}}</h3>
+    
+    {% if post.description|length > 0 %}
+      <p>{{post.description}}</p>
+    {% endif %}
+    
+    {% if post.findingAid|length > 0 and post.findingAid.linkURL|length > 0 and post.findingAid.linkTitle|length > 0 %}
+      <h4>Finding Aid</h4>
+      <a href="{{post.findingAid.linkURL}}" target="_blank">{{post.findingAid.linkTitle}}</a>
+    {% endif %}
+    
+    {% if post.inclusiveDates|length > 0 %}
+      <h4>Inclusive Dates</h4>
+      <p>{{post.inclusiveDates}}</p>
+    {% endif %}
+
+    {% if post.extent|length > 0 %}
+      <h4>Extent</h4>
+      <p>{{post.extent}}</p>
+    {% endif %}
+
+    {% if post.terms('collection-subject')|length > 0 %}
+      <h4>Subject</h4>
+      {% for subject in post.terms('collection-subject') %}
+        <p><a href="/collection-subject/{{subject|lower|replace({' ' : '-'})}}">{{subject}}</a></p>    
+      {% endfor %}
+    {% endif %}
+
+    {% if post.referenceInfoLinks %}
+      <h4>Additional Collection Info</h4>
+      {% for link in post.referenceInfoLinks %}
+        <p><a href="{{link.linkURL}}" target="_blank">{{link.displayLabel}}</a></p>
+      {% endfor %}
+    {% endif %}
+      
+    </div>
+    
+  </div>
+  <div class="l-sidebar-second">
+    {{sidebar}}
+  </div>  
+</div>
+{% endblock %}

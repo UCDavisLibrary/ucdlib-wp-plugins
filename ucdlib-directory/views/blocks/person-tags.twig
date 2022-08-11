@@ -1,0 +1,14 @@
+{% set p = siteContext.post %}
+{% set directory = attributes.directory_page_link %}
+{% if p.directoryTags %}
+  <div>
+    <h2 class="heading--auxiliary">Directory Tags</h2>
+    {% for tag in p.directoryTags %}
+      {% if directory %}
+        <a href='{{directory}}?directory-tag={{tag.ID}}' class="tags__tag">{{tag.name}}</a>
+      {% else %}
+        <span class="tags__tag">{{tag.name}}</span>
+      {% endif %}
+    {% endfor %}
+  </div>
+{% endif %}

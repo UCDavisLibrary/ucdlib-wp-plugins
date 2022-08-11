@@ -1,0 +1,47 @@
+{% from "@ucd-cas/macros.twig" import regularTextInput, smallTextInput, checkbox %}
+{% if field.args.short_slug == 'host' %}
+
+  {{ regularTextInput(field, true) }}
+  {% if field.args.env %}
+    <p class="description">
+      Value is currently being set by an environmental variable and is readonly.
+    </p>
+  {% endif %}
+  <p class="description">
+  <code>ssodev.ucdavis.edu</code> is the development server. It does not require registration.
+  </p>
+  <p class="description">
+  <code>cas.ucdavis.edu</code> is the production server. You must <a href="https://casmgr.ucdavis.edu/">register this site</a>.
+  </p>
+{% endif %}
+
+{% if field.args.short_slug == 'port' %}
+  {{ smallTextInput(field) }}
+  <p class="description">This is almost always going to be '443'</p>
+{% endif %}
+
+{% if field.args.short_slug == 'uri' %}
+  {{ regularTextInput(field, true) }} 
+  <p class="description">
+  UC Davis CAS servers are located at the <code>cas</code> URI
+  </p>
+{% endif %}
+
+{% if field.args.short_slug == 'validation' %}
+  {{ checkbox(field) }}
+  <p class="description">Enables SSL validation of the CAS server</p>
+{% endif %}
+
+{% if field.args.short_slug == 'validation_path' %}
+  {{ regularTextInput(field, true) }}  
+  <p class="description">
+  If using SSL validation, enter path to CA certificate that is the issuer of the CAS cert
+  </p>
+{% endif %}
+
+{% if field.args.short_slug == 'validation_uri' %}
+  {{ regularTextInput(field, true) }} 
+  <p class="description">
+  If using SSL validation, what is the server uri? Should be <code>p3/serviceValidate</code> for UC Davis.
+  </p>
+{% endif %}

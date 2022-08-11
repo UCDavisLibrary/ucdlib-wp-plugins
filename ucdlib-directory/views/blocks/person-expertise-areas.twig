@@ -1,0 +1,16 @@
+{% set p = siteContext.post %}
+{% if p.expertiseAreas %}
+  <div>
+    <h2 class="heading--auxiliary">Areas of Expertise</h2>
+    <p>
+    {% apply spaceless %}
+      {% for tag in p.expertiseAreas %}
+        <span>{{tag.name}}</span>
+        {% if not loop.last and loop.length > 1 %}
+          <span>, </span>
+        {% endif %}
+      {% endfor %}
+    {% endapply %}
+    </p>
+  </div>
+{% endif %}

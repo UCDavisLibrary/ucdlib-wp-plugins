@@ -1,0 +1,12 @@
+{
+    "name": "@ucd-lib/plugin-migration-editor",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "private": true,
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "@ucd-lib/brand-theme-editor": "file:../../../../ucdlib-theme-wp/src/editor"
+    }
+}

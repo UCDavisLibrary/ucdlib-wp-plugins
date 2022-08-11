@@ -1,0 +1,83 @@
+{% macro highlight(exhibit, kwargs) %}
+  {% set classes = 'hero-banner hero-banner--exhibit' %}
+
+  {% if kwargs.brandColor %}
+    {% set color = kwargs.brandColor %}
+  {% elseif exhibit.exhibitBrandColor %}
+    {% set color = exhibit.exhibitBrandColor %}
+  {% else %}
+    {% set color = 'primary' %}
+  {% endif %}
+
+  {% if color %}
+    {% set classes = classes ~ ' category-brand--' ~  color %}
+  {% endif %}
+  {% if kwargs.classes %}
+    {% set classes = classes ~ ' ' ~ kwargs.classes %}
+  {% endif %}
+
+  {% if not color and not exhibit.exhibitHero %}
+    {% set classes = classes ~ ' hero-banner--no-background' %}
+  {% endif %}
+
+  <article class='{{classes}}'>
+    <div class="hero-banner__image u-background-image" style={{exhibit.exhibitHero ? "background-image:url("~exhibit.exhibitHero.src~")": ''}}></div>
+    {% if color %}
+      <div class="hero-banner__film"></div>
+    {% endif %}
+    <div class="hero-banner__body">
+      <div class="hero-banner__title">{{exhibit.exhibitTitle}}</div>
+      <div class="hero-banner__summary">
+        {% if exhibit.exhibitIsPhysical %}
+          <div>
+            <div>{{exhibit.exhibitLocationLabel}}</div>
+            {% if exhibit.exhibitIsPermanent %}
+              <div>Permanent Exhibit</div>
+            {% else %}
+              <div>{{exhibit.exhibitDateRange}}</div>
+            {% endif %}
+          </div>
+        {% elseif exhibit.exhibitIsOnline %}
+          <div>Online Exhibit</div>
+        {% endif %}
+      </div>
+      <div class="hero-banner__button-group">
+        <a class="hero-banner__button" href='{{exhibit.exhibitLink}}'>Exhibit Details</a>
+      </div>
+    </div>
+  </article>
+{% endmacro %}
+
+{% macro teaser(exhibit, kwargs) %}
+  {% set opts = kwargs.options %}
+  {% set showLocation = exhibit.exhibitLocationLabel and not opts.hideLocation %}
+  {% set showDates = (exhibit.exhibitIsPermanent or exhibit.exhibitDateRange) and not opts.hideDates %}
+  {% set showByline = showLocation or showDates %}
+  <article class='vm-teaser vm-teaser--exhibit'>
+    {% if exhibit.teaser_image %}
+      <div class="vm-teaser__figure category" style="width:20%;max-width:135px;" role='image' aria-label='{{exhibit.teaser_image.alt}}'>
+        <a href="{{href}}" style="display:block;background-image:url({{exhibit.teaser_image.src}})" class="aspect--1x1 u-background-image">
+        </a>
+      </div>
+    {% endif %}
+    <div class="vm-teaser__body">
+      <h3 class="vm-teaser__title"><a href="{{exhibit.link}}">{{exhibit.title}}</a></h3>
+      {% if exhibit.exhibitCuratorOrgs|length and not opts.hideCuratorOrgs %}
+        <div class='vm-teaser--exhibit__curators {{not showByline ? 'vm-teaser__byline'}}'>Curated by {{exhibit.exhibitCuratorOrgs|map(e => e.name)|join(', ')}}</div>
+      {% endif %}
+      {% if showByline %}
+        <ul class="vm-teaser__byline">
+          {% if showLocation %}
+            <li>{{exhibit.exhibitLocationLabel}}</li>
+          {% endif %}
+          {% if showDates %}
+            <li>{{exhibit.exhibitIsPermanent ? 'Ongoing' : exhibit.exhibitDateRange}}</li>
+          {% endif %}
+        </ul>
+      {% endif %}
+      {% if not opts.hideExcerpt and exhibit.excerpt %}
+        <div class="vm-teaser__summary">{{ exhibit.excerpt({words: 25}) }}</div>
+      {% endif %}
+    </div>
+  </article>
+{% endmacro %}

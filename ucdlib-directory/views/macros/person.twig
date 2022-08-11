@@ -1,0 +1,65 @@
+{% macro teaser(person) %}
+  <article class='vm-teaser vm-teaser--person'>
+    {% if person.teaser_image %}
+        <div class="vm-teaser__figure" style="width:20%;max-width:135px;" role='image' aria-label='{{person.teaser_image.alt}}'>
+          <a href="{{person.link}}" style="display:block;background-image:url({{person.teaser_image.src}})" class="aspect--1x1 u-background-image">
+        </a>
+      </div>
+    {% endif %}
+    <div class="vm-teaser__body">
+      <h3 class="vm-teaser__title"><a href="{{person.link}}">{{person.name_first}} {{person.name_last}}</a></h3>
+      {% if person.positionTitle or person.department %}
+        <ul class='u-space-mb--small list--pipe'>
+          {% if person.positionTitle %}
+            <li>{{person.positionTitle}}</li>
+          {% endif %}
+          {% if person.department %}
+            <li>{{person.department.title}}</li>
+          {% endif %}
+        </ul>
+      {% endif %}
+      {{_self.contact(person, 'text--smaller u-space-mb--small vm-teaser--person__contact')}}
+      {% if person.libraries %}
+        <div>
+          {{_self.library_locations(person)}}
+        </div>
+      {% endif %}
+    </div>
+  </article>
+{% endmacro %}
+
+{% macro no_results() %}
+  <div class='alert'>Sorry, no people match your search.</div>
+{% endmacro %}
+
+{% macro library_locations(person) %}
+  {% if person.libraries %}
+    <span class="icon icon--location">
+    {% apply spaceless %}
+      {% for library in person.libraries %}
+        <span>{{library.name}}</span>
+        {% if not loop.last and loop.length > 1 %}
+          <span>, </span>
+        {% endif %}
+      {% endfor %}
+    {% endapply %}
+    </span> 
+  {% endif %}
+{% endmacro %}
+
+{% macro contact(person, class) %}
+  {% if person.contactInfo.contact and not person.contactInfo.hide %}
+    <ul class="contact-info list--pipe {{class ? class}}">
+      {% for contact in person.contactInfo.contact %}
+        <li>
+          <a class="icon-ucdlib" href="{{contact.link}}">
+            <ucdlib-icon icon="{{contact.icon}}"></ucdlib-icon><div>{{contact.label}}</div>
+          </a>
+          {% if contact.additionalText %}
+            <span class='additional-text'>&nbsp;({{contact.additionalText}})</span>
+          {% endif %}
+        </li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+{% endmacro %}

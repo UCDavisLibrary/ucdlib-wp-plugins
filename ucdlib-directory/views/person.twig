@@ -1,0 +1,30 @@
+{% from getUcdMacro('links') import breadcrumbs as render_crumbs %}
+
+{% extends getUcdTemplate('base') %}
+
+{% block hero_image %}
+{% endblock %}
+
+{% block breadcrumbs %}
+  {{render_crumbs(breadcrumbs)}}
+{% endblock %}
+
+{% block content_container %}
+  <div class="l-container {{sidebar ? 'l-basic--flipped'}}">
+    <div class="l-content">
+      {% if post.thumbnail %}
+        <div class="u-align--right u-width--one-third">
+          <div class="aspect--520x580">
+            <img src='{{post.thumbnail.src}}' alt='Picture of {{post.name_first}}'>
+          </div>
+        </div>
+      {% endif %}
+      {{post.content}}
+    </div>
+    {% if sidebar %}
+      <div class="l-sidebar-second">
+        {{sidebar}}
+      </div>
+    {% endif %}
+  </div>
+{% endblock %}

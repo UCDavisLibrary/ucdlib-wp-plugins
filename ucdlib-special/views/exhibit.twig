@@ -1,0 +1,50 @@
+{% from getUcdMacro('links') import breadcrumbs as render_crumbs %}
+
+{% extends getUcdTemplate('base') %}
+
+{% block page_title %}
+  <section>
+    <h1 class="page-title">{{title}}</h1>
+  </section>
+{% endblock %}
+
+{% block breadcrumbs %}
+  {{render_crumbs(breadcrumbs)}}
+{% endblock %}
+
+{% block content_container %}
+<div class="l-container {{sidebar ? 'l-basic--flipped'}}">
+  <div class="l-content">
+    {% if post.isTopPage and ((not post.exhibitIsPast ) or (post.exhibitIsPast and not post.exhibitIsOnline)) %}
+      {% if post.exhibitLocations and post.exhibitLocations|length %}
+        <h2 class='heading--secondary exhibit-header-intro'>{{post.exhibitLocations[0].name}}</h2>
+      {% endif %}
+      {% if post.exhibitIsPhysical and post.exhibitIsPermanent %}
+        <h2 class='heading--secondary exhibit-header-intro'>Permanent Exhibit</h2>
+      {% elseif post.exhibitIsPhysical and post.exhibitDateRange %}
+        <h2 class='heading--secondary exhibit-header-intro'>{{post.exhibitDateRange}}</h2>
+      {% endif %}
+    {% endif %}
+    {{post.content}}
+
+    {% if (post.showGrandchildrenInNav or not post.isDeepPage) and (post.prevPage or post.nextPage) %}
+      <hr class="dotted secondary y2">
+      <div class='btn--seq-container {{not post.prevPage ? 'btn--seq-container-first'}}'>
+      {% if post.prevPage %}
+        <a href="{{post.prevPage.link}}" class="btn btn--seq btn--seq__prev">{{post.prevPage.isTopPage ? 'Introduction' : post.prevPage.title}}</a>
+      {% endif %}
+
+      {% if post.nextPage %}
+        <a href="{{post.nextPage.link}}" class="btn btn--seq btn--seq__next">{{post.nextPage.title}}</a>
+      {% endif %}
+      </div>
+    {% endif %}
+  </div>
+  {% if sidebar %}
+    <div class="l-sidebar-second">
+      {{sidebar}}
+    </div>
+  {% endif %}
+</div>
+
+{% endblock %}

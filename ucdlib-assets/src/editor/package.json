@@ -1,0 +1,42 @@
+{
+  "name": "@ucd-lib/plugin-assets-editor",
+  "version": "1.0.0",
+  "description": "",
+  "main": "ucdlib-editor.js",
+  "scripts": {
+    "watch": "wp-scripts start ucdlib-editor.js --output-path=../../assets/js/editor/dev",
+    "init-bundle": "wp-scripts build ucdlib-editor.js --output-path=../../assets/js/editor/dev",
+    "dist": "wp-scripts build ucdlib-editor.js --output-path=../../assets/js/editor/dist"
+  },
+  "author": "",
+  "license": "ISC",
+  "private": true,
+  "dependencies": {
+    "@ucd-lib/brand-theme-editor": "file:../../../../ucdlib-theme-wp/src/editor",
+    "@ucd-lib/plugin-directory-editor": "file:../../../ucdlib-directory/src/editor",
+    "@ucd-lib/plugin-locations-editor": "file:../../../ucdlib-locations/src/editor",
+    "@ucd-lib/plugin-migration-editor": "file:../../../ucdlib-migration/src/editor",
+    "@ucd-lib/plugin-special-editor": "file:../../../ucdlib-special/src/editor",
+    "@wordpress/api-fetch": "^6.0.1",
+    "@wordpress/block-editor": "^7.0.2",
+    "@wordpress/block-library": "^7.0.2",
+    "@wordpress/blocks": "^11.5.1",
+    "@wordpress/components": "^15.0.0",
+    "@wordpress/compose": "^5.0.5",
+    "@wordpress/data": "^6.3.0",
+    "@wordpress/dom-ready": "^3.2.2",
+    "@wordpress/edit-post": "^6.0.2",
+    "@wordpress/element": "^4.1.1",
+    "@wordpress/hooks": "^3.2.1",
+    "@wordpress/html-entities": "^3.2.1",
+    "@wordpress/icons": "^5.0.2",
+    "@wordpress/notices": "^3.2.2",
+    "@wordpress/plugins": "^4.1.3",
+    "@wordpress/rich-text": "^5.0.2",
+    "@wordpress/url": "^3.4.1",
+    "htm": "^3.1.1"
+  },
+  "devDependencies": {
+    "@wordpress/scripts": "^23.1.0"
+  }
+}

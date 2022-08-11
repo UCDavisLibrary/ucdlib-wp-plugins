@@ -1,5 +1,15 @@
 <div class="wrap">
   <h1>{{title}}</h1>
-  <p>I am a menu</p>
-    <p>whoop!</p>
+  {% if cas_not_installed %}
+    <div class="notice notice-error settings-error is-dismissible"> 
+      <p><strong>CAS Client is not installed!</strong>
+      <a href="https://apereo.atlassian.net/wiki/spaces/CASC/pages/103252681/phpCAS+installation+guide">Install via composer</a> to wordpress root.</p>
+      <button type="button" class="notice-dismiss"><span class="screen-reader-text">Dismiss this notice.</span></button>
+    </div>
+  {% endif %}
+  <form action="options.php" method="post">
+    {{ function('settings_fields', slug) }}
+    {{ function('do_settings_sections', slug) }}
+    {{ function('submit_button', 'Save') }}
+  </form>
 </div>

@@ -1,0 +1,9 @@
+{% set p = siteContext.post %}
+{% if p.positionTitle %}
+  <h2 class='u-space-mt--flush'>{{p.positionTitle}}</h2>
+{% endif %}
+{% if p.department %}
+  <ul class="unit-list">
+    <li class="field__item">{{p.department.title}}</li>
+  </ul>
+{% endif %}

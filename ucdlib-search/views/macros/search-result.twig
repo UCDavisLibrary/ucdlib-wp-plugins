@@ -1,0 +1,52 @@
+{% macro search_result(kwargs) %}
+  {% if kwargs.result %}
+    {% set result = kwargs.result %}
+  {% else %}
+    {% set result = kwargs %}
+  {% endif %}
+
+  {% if result.author.first_name and result.author.last_name %}
+    {% set author = result.author.first_name ~ " " ~ result.author.last_name %}
+  {% else %}
+    {% set author = result.author.name %}
+  {% endif %}
+
+  {% set excerpt = result.hasHighlight ? result.highlight : result.excerpt %}
+
+  <article class="vm-teaser vm-teaser--search">
+    <div class="vm-teaser__figure category" style="width:20%;max-width:80px;" role='image'>
+      <a href="{{result.link}}" style="display:block;background-image:url({{result.image}})" class="aspect--1x1 u-background-image">
+      </a>
+    </div>
+    <div class="vm-teaser__body">
+      <h3 class="vm-teaser__title"><a href="{{result.link}}">{{result.title}}</a></h3>
+      <p class="vm-teaser__result-type">{{result.type.label}}</p>
+      <div class="vm-teaser__summary">
+        {% if result.type.showByline %}
+
+          <div class="list--pipe">
+            {% if result.showAuthor %}
+              <li>{{author}}</li>
+            {% endif %}
+            {% if result.showPublishedDate %}
+              <li>{{result.date}}</li>
+            {% endif %}
+              <li style="display:inline;">{{ excerpt }}</li>
+          </div>
+        {% else %}
+          {{ excerpt }}
+        {% endif %}
+        </div>
+
+  {#
+    <ucd-theme-list-accordion>
+      <li>ES Document</li>
+      <li><pre>{{dump(result.document)}}</pre></li>
+    </ucd-theme-list-accordion>
+  #}
+
+    </div>
+    
+  </article>
+
+{% endmacro %}

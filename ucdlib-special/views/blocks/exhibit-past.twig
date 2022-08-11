@@ -1,0 +1,19 @@
+ {% from '@ucdlib-special/macros/exhibit.twig' import teaser %}
+{% from getUcdMacro('links') import pagination %}
+
+<div>
+  <ucdlib-special-exhibit-past-filters></ucdlib-special-exhibit-past-filters>
+  <hr class="dotted secondary y1">
+  {% if attributes.years|length %}
+    {% for year, exhibits in attributes.years %}
+      <h2>{{year}}</h2>
+      {% for exhibit in exhibits %}
+        {{ teaser(exhibit, {options: attributes.teaserOptions}) }}
+      {% endfor %}
+    {% endfor %}
+  {% else %}
+    <p>No exhibits found!</p>
+  {% endif %}
+
+  {{ pagination({"pagination": attributes.exhibits.pagination}) }}
+</div>

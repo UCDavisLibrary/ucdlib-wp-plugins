@@ -1,0 +1,40 @@
+{% set p = siteContext.post %}
+{% set curatedLabel = 'Curated by' %}
+{% if p.exhibitCuratorOrgs or p.exhibitCurators %}
+  <aside class="o-box panel">
+    <div class="curator-widget">
+      <div class="subsection-label">Exhibit from</div>
+      {% if p.exhibitCuratorOrgs|length %}
+        <div>
+        {% for org in p.exhibitCuratorOrgs %}
+          <h2 class='heading--h5 u-space-mt--flush'>{{org.name}}</h2>
+        {% endfor %}
+        </div>
+      {% endif %}
+      {% if p.exhibitCuratorOrgs|length and p.exhibitCurators|length %}
+        <div class="u-space-my--small"></div>
+      {% endif %}
+      {% if p.exhibitCurators|length == 1 %}
+        {% set curator = p.exhibitCurators[0] %}
+        <div>
+          <span class="subsection-label">{{curatedLabel}}</span>
+          <a href="{{curator.link}}">{{curator.title}}</a>
+        </div>
+      {% elseif p.exhibitCurators|length > 1 %}
+        <div>
+          <div class='subsection-label'>{{curatedLabel}}</div>
+          {% for curator in p.exhibitCurators %}
+            <div><a href="{{curator.link}}">{{curator.title}}</a></div>
+          {% endfor %}
+        </div>
+      {% endif %}
+
+      {% if p.exhibitIsPast and p.exhibitIsOnline %}
+        <div class='previous-display'>
+          Previously on display {{p.exhibitDateRange}} in the {{p.exhibitLocations[0].name}}
+        </div>
+      {% endif %}
+
+    </div>
+  </aside>
+{% endif %}
