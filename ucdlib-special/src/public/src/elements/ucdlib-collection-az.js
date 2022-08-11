@@ -102,21 +102,6 @@ export default class UcdlibCollectionAZ extends LitElement {
       this.urlParams.delete(key);
     }
   }
-  // onFilter(v, e) {
-  //   if ( v != this.default ){
-  //     this.urlParams.set(this.keySort, v);
-  //   }
-  //   else if ( v == this.default && this.urlParams.get(this.keySort)) {
-  //     this.urlParams.delete(this.keySort);
-  //   }
-  //   let queryString = this.urlParams.toString();
-  //   if ( queryString ) {
-  //     window.location = this.url + '?' + this.urlParams.toString();
-  //   } else {
-  //     window.location = this.url;
-  //   }
-  // }
-
 
 }
 
