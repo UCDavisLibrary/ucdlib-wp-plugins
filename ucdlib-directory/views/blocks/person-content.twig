@@ -21,6 +21,7 @@
       {{ focal_link({text, href: '/?s&type=research-guide' ~ email, icon: 'ucd-public:fa-book-atlas', brandColor: 'thiebaud-icing'}) }}
     {% endif %}
 
+    {#
     {% if p.typeAggs.page or p.typeAggs.location %}
       {% set ct = 0 %}
       {% if p.typeAggs.page %}
@@ -32,6 +33,7 @@
       {% set text = 'Information Pages (' ~ ct ~ ')' %}
       {{ focal_link({text, href: '/?s&type=info-page' ~ email, icon: 'ucd-public:fa-info', brandColor: 'cabernet'}) }}
     {% endif %}
+    #}
 
   </div>
 {% endif %}

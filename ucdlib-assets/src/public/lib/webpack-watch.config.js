@@ -25,7 +25,8 @@ if( !Array.isArray(config) ) config = [config];
 config.forEach(conf => {
   
   // make stylesheet
-  conf.entry = [conf.entry, path.join(__dirname, './scss/style.scss')];
+  if( !Array.isArray(conf.entry) ) conf.entry = [conf.entry]; 
+  conf.entry.push(path.join(__dirname, './scss/style.scss'));
   conf.module.rules.push({
      test: /\.s[ac]ss$/i,
      use: [

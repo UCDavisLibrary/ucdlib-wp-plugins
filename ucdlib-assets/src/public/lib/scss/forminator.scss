@@ -1,4 +1,5 @@
 @use '@ucd-lib/theme-sass/2_base_class/_buttons-mixin.scss' as *;
+@use '@ucd-lib/theme-sass/0_tools/_headings-mixin.scss' as *;
 
 // shims for the forminator third-party plugin
 .forminator-error-message {
@@ -122,4 +123,35 @@ input.forminator-datepicker {
 }
 .subject-collection-container-no-image:hover {
   background-color:#fff9e6;
+}
+.forminator-title {
+  @include heading-default();
+  @include heading--secondary();
+}
+.heading--primary .forminator-title {
+  @include heading--primary();
+}
+.heading--secondary .forminator-title {
+  @include heading--secondary();
+}
+.heading--highlight .forminator-title {
+  @include heading--highlight();
+}
+.heading--auxiliary .forminator-title {
+  @include heading--auxiliary();
+}
+.heading--weighted .forminator-title {
+  @include heading--weighted();
+}
+.heading--underline .forminator-title {
+  @include heading--underline();
+}
+.heading--weighted-underline .forminator-title {
+  @include heading--weighted-underline();
+}
+.heading--invert .forminator-title {
+  @include heading--invert();
+}
+.heading--invert-box .forminator-title {
+  @include heading--invert-box();
 }
