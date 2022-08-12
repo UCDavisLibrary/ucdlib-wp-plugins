@@ -19,7 +19,12 @@ class DynamicScriptLoader {
       },
       {
         name: 'special',
-        cssQuery: ['ucdlib-special-exhibit-online-sort', 'ucdlib-special-exhibit-past-filters']
+        cssQuery: [
+          'ucdlib-special-exhibit-online-sort', 
+          'ucdlib-special-exhibit-past-filters', 
+          'ucdlib-collection-az',
+          'ucdlib-collection-filter'
+        ]
       }
     ];
   }

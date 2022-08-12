@@ -6,6 +6,7 @@ class UCDLibPluginDirectoryAreasOfExpertise {
   public function __construct($config){
     $this->config = $config;
     $this->slug = $this->config['taxSlugs']['expertise'];
+    $this->postType = $this->config['postSlugs']['person'];
 
     add_action( 'init', array($this, 'register') );
     add_action( 'admin_menu', array($this, 'add_to_menu'));
@@ -46,7 +47,7 @@ class UCDLibPluginDirectoryAreasOfExpertise {
 
     register_taxonomy(
       $this->slug, 
-      [$this->config['postSlugs']['person']],
+      [$this->postType],
       $args
     );
     
@@ -55,7 +56,13 @@ class UCDLibPluginDirectoryAreasOfExpertise {
   // add to plugin admin menu
   public function add_to_menu(){
     $label = 'Areas of Expertise';
-    add_submenu_page($this->config['slug'], $label, $label, 'edit_posts', "edit-tags.php?taxonomy=$this->slug",false );
+    add_submenu_page(
+      $this->config['slug'], 
+      $label, 
+      $label, 
+      $this->config['capabilities']['manage_directory'], 
+      "edit-tags.php?taxonomy=$this->slug&post_type=$this->postType",
+      false );
   }
 
   // expand plugin menu when on taxonomy admin page

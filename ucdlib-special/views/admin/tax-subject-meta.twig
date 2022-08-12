@@ -1,25 +1,46 @@
-{% macro label() %}
+{% macro headingLabel() %}
   <label for="subjectHeading">Subject Heading</label>
 {% endmacro %}
 
 
-{% macro input(subjectHeading) %}
+{% macro headingInput(subjectHeading) %}
   <input type="text" size="40" value="{{subjectHeading}}" id="subjectHeading" name="subjectHeading">
   <p class="description">The heading to display at the top of the list of collections in this subject</p>
 {% endmacro %}
 
+{% macro teaserTextLabel() %}
+  <label for="teaserText">Teaser Text</label>
+{% endmacro %}
+
+
+{% macro teaserTextInput(teaserText) %}
+  <textarea type="text" cols="40" rows='5' id="teaserText" name="teaserText">{{teaserText}}</textarea>
+  <p class="description">Text to display on any teaser blocks for this subject.</p>
+{% endmacro %}
+
 {% if current_filter ends with 'edit_form_fields' %}
   <tr class="form-field">
-    <th valign="top" scope="row">{{_self.label()}}</th>
+    <th valign="top" scope="row">{{_self.headingLabel()}}</th>
       <td>
-        {{_self.input(subjectHeading)}}
+        {{_self.headingInput(subjectHeading)}}
+      </td>
+  </tr> 
+
+  <tr class="form-field">
+    <th valign="top" scope="row">{{_self.teaserTextLabel()}}</th>
+      <td>
+        {{_self.teaserTextInput(teaserText)}}
       </td>
   </tr> 
 
 {% elseif current_filter ends with 'add_form_fields' %}
   <div class="form-field">
-    {{_self.label()}}
-    {{_self.input(subjectHeading)}}
+    {{_self.headingLabel()}}
+    {{_self.headingInput(subjectHeading)}}
+  </div>  
+  <div class="form-field">
+    {{_self.teaserTextLabel()}}
+    {{_self.teaserTextInput(teaserText)}}
   </div>  
 
 {% endif %}

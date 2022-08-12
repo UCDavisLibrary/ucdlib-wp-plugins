@@ -16,6 +16,10 @@ class UCDLibPluginSpecialBlocks extends UCDThemeBlockRenderer {
       "$this->slug/collection" => [
         'twig' => $this->twigPath('collection'),
       ],
+      "$this->slug/collection-results" => [
+        'twig' => $this->twigPath('collection-results'),
+        'transform' => ['collectionQueryArgsToAttributes', 'getCollectionFiltResults']
+      ],
       "$this->slug/exhibit-curators" => [
         'twig' => $this->twigPath('exhibit-curators')
       ],
