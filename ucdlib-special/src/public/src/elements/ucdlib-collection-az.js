@@ -7,6 +7,7 @@ export default class UcdlibCollectionAZ extends LitElement {
     return {
         url: {type: String},
         keySort: {type: String},
+        selectedLetter: {type: String, attribute: 'selected-letter'},
         noResult: {type: String, attribute: 'no-result'},
         sort: {state: true},
         urlParams: {state: true}
@@ -80,6 +81,8 @@ export default class UcdlibCollectionAZ extends LitElement {
   }
   
   onAlphaInput(v) {
+    if ( !v.exists || v.value == this.selectedLetter ) return;
+    v = v.value;
     this.sort = v;
     this.updateUrlParams(this.defaultSort, this.keySort, v);
     this.urlParams.set('collection-tax', 'az');

@@ -1,4 +1,5 @@
 <?php
+require_once( __DIR__ . '/block-transformations.php' );
 
 class UCDLibPluginSpecialTaxSubject {
   public function __construct( $config ){
@@ -37,11 +38,19 @@ class UCDLibPluginSpecialTaxSubject {
       'new_item_name'     => __( 'New Subject' ),
       'menu_name'         => __( 'Manuscript Subjects' ),
     ];
+
+    // permalink nested under asc department page
+    $rewrite = ['with_front' => false];
+    $deptHomePage = UCDLibPluginSpecialBlockTransformations::deptLanderLink()['dept_page_link'];
+    if ( $deptHomePage ) {
+      $rewrite['slug'] = trailingslashit(parse_url($deptHomePage)['path']) . $this->slug;
+    }
+
     $args = [
       'labels' => $labels,
       'description' => 'Manuscript subject areas',
       'public' => true,
-      'rewrite' => ['with_front' => false],
+      'rewrite' => $rewrite,
       'publicly_queryable' => true,
       'hierarchical' => true,
       'show_ui' => true,

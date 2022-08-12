@@ -2,6 +2,7 @@
 
 require_once( __DIR__ . '/config.php' );
 require_once( __DIR__ . '/exhibit-utils.php' );
+require_once( __DIR__ . '/collection-utils.php' );
 
 // Contains methods that transform the attributes of a block (mostly fetching additional data)
 // See 'transform' property in $registry array in blocks class.
@@ -113,13 +114,30 @@ class UCDLibPluginSpecialBlockTransformations {
       $attrs['subjects'] = $subjects;
 
     } else {
-      $az = Timber::get_terms([
-        'taxonomy' => 'collection-az',
-        'orderby' => 'name',
-        'count' => true,
-        'hide_empty' => false
-      ]);
-      $attrs['azTerm'] = $az;
+
+      // get az counts
+      $noAZ = array();
+      if ( $collectionType ) {
+        $azTermCt = UCDLibPluginSpecialCollectionUtils::getAzByCollectionType($collectionType);
+        foreach ($azTermCt as $letter => $ct) {
+          if ( !$ct ) $noAZ[] = $letter;
+        }
+      } else {
+        $az = Timber::get_terms([
+          'taxonomy' => 'collection-az',
+          'orderby' => 'name',
+          'count' => true,
+          'hide_empty' => false
+        ]);
+        foreach ($az as $letter) {
+          if($letter->count == 0){
+            array_push($noAZ, $letter->slug);
+          }
+        }
+      }
+      $attrs['noAZ'] = implode(",",$noAZ);
+
+      // get collections in az term
       $azQueryVar = $attrs['az'];
       $collectionQuery = [
         'post_type' => 'collection',
@@ -139,15 +157,6 @@ class UCDLibPluginSpecialBlockTransformations {
 
       }
       $attrs['collectionResults'] = Timber::get_posts($collectionQuery);
-
-      $noAZ = array();
-      foreach ($az as $letter) {
-        if($letter->count == 0){
-          array_push($noAZ, $letter->slug);
-        }
-
-      }
-      $attrs['noAZ'] = implode(",",$noAZ);
 
     }
  

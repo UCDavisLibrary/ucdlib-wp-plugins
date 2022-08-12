@@ -102,7 +102,7 @@ class UCDLibPluginSpecialCollections {
         'editor', 
         // 'author', 
         'thumbnail', 
-        // 'excerpt', 
+        'excerpt', 
         //'revisions',
         'page-attributes',
         'custom-fields'

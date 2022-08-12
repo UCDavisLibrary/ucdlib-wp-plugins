@@ -22,9 +22,12 @@ export function styles() {
       text-align:center;
       cursor: pointer;
     }
-    .box:hover {
+    .box:hover, .box.selected, .box.selected.disabled, .box.selected.disabled:hover {
       color: white;
-      background-color: #022851;   
+      background-color: #13639E;   
+    }
+    .box.selected {
+      cursor: auto;
     }
 
     .box.disabled {
@@ -49,11 +52,7 @@ export function render() {
 return html`
     <div class="alphaContainer">
       ${this.alpha.map((alp, i) => html`
-          ${alp.exists ? html`
-            <span @click=${() => this.onAlphaInput(alp.value)} class="box"><b>${alp.display}</b></span>
-          `: html`
-            <span class="box disabled"><b>${alp.display}</b></span>
-          `}
+        <span @click=${() => this.onAlphaInput(alp)} class="box ${alp.exists ? '' : 'disabled'} ${alp.value == this.selectedLetter ? 'selected' : ''}"><b>${alp.display}</b></span>
       `)}
     </div>
 `;}
