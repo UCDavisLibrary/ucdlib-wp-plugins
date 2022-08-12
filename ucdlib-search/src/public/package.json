@@ -11,7 +11,7 @@
     "author": "",
     "license": "ISC",
     "dependencies": {
-        "@ucd-lib/theme-elements": "^0.0.17",
+        "@ucd-lib/theme-elements": "^1.1.1",
         "@ucd-lib/theme-sass": "^5.0.16",
         "lit": "^2.2.4"
     }
