@@ -246,7 +246,10 @@ export class UcdlibLocation{
             <div class="value">
               ${day.hasHoursData ? html`
                 ${ day.isOpen ? 
-                    this.hasAppointments ? this.renderAppointmentsLink(false, true) :
+                    this.hasAppointments ? html`
+                      ${this._renderHours(day.hours.from, day.hours.to)}
+                      ${this.renderAppointmentsLink(false, true)}
+                    ` :
                       this._renderHours(day.hours.from, day.hours.to) 
                   : html`
                     <span class="double-decker">Closed</span>`}

@@ -5,6 +5,7 @@ class UCDLibPluginDirectoryServiceTypes {
   public function __construct($config){
     $this->config = $config;
     $this->slug = $this->config['taxSlugs']['service-type'];
+    $this->postType = $this->config['postSlugs']['service'];
 
     add_action( 'init', array($this, 'register') );
     add_action( 'admin_menu', array($this, 'add_to_menu'));
@@ -50,7 +51,7 @@ class UCDLibPluginDirectoryServiceTypes {
 
     register_taxonomy(
       $slug, 
-      [$this->config['postSlugs']['service']],
+      [$this->postType],
       $args
     );
     
@@ -59,7 +60,13 @@ class UCDLibPluginDirectoryServiceTypes {
   // add to plugin admin menu
   public function add_to_menu(){
     $label = 'Service Types';
-    add_submenu_page($this->config['slug'], $label, $label, 'edit_posts', "edit-tags.php?taxonomy=$this->slug",false );
+    add_submenu_page(
+      $this->config['slug'], 
+      $label, 
+      $label, 
+      $this->config['capabilities']['manage_directory'], 
+      "edit-tags.php?taxonomy=$this->slug&post_type=$this->postType",
+      false );
   }
 
   public function register_query_vars( $qvars ) {

@@ -13,7 +13,7 @@
   "license": "ISC",
   "dependencies": {
     "@lit-labs/task": "^1.1.1",
-    "@ucd-lib/theme-elements": "^0.0.15",
+    "@ucd-lib/theme-elements": "^1.1.1",
     "@ucd-lib/theme-sass": "^5.0.16"
   }
 }

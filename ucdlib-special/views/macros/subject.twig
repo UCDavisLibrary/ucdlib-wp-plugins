@@ -4,7 +4,11 @@
       <a href="{{collection.link}}" style="text-decoration: underline; color: var(--ucd-blue-80)">{{collection.title}}</a> 
     </h3> ({{collection.callNumber}})
     <div class="vm-teaser__summary">
-      {{ collection.description({words: 25}) }}
+      {% if collection.post_excerpt %}
+        {{collection.post_excerpt}}
+      {% else %}
+        {{ collection.description({words: 25}) }}
+      {% endif %}
     </div>
   </div>
 {% endmacro %}

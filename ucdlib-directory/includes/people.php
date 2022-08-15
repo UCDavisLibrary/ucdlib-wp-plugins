@@ -402,12 +402,14 @@ class UCDLibPluginDirectoryPeople {
 
   // add new columns to the admin table
   public function add_admin_list_column( $column_key, $post_id ) {
-    if ( $column_key ==  'department')
-    $department = get_post_meta($post_id, 'position_dept', true);
-    if ( $department ) {
-      $department_name = get_the_title($department);
+    if ( $column_key ==  'department') {
+      $department = get_post_meta($post_id, 'position_dept', true);
+      if ( $department ) {
+        $department_name = get_the_title($department);
+      }
+      echo (!empty($department_name)) ? __($department_name, 'textdomain') : __('-', 'textdomain');
     }
-    echo (!empty($department_name)) ? __($department_name, 'textdomain') : __('-', 'textdomain');
+
   }
 
   // Add link to wp user account for each user in the admin table that lists all people

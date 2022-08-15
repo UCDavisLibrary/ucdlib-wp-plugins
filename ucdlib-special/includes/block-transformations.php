@@ -2,6 +2,7 @@
 
 require_once( __DIR__ . '/config.php' );
 require_once( __DIR__ . '/exhibit-utils.php' );
+require_once( __DIR__ . '/collection-utils.php' );
 
 // Contains methods that transform the attributes of a block (mostly fetching additional data)
 // See 'transform' property in $registry array in blocks class.
@@ -83,5 +84,85 @@ class UCDLibPluginSpecialBlockTransformations {
     $attrs['exhibits'] = UCDLibPluginSpecialExhibitUtils::getExhibits($attrs);
     return $attrs;
   }
+
+  
+  // converts collection url query args to attributes
+  public static function collectionQueryArgsToAttributes($attrs){
+    $attrs['tax'] =  get_query_var('collection-tax', '');
+    $attrs['az'] = get_query_var('collection-az', 'a');
+    return $attrs;
+  }
+  /**
+   * Gets list of collections faceted by subject or az
+   */
+  public static function getCollectionFiltResults( $attrs=[] ){
+    
+    // set default view based on collection type
+    $collectionType = array_key_exists('collectionType', $attrs) ? $attrs['collectionType'] : '';
+    if ( !$attrs['tax'] && $collectionType == 'manuscript' ){
+      $attrs['tax'] = 'subject';
+    } elseif ( !$attrs['tax'] ){
+      $attrs['tax'] = 'az';
+    }
+
+    if ($attrs['tax'] != 'az') {
+      $subjects = Timber::get_terms([
+        'taxonomy' => 'collection-subject',
+        'orderby' => 'name',
+        'hide_empty' => true
+      ]);
+      $attrs['subjects'] = $subjects;
+
+    } else {
+
+      // get az counts
+      $noAZ = array();
+      if ( $collectionType ) {
+        $azTermCt = UCDLibPluginSpecialCollectionUtils::getAzByCollectionType($collectionType);
+        foreach ($azTermCt as $letter => $ct) {
+          if ( !$ct ) $noAZ[] = $letter;
+        }
+      } else {
+        $az = Timber::get_terms([
+          'taxonomy' => 'collection-az',
+          'orderby' => 'name',
+          'count' => true,
+          'hide_empty' => false
+        ]);
+        foreach ($az as $letter) {
+          if($letter->count == 0){
+            array_push($noAZ, $letter->slug);
+          }
+        }
+      }
+      $attrs['noAZ'] = implode(",",$noAZ);
+
+      // get collections in az term
+      $azQueryVar = $attrs['az'];
+      $collectionQuery = [
+        'post_type' => 'collection',
+        'order' => 'ASC',
+        'posts_per_page' => -1,
+        'tax_query' =>  [[
+            'taxonomy' => 'collection-az',
+            'field' => 'slug',
+            'terms' => $azQueryVar,
+        ]]
+      ];
+      if ( $collectionType ) {
+        $collectionQuery['meta_query'] = [[
+          'key' => 'collectionType',
+          'value' => $collectionType
+        ]];
+
+      }
+      $attrs['collectionResults'] = Timber::get_posts($collectionQuery);
+
+    }
+ 
+    
+    return $attrs;
+  }
+
 }
 ?>

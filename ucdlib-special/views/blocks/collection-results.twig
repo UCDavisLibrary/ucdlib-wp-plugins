@@ -1,0 +1,24 @@
+{% from "@ucdlib-special/macros/collection.twig" import az, subject_teaser, no_results %}
+
+{% if attributes.collectionType == 'manuscript' %}
+  <ucdlib-collection-filter ></ucdlib-collection-filter>
+{% endif %}
+
+{% if attributes.tax == 'az' %}
+  {% if attributes.collectionType == 'manuscript' %}
+    <hr class="dotted secondary y1">
+  {% endif %}
+  <ucdlib-collection-az no-result="{{attributes.noAZ}}" selected-letter='{{attributes.az}}'></ucdlib-collection-az>
+  <hr class="dotted secondary y1">
+  {{az(attributes.collectionResults, attributes.az)}}
+{% else %}
+  <hr class="dotted secondary y2">
+  <p>Subject areas represented within the collections correspond to the breadth, diversity, and focus of instruction offered at University of California, Davis.</p>
+  {% if attributes.subjects|length %}
+    {% for subject in attributes.subjects %}
+      {{ subject_teaser(subject) }}
+    {% endfor %}
+  {% else %}
+    {{no_results()}}
+  {% endif %}
+{% endif %}

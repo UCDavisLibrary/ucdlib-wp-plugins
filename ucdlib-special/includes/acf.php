@@ -39,6 +39,8 @@ class UCDLibPluginSpecialACF {
       strpos($screen->id, $this->menuSlug) == true
       ) {
       delete_transient('asc_dept_page_link');
+      delete_transient('ucdlib-special-az-manuscript');
+      delete_transient('ucdlib-special-az-university-archive');
     }
   }
   
