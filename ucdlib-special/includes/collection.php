@@ -363,17 +363,6 @@ class UCDLibPluginSpecialCollection extends UcdThemePost {
     return $this->source;
   }
 
-  protected $title;
-  public function title(){
-    if ( ! empty( $this->title ) ) {
-      return $this->title;
-    }
-    $title = $this->meta('title');
-    $this->title = $title;
-
-    return $this->title;
-  }
-
   protected $dates;
   public function dates(){
     if ( ! empty( $this->dates ) ) {
