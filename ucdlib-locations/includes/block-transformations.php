@@ -41,5 +41,31 @@ class UCDLibPluginLocationsBlockTransformations {
     $attrs['icons'] = ['ucd-public:fa-circle-exclamation'];
     return $attrs;
   }
+
+  static function signSectionStyle($attrs){
+    $style = '';
+    if ( array_key_exists('backgroundColor', $attrs) ) {
+      $v = $attrs['backgroundColor'];
+      $style .= "background-color:$v;";
+    }
+    if ( array_key_exists('textColor', $attrs) ) {
+      $v = $attrs['textColor'];
+      $style .= "color:$v;";
+    }
+    if ( array_key_exists('justifyContent', $attrs) ) {
+      $v = $attrs['justifyContent'];
+      $style .= "justify-content:$v;";
+    }
+    if ( array_key_exists('alignItems', $attrs) ) {
+      $v = $attrs['alignItems'];
+      $style .= "align-items:$v;";
+    }
+    if ( array_key_exists('flexGrow', $attrs) ){
+      $style .= "flex-grow:1";
+    }
+
+    $attrs['style'] = $style;
+    return $attrs;
+  }
 }
 ?>

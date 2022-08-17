@@ -109,6 +109,40 @@
     font-size: 1rem;
   }
 }
+body.digital-sign {
+  display: block;
+  height: 100vh;
+  min-height: 100vh;
+  width: 100vw;
+  min-width: 100vw;
+  overflow-y: hidden;
+}
+.digital-sign-sections {
+  display: flex;
+  height: 100%;
+  flex-flow: column;
+  justify-content: space-between;
+}
+.digital-sign-section {
+  display: flex;
+  flex-flow: column;
+}
+.digital-sign-text {
+  font-size: calc(100vh/12);
+
+  &.digital-sign-text--xs {
+    font-size: calc(100vh/20);
+  }
+  &.digital-sign-text--sm {
+    font-size: calc(100vh/16);
+  }
+  &.digital-sign-text--lg {
+    font-size: calc(100vh/8);
+  }
+  &.digital-sign-text--xl {
+    font-size: calc(100vh/6);
+  }
+}
 
 // move to special collections plugin
 .curator-widget {
