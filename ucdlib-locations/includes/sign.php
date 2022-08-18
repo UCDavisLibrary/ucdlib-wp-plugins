@@ -42,6 +42,22 @@ class UCDLibPluginLocationsSigns {
       'items_list'            => _x( 'Digital Signs list', 'textdomain' ),
     );
 
+    $template = [
+      ['ucdlib-locations/sign-sections', ['lock' => ['remove' => true]], [
+        ['ucdlib-locations/sign-section', 
+          ['backgroundColor' => '#022851', 'textColor' => '#fff', 'alignItems' => 'center'],
+          [['ucdlib-locations/sign-text', ['placeholder' => 'SIGN HEADER', 'size' => 'lg']]]
+        ],
+        ['ucdlib-locations/sign-section', 
+          ['flexGrow' => '1', 'justifyContent' => 'center', 'alignItems' => 'center'],
+          [['ucdlib-locations/sign-text', ['placeholder' => 'Body text...']]]
+        ],
+        ['ucdlib-locations/sign-section', 
+          [ 'alignItems' => 'center' ],
+          [['ucdlib-locations/sign-text', ['placeholder' => 'footer text', 'size' => 'sm']]]
+        ],
+      ]]
+    ];
 
     $args = array(
       'labels' => $labels,
@@ -57,7 +73,7 @@ class UCDLibPluginLocationsSigns {
       'menu_position' => 20,
       //'menu_icon' => 'dashicons-format-image',
       'rewrite'			  => ['with_front' => false],
-      //'template' => $template,
+      'template' => $template,
       //'template_lock' => 'all',
       'supports' => array(
         'title', 

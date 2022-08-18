@@ -18,6 +18,10 @@ class UCDLibPluginLocationsBlocks extends UCDThemeBlockRenderer {
         'twig' => $this->twigPath('hours'),
         'transform' => ['getSiteUrl']
       ],
+      "$this->slug/sign-hours" => [
+        'twig' => $this->twigPath('sign-hours'),
+        'transform' => ['getSiteUrl']
+      ],
       "$this->slug/sign-section" => [
         'twig' => $this->twigPath('sign-section'),
         'transform' => ['signSectionStyle']
@@ -26,7 +30,8 @@ class UCDLibPluginLocationsBlocks extends UCDThemeBlockRenderer {
         'twig' => $this->twigPath('sign-sections')
       ],
       "$this->slug/sign-text" => [
-        'twig' => $this->twigPath('sign-text')
+        'twig' => $this->twigPath('sign-text'),
+        'transform' => ['signSectionStyle']
       ],
       "$this->slug/address" => [
         'twig' => $this->twigPath('address'),

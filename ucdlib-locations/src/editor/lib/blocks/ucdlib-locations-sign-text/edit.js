@@ -1,6 +1,7 @@
 import { html, UCDIcons } from "@ucd-lib/brand-theme-editor/lib/utils";
+import { PanelBody, TextControl } from '@wordpress/components';
 import { ToolbarSelectMenu, ToolbarColorPicker } from "@ucd-lib/brand-theme-editor/lib/block-components";
-import { useBlockProps, RichText, BlockControls } from '@wordpress/block-editor';
+import { useBlockProps, RichText, BlockControls, InspectorControls } from '@wordpress/block-editor';
 import classnames from 'classnames';
 
 export default ( props ) => {
@@ -12,6 +13,12 @@ export default ( props ) => {
     [`digital-sign-text--${attributes.size}`]: attributes.size,
     [`${attributes.brandColor}`]: attributes.brandColor
   });
+
+  const style = {
+    padding: attributes.padding || '',
+    margin: attributes.margin || '',
+    lineHeight: attributes.lineHeight || ''
+  }
 
   const placeholder = attributes.placeholder || 'Write sign text...';
 
@@ -54,7 +61,26 @@ export default ( props ) => {
         ucdBlock="all"
       />
     </${BlockControls}>
-    <div className=${classes}>
+    <${InspectorControls}>
+      <${PanelBody} title="Spacing">
+        <${TextControl} 
+          label='Margin'
+          value=${attributes.margin}
+          onChange=${margin => setAttributes({margin})}
+        />
+        <${TextControl} 
+          label='Padding'
+          value=${attributes.padding}
+          onChange=${padding => setAttributes({padding})}
+        />
+        <${TextControl} 
+          label='Line Height'
+          value=${attributes.lineHeight}
+          onChange=${lineHeight => setAttributes({lineHeight})}
+        />
+      </${PanelBody}>
+    </${InspectorControls}> 
+    <div className=${classes} style=${style}>
       <${RichText} 
         tagName='span'
         value=${attributes.text}

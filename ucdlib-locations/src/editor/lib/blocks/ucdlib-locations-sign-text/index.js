@@ -8,7 +8,7 @@ const settings = {
 	description: "Text input sized for a digital sign",
 	icon: UCDIcons.renderPublic('fa-font'),
 	category: 'ucdlib-locations-signs',
-	keywords: [  ],
+	keywords: [ 'digital', 'sign' ],
   supports: {
     "html": false,
     "customClassName": false
@@ -23,6 +23,18 @@ const settings = {
       default: ''
     },
     brandColor: {
+      type: 'string',
+      default: ''
+    },
+    margin: {
+      type: 'string',
+      default: ''
+    },
+    padding: {
+      type: 'string',
+      default: ''
+    },
+    lineHeight: {
       type: 'string',
       default: ''
     },

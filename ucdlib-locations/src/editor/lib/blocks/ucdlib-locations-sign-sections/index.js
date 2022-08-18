@@ -8,7 +8,7 @@ const settings = {
 	description: "Primary layout block for digital signs",
 	icon: UCDIcons.renderPublic('fa-layer-group'),
 	category: 'ucdlib-locations-signs',
-	keywords: [  ],
+	keywords: [ 'digital', 'sign' ],
   supports: {
     "html": false,
     "customClassName": false

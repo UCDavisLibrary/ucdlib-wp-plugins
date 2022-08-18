@@ -1,0 +1,7 @@
+{% set refresh = attributes.refreshRate ? attributes.refreshRate : 5 %}
+{% set refresh = refresh * 1000 * 60 %}
+<ucdlib-hours-today-sign 
+  api-host='{{attributes.site_url}}'
+  refresh-rate='{{refresh}}'
+  location="{{attributes.locationId}}">
+</ucdlib-hours-today-sign>

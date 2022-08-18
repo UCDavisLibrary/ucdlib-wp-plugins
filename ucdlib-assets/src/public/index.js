@@ -7,7 +7,7 @@ class DynamicScriptLoader {
     this.registration = [
       {
         name: 'locations',
-        cssQuery: ['ucdlib-hours', 'ucdlib-hours-today', 'ucdlib-hours-today-simple']
+        cssQuery: ['ucdlib-hours', 'ucdlib-hours-today', 'ucdlib-hours-today-simple', 'ucdlib-hours-today-sign']
       },
       {
         name: 'search',

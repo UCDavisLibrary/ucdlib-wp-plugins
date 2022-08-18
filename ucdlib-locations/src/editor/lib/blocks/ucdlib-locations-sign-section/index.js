@@ -9,7 +9,7 @@ const settings = {
 	description: "A section of a digital sign",
 	icon: UCDIcons.renderPublic('fa-puzzle-piece'),
 	category: 'ucdlib-locations-signs',
-	keywords: [  ],
+	keywords: [ 'digital', 'sign' ],
   supports: {
     "html": false,
     "customClassName": false
@@ -23,6 +23,10 @@ const settings = {
       type: 'string',
       default: ''
     },
+    textSize: {
+      type: 'string',
+      default: ''
+    },
     justifyContent: {
       type: 'string',
       default: ''
@@ -32,6 +36,18 @@ const settings = {
       default: ''
     },
     flexGrow: {
+      type: 'string',
+      default: ''
+    },
+    margin: {
+      type: 'string',
+      default: ''
+    },
+    padding: {
+      type: 'string',
+      default: ''
+    },
+    lineHeight: {
       type: 'string',
       default: ''
     }

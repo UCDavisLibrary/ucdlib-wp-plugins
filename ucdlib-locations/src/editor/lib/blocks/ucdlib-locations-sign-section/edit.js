@@ -1,7 +1,8 @@
 import classnames from 'classnames';
 
 import { html, UCDIcons } from "@ucd-lib/brand-theme-editor/lib/utils";
-import { BaseControl, ColorPicker, PanelBody, ToolbarButton } from '@wordpress/components';
+import { ToolbarSelectMenu } from "@ucd-lib/brand-theme-editor/lib/block-components";
+import { BaseControl, ColorPicker, PanelBody, TextControl, ToolbarButton } from '@wordpress/components';
 import { useBlockProps,
   BlockControls,
   InspectorControls,
@@ -15,6 +16,8 @@ export default ( props ) => {
 
   const classes = classnames({
     "digital-sign-section": true,
+    "digital-sign-text": attributes.textSize ? true : false,
+    [`digital-sign-text--${attributes.textSize}`]: attributes.textSize ? true : false
   });
 
   const style = {
@@ -22,8 +25,38 @@ export default ( props ) => {
     color: attributes.textColor || '',
     justifyContent: attributes.justifyContent || '',
     alignItems: attributes.alignItems || '',
-    flexGrow: attributes.flexGrow || ''
+    flexGrow: attributes.flexGrow || '',
+    padding: attributes.padding || '',
+    margin: attributes.margin || '',
+    lineHeight: attributes.lineHeight || ''
   }
+
+  const textSizeOptions = [
+    {
+      title: 'Not Set',
+      slug: ''
+    },
+    {
+      title: 'Extra Small',
+      slug: 'xs'
+    },
+    {
+      title: 'Small',
+      slug: 'sm'
+    },
+    {
+      title: 'Medium',
+      slug: 'md'
+    },
+    {
+      title: 'Large',
+      slug: 'lg'
+    },
+    {
+      title: 'Extra Large',
+      slug: 'xl'
+    },
+  ];
 
   const blockProps = useBlockProps( {
     className: classes,
@@ -87,6 +120,13 @@ export default ( props ) => {
           onClick=${() => setAttributes({flexGrow: attributes.flexGrow ? '' : '1'})}
           isPressed=${attributes.flexGrow ? true : false}
         />
+        <${ToolbarSelectMenu} 
+          label='Default Font Size'
+          icon=${UCDIcons.renderPublic('fa-text-height')}
+          options=${textSizeOptions}
+          value=${attributes.textSize}
+          onChange=${v => setAttributes({textSize: v.slug})}
+        /> 
       </${BlockControls}>
       <${InspectorControls}>
         <${PanelBody} title="Colors">
@@ -104,6 +144,23 @@ export default ( props ) => {
               defaultValue="#000"
             />
           </${BaseControl}>
+        </${PanelBody}>
+        <${PanelBody} title="Spacing">
+          <${TextControl} 
+            label='Margin'
+            value=${attributes.margin}
+            onChange=${margin => setAttributes({margin})}
+          />
+          <${TextControl} 
+            label='Padding'
+            value=${attributes.padding}
+            onChange=${padding => setAttributes({padding})}
+          />
+          <${TextControl} 
+            label='Default Line Height'
+            value=${attributes.lineHeight}
+            onChange=${lineHeight => setAttributes({lineHeight})}
+          />
         </${PanelBody}>
       </${InspectorControls}> 
       <div ...${ innerBlocksProps } >

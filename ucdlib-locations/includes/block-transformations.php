@@ -61,7 +61,19 @@ class UCDLibPluginLocationsBlockTransformations {
       $style .= "align-items:$v;";
     }
     if ( array_key_exists('flexGrow', $attrs) ){
-      $style .= "flex-grow:1";
+      $style .= "flex-grow:1;";
+    }
+    if ( array_key_exists('padding', $attrs) ) {
+      $v = $attrs['padding'];
+      $style .= "padding:$v;";
+    }
+    if ( array_key_exists('margin', $attrs) ) {
+      $v = $attrs['margin'];
+      $style .= "margin:$v;";
+    }
+    if ( array_key_exists('lineHeight', $attrs) ) {
+      $v = $attrs['lineHeight'];
+      $style .= "line-height:$v;";
     }
 
     $attrs['style'] = $style;
