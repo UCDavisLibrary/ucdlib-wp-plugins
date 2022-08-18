@@ -4,6 +4,7 @@ import specialFindingAid from './ucdlib-special-finding-aid';
 import specialInclusiveDates from './ucdlib-special-inclusive-dates';
 import specialExtent from './ucdlib-special-extent';
 import specialSubject from './ucdlib-special-subject';
+import specialResults from './ucdlib-special-collection-results';
 import exibitCurators from "./ucdlib-special-exhibit-curators";
 import exhibitHighlight from "./ucdlib-special-exhibit-highlight"
 import exhibitLocation from "./ucdlib-special-exhibit-location";
@@ -19,6 +20,7 @@ export default [
     specialInclusiveDates,
     specialExtent,
     specialSubject,
+    specialResults,
     exibitCurators,
     exhibitHighlight,
     exhibitLocation,

@@ -402,12 +402,14 @@ class UCDLibPluginDirectoryPeople {
 
   // add new columns to the admin table
   public function add_admin_list_column( $column_key, $post_id ) {
-    if ( $column_key ==  'department')
-    $department = get_post_meta($post_id, 'position_dept', true);
-    if ( $department ) {
-      $department_name = get_the_title($department);
+    if ( $column_key ==  'department') {
+      $department = get_post_meta($post_id, 'position_dept', true);
+      if ( $department ) {
+        $department_name = get_the_title($department);
+      }
+      echo (!empty($department_name)) ? __($department_name, 'textdomain') : __('-', 'textdomain');
     }
-    echo (!empty($department_name)) ? __($department_name, 'textdomain') : __('-', 'textdomain');
+
   }
 
   // Add link to wp user account for each user in the admin table that lists all people
@@ -616,6 +618,15 @@ class UCDLibPluginDirectoryPerson extends UcdThemePost {
     return $this->department;
   }
 
+  protected $appointmentLink;
+  public function appointmentLink(){
+    if ( ! empty( $this->appointmentLink ) ) {
+      return $this->appointmentLink;
+    }
+    $this->appointmentLink = $this->meta('contactAppointmentUrl');
+    return $this->appointmentLink;
+  }
+
   protected $contactInfo;
   public function contactInfo(){
     if ( ! empty( $this->contactInfo ) ) {
@@ -638,5 +649,45 @@ class UCDLibPluginDirectoryPerson extends UcdThemePost {
     
     $this->contactInfo = $attrs;
     return $this->contactInfo;
+  }
+
+  protected $elasticSearchClient;
+  public function elasticSearchClient(){
+    if ( ! empty( $this->elasticSearchClient ) ) {
+      return $this->elasticSearchClient;
+    }
+    $isActive = in_array( 'ucdlib-search/ucdlib-search.php', get_option( 'active_plugins', array() ), true );
+    if ( !$isActive ){
+      $this->elasticSearchClient = false;
+      return $this->elasticSearchClient;
+    }
+    require_once( WP_PLUGIN_DIR . "/ucdlib-search/includes/elasticsearch.php");
+    $this->elasticSearchClient = new UCDLibPluginSearchElasticsearch(false, false);
+    return $this->elasticSearchClient;
+
+  }
+
+  protected $typeAggs;
+  public function typeAggs(){
+    if ( ! empty( $this->typeAggs ) ) {
+      return $this->typeAggs;
+    }
+    $this->typeAggs = false;
+    $es = $this->elasticSearchClient();
+    if ( !$es ) {
+      return $this->typeAggs;
+    }
+    try {
+      $results = $es->getAuthorTypeAggs($this->email());
+      $results = $results['aggregations']['types']['buckets'];
+    } catch (\Throwable $th) {
+      return $this->typeAggs;
+    }
+    
+    $this->typeAggs = [];
+    foreach ($results as $t) {
+      $this->typeAggs[$t['key']] = $t['doc_count'];
+    }
+    return $this->typeAggs;
   }
 }

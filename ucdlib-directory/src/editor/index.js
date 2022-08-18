@@ -7,10 +7,10 @@ import userPlugin from "./lib/plugins/user";
 import profilePlugin from "./lib/plugins/profile";
 
 if ( document.querySelector('ucdlib-plugin[plugin=ucdlib-directory]') ) {
+  pluginBlocks.forEach(block => {
+    registerBlockType( block.name, block.settings );
+  });
   if ( select('core/editor') ){
-    pluginBlocks.forEach(block => {
-      registerBlockType( block.name, block.settings );
-    });
     registerPlugin( profilePlugin.name, profilePlugin.settings );
     registerPlugin( userPlugin.name, userPlugin.settings );
 

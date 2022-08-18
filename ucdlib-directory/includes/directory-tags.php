@@ -6,6 +6,7 @@ class UCDLibPluginDirectoryDirectoryTags {
   public function __construct($config){
     $this->config = $config;
     $this->slug = $this->config['taxSlugs']['directory'];
+    $this->postType = $this->config['postSlugs']['person'];
 
     add_action( 'init', array($this, 'register') );
     add_action( 'init', [$this, 'register_term_meta'] );
@@ -56,7 +57,7 @@ class UCDLibPluginDirectoryDirectoryTags {
 
     register_taxonomy(
       $this->slug, 
-      [$this->config['postSlugs']['person']],
+      [$this->postType],
       $args
     );
     
@@ -91,7 +92,13 @@ class UCDLibPluginDirectoryDirectoryTags {
   // add to plugin admin menu
   public function add_to_menu(){
     $label = 'Subjects and Directory Tags';
-    add_submenu_page($this->config['slug'], $label, $label, 'edit_posts', "edit-tags.php?taxonomy=$this->slug",false );
+    add_submenu_page(
+      $this->config['slug'], 
+      $label, 
+      $label, 
+      $this->config['capabilities']['manage_directory'], 
+      "edit-tags.php?taxonomy=$this->slug&post_type=$this->postType",
+      false );
   }
 
   public function register_query_vars( $qvars ) {

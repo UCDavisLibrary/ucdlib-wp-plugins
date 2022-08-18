@@ -3,7 +3,7 @@
  * Plugin Name: UCD Library Migration Tools
  * Plugin URI: https://github.com/UCDavisLibrary/ucdlib-wp-plugins/tree/main/ucdlib-migration
  * Description: Tools for assisting in content migration from the old site to this site.
- * Version: 1.0.0-alpha.1
+ * Version: 1.0.0
  * Author: UC Davis Library Online Strategy
  */
 

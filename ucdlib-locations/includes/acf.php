@@ -14,7 +14,7 @@ class UCDLibPluginLocationsACF {
     acf_add_options_sub_page(array(
       'page_title'  => __('Location Settings'),
       'menu_title'  => __('Settings'),
-      'parent_slug' => 'edit.php?post_type=' . $this->config['postTypeSlug'],
+      'parent_slug' => $this->config['slug'],
       'post_id' => $this->config['postTypeSlug'],
       'updated_message' => 'Location settings updated',
       'capability' => 'activate_plugins'

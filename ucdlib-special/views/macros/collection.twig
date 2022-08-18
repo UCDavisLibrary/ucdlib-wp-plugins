@@ -1,0 +1,30 @@
+{% macro subject_teaser(subject) %}
+{% from getUcdMacro('lists') import media_link %}
+  {% set kwargs = {
+    title: subject.name,
+    href: subject.link,
+    excerpt: subject.teaserText,
+    image: subject.teaserImage
+    } 
+  %}
+  {{ media_link(kwargs) }}
+{% endmacro %}
+
+{% macro no_results() %}
+  <div class='alert'>Sorry, no collections available to display.</div>
+{% endmacro %}
+
+{% macro az(collections, letter) %}
+  <h2>{{letter|capitalize}}</h2>
+  {% if collections|length %}
+    <ul class="list--arrow">
+      {% for col in collections %}
+        <li><span><b><a href="{{col.link}}">{{col.title}}</a></b></span><span> ({{col.callNumber}})</span></li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    {{ _self.no_results() }}
+  {% endif %}
+ 
+{% endmacro %}
+

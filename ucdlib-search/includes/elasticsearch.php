@@ -1,14 +1,25 @@
 <?php
 
 require_once( __DIR__ . '/document.php' );
+require_once( __DIR__ . '/config.php' );
 
 /**
  * Class for hijacking the main wp search, and returning results from elasticsearch.
  */
 class UCDLibPluginSearchElasticsearch {
-  public function __construct( $config, $doHooks=true ){
+  public function __construct( $config=false, $doHooks=true ){
+    if ( !$config ) {
+      $config = new UCDLibPluginSearchConfig();
+    } 
     $this->config = $config;
+    
     $this->client = $this->createClient();
+
+    $this->currentPage = 0;
+    $this->pageSize = get_option('posts_per_page');
+    $this->authorsQuery = '';
+    $this->setAuthors();
+
 
     if ( $doHooks ){
       add_action( 'pre_get_posts', array($this, 'interceptWpSearch') );
@@ -38,13 +49,28 @@ class UCDLibPluginSearchElasticsearch {
 
       // save original search status for ES query
       $this->currentPage = get_query_var('paged') ? get_query_var('paged') : 1;
-      $this->pageSize = get_option('posts_per_page');
       $this->searchQuery = get_search_query();
+      $this->authorsQuery = get_query_var('authors');
+      $this->setAuthors();
       
       // stop wp from throwing a 404 when no posts are returned
       $query->set( 'posts_per_page', 1 );
       $query->set( 'paged', 1);
       $query->set( 's', '' );
+      $query->set( 'author', '' );
+    }
+  }
+
+  public function setAuthors(){
+    $this->authors = [];
+    if ( $this->authorsQuery ) {
+      $this->authors = array_map(function($a){
+        $a = trim($a);
+        if ( strpos($a, '@') === false ) {
+          $a = $a . '@ucdavis.edu';
+        }
+        return $a;}, 
+        explode(',', $this->authorsQuery ));
     }
   }
 
@@ -109,6 +135,8 @@ class UCDLibPluginSearchElasticsearch {
     $context['currentPage'] = $this->currentPage;
     $context['pageSize'] = $this->pageSize;
     $context['search_query'] = $this->searchQuery;
+    $context['authors'] = $this->authors;
+    $context['authorsQuery'] = $this->authorsQuery;
     $context['title'] = 'Search Our Website';
     $context['typeFacets'] = $this->typeFacets();
     $context['sortOptions'] = $this->sortOptions();
@@ -129,11 +157,13 @@ class UCDLibPluginSearchElasticsearch {
 
       // filter suggest
       $suggest = ['score' => 0, 'highlighted' => '', 'text' => ''];
-      foreach ($results['suggest'] as $key => $value) {
-        foreach($value as $item) {
-          foreach($item['options'] as $option) {
-            if( $option['score'] > $suggest['score'] ) {
-              $suggest = $option;
+      if ( array_key_exists('suggest', $results )) {
+        foreach ($results['suggest'] as $key => $value) {
+          foreach($value as $item) {
+            foreach($item['options'] as $option) {
+              if( $option['score'] > $suggest['score'] ) {
+                $suggest = $option;
+              }
             }
           }
         }
@@ -183,96 +213,156 @@ class UCDLibPluginSearchElasticsearch {
         'from' => ($this->currentPage - 1) * $this->pageSize,
         'query' => [
           'bool' => [
-            'must' => [
-              'multi_match' => [
-                'query' => $this->searchQuery,
-                'fields' => ['content', 'description', 'title^3', 'altTitles^3', 'tags.text^2']
-              ],
-            ]
-          ]
-        ],
-        'highlight' => [
-          'order' => 'score',
-          'fields' => [
-            '*' => new stdClass()
-          ]
-        ],
-        'suggest' => [
-          'text' => $this->searchQuery,
-          'title_phrase' => [
-            'phrase' => [
-              'field' => 'title.trigram',
-              'size' => 1,
-              'gram_size' => 3,
-              'direct_generator' => [ [
-                'field' => 'title.trigram',
-                'suggest_mode' => 'always'
-              ], [
-                "field" => "title.reverse",
-                "suggest_mode" => "always",
-                "pre_filter" => "reverse",
-                "post_filter" => "reverse"
-              ] ],
-              'highlight' => [
-                "pre_tag" => "<em>",
-                "post_tag" => "</em>"
-              ]
-            ]
-          ],
-          'description_phrase' => [
-            'phrase' => [
-              'field' => 'description.trigram',
-              'size' => 1,
-              'gram_size' => 3,
-              'direct_generator' => [ [
-                'field' => 'description.trigram',
-                'suggest_mode' => 'always'
-              ], [
-                "field" => "description.reverse",
-                "suggest_mode" => "always",
-                "pre_filter" => "reverse",
-                "post_filter" => "reverse"
-              ] ],
-              'highlight' => [
-                "pre_tag" => "<em>",
-                "post_tag" => "</em>"
-              ]
-            ]
-          ],
-          'content_phrase' => [
-            'phrase' => [
-              'field' => 'content.trigram',
-              'size' => 1,
-              'gram_size' => 3,
-              'direct_generator' => [ [
-                'field' => 'content.trigram',
-                'suggest_mode' => 'always'
-              ], [
-                "field" => "content.reverse",
-                "suggest_mode" => "always",
-                "pre_filter" => "reverse",
-                "post_filter" => "reverse"
-              ] ],
-              'highlight' => [
-                "pre_tag" => "<em>",
-                "post_tag" => "</em>"
-              ]
-            ]
+            'must' => []
           ]
         ]
       ]
     ];
 
-    // add any filters
+    // add keyword search
+    if ( $this->searchQuery ){
+      $params['body']['query']['bool']['must']['multi_match'] = [
+        'query' => $this->searchQuery,
+        'fields' => ['content', 'description', 'title^3', 'altTitles^3', 'tags.text^2']
+      ];
+
+      $params['body']['highlight'] = [
+        'order' => 'score',
+        'fields' => [
+          '*' => new stdClass()
+        ]
+      ];
+
+      $params['body']['suggest'] = [
+        'text' => $this->searchQuery,
+        'title_phrase' => [
+          'phrase' => [
+            'field' => 'title.trigram',
+            'size' => 1,
+            'gram_size' => 3,
+            'direct_generator' => [ [
+              'field' => 'title.trigram',
+              'suggest_mode' => 'always'
+            ], [
+              "field" => "title.reverse",
+              "suggest_mode" => "always",
+              "pre_filter" => "reverse",
+              "post_filter" => "reverse"
+            ] ],
+            'highlight' => [
+              "pre_tag" => "<em>",
+              "post_tag" => "</em>"
+            ]
+          ]
+        ],
+        'description_phrase' => [
+          'phrase' => [
+            'field' => 'description.trigram',
+            'size' => 1,
+            'gram_size' => 3,
+            'direct_generator' => [ [
+              'field' => 'description.trigram',
+              'suggest_mode' => 'always'
+            ], [
+              "field" => "description.reverse",
+              "suggest_mode" => "always",
+              "pre_filter" => "reverse",
+              "post_filter" => "reverse"
+            ] ],
+            'highlight' => [
+              "pre_tag" => "<em>",
+              "post_tag" => "</em>"
+            ]
+          ]
+        ],
+        'content_phrase' => [
+          'phrase' => [
+            'field' => 'content.trigram',
+            'size' => 1,
+            'gram_size' => 3,
+            'direct_generator' => [ [
+              'field' => 'content.trigram',
+              'suggest_mode' => 'always'
+            ], [
+              "field" => "content.reverse",
+              "suggest_mode" => "always",
+              "pre_filter" => "reverse",
+              "post_filter" => "reverse"
+            ] ],
+            'highlight' => [
+              "pre_tag" => "<em>",
+              "post_tag" => "</em>"
+            ]
+          ]
+        ]
+      ];
+    }
+
+    // add filter context
+    $documentTypes = [];
+    $documentSubTypes = [];
+    $documentTypeFilter = [];
+    $authorFilter = [];
+
+    // type/subtype facets
     $facets = array_filter($this->typeFacets(), function($f){return $f['isSelected'];});
     if ( count($facets) ){
-      $documentTypes = [];
       foreach ($facets as $facet) {
+
+        // use subtype instead of type
+        if ( array_key_exists('documentSubType', $facet) ){
+          foreach ($facet['documentSubType'] as $termField => $t) {
+            if ( !array_key_exists($termField, $documentSubTypes) ) {
+              $documentSubTypes[$termField] = [];
+            }
+            foreach ($t as $tt) {
+              $documentSubTypes[$termField][] = $tt;
+            }
+          }
+          continue;
+        }
+
         foreach ($facet['documentType'] as $dt) {
           $documentTypes[] = $dt;
         }
       }
-      $params['body']['query']['bool']['filter'] = ['terms' => ['type' =>  $documentTypes]];
+    }
+    if ( count($documentTypes) || count($documentSubTypes) ){
+      $documentTypeFilter = ['bool' => ['should' => []]];
+      if ( count($documentTypes) ) {
+        $documentTypeFilter['bool']['should'][] = ['terms' => ['type' => $documentTypes]];
+      }
+      
+      if ( count($documentSubTypes) ){
+        foreach ($documentSubTypes as $termField => $t) {
+          $documentTypeFilter['bool']['should'][] = ['terms' => [$termField => $t] ];
+        }
+      }
+    }
+
+    // check for author filters
+    if ( count($this->authors) ){
+      $authorFilter = ['terms' => ['authors' => []]];
+      foreach ($this->authors as $author) {
+        $authorFilter['terms']['authors'][] = $author;
+      }
+    }
+
+    // put together filter context
+    if ( 
+      count( $documentTypeFilter) || 
+      count( $authorFilter )
+      ){
+      $filterContext = ['bool' => ['must' => []]];
+      if ( count($documentTypeFilter) ) {
+        $filterContext['bool']['must'][] = $documentTypeFilter;
+      }
+      if ( count( $authorFilter ) ){
+        $filterContext['bool']['must'][] = $authorFilter;
+        $filterContext['bool']['must'][] = ['term' => ['ucd_hide_author' => false]];
+      }
+      $params['body']['query']['bool']['filter'] = $filterContext;
+      //echo '<pre>' . var_dump($filterContext) . '</pre>';
     }
 
     // add sort
@@ -285,5 +375,37 @@ class UCDLibPluginSearchElasticsearch {
     $response = $this->client->search($params);
   
   return $response;
+  }
+
+  public function getAuthorTypeAggs($email){
+    $params = [
+      'index' => $this->config->elasticsearch['indexAlias'],
+      'body'  => [
+        'size' => 0,
+        'from' => 0,
+        'query' => [
+          'bool' => [
+            'filter' => [
+              'bool' => [
+                'must' => [
+                  ['term' => ['ucd_hide_author' => false]],
+                  ['term' => ['authors' => $email]]
+                ]
+              ]
+            ]
+          ]
+        ],
+        'aggs' => [
+          'types' => [
+            'terms' => [
+              'field' => 'type'
+            ]
+          ]
+        ]
+      ]
+    ];
+
+    $response = $this->client->search($params);
+    return $response;
   }
 }

@@ -18,6 +18,16 @@ class UCDLibPluginLocationsBlocks extends UCDThemeBlockRenderer {
         'twig' => $this->twigPath('hours'),
         'transform' => ['getSiteUrl']
       ],
+      "$this->slug/sign-section" => [
+        'twig' => $this->twigPath('sign-section'),
+        'transform' => ['signSectionStyle']
+      ],
+      "$this->slug/sign-sections" => [
+        'twig' => $this->twigPath('sign-sections')
+      ],
+      "$this->slug/sign-text" => [
+        'twig' => $this->twigPath('sign-text')
+      ],
       "$this->slug/address" => [
         'twig' => $this->twigPath('address'),
         'transform' => ['getAddress']
@@ -50,6 +60,11 @@ class UCDLibPluginLocationsBlocks extends UCDThemeBlockRenderer {
       array(
         'slug'  => $this->config['slug'],
         'title' => 'Location',
+        'icon'  => null,
+      ),
+      array(
+        'slug'  => $this->config['slug'] . '-signs',
+        'title' => 'Digital Signs',
         'icon'  => null,
       ),
     );

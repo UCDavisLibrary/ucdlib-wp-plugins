@@ -11,6 +11,8 @@
     {% set author = result.author.name %}
   {% endif %}
 
+  {% set excerpt = result.hasHighlight ? result.highlight : result.excerpt %}
+
   <article class="vm-teaser vm-teaser--search">
     <div class="vm-teaser__figure category" style="width:20%;max-width:80px;" role='image'>
       <a href="{{result.link}}" style="display:block;background-image:url({{result.image}})" class="aspect--1x1 u-background-image">
@@ -29,18 +31,20 @@
             {% if result.showPublishedDate %}
               <li>{{result.date}}</li>
             {% endif %}
-              <li style="display:inline;">{{result.highlight}}</li>
+              <li style="display:inline;">{{ excerpt }}</li>
           </div>
         {% else %}
-          {{ result.highlight }}
+          {{ excerpt }}
         {% endif %}
         </div>
-    {#
+
+  {#
     <ucd-theme-list-accordion>
       <li>ES Document</li>
       <li><pre>{{dump(result.document)}}</pre></li>
     </ucd-theme-list-accordion>
-    #}
+  #}
+
     </div>
     
   </article>

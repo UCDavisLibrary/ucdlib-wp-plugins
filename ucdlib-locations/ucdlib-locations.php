@@ -3,7 +3,7 @@
  * Plugin Name: UCD Library Locations
  * Plugin URI: https://github.com/UCDavisLibrary/ucdlib-wp-plugins/tree/main/ucdlib-locations
  * Description: Enables the 'location' post type, api, and custom elements for displaying hours.
- * Version: 1.0.0-alpha.1
+ * Version: 1.0.0
  * Author: UC Davis Library Online Strategy
  */
 

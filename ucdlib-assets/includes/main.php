@@ -60,6 +60,11 @@ class UCDLibPluginAssets {
     add_action( 'wp_enqueue_scripts', array($this, "deregister_public"), 1000);
     add_action( 'enqueue_block_editor_assets', array($this, "enqueue_block_editor_assets"), 3);
     add_action( 'enqueue_block_editor_assets', array($this, "deregister_block_editor_assets"), 1000);
+    add_filter( 'timber/locations', array($this, 'add_timber_locations') );
+    add_filter( 'timber/context', array( $this, 'addGoogleAnalytics' ) );
+    //add_action('wp_head', [$this, 'addGoogleAnalytics']);
+    add_action( 'admin_footer', [$this, 'highlightCustomTaxonomyPages']);
+
 
     add_action( 'after_setup_theme', array($this, 'enqueue_editor_css'));
     // add_filter( 'mce_css', array($this, 'enqueue_editor_css') );
@@ -138,8 +143,7 @@ class UCDLibPluginAssets {
         $slug,
         $this->config['uris']['js'] . "/dev/ucdlib.js",
         array(),
-        $this->config['bundleVersion'],
-        true
+        $this->config['bundleVersion']
       );
       wp_enqueue_style( 
         $slug,
@@ -152,8 +156,7 @@ class UCDLibPluginAssets {
         $slug,
         $this->config['uris']['js'] . "/dist/ucdlib.js",
         array(),
-        $this->config['bundleVersion'],
-        true
+        $this->config['bundleVersion']
       );
       wp_enqueue_style( 
         $slug,
@@ -173,6 +176,45 @@ class UCDLibPluginAssets {
         wp_deregister_style( $s['slug'] );
       }
     }
+  }
+
+  public function add_timber_locations($paths){
+    $paths[$this->config['slug']] = array(WP_PLUGIN_DIR . "/" . $this->config['slug'] . '/views');
+    return $paths;
+  }
+
+  public function addGoogleAnalytics($context){
+    $context['twigHooks']['base']['postHead'][] = '@' . $this->config['slug'] . '/google-analytics.twig';
+    return $context;
+  }
+
+  // a little hack to make sure that custom taxonomy admin menu items are highlighted
+  // when on that page
+  public function highlightCustomTaxonomyPages(){
+    ?>
+    <script type="text/javascript">
+      (() => {
+        const searchParams = new URLSearchParams(window.location.search);
+        const tax = searchParams.get('taxonomy');
+        if ( !tax ){
+          return;
+        }
+        const parent = document.querySelector('.wp-has-submenu.wp-menu-open');
+        if ( !parent || parent.querySelector('.current') ) return;
+        Array.from(parent.querySelectorAll('a')).forEach(a => {
+          if ( !a.href ) return;
+          const q = a.href.split('?');
+          if ( !q.length == 2 ) return;
+          const params = new URLSearchParams(q[1]);
+          if ( params.get('taxonomy') == tax ){
+            a.classList.add('current');
+            a.parentElement.classList.add('current');
+          }
+        });
+
+      })();
+    </script>
+    <?php
   }
 
 }

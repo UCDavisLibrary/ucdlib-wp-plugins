@@ -8,7 +8,9 @@ class UCDLibPluginSearchDocument {
     $this->config = $config;
     $this->document = $document;
 
-    $this->type = $this->config->getFacet($document['_source']['type'], 'documentType');
+    $this->hasHighlight = array_key_exists('highlight', $document);
+
+    $this->type = $this->config->getFacetFromDocument($document);
     if ( $this->type['source'] == 'wordpress' ){
       $this->post = Timber::get_post($document['_source']['id']);
     } else {
@@ -34,13 +36,14 @@ class UCDLibPluginSearchDocument {
   }
 
   public function title(){
-    if( array_key_exists('title', $this->document['highlight']) ) {
+    if( $this->hasHighlight && array_key_exists('title', $this->document['highlight']) ) {
       return $this->document['highlight']['title'][0];
     }
     return $this->document['_source']['title'];
   }
 
   public function highlight(){
+    if ( !$this->hasHighlight ) return '';
     if( array_key_exists('content', $this->document['highlight']) ) {
       return $this->document['highlight']['content'][0];
     }
@@ -68,10 +71,19 @@ class UCDLibPluginSearchDocument {
   }
 
   public function excerpt(){
-    if ( $this->post ){
-      return $this->post->excerpt(['read_more' => '' ]);
+    $words = 25;
+    $postExcept = $this->post ? trim($this->post->excerpt(['words' => $words])) : '';
+    if ( $postExcept ){
+      return $postExcept;
     }
-    return $this->document['_source']['description'];
+    if ( !array_key_exists('content', $this->document['_source'])) return '';
+    $content = $this->document['_source']['content'];
+    if ( is_array($content) ){
+      $content = implode(' ', $content);
+    }
+    if ( !$content ) return '';
+    $content = explode(' ', $content);
+    return implode(' ', array_slice($content, 0, $words));
   }
 
   protected $showAuthor;

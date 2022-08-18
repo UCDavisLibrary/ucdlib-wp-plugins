@@ -10,6 +10,7 @@ export default class UcdlibSearchFilter extends LitElement {
       sortVar: {type: String, attribute: 'sort-var'},
       sortOptions: {type: Array},
       url: {type: String},
+      authors: {type: String},
       keyword: {type: String},
       keyKeyword: {type: String},
       keyFilters: {type: String},
@@ -37,6 +38,8 @@ export default class UcdlibSearchFilter extends LitElement {
     this.url = "/";
     this.keyword = "";
     this.keyKeyword = "s";
+    this.authors = '';
+    this.keyAuthors = 'authors';
     this.keyFilters = "type";
     this.keySort = 'sortby';
     this.showOnMobile = false;
@@ -182,6 +185,9 @@ export default class UcdlibSearchFilter extends LitElement {
   apply(){
     const params = new URLSearchParams();
     params.append(this.keyKeyword, this.keyword);
+    if ( this.authors ) {
+      params.append(this.keyAuthors, this.authors);
+    }
     let appliedFilters = this.filters.filter(f => f.isSelected).map(f => f.urlArg).join(",");
     if ( appliedFilters ) {
       params.append(this.keyFilters, appliedFilters);

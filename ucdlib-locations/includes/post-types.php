@@ -65,6 +65,7 @@ class UCDLibPluginLocationsPostTypes {
       'description' => 'A library, building, or business unit',
       'public' => true,
       'show_in_rest' => true,
+      'show_in_menu' => $this->config['slug'],
       'menu_position' => 20,
       'menu_icon' => 'dashicons-location',
       'rewrite'			  => array(
