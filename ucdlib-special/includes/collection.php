@@ -427,7 +427,7 @@ class UCDLibPluginSpecialCollection extends UcdThemePost {
     $referenceInfoLinks = [];    
     $links = $this->meta('links');
 
-    foreach ($links as $link) {
+    foreach ((array) $links as $link) {
       if ($link['linkType'] == 'referenceInfo' && strlen($link['linkURL']) > 0 && strlen($link['displayLabel']) > 0) {
         array_push($referenceInfoLinks, $link);
       }
