@@ -44,7 +44,6 @@ export default ( props ) => {
   }
 
   const onModalSave = () => {
-    debugger;
     setModalOpen(false);
     const findingAid = JSON.parse(JSON.stringify(meta.findingAid));
     findingAid.linkTitle = modalData.linkTitle;
@@ -74,7 +73,6 @@ export default ( props ) => {
   }
 
   const onFindingAidClicked = (e) => {
-    debugger;
     // update modalData with this links data
     setModalData({
       linkTitle: meta.findingAid.linkTitle,
