@@ -63,6 +63,14 @@ export default ( props ) => {
     editPost({meta: {links}});
   }
 
+  const onModalDelete = (e) => {
+    // remove modalData (currently viewed link)
+    const metaLinks = JSON.parse(JSON.stringify(meta.links));
+    metaLinks.splice(modalData.linkIndex, 1);
+    editPost({meta: {links: metaLinks}});
+    setModalOpen(false);
+  }
+
   const onAddLink = () => {
     let metaLinks = JSON.parse(JSON.stringify(meta.links));
     const additionalInfo = { linkURL: '', displayLabel: 'Add new link info', linkType: 'referenceInfo' };
@@ -168,6 +176,11 @@ export default ( props ) => {
               onClick=${onModalSave}
               variant='primary' 
               disabled=${!modalCanSave}>${modalMode == 'Add' ? 'Add Additional Info Link' : 'Save Changes'}</${Button}>
+            <${Button} 
+              onClick=${e => onModalDelete(e)}
+              className='is-destructive'
+              style=${{ float: 'right' }}>Delete Link
+            </${Button}>
           </div>
         </${Modal}>
       `}
