@@ -17,10 +17,11 @@
         {% if term.subjectHeading %}
             <h2 class="panel__title">{{term.subjectHeading}}</h2>
         {% endif %}
-        <section class='u-space-mb--large'>
+        <section class='u-space-mb'>
             <p>{{term.description}}</p>
         </section>
         {% if posts %}
+        <h3 class='heading--auxiliary'>Collections</h3>
         <ul class="list--arrow">
             {% for post in posts %}
                 <li style="margin-bottom: 1em;">
