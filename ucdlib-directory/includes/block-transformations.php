@@ -74,7 +74,12 @@ class UCDLibPluginDirectoryBlockTransformations {
       }
     }
     usort($serviceTypesWithServices, function($a, $b){
-      return strcmp($a['term']->name, $b['term']->name);
+      $a_mo = $a['term']->meta('menu_order') || 0;
+      $b_mo = $b['term']->meta('menu_order') || 0;
+      if ( $a_mo == $b_mo ) {
+        return strcmp($a['term']->name, $b['term']->name);
+      }
+      return ($a_mo < $b_mo) ? -1 : 1;
     });
     $attrs['serviceTypes'] = $serviceTypesWithServices;
     return $attrs;
