@@ -203,12 +203,16 @@ class UCDPluginCASAuth {
     if ( is_array($attributes) ){
       if ( array_key_exists('mail', $attributes) ) {
         $user['user_email'] = $attributes['mail'];
+      } elseif ( array_key_exists('email', $attributes) ){
+        $user['user_email'] = $attributes['email'];
       }
       if ( array_key_exists('givenName', $attributes) ) {
         $user['first_name'] = $attributes['givenName'];
       }
       if ( array_key_exists('sn', $attributes) ) {
         $user['last_name'] = $attributes['sn'];
+      } else if ( array_key_exists('surname', $attributes) ){
+        $user['last_name'] = $attributes['surname'];
       }
       if ( array_key_exists('displayName', $attributes) ) {
         $user['display_name'] = $attributes['displayName'];
