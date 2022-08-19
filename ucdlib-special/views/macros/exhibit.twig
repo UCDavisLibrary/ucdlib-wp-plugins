@@ -75,7 +75,7 @@
           {% endif %}
         </ul>
       {% endif %}
-      {% if not opts.hideExcerpt and exhibit.excerpt %}
+      {% if (opts.showExcerpt or not opts.hideExcerpt) and exhibit.excerpt %}
         <div class="vm-teaser__summary">{{ exhibit.excerpt({words: 25}) }}</div>
       {% endif %}
     </div>
