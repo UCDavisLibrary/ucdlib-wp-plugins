@@ -28,14 +28,12 @@ class UCDLibPluginLocationsACF {
 
   // clears transients used to cache location data
   public function clear_all_transients(  ){
+    $slug = $this->config['postTypeSlug'];
     $screen = get_current_screen();
-    if (
-      strpos($screen->id, "acf-options-settings") == true &&
-      $screen->post_type === $this->config['postTypeSlug']
-      ) {
+    if ( $screen->id && $screen->id == "locations_page_acf-options-settings") {
       delete_transient('libcal_token');
       $locations = Timber::get_posts( [
-        'post_type' => $this->config['postTypeSlug'],
+        'post_type' => $slug,
         'nopaging' => true,
       ] );
       foreach ($locations as $location) {
