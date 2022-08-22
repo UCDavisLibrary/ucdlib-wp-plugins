@@ -469,7 +469,7 @@ class UCDLibPluginSpecialExhibitPage extends UcdThemePost {
     if ( ! empty( $this->curatorOrgs ) ) {
       return $this->curatorOrgs;
     }
-    $terms = get_the_terms( $this->id, UCDLibPluginSpecialConfig::$config['taxonomies']['curator']);
+    $terms = $this->terms(['taxonomy' => UCDLibPluginSpecialConfig::$config['taxonomies']['curator']]);
     $this->curatorOrgs = $terms ? $terms : [];
     return $this->curatorOrgs;
   }

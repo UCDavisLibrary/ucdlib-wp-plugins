@@ -1,0 +1,47 @@
+{
+    "key": "group_6303dfcfbcfba",
+    "title": "Curator Org Meta",
+    "fields": [
+        {
+            "key": "field_6303dfe4078ce",
+            "label": "Home Page",
+            "name": "home_page",
+            "type": "post_object",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "post_type": [
+                "page"
+            ],
+            "taxonomy": "",
+            "allow_null": 1,
+            "multiple": 0,
+            "return_format": "id",
+            "ui": 1
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "taxonomy",
+                "operator": "==",
+                "value": "curator"
+            }
+        ]
+    ],
+    "menu_order": 0,
+    "position": "normal",
+    "style": "seamless",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": "",
+    "active": true,
+    "description": "Additional metadata for curator org taxonomy",
+    "show_in_rest": 1,
+    "modified": 1661198564
+}

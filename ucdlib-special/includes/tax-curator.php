@@ -11,6 +11,8 @@ class UCDLibPluginSpecialCurators {
 
     add_filter( 'ucd-theme/context/taxonomy', array($this, 'set_context') );
     add_filter( 'ucd-theme/templates/taxonomy', array($this, 'set_template'), 10, 2 );
+
+    add_filter( 'timber/term/classmap', array($this, 'extend_timber_class') );
   }
 
   // register taxonomy
@@ -98,4 +100,29 @@ class UCDLibPluginSpecialCurators {
     return $templates;
   }
 
+  public function extend_timber_class($classmap){
+    $custom_classmap = [
+      $this->slug => UCDLibPluginSpecialTaxCuratorTerm::class,
+    ];
+
+    return array_merge($classmap, $custom_classmap);
+  }
+
+}
+
+class UCDLibPluginSpecialTaxCuratorTerm extends \Timber\Term {
+
+  protected $homePage;
+  public function homePage(){
+    if ( ! empty( $this->homePage ) ) {
+      return $this->homePage;
+    }
+    $postId = $this->meta('home_page');
+    if ( !$postId ) {
+      $this->homePage = false;
+      return $this->homePage;
+    }
+    $this->homePage = Timber::get_post($postId);
+    return $this->homePage;
+  }
 }
