@@ -10,7 +10,7 @@ export default ( props ) => {
   const editPost = useDispatch( 'core/editor' ).editPost;
 
   const startingModalData = {
-    linkTitle: '',
+    linkTitle: 'Finding Aid on the Online Archive of California',
     linkURL: ''
   };
   const [ modalIsOpen, setModalOpen ] = useState( false );
@@ -46,7 +46,7 @@ export default ( props ) => {
   const onModalSave = () => {
     setModalOpen(false);
     const findingAid = JSON.parse(JSON.stringify(meta.findingAid));
-    findingAid.linkTitle = modalData.linkTitle;
+    findingAid.linkTitle = modalData.linkTitle || 'Finding Aid on the Online Archive of California';
     findingAid.linkURL = modalData.linkURL;
     editPost({meta: {findingAid}});
   }

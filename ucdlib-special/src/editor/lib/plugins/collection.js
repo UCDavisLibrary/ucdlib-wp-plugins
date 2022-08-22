@@ -4,7 +4,7 @@ import { ApiController } from "./controller";
 import { Fragment } from "@wordpress/element";
 import { PluginDocumentSettingPanel } from '@wordpress/edit-post';
 import { useDispatch } from "@wordpress/data";
-import { TextControl, SelectControl, Button } from "@wordpress/components";
+import { TextControl, SelectControl, Button, HorizontalRule } from "@wordpress/components";
 import { html, SelectUtils } from "@ucd-lib/brand-theme-editor/lib/utils";
 import { useState } from '@wordpress/element';
 
@@ -106,6 +106,7 @@ const runController = (recordId, meta, editPost) => {
       extent: result.extent ? result.extent[0] : '',
       links: fetchedLinks,
       subject: [...result.tags],
+      title: result.title ? result.title[0] : '',
     };
 
     editPost(
@@ -148,6 +149,19 @@ const Edit = () => {
     runController(meta.almaRecordId, meta, editPost);
   }
 
+  const revertTitle = () => {
+    // TODO revert
+    // var title = wp.data.select( 'core/editor' ).getEditedPostAttribute( 'title' );
+    // let currentTitle = wp.data.select( 'core/editor' ).getEditedPostAttribute( 'title' );
+    wp.data.dispatch( 'core/editor' ).editPost( { title: meta.fetchedData.title } );
+  }
+
+  let titleHasChanged = false;
+  let currentTitle = wp.data.select( 'core/editor' ).getEditedPostAttribute( 'title' );
+  if (currentTitle !== meta.fetchedData.title) {
+    titleHasChanged = true;
+  }
+
   return html`
     <${Fragment}>
       ${isCollection && html`
@@ -169,9 +183,20 @@ const Edit = () => {
             <${Button} 
               variant="primary"
               onClick=${searchRecordId}
-              style=${{ marginBottom: '1.5em' }}
+              style=${{ marginBottom: '.5em' }}
               >Search Record ID
             </${Button}>
+            
+            <${HorizontalRule} />
+
+            <${Button} 
+              variant="primary"
+              onClick=${revertTitle}
+              className='is-destructive'
+              style=${{ marginBottom: '1.5em', marginTop: '.5em' }}
+              disabled=${!titleHasChanged}>Revert Title
+            </${Button}>
+
         </${PluginDocumentSettingPanel}>
       `}
     </${Fragment}>
