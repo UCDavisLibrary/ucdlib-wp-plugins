@@ -22,11 +22,11 @@ const runController = (recordId, meta, editPost) => {
   perma = new ApiController(requestUrl);
   perma["task"].then(function(result) {
     // @id causes issues in php, replace with id
-    const fetchedLinks = result.links.map((r) => { return { id: r['@id'], linkType: r.linkType, linkURL: r.linkURL, displayLabel: r.displayLabel }});
+    let fetchedLinks = result.links.map((r) => { return { id: r['@id'], linkType: r.linkType, linkURL: r.linkURL, displayLabel: r.displayLabel }});
     let fetchedFindingAid = fetchedLinks.filter(r => r.linkURL.includes('oac.cdlib.org/findaid'));
     if (fetchedFindingAid && fetchedFindingAid[0]) fetchedFindingAid = fetchedFindingAid[0];
-    fetchedFindingAid.linkTitle = 'Online Archive of California (OAC)';
-  
+    fetchedFindingAid.linkTitle = 'Finding Aid on the Online Archive of California'; // 'Online Archive of California (OAC)';
+    fetchedLinks = fetchedLinks.filter(l => l.linkType === 'referenceInfo');
     // compare current meta with previous meta.fetched data, don't override user updated data
     let creator;
     if (meta.fetchedData && meta.creator !== meta.fetchedData.creator) {
@@ -92,12 +92,9 @@ const runController = (recordId, meta, editPost) => {
       subject = [...result.tags];
     }
     
-    let title;
-    if (meta.fetchedData && meta.title !== meta.fetchedData.title) {
-      title = meta.title;
-    } else {
-      title = result.title ? result.title[0] : '';
-    }
+    let title = result.title ? result.title[0] : '';
+    // let currentTitle = wp.data.select( 'core/editor' ).getEditedPostAttribute( 'title' );
+    wp.data.dispatch( 'core/editor' ).editPost( { title } );
 
     const fetchedData = { 
       creator: result.author ? result.author[0] : '', 
@@ -109,7 +106,6 @@ const runController = (recordId, meta, editPost) => {
       extent: result.extent ? result.extent[0] : '',
       links: fetchedLinks,
       subject: [...result.tags],
-      title: result.title ? result.title[0] : '',
     };
 
     editPost(
@@ -124,7 +120,6 @@ const runController = (recordId, meta, editPost) => {
           extent,
           links,
           subject,
-          title,
         }
       }
     );
