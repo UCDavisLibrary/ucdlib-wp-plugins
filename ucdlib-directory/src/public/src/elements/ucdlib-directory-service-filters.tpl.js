@@ -97,7 +97,7 @@ return html`
         <span>${this.widgetTitle}</span>
       </h5>
       <div class="field-container">
-        <label for="keyword">Name or Keyword</label>
+        <label for="keyword">Keyword</label>
         <div class='flex'>
           <input id='keyword' .value=${this.keyword} type="text" @input=${e => this.keyword = e.target.value}>
         </div>
