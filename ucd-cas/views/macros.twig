@@ -3,8 +3,8 @@
   {% if code %}
     {% set class = class~" code" %}
   {% endif %}
-  {% if field.env %}
-    {% set value = field.env %}
+  {% if field.args.env %}
+    {% set value = field.args.env %}
   {% else %}
     {% set value = field.options[field.args.label_for] %}
   {% endif %}
