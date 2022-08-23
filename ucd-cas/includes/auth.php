@@ -280,8 +280,21 @@ class UCDPluginCASAuth {
     }
     $port = intval($options[$this->slug . "_field_port"]);
     $casUri = $options[$this->slug . "_field_uri"];
-
+    
     phpCAS::client(CAS_VERSION_3_0, $host, $port, $casUri);
+    
+    if ( array_key_exists($this->slug . "_field_validation_uri", $options) ) {
+      $serviceValidate = $options[$this->slug . "_field_validation_uri"];
+      if ( $serviceValidate ){
+        if ( $port == 443 ) {
+          $protocol = 'https';
+        } else {
+          $protocol = 'http';
+        }
+        phpCas::setServerServiceValidateURL( "$protocol://$host/$casUri/$serviceValidate" );
+      }
+      
+    }
   }
 
   /**
