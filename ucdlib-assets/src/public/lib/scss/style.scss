@@ -182,3 +182,8 @@ h2.exhibit-header-intro {
   margin-bottom: .25rem;
   margin-top: 0;
 }
+
+.title-modified::after {
+  content: '*';
+  color: #f93549;
+}

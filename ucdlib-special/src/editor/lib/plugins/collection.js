@@ -150,10 +150,11 @@ const Edit = () => {
   }
 
   const revertTitle = () => {
-    // TODO revert
-    // var title = wp.data.select( 'core/editor' ).getEditedPostAttribute( 'title' );
-    // let currentTitle = wp.data.select( 'core/editor' ).getEditedPostAttribute( 'title' );
     wp.data.dispatch( 'core/editor' ).editPost( { title: meta.fetchedData.title } );
+    const renderedTitle = document.querySelector('.wp-block-post-title');
+    if (renderedTitle) {
+        renderedTitle.classList.remove('title-modified');
+    }
   }
 
   let titleHasChanged = false;
@@ -161,6 +162,8 @@ const Edit = () => {
   if (currentTitle !== meta.fetchedData.title) {
     titleHasChanged = true;
   }
+
+  
 
   return html`
     <${Fragment}>
