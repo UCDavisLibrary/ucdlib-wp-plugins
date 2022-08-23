@@ -9,6 +9,8 @@ class UCDLibPluginSpecialExhibitLocations {
     add_action( 'init', array($this, 'register') );
     add_filter( 'rest_prepare_taxonomy', [ $this, 'hide_metabox'], 10, 3);
 
+    add_filter( 'timber/term/classmap', array($this, 'extend_timber_class') );
+
   }
 
   // register taxonomy
@@ -67,6 +69,41 @@ class UCDLibPluginSpecialExhibitLocations {
 
     return $response;
 
+  }
+
+  public function extend_timber_class($classmap){
+    $custom_classmap = [
+      $this->slug => UCDLibPluginSpecialTaxLocationTerm::class,
+    ];
+
+    return array_merge($classmap, $custom_classmap);
+  }
+
+}
+
+class UCDLibPluginSpecialTaxLocationTerm extends \Timber\Term {
+
+  protected $map;
+  public function map(){
+    if ( ! empty( $this->map ) ) {
+      return $this->map;
+    }
+    $imgId = $this->meta('map');
+    if ( !$imgId ) {
+      $this->map = false;
+      return $this->map;
+    }
+    $this->map = Timber::get_image($imgId);
+    return $this->map;
+  }
+
+  protected $directions;
+  public function directions(){
+    if ( ! empty( $this->directions ) ) {
+      return $this->directions;
+    }
+    $this->directions = $this->meta('directions');
+    return $this->directions;
   }
 
 }

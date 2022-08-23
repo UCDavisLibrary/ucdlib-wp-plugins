@@ -1,0 +1,68 @@
+{
+    "key": "group_6304ddd7604c0",
+    "title": "Exhibit Location Meta",
+    "fields": [
+        {
+            "key": "field_6304ddf620796",
+            "label": "Map",
+            "name": "map",
+            "type": "image",
+            "instructions": "A map of the location to aid patrons find exhibits.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "return_format": "id",
+            "preview_size": "medium",
+            "library": "all",
+            "min_width": "",
+            "min_height": "",
+            "min_size": "",
+            "max_width": "",
+            "max_height": "",
+            "max_size": "",
+            "mime_types": ""
+        },
+        {
+            "key": "field_6304de2020797",
+            "label": "Directions",
+            "name": "directions",
+            "type": "textarea",
+            "instructions": "Directions to this location to aid patrons find this location",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "placeholder": "",
+            "maxlength": "",
+            "rows": "",
+            "new_lines": ""
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "taxonomy",
+                "operator": "==",
+                "value": "exhibit-location"
+            }
+        ]
+    ],
+    "menu_order": 0,
+    "position": "normal",
+    "style": "seamless",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": "",
+    "active": true,
+    "description": "Additional metadata for the exhibit location taxonomy",
+    "show_in_rest": 1,
+    "modified": 1661263584
+}
