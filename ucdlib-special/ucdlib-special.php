@@ -3,7 +3,7 @@
  * Plugin Name: UCD Library Special Collections
  * Plugin URI: https://github.com/UCDavisLibrary/ucdlib-wp-plugins/tree/main/ucdlib-special
  * Description: Registers exhibit and special collections post types
- * Version: 1.0.0-alpha.1
+ * Version: 1.0.1
  * Author: UC Davis Library Online Strategy
  */
 

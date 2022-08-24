@@ -141,6 +141,7 @@ class UCDLibPluginSpecialBlockTransformations {
       $azQueryVar = $attrs['az'];
       $collectionQuery = [
         'post_type' => 'collection',
+        'orderby' => 'title',
         'order' => 'ASC',
         'posts_per_page' => -1,
         'tax_query' =>  [[

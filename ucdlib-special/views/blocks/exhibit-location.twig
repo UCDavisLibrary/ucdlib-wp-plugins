@@ -1,14 +1,14 @@
 {% set p = siteContext.post %}
 
-{% if (p.exhibitLocationMap.url or p.exhibitLocationDirections) and not p.exhibitIsPast %}
+{% if (p.exhibitLocationMapWithDefault.src or p.exhibitLocationDirectionsWithDefault) and not p.exhibitIsPast %}
   <aside class='panel o-box'>
     <div class="location-widget">
       <h2 class='heading--highlight u-space-mb'>Exhibit Location</h2>
-      {% if p.exhibitLocationDirections %}
-        <p>{{p.exhibitLocationDirections}}</p>
+      {% if p.exhibitLocationDirectionsWithDefault %}
+        <p>{{p.exhibitLocationDirectionsWithDefault}}</p>
       {% endif %}
-      {% if p.exhibitLocationMap.url %}
-        <img src='{{p.exhibitLocationMap.url}}'>
+      {% if p.exhibitLocationMapWithDefault.src %}
+        <img src='{{p.exhibitLocationMapWithDefault.src}}'>
       {% endif %}
     </div>
   </aside>

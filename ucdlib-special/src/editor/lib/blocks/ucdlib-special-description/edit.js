@@ -12,6 +12,23 @@ export default ( props ) => {
     editPost({meta: {description: meta.fetchedData.description}});
   } 
 
+  // since this renders for title changes as well (collection.js does not), we'll handle the title indicator if different than fetchedData
+  const currentTitle = wp.data.select( 'core/editor' ).getEditedPostAttribute( 'title' ) || '';
+  const fetchedTitle = meta.fetchedData.title || '';
+  const renderedTitle = document.querySelector('.wp-block-post-title');
+  if (currentTitle.trim().replaceAll('*', '') !== fetchedTitle.trim().replaceAll('*', '')) {
+    // add asterisk to title to indicate
+    if (renderedTitle) {
+      renderedTitle.classList.add('title-modified');
+    }
+  } else {
+    // remove asterisk
+    if (renderedTitle) {
+      renderedTitle.classList.remove('title-modified');
+    }
+  }
+
+
   return html`
   <div ...${ blockProps }>
     <${BlockControls} group="block">

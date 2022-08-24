@@ -41,5 +41,43 @@ class UCDLibPluginLocationsBlockTransformations {
     $attrs['icons'] = ['ucd-public:fa-circle-exclamation'];
     return $attrs;
   }
+
+  static function signSectionStyle($attrs){
+    $style = '';
+    if ( array_key_exists('backgroundColor', $attrs) ) {
+      $v = $attrs['backgroundColor'];
+      $style .= "background-color:$v;";
+    }
+    if ( array_key_exists('textColor', $attrs) ) {
+      $v = $attrs['textColor'];
+      $style .= "color:$v;";
+    }
+    if ( array_key_exists('justifyContent', $attrs) ) {
+      $v = $attrs['justifyContent'];
+      $style .= "justify-content:$v;";
+    }
+    if ( array_key_exists('alignItems', $attrs) ) {
+      $v = $attrs['alignItems'];
+      $style .= "align-items:$v;";
+    }
+    if ( array_key_exists('flexGrow', $attrs) ){
+      $style .= "flex-grow:1;";
+    }
+    if ( array_key_exists('padding', $attrs) ) {
+      $v = $attrs['padding'];
+      $style .= "padding:$v;";
+    }
+    if ( array_key_exists('margin', $attrs) ) {
+      $v = $attrs['margin'];
+      $style .= "margin:$v;";
+    }
+    if ( array_key_exists('lineHeight', $attrs) ) {
+      $v = $attrs['lineHeight'];
+      $style .= "line-height:$v;";
+    }
+
+    $attrs['style'] = $style;
+    return $attrs;
+  }
 }
 ?>

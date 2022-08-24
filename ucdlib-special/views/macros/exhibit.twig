@@ -28,18 +28,18 @@
     <div class="hero-banner__body">
       <div class="hero-banner__title">{{exhibit.exhibitTitle}}</div>
       <div class="hero-banner__summary">
-        {% if exhibit.exhibitIsPhysical %}
-          <div>
-            <div>{{exhibit.exhibitLocationLabel}}</div>
-            {% if exhibit.exhibitIsPermanent %}
-              <div>Permanent Exhibit</div>
-            {% else %}
-              <div>{{exhibit.exhibitDateRange}}</div>
-            {% endif %}
-          </div>
+        {% if exhibit.exhibitIsPhysical and not exhibit.exhibitIsPast %}
+          <div>{{exhibit.exhibitLocationLabel}}</div>
+          {% if exhibit.exhibitIsPermanent %}
+            <div>Permanent Exhibit</div>
+          {% else %}
+            <div>{{exhibit.exhibitDateRange}}</div>
+          {% endif %}
         {% elseif exhibit.exhibitIsOnline %}
           <div>Online Exhibit</div>
-        {% endif %}
+        {% elseif exhibit.exhibitIsPast %}
+          <div>Past Exhibit</div>
+        {% endif %} 
       </div>
       <div class="hero-banner__button-group">
         <a class="hero-banner__button" href='{{exhibit.exhibitLink}}'>Exhibit Details</a>
@@ -75,7 +75,7 @@
           {% endif %}
         </ul>
       {% endif %}
-      {% if not opts.hideExcerpt and exhibit.excerpt %}
+      {% if (opts.showExcerpt or not opts.hideExcerpt) and exhibit.excerpt %}
         <div class="vm-teaser__summary">{{ exhibit.excerpt({words: 25}) }}</div>
       {% endif %}
     </div>

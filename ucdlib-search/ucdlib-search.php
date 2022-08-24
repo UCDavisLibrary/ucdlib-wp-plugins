@@ -3,7 +3,7 @@
  * Plugin Name: UCD Library Search
  * Plugin URI: https://github.com/UCDavisLibrary/ucdlib-wp-plugins/tree/main/ucdlib-search
  * Description: Integrates WP and Libguides search. Assumes you are running an elasticsearch instance.
- * Version: 1.0.0-alpha.1
+ * Version: 1.0.0
  * Author: UC Davis Library Online Strategy
  */
 

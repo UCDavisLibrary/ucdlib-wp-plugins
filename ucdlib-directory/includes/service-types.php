@@ -11,6 +11,12 @@ class UCDLibPluginDirectoryServiceTypes {
     add_action( 'admin_menu', array($this, 'add_to_menu'));
     add_action( 'parent_file',  array($this, 'expand_parent_menu') );
     add_filter( 'query_vars', [$this, 'register_query_vars'] );
+
+    // custom meta for taxonomy term
+    add_action($this->slug . '_add_form_fields', array($this, 'render_term_meta'), 4, 1);
+    add_action($this->slug . '_edit_form_fields', array($this, 'render_term_meta'), 4, 1);
+    add_action('edited_' . $this->slug, array($this, 'save_term_meta'), 10, 1);
+    add_action('create_' . $this->slug, array($this, 'save_term_meta'), 10, 2);
   }
 
   // register taxonomy
@@ -55,6 +61,37 @@ class UCDLibPluginDirectoryServiceTypes {
       $args
     );
     
+  }
+
+  // register metadata associated with each taxonomy term
+  public function register_term_meta(){
+    register_term_meta($this->slug, 'menu_order', ['type' => 'number', 'default' => 0, 'single' => true, 'show_in_rest' => true]);
+  }
+
+  // renders custom meta fields on add/edit taxonomy term forms
+  public function render_term_meta( $term ){
+    $fieldSlug = 'menu_order';
+    $context = [
+      'current_filter' => current_filter(),
+      'term' => $term,
+      'fieldSlug' => $fieldSlug
+    ];
+    if ( is_object($term) ) {
+      $context['menu_order'] = get_term_meta($term->term_id, $fieldSlug, true);
+    } else {
+      $context['menu_order'] = 0;
+    }
+    Timber::render('@' . $this->config['slug'] . '/admin/service-type-meta.twig' , $context);
+  }
+
+  // saves custom meta fields on add/edit taxonomy term forms
+  public function save_term_meta( $term_id ){
+    $fieldSlug = 'menu_order';
+    $menu_order = 0;
+    if ( isset($_POST) && isset($_POST[$fieldSlug]) ){
+      $menu_order = intval($_POST[$fieldSlug]);
+    }
+    update_term_meta($term_id, $fieldSlug, $menu_order);
   }
 
   // add to plugin admin menu

@@ -27,6 +27,13 @@
   </p>
 {% endif %}
 
+{% if field.args.short_slug == 'validation_uri' %}
+  {{ regularTextInput(field, true) }} 
+  <p class="description">
+  The service validation uri. Should be <code>p3/serviceValidate</code> for UC Davis.
+  </p>
+{% endif %}
+
 {% if field.args.short_slug == 'validation' %}
   {{ checkbox(field) }}
   <p class="description">Enables SSL validation of the CAS server</p>
@@ -36,12 +43,5 @@
   {{ regularTextInput(field, true) }}  
   <p class="description">
   If using SSL validation, enter path to CA certificate that is the issuer of the CAS cert
-  </p>
-{% endif %}
-
-{% if field.args.short_slug == 'validation_uri' %}
-  {{ regularTextInput(field, true) }} 
-  <p class="description">
-  If using SSL validation, what is the server uri? Should be <code>p3/serviceValidate</code> for UC Davis.
   </p>
 {% endif %}

@@ -157,6 +157,11 @@ export default ( props ) => {
             checked=${getTempateOption('hideDates')}
             onChange=${() => setTemplateOptions('hideDates', !getTempateOption('hideDates'))}
           />
+          <${ToggleControl} 
+            label='Show Exhibit Excerpt'
+            checked=${getTempateOption('showExcerpt')}
+            onChange=${() => setTemplateOptions('showExcerpt', !getTempateOption('showExcerpt'))}
+          />
         </div>
       `}
       <${SelectControl}

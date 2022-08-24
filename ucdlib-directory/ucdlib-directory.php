@@ -3,7 +3,7 @@
  * Plugin Name: UCD Library Directory
  * Plugin URI: https://github.com/UCDavisLibrary/ucdlib-wp-plugins/tree/main/ucdlib-directory
  * Description: Enhanced profile pages and directory/people search.
- * Version: 1.0.0-alpha.1
+ * Version: 1.0.1
  * Author: UC Davis Library Online Strategy
  */
 

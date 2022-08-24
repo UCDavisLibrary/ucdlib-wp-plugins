@@ -203,12 +203,16 @@ class UCDPluginCASAuth {
     if ( is_array($attributes) ){
       if ( array_key_exists('mail', $attributes) ) {
         $user['user_email'] = $attributes['mail'];
+      } elseif ( array_key_exists('email', $attributes) ){
+        $user['user_email'] = $attributes['email'];
       }
       if ( array_key_exists('givenName', $attributes) ) {
         $user['first_name'] = $attributes['givenName'];
       }
       if ( array_key_exists('sn', $attributes) ) {
         $user['last_name'] = $attributes['sn'];
+      } else if ( array_key_exists('surname', $attributes) ){
+        $user['last_name'] = $attributes['surname'];
       }
       if ( array_key_exists('displayName', $attributes) ) {
         $user['display_name'] = $attributes['displayName'];
@@ -276,8 +280,21 @@ class UCDPluginCASAuth {
     }
     $port = intval($options[$this->slug . "_field_port"]);
     $casUri = $options[$this->slug . "_field_uri"];
-
+    
     phpCAS::client(CAS_VERSION_3_0, $host, $port, $casUri);
+    
+    if ( array_key_exists($this->slug . "_field_validation_uri", $options) ) {
+      $serviceValidate = $options[$this->slug . "_field_validation_uri"];
+      if ( $serviceValidate ){
+        if ( $port == 443 ) {
+          $protocol = 'https';
+        } else {
+          $protocol = 'http';
+        }
+        phpCas::setServerServiceValidateURL( "$protocol://$host/$casUri/$serviceValidate" );
+      }
+      
+    }
   }
 
   /**

@@ -16,14 +16,16 @@
 <div class="l-container {{sidebar ? 'l-basic--flipped'}}">
   <div class="l-content">
     {% if post.isTopPage and ((not post.exhibitIsPast ) or (post.exhibitIsPast and not post.exhibitIsOnline)) %}
-      {% if post.exhibitLocations and post.exhibitLocations|length %}
-        <h2 class='heading--secondary exhibit-header-intro'>{{post.exhibitLocations[0].name}}</h2>
-      {% endif %}
-      {% if post.exhibitIsPhysical and post.exhibitIsPermanent %}
-        <h2 class='heading--secondary exhibit-header-intro'>Permanent Exhibit</h2>
-      {% elseif post.exhibitIsPhysical and post.exhibitDateRange %}
-        <h2 class='heading--secondary exhibit-header-intro'>{{post.exhibitDateRange}}</h2>
-      {% endif %}
+      <div class='u-space-mb--medium'>
+        {% if post.exhibitLocations and post.exhibitLocations|length %}
+          <h2 class='heading--secondary exhibit-header-intro'>{{post.exhibitLocations[0].name}}</h2>
+        {% endif %}
+        {% if post.exhibitIsPhysical and post.exhibitIsPermanent %}
+          <h2 class='heading--secondary exhibit-header-intro'>Permanent Exhibit</h2>
+        {% elseif post.exhibitIsPhysical and post.exhibitDateRange %}
+          <h2 class='heading--secondary exhibit-header-intro'>{{post.exhibitDateRange}}</h2>
+        {% endif %}
+      </div>
     {% endif %}
     {{post.content}}
 

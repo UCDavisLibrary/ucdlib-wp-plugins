@@ -446,6 +446,20 @@ class UCDLibPluginSpecialExhibitPage extends UcdThemePost {
     return $this->exhibitCurators;
   }
 
+  protected $exhibitLocationDirectionsWithDefault;
+  public function exhibitLocationDirectionsWithDefault(){
+    if ( ! empty( $this->exhibitLocationDirectionsWithDefault ) ) {
+      return $this->exhibitLocationDirectionsWithDefault;
+    }
+    $this->exhibitLocationDirectionsWithDefault = $this->exhibitLocationDirections();
+    if ( !$this->exhibitLocationDirectionsWithDefault ){
+      if ( count($this->exhibitLocations()) && $this->exhibitLocations()[0]->directions() ){
+        $this->exhibitLocationDirectionsWithDefault = $this->exhibitLocations()[0]->directions();
+      }
+    }
+    return $this->exhibitLocationDirectionsWithDefault;
+  }
+
   protected $exhibitLocationDirections;
   public function exhibitLocationDirections(){
     if ( ! empty( $this->exhibitLocationDirections ) ) {
@@ -469,7 +483,7 @@ class UCDLibPluginSpecialExhibitPage extends UcdThemePost {
     if ( ! empty( $this->curatorOrgs ) ) {
       return $this->curatorOrgs;
     }
-    $terms = get_the_terms( $this->id, UCDLibPluginSpecialConfig::$config['taxonomies']['curator']);
+    $terms = $this->terms(['taxonomy' => UCDLibPluginSpecialConfig::$config['taxonomies']['curator']]);
     $this->curatorOrgs = $terms ? $terms : [];
     return $this->curatorOrgs;
   }
@@ -500,9 +514,23 @@ class UCDLibPluginSpecialExhibitPage extends UcdThemePost {
     if ( ! empty( $this->locations ) ) {
       return $this->locations;
     }
-    $terms = get_the_terms( $this->id, UCDLibPluginSpecialConfig::$config['taxonomies']['location']);
+    $terms = $this->terms(['taxonomy' => UCDLibPluginSpecialConfig::$config['taxonomies']['location']]);
     $this->locations = $terms ? $terms : [];
     return $this->locations;
+  }
+
+  protected $exhibitLocationMapWithDefault;
+  public function exhibitLocationMapWithDefault(){
+    if ( ! empty( $this->exhibitLocationMapWithDefault ) ) {
+      return $this->exhibitLocationMapWithDefault;
+    }
+    $this->exhibitLocationMapWithDefault = $this->exhibit()->locationMap();
+    if ( !$this->exhibitLocationMapWithDefault['id']){
+      if ( count($this->exhibitLocations()) && $this->exhibitLocations()[0]->map() ){
+        $this->exhibitLocationMapWithDefault = $this->exhibitLocations()[0]->map();
+      }
+    }
+    return $this->exhibitLocationMapWithDefault;
   }
 
   protected $exhibitLocationMap;
@@ -524,7 +552,7 @@ class UCDLibPluginSpecialExhibitPage extends UcdThemePost {
     if ( $mapId ) {
       $map = Timber::get_image($mapId);
       if ( $map ) {
-        $this->locationMap['url'] = $map->src();
+        $this->locationMap['src'] = $map->src();
       }
     }
     return $this->locationMap;

@@ -1,0 +1,24 @@
+{% macro orderLabel() %}
+  <label for="menu_order">Menu Order</label>
+{% endmacro %}
+
+{% macro orderInput(menu_order) %}
+  <input type="number" value="{{menu_order}}" id="menu_order" name="menu_order">
+  <p class="description">How this service type will be sorted in directory</p>
+{% endmacro %}
+
+{% if current_filter ends with 'edit_form_fields' %}
+  <tr class="form-field">
+    <th valign="top" scope="row">{{_self.orderLabel()}}</th>
+      <td>
+        {{_self.orderInput(menu_order)}}
+      </td>
+  </tr> 
+
+{% elseif current_filter ends with 'add_form_fields' %}
+  <div class="form-field">
+    {{_self.orderLabel()}}
+    {{_self.orderInput(menu_order)}}
+  </div>  
+
+{% endif %}

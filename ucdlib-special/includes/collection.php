@@ -414,17 +414,6 @@ class UCDLibPluginSpecialCollection extends UcdThemePost {
     return $this->source;
   }
 
-  protected $title;
-  public function title(){
-    if ( ! empty( $this->title ) ) {
-      return $this->title;
-    }
-    $title = $this->meta('title');
-    $this->title = $title;
-
-    return $this->title;
-  }
-
   protected $dates;
   public function dates(){
     if ( ! empty( $this->dates ) ) {
@@ -489,7 +478,7 @@ class UCDLibPluginSpecialCollection extends UcdThemePost {
     $referenceInfoLinks = [];    
     $links = $this->meta('links');
 
-    foreach ($links as $link) {
+    foreach ((array) $links as $link) {
       if ($link['linkType'] == 'referenceInfo' && strlen($link['linkURL']) > 0 && strlen($link['displayLabel']) > 0) {
         array_push($referenceInfoLinks, $link);
       }

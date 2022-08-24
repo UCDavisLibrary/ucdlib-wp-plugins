@@ -58,9 +58,9 @@ class UCDPluginCASMenu {
       array("slug" => "host", "label" => "Host", "env" => $this->env['host'], "required" => true),
       array("slug" => "port", "label" => "Port", "required" => true),
       array("slug" => "uri", "label" => "URI", "required" => true),
-      array("slug" => "validation", "label" => "Do SSL Server Validation"),
-      array("slug" => "validation_path", "label" => "SSL Server Validation Cert Path"),
-      array("slug" => "validation_uri", "label" => "SSL Server Validation URI")
+      array("slug" => "validation_uri", "label" => "Service Validation URI"),
+      array("slug" => "validation", "label" => "Do SSL Validation"),
+      array("slug" => "validation_path", "label" => "CAS Server Cert Path"),
     );
 
     $this->addSettingsFields($fields, "displayFieldsConnection", $sectionSlug);

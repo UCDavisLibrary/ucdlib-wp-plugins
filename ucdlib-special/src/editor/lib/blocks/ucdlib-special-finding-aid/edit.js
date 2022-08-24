@@ -1,31 +1,63 @@
 import { html, SelectUtils, UCDIcons } from "@ucd-lib/brand-theme-editor/lib/utils";
-import { useBlockProps, BlockControls, RichText } from '@wordpress/block-editor';
-import { ToolbarButton } from '@wordpress/components';
+import { useBlockProps, BlockControls } from '@wordpress/block-editor';
+import { Button, Modal, TextControl, ToolbarButton } from '@wordpress/components';
 import { useDispatch } from "@wordpress/data";
+import { useState } from '@wordpress/element';
 
 export default ( props ) => {
   const blockProps = useBlockProps();
   const meta = SelectUtils.meta();
   const editPost = useDispatch( 'core/editor' ).editPost;
 
-  const onFindingAidChange = (findingAid) => {
-    const isLink = findingAid.split('href="').length > 1;
-    const newFindingAid = Object.assign({}, meta.findingAid);
-    if (isLink) {
-      const linkURL = findingAid.split('href="')[1].split('">')[0];
-      const linkTitle = findingAid.split('>')[findingAid.split('>').length - 2].split('</a')[0];
-      if (meta.findingAid.linkURL !== linkURL || meta.findingAid.linkTitle !== linkTitle) {
-        newFindingAid.linkURL = linkURL;
-        newFindingAid.linkTitle = linkTitle;
+  const startingModalData = {
+    linkTitle: 'Finding Aid on the Online Archive of California',
+    linkURL: ''
+  };
+  const [ modalIsOpen, setModalOpen ] = useState( false );
+  const [ modalMode, setModalMode ] = useState( 'Add' );
+  const [ modalData, setModalData ] = useState( startingModalData );
+
+  // modal validation
+  const modalCanSave = (() => {
+    if ( 
+      !modalData || 
+      !modalData.linkURL
+      ) {
+        return false
       }
-    } else {
-      newFindingAid.linkTitle = findingAid;
-    }
-    editPost({meta: {findingAid: newFindingAid}});
+    return true;
+  })();
+
+  // useEffect(() => {
+
+  // }, [modalIsOpen])
+
+  const onUrlChange = (url) => {
+    setModalData({
+      linkTitle: modalData.linkTitle,
+      linkURL: url
+    });
+  }
+
+  const closeModal = () => {
+    setModalOpen(false);
+  }
+
+  const onModalSave = () => {
+    setModalOpen(false);
+    const findingAid = JSON.parse(JSON.stringify(meta.findingAid));
+    findingAid.linkTitle = modalData.linkTitle || 'Finding Aid on the Online Archive of California';
+    findingAid.linkURL = modalData.linkURL;
+    editPost({meta: {findingAid}});
   }
 
   const onUndoClicked = (e) => {
-    editPost({meta: {findingAid: Object.assign({}, meta.fetchedData.findingAid)}});
+    const findingAid = JSON.parse(JSON.stringify(meta.fetchedData.findingAid));
+    editPost({meta: {findingAid}});
+    setModalData({
+      linkTitle: findingAid.linkTitle,
+      linkURL: findingAid.linkURL
+    });
   } 
 
   let isModified = false;
@@ -40,7 +72,16 @@ export default ( props ) => {
     }
   }
 
-  const value = `<a href="${meta.findingAid.linkURL}" data-rich-text-format-boundary="true">${meta.findingAid.linkTitle || meta.findingAid.linkURL}</a>`
+  const onFindingAidClicked = (e) => {
+    // update modalData with this links data
+    setModalData({
+      linkTitle: meta.findingAid.linkTitle,
+      linkURL: meta.findingAid.linkURL
+    });
+
+    setModalMode('Edit');
+    setModalOpen(true);
+  }  
 
   return html`
   <div ...${ blockProps }>
@@ -53,17 +94,27 @@ export default ( props ) => {
       />
     </${BlockControls}>
 
-    <div>
-      <h4>Finding Aid ${isModified ? html`<span className="strawberry">*</span>` : ''}</h4>
-      <${RichText}
-          tagName="a"
-          className=""
-          href=${meta.findingAid.linkURL}
-          title=${meta.findingAid.linkTitle}
-          value=${value}
-          onChange=${(findingAid) => onFindingAidChange(findingAid)}
-        />
+    <div onClick=${e => onFindingAidClicked(e)} className="clickable">
+      <h4>Finding Aid ${isModified ? html`<span className="strawberry">*</span>` : ''}</h4>      
+      <a href=${meta.findingAid.linkURL} style=${{ display: 'inline-block', pointerEvents: 'none' }}>${meta.findingAid.linkTitle}</a>
     </div>
+    
+    ${modalIsOpen && html`
+      <${Modal} title=${modalMode + " Finding Aid Link"} onRequestClose=${closeModal}>
+        <div>
+          <${TextControl} 
+            label="Url"
+            value=${modalData.linkURL}
+            onChange=${onUrlChange}
+            type="url"
+          />
+          <${Button} 
+            onClick=${onModalSave}
+            variant='primary' 
+            disabled=${!modalCanSave}>${modalMode == 'Add' ? 'Add Finding Aid Link' : 'Save Changes'}</${Button}>
+        </div>
+      </${Modal}>
+    `}
   </div>
   `
 }
