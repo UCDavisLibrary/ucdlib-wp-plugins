@@ -75,6 +75,10 @@ class UCDLibPluginLocationsBlockTransformations {
       $v = $attrs['lineHeight'];
       $style .= "line-height:$v;";
     }
+    if ( array_key_exists('fontWeight', $attrs) ) {
+      $v = $attrs['fontWeight'];
+      $style .= "font-weight:$v;";
+    }
 
     $attrs['style'] = $style;
     return $attrs;
