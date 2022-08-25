@@ -50,6 +50,10 @@ const settings = {
     lineHeight: {
       type: 'string',
       default: ''
+    },
+    fontWeight: {
+      type: 'string',
+      default: ''
     }
   },
   edit: Edit,

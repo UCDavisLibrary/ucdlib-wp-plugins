@@ -502,6 +502,15 @@ class UCDLibPluginDirectoryPerson extends UcdThemePost {
     return $this->email;
   }
 
+  protected $pastEmployee;
+  public function pastEmployee(){
+    if ( ! empty( $this->pastEmployee ) ) {
+      return $this->pastEmployee;
+    }
+    $this->pastEmployee = $this->meta('pastEmployee');
+    return $this->pastEmployee;
+  }
+
   protected $name_first;
   public function name_first(){
     if ( ! empty( $this->name_first ) ) {

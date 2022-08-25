@@ -156,6 +156,8 @@ const Edit = () => {
         renderedTitle.classList.remove('title-modified');
     }
   }
+  
+  if ( !isCollection) return html`<${Fragment} />`
 
   let titleHasChanged = false;
   let currentTitle = wp.data.select( 'core/editor' ).getEditedPostAttribute( 'title' );

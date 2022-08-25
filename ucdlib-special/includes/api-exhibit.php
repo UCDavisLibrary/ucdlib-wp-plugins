@@ -104,7 +104,8 @@ class UCDLibPluginSpecialAPIExhibit {
       'exhibitLocations' => $post->exhibitLocations(),
       'exhibitLocationDirections' => $post->exhibitLocationDirections(),
       'exhibitLocationMap' => $post->exhibitLocationMap(),
-      'exhibitBrandColor' => $post->exhibitBrandColor()
+      'exhibitBrandColor' => $post->exhibitBrandColor(),
+      'exhibitCurationNotes' => $post->exhibitCurationNotes()
     ];
     $hero = $post->exhibitHero();
     if ( $hero ) {

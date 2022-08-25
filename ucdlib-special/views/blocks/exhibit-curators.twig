@@ -1,3 +1,11 @@
+{% macro curatorLink(curator) %}
+  {% if curator.pastEmployee %}
+    <span class='curator-name'>{{curator.title}}</span>
+  {% else %}
+    <a class='curator-name' href="{{curator.link}}">{{curator.title}}</a>
+  {% endif %}
+{% endmacro %}
+
 {% set p = siteContext.post %}
 {% set curatedLabel = 'Curated by' %}
 {% if p.exhibitCuratorOrgs or p.exhibitCurators %}
@@ -9,7 +17,7 @@
         {% for org in p.exhibitCuratorOrgs %}
           <h2 class='heading--h5 u-space-mt--flush'>
           {% if org.homePage.link %}
-            <a href='{{org.homePage.link}}' style='text-decoration:none;'>{{org.name}}</a>
+            <a class='org-link' href='{{org.homePage.link}}'>{{org.name}}</a>
           {% else %}
             {{org.name}}
           {% endif %}
@@ -24,15 +32,19 @@
         {% set curator = p.exhibitCurators[0] %}
         <div>
           <span class="subsection-label">{{curatedLabel}}</span>
-          <a href="{{curator.link}}">{{curator.title}}</a>
+          {{_self.curatorLink(curator)}}
         </div>
       {% elseif p.exhibitCurators|length > 1 %}
         <div>
           <div class='subsection-label'>{{curatedLabel}}</div>
           {% for curator in p.exhibitCurators %}
-            <div><a href="{{curator.link}}">{{curator.title}}</a></div>
+            <div>{{_self.curatorLink(curator)}}</div>
           {% endfor %}
         </div>
+      {% endif %}
+
+      {% if p.exhibitCurationNotes %}
+        <div class='curation-note'>{{p.exhibitCurationNotes}}</div>
       {% endif %}
 
       {% if p.exhibitIsPast and p.exhibitIsOnline %}

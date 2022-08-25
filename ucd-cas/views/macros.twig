@@ -23,8 +23,8 @@
   {% if code %}
     {% set class = class~" code" %}
   {% endif %}
-  {% if field.env %}
-    {% set value = field.env %}
+  {% if field.args.env %}
+    {% set value = field.args.env %}
   {% else %}
     {% set value = field.options[field.args.label_for] %}
   {% endif %}
@@ -39,8 +39,8 @@
 
 {% macro textArea( field, size="regular", rows="5") %}
   {% set class = size~"-text" %}
-  {% if field.env %}
-    {% set value = field.env %}
+  {% if field.args.env %}
+    {% set value = field.args.env %}
   {% else %}
     {% set value = field.options[field.args.label_for] %}
   {% endif %}
@@ -53,10 +53,17 @@
 {% endmacro %}
 
 {% macro checkbox(field) %}
+  {% if field.args.env is not same as(false) %}
+    {% set value = field.args.env %}
+    {% set isenv = true %}
+  {% else %}
+    {% set value = field.options[field.args.label_for] %}
+  {% endif %}
   <input 
     id="{{field.args.label_for}}" 
     name="{{field.optionsSlug}}[{{field.args.label_for}}]" 
     type="checkbox"
     value="1"
-    {{field.options[field.args.label_for] == "1" ? 'checked'}}>
+    {{isenv ? 'disabled'}}
+    {{value == "1" ? 'checked'}}>
 {% endmacro %}

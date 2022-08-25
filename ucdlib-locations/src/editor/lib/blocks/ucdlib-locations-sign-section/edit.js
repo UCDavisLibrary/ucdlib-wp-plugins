@@ -28,7 +28,8 @@ export default ( props ) => {
     flexGrow: attributes.flexGrow || '',
     padding: attributes.padding || '',
     margin: attributes.margin || '',
-    lineHeight: attributes.lineHeight || ''
+    lineHeight: attributes.lineHeight || '',
+    fontWeight: attributes.fontWeight || ''
   }
 
   const textSizeOptions = [
@@ -145,7 +146,7 @@ export default ( props ) => {
             />
           </${BaseControl}>
         </${PanelBody}>
-        <${PanelBody} title="Spacing">
+        <${PanelBody} title="Spacing and Styles">
           <${TextControl} 
             label='Margin'
             value=${attributes.margin}
@@ -160,6 +161,11 @@ export default ( props ) => {
             label='Default Line Height'
             value=${attributes.lineHeight}
             onChange=${lineHeight => setAttributes({lineHeight})}
+          />
+          <${TextControl} 
+            label='Default Font Weight'
+            value=${attributes.fontWeight}
+            onChange=${fontWeight => setAttributes({fontWeight})}
           />
         </${PanelBody}>
       </${InspectorControls}> 

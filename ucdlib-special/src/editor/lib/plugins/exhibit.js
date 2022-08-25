@@ -77,6 +77,7 @@ const Edit = () => {
     postMeta.curators,
     postMeta.locationDirections,
     postMeta.locationMap,
+    postMeta.curationNotes,
     postCuratorOrgs,
     postLocations
   ];
@@ -92,6 +93,7 @@ const Edit = () => {
   const [ exhibitLocations, setExhibitLocations] = useState(postLocations);
   const [ exhibitLocationDirections, setExhibitLocationDirections] = useState(postMeta.locationDirections);
   const [ exhibitLocationMap, setExhibitLocationMap ] = useState(postMeta.locationMap);
+  const [ exhibitCurationNotes, setExhibitCurationNotes ] = useState(postMeta.curationNotes);
 
   const setStateFromCurrentPage = () => {
     setTopExhibit(0);
@@ -105,7 +107,8 @@ const Edit = () => {
     setExhibitCurators(postMeta.curators);
     setExhibitLocations(postLocations);
     setExhibitLocationDirections( postMeta.locationDirections );
-    setExhibitLocationMap(postMeta.locationMap)
+    setExhibitLocationMap(postMeta.locationMap);
+    setExhibitCurationNotes(postMeta.curationNotes);
   }
 
   // format people the way selector likes
@@ -144,7 +147,8 @@ const Edit = () => {
         dateTo: (exhibitIsPhysical && !exhibitIsPermanent) ? exhibitDateTo : null,
         curators: exhibitCurators,
         locationDirections: exhibitLocationDirections,
-        locationMap: exhibitLocationMap
+        locationMap: exhibitLocationMap,
+        curationNotes: exhibitCurationNotes
       }
     }
     if ( topExhibit ) {
@@ -177,6 +181,7 @@ const Edit = () => {
         setExhibitIsPhysical(r.exhibitIsPhysical);
         setExhibitDateFrom(r.exhibitDateFrom);
         setExhibitDateTo(r.exhibitDateTo);
+        setExhibitCurationNotes(r.exhibitCurationNotes);
         setExhibitCuratorOrgs(r.exhibitCuratorOrgs.map(org => org.term_id));
         setExhibitCurators(r.exhibitCurators);
         setExhibitLocations(r.exhibitLocations.map(loc => loc.term_id));
@@ -317,6 +322,11 @@ const Edit = () => {
                         onChange=${ onIndividualCuratorChange }
                       />
                     </div>
+                    <${TextareaControl}
+                      label="Curation Notes"
+                      value=${exhibitCurationNotes}
+                      onChange=${setExhibitCurationNotes}
+                    />
                   </div>
                   ${exhibitIsPhysical && html`
                     <div>

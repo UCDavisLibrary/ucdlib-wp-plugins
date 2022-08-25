@@ -163,6 +163,21 @@ body.digital-sign {
     margin-top: 1.5rem;
     color: rgb(119, 119, 119);
   }
+  .curation-note {
+    font-style: italic;
+    font-size: .75rem;
+    margin-top: .5rem;
+    color: rgb(119, 119, 119);
+  }
+  .org-link {
+    text-decoration: none;
+  }
+  .org-link:hover {
+    text-decoration: underline;
+  }
+  .curator-name {
+    font-weight: 700;
+  }
 }
 .hero-banner {
   .hero-banner__summary {
