@@ -11,7 +11,8 @@
   <code>ssodev.ucdavis.edu</code> is the development server. It does not require registration.
   </p>
   <p class="description">
-  <code>cas.ucdavis.edu</code> is the production server. You must <a href="https://casmgr.ucdavis.edu/">register this site</a>.
+  <code>cas.ucdavis.edu</code> is the production server. You must <a href="https://casmgr.ucdavis.edu/">register this site</a>, 
+    and ask IET to release any attributes needed by this plugin.
   </p>
 {% endif %}
 
@@ -36,12 +37,23 @@
 
 {% if field.args.short_slug == 'validation' %}
   {{ checkbox(field) }}
+  {% if field.args.env %}
+    <p class="description">
+      Value is currently being set by <code>UCD_CAS_DO_SSL</code> environmental variable and is readonly.
+    </p>
+  {% endif %}
   <p class="description">Enables SSL validation of the CAS server</p>
 {% endif %}
 
 {% if field.args.short_slug == 'validation_path' %}
-  {{ regularTextInput(field, true) }}  
+  {{ regularTextInput(field, true) }}
+  {% if field.args.env %}
+    <p class="description">
+      Value is currently being set by <code>UCD_CAS_SERVER_CA_CERT</code> environmental variable and is readonly. 
+    </p>
+  {% endif %}
   <p class="description">
-  If using SSL validation, enter path to CA certificate that is the issuer of the CAS cert
+  If using SSL validation, enter path to CA certificate that is the issuer of the CAS cert.
+  If there is no leading slash, path will be relative from the plugin root. 
   </p>
 {% endif %}

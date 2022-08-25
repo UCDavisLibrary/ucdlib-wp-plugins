@@ -2,5 +2,5 @@
     <p>How should users be authorized after they have been CAS authenticated?</p>
 </div>
 {% if args.callback[0].env.ensure_users %}
-    <p style='color:#c10230;'>The <code>ensure_users</code> environmental variable is setting the following kerberos IDs as admin: {{args.callback[0].env.ensure_users|join(', ')}}
+    <p style='color:#c10230;'>The <code>UCD_CAS_ENSURE_USERS</code> environmental variable is setting the following kerberos IDs as admin: {{args.callback[0].env.ensure_users|join(', ')}}
 {% endif %}

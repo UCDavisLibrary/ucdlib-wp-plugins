@@ -40,16 +40,6 @@ class UCDPluginCASAuth {
     $options = $this->get_options();
     $this->createClient();
 
-    if ( array_key_exists($this->slug . "_field_validation", $options) ) {
-      // TODO
-      // phpCAS::setCasServerCACert($cas_server_ca_cert_path);
-
-      // delete this when set up
-      phpCAS::setNoCasServerValidation();
-    } else {
-      phpCAS::setNoCasServerValidation();
-    }
-
     if ( phpCAS::isAuthenticated() ){
       $kerb = phpCAS::getUser();
       $user = get_user_by('login', $kerb);
@@ -293,7 +283,31 @@ class UCDPluginCASAuth {
         }
         phpCas::setServerServiceValidateURL( "$protocol://$host/$casUri/$serviceValidate" );
       }
+    }
+
+    // verify cas server
+    $do_ssl = false;
+    if ( $this->env['do_ssl'] !== false ) {
+      $do_ssl = intval($this->env['do_ssl']) === 1 || false;
+    } else {
+      $do_ssl = array_key_exists($this->slug . "_field_validation", $options);
+    }
+    $cert_path = '';
+    if ( $this->env['cert'] ) {
+      $cert_path = $this->env['cert'];
+    } else if ( array_key_exists($this->slug . "_field_validation_path", $options) ){
+      $cert_path = $options[$this->slug . "_field_validation_path"];
+    }
+
+    if ( $do_ssl && $cert_path ) {
+      if ( substr( $cert_path, 0, 1 ) === "/" ) {
+        phpCAS::setCasServerCACert($cert_path);
+      } else {
+        phpCAS::setCasServerCACert(WP_PLUGIN_DIR . "/$this->slug/" . $cert_path);
+      }
       
+    } else {
+      phpCAS::setNoCasServerValidation();
     }
   }
 

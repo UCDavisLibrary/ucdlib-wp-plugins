@@ -8,7 +8,9 @@ class UCDPluginCAS {
     $this->slug = "ucd-cas";
     $this->env = array(
       "host" => getenv('UCD_CAS_HOST'),
-      "ensure_users" => getenv('UCD_CAS_ENSURE_USERS')
+      "ensure_users" => getenv('UCD_CAS_ENSURE_USERS'),
+      'cert' => getenv('UCD_CAS_SERVER_CA_CERT'),
+      'do_ssl' => getenv('UCD_CAS_DO_SSL')
     );
     if ( is_string($this->env['ensure_users']) ){
       $this->env['ensure_users'] = array_map('trim', explode(',', $this->env['ensure_users'] ));
