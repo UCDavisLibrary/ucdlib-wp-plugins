@@ -325,6 +325,15 @@ class UCDLibPluginSpecialExhibitPage extends UcdThemePost {
     return $this->exhibitLink;
   }
 
+  protected $exhibitCurationNotes;
+  public function exhibitCurationNotes(){
+    if ( ! empty( $this->exhibitCurationNotes ) ) {
+      return $this->exhibitCurationNotes;
+    }
+    $this->exhibitCurationNotes = $this->exhibit()->meta('curationNotes');
+    return $this->exhibitCurationNotes;
+  }
+
   protected $exhibitIsOnline;
   public function exhibitIsOnline(){
     if ( ! empty( $this->exhibitIsOnline ) ) {
