@@ -14,6 +14,9 @@ const Edit = () => {
   // get metadata
   const isLocation = SelectUtils.editedPostAttribute('type') === 'location';
   const meta = SelectUtils.editedPostAttribute('meta');
+  const hideHours = meta.hideHours ? true : false;
+  const hasAppointmentDisplay = meta.hasAppointmentDisplay ? true : false;
+  const appointmentDisplay = meta.appointmentDisplay ? meta.appointmentDisplay : {};
   const hasOperatingHours = meta.has_operating_hours ? true : false;
   const hasAppointments = meta.has_appointments ? true : false;
   const appointments = meta.appointments ? meta.appointments : {};
@@ -23,6 +26,9 @@ const Edit = () => {
   const placeholderText = meta.hours_placeholder ? meta.hours_placeholder : '';
   const libcalId = meta.libcal_id ? meta.libcal_id : '';
   const watchedVars = [
+    hasAppointmentDisplay,
+    hideHours,
+    appointmentDisplay,
     hasOperatingHours,
     hasAppointments,
     appointments,
@@ -55,6 +61,30 @@ const Edit = () => {
               help="Can be found here: https://ucdavis.libcal.com/admin/hours"
             />
           `}
+
+          <!-- Added for hide hours toggle and adding appointment description -->
+          <${ToggleControl} 
+            label="Display Appointments Description in Hours page"
+            checked=${hasAppointmentDisplay}
+            onChange=${() => editPost({meta: { hasAppointmentDisplay: !hasAppointmentDisplay}})}
+          />
+          ${hasAppointmentDisplay && html`
+            <div>
+              <${TextControl} 
+                label="Appointment Href Link"
+                value=${appointmentDisplay.linkUrl}
+                onChange=${linkUrl => editPost({meta: {appointmentDisplay: {...appointmentDisplay, linkUrl}}})}
+                help="Format as a sentence with 'a' tag, ie This is an <a>appointment</a> link"
+              />
+            </div>
+          `}
+          <${ToggleControl} 
+            label="Hide Hours on Hours page"
+            checked=${hideHours}
+            onChange=${() => editPost({meta: { hideHours: !hideHours}})}
+          />
+          <!-- Added for hide hours toggle and adding appointment description -->
+
           <${ToggleControl} 
             label="Has Appointments"
             checked=${hasAppointments}

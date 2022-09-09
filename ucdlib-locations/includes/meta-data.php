@@ -81,6 +81,42 @@ class UCDLibPluginLocationsMetaData {
       'default' => '',
       'type' => 'string',
     ) );
+
+
+
+
+    register_post_meta( $this->config['postTypeSlug'], 'hideHours', array(
+      'show_in_rest' => true,
+      'single' => true,
+      'default' => false,
+      'type' => 'boolean',
+    ) );
+    register_post_meta( $this->config['postTypeSlug'], 'hasAppointmentDisplay', array(
+      'show_in_rest' => true,
+      'single' => true,
+      'default' => false,
+      'type' => 'boolean',
+    ) );
+    register_post_meta( $this->config['postTypeSlug'], 'appointmentDisplay', array(
+      'show_in_rest' => [
+        'schema' => [
+          'type' => 'object',
+          'properties' => [
+            'linkUrl' => ['type' => 'string'],
+          ]
+        ]
+      ],
+      'single' => true,
+      'default' => ['linkText' => 'Appointment Required', 'linkUrl' => ''],
+      'type' => 'object',
+    ) );
+
+
+
+
+
+
+
     register_post_meta( $this->config['postTypeSlug'], 'has_appointments', array(
       'show_in_rest' => true,
       'single' => true,

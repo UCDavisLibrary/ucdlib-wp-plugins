@@ -164,6 +164,7 @@ export class LocationsController{
         throw new Error('Non 200 response');
       }  
       const result = await response.json();
+      console.log("RESULT: ", result)
       this._data = result;
       let out;
       if ( Array.isArray( result ) ){
