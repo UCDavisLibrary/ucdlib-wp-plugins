@@ -233,10 +233,13 @@ return html`
         ${location.children.length ? html`<h3 class="heading--highlight">${location.roomNumber}</h3>` : html``}
         ${location.renderAlert('u-space-mb')}
         ${location.renderOccupancyBar()}
+        ${location.data.appointmentDisplay.required ? html`${location.renderAppointmentsLink(false, true, true)}` :html``}
+        ${console.log(location.name)}
+        ${console.log(location.data.hideHours)}
         ${location.hoursPlaceholder ? html`
           <div>${unsafeHTML(location.hoursPlaceholder)}</div>
           <!-- Added conditional statements for hide hours toggle and adding appointment description -->
-        ` : (location.hideHours) ? html`` : html`${this._renderWeeklyHours(location)}` }
+        `:html` ${location.data.hideHours.required ? html``: html`${this._renderWeeklyHours(location)}`}`}
           <!-- Added conditional statements for hide hours toggle and adding appointment description -->
         <div class="children">
           ${location.children.filter(c => this._surfaceChildren.includes(c.id)).map(c => this._renderChild(c))}

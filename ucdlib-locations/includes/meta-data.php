@@ -107,7 +107,7 @@ class UCDLibPluginLocationsMetaData {
         ]
       ],
       'single' => true,
-      'default' => ['linkText' => 'Appointment Required', 'linkUrl' => ''],
+      'default' => ['linkUrl' => ''],
       'type' => 'object',
     ) );
 
