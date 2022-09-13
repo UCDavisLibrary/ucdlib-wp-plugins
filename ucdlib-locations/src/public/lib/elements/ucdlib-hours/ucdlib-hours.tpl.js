@@ -233,9 +233,14 @@ return html`
         ${location.children.length ? html`<h3 class="heading--highlight">${location.roomNumber}</h3>` : html``}
         ${location.renderAlert('u-space-mb')}
         ${location.renderOccupancyBar()}
+        ${location.data.appointmentDisplay.required ? html`${location.renderAppointmentsLink(false, true, true)}` :html``}
+        ${console.log(location.name)}
+        ${console.log(location.data.hideHours)}
         ${location.hoursPlaceholder ? html`
           <div>${unsafeHTML(location.hoursPlaceholder)}</div>
-        ` : this._renderWeeklyHours(location) }
+          <!-- Added conditional statements for hide hours toggle and adding appointment description -->
+        `:html` ${location.data.hideHours.required ? html``: html`${this._renderWeeklyHours(location)}`}`}
+          <!-- Added conditional statements for hide hours toggle and adding appointment description -->
         <div class="children">
           ${location.children.filter(c => this._surfaceChildren.includes(c.id)).map(c => this._renderChild(c))}
           ${location.hasServices && location.children.filter(c => !this._surfaceChildren.includes(c.id)).length ? html`
@@ -319,7 +324,11 @@ export function _renderChild(child){
   return html`
     <div class="child">
       <h3 class="heading--highlight">${child.name}</h3>
-      ${ this._renderWeeklyHours(child) }
+      <!-- Added conditional statements for hide hours toggle and adding appointment description -->
+      ${(child.data.appointmentDisplay.required) ? html`${child.renderAppointmentsLink(false, true, true)}` :html``}
+      ${(child.data.hideHours.required) ? html`` : html`${this._renderWeeklyHours(child)}`}
+      <!-- Added conditional statements for hide hours toggle and adding appointment description -->
+
     </div>
   `;
 }

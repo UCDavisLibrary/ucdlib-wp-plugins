@@ -1,5 +1,6 @@
 import { html, svg } from 'lit';
 import { DateTimeUtils } from './datetime';
+import { unsafeHTML } from 'lit/directives/unsafe-html.js';
 import "../elements/ucdlib-occupancy-bar/ucdlib-occupancy-bar";
 
 /**
@@ -246,6 +247,11 @@ export class UcdlibLocation{
             <div class="value">
               ${day.hasHoursData ? html`
                 ${ day.isOpen ? 
+                  // Added conditional statements for hide hours toggle and adding appointment description
+                  (this.data.appointmentDisplay.required) ? 
+                    this._renderHours(day.hours.from, day.hours.to) 
+                  // Added conditional statements for hide hours toggle and adding appointment description
+                   :
                     this.hasAppointments ? html`
                       ${this._renderHours(day.hours.from, day.hours.to)}
                       ${this.renderAppointmentsLink(false, true)}
@@ -295,9 +301,19 @@ export class UcdlibLocation{
    * @param {Boolean} showIcon Renders a calendar icon before link. default: true
    * @returns {TemplateResult}
    */
-  renderAppointmentsLink(showIcon=true, useAltText=false){
-    if ( !this.hasAppointments ) return html``;
+  renderAppointmentsLink(showIcon=true, useAltText=false,  outerString=false){
+    /* "outerString" Added for hide hours toggle and adding appointment description */
     const appt = this.data.appointments;
+
+    /* Added for hide hours toggle and adding appointment description */
+    if(outerString){
+      const apptDisplay = this.data.appointmentDisplay;
+      let htmlText = apptDisplay.link_url;
+      return html`<span>${unsafeHTML(htmlText)}</span>`;
+    }
+    /* Added for hide hours toggle and adding appointment description */
+
+    if ( !this.hasAppointments ) return html``;
     let text
     if ( useAltText ){
       text = appt.link_text_alt ? appt.link_text_alt : "Schedule a Visit";
