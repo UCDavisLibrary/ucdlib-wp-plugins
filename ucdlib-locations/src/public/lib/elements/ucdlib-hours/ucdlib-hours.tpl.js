@@ -234,8 +234,6 @@ return html`
         ${location.renderAlert('u-space-mb')}
         ${location.renderOccupancyBar()}
         ${location.data.appointmentDisplay.required ? html`${location.renderAppointmentsLink(false, true, true)}` :html``}
-        ${console.log(location.name)}
-        ${console.log(location.data.hideHours)}
         ${location.hoursPlaceholder ? html`
           <div>${unsafeHTML(location.hoursPlaceholder)}</div>
           <!-- Added conditional statements for hide hours toggle and adding appointment description -->
