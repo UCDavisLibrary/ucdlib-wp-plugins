@@ -70,7 +70,8 @@ export function render() {
   export function renderComplete(location) {
     return html`
     ${ location.hasHoursData ? html`
-    <div class="hours ${location.hasAppointments  ? 'has-appts' : ''}">
+    <div class="hours ${location.hasAppointments && !location.data.hideHours.required ? 'has-appts' : ''}">
+      ${!location.data.hideHours.required ? html`
       <span>
         <span class="hours-label">Hours Today</span>
         ${location.isOpenToday ? 
@@ -82,9 +83,11 @@ export function render() {
           html`<span class="double-decker">Closed</span>`}
       </span>
       <span class="separator ${this.hideAppointmentLink ? 'hide' : ''}">|</span>
+      `:html``}
+
       <span class="${this.hideAppointmentLink ? 'hide' : ''}">${location.renderAppointmentsLink()}</span>
     </div>
-    ${ location.renderOccupancyBar() }
+    ${!location.data.hideHours.required ? html`${ location.renderOccupancyBar() }`:html``}
     ` : this.ctl.renderStatus('error')
     }
   `;}

@@ -247,16 +247,7 @@ export class UcdlibLocation{
             <div class="value">
               ${day.hasHoursData ? html`
                 ${ day.isOpen ? 
-                  // Added conditional statements for hide hours toggle and adding appointment description
-                  (this.data.appointmentDisplay.required) ? 
                     this._renderHours(day.hours.from, day.hours.to) 
-                  // Added conditional statements for hide hours toggle and adding appointment description
-                   :
-                    this.hasAppointments ? html`
-                      ${this._renderHours(day.hours.from, day.hours.to)}
-                      ${this.renderAppointmentsLink(false, true)}
-                    ` :
-                      this._renderHours(day.hours.from, day.hours.to) 
                   : html`
                     <span class="double-decker">Closed</span>`}
               ` : html`<span>?</span>`}
@@ -296,22 +287,24 @@ export class UcdlibLocation{
   }
 
   /**
+   * @method renderDescription
+   * @description Renders html text in the hours page
+   * @returns {TemplateResult}
+   */
+  renderDescription(){
+    const apptDisplay = this.data.descriptionDisplay;
+    let htmlText = apptDisplay.link_url;
+    return html`<span class="description-html">${unsafeHTML(htmlText)}</span>`;
+  }
+
+  /**
    * @method renderAppointmentsLink
    * @description Renders stylized link to location's appt booking system
    * @param {Boolean} showIcon Renders a calendar icon before link. default: true
    * @returns {TemplateResult}
    */
-  renderAppointmentsLink(showIcon=true, useAltText=false,  outerString=false){
-    /* "outerString" Added for hide hours toggle and adding appointment description */
+  renderAppointmentsLink(showIcon=true, useAltText=false){
     const appt = this.data.appointments;
-
-    /* Added for hide hours toggle and adding appointment description */
-    if(outerString){
-      const apptDisplay = this.data.appointmentDisplay;
-      let htmlText = apptDisplay.link_url;
-      return html`<span>${unsafeHTML(htmlText)}</span>`;
-    }
-    /* Added for hide hours toggle and adding appointment description */
 
     if ( !this.hasAppointments ) return html``;
     let text

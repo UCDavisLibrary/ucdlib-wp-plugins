@@ -81,6 +81,8 @@ return html`
 export function renderComplete(location) {
   return html`
   ${ location.hasHoursData ? html`
+  
+  ${!location.data.hideHours.required ? html`
   <div class="location-status ${this.onlyShowChildren ? 'hide' : ''}">
     <h3 class="heading--highlight">
       ${location.isOpenToday ? 
@@ -90,17 +92,23 @@ export function renderComplete(location) {
     ${ location.renderOccupancyBar() }
     <div class="u-space-my"></div>
   </div>
+  `:html``}
+
   <div class="children ${location.hasChildren ? '': 'children--none'}">
     ${location.children.map(child => html`
       <div class="child u-space-mb ${child.hasHoursData && (!this._childFilter.length || this._childFilter.includes(child.id)) ? 'child--has-hours' : 'child--no-hours'}">
         <div class="name">${child.name}</div>
         <div class="child-details ${child.hasAppointments ? 'child-details--appts' : ''}">
+
+        ${!child.data.hideHours.required ? html`
           <div>${child.isOpenToday ? 
             child.renderHoursToday() : 
             html`<span class="double-decker">Closed</span>`}
           </div>
           <span class="separator">|</span>
-          <div>${child.renderAppointmentsLink()}</div>
+        `:html``}
+
+        <div>${child.renderAppointmentsLink()}</div>
         </div>
       </div>
     `)}
