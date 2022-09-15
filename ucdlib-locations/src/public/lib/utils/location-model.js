@@ -247,16 +247,7 @@ export class UcdlibLocation{
             <div class="value">
               ${day.hasHoursData ? html`
                 ${ day.isOpen ? 
-                  // Added conditional statements for hide hours toggle and adding appointment description
-                  // (this.data.descriptionDisplay.required) ? 
                     this._renderHours(day.hours.from, day.hours.to) 
-                  // Added conditional statements for hide hours toggle and adding appointment description
-                  //  :
-                    // this.hasAppointments ? html`
-                    //   ${this._renderHours(day.hours.from, day.hours.to)}
-                    //   ${this.renderAppointmentsLink(false, true)}
-                    // ` :
-                    //   this._renderHours(day.hours.from, day.hours.to) 
                   : html`
                     <span class="double-decker">Closed</span>`}
               ` : html`<span>?</span>`}
