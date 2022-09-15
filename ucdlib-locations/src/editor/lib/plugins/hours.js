@@ -15,8 +15,8 @@ const Edit = () => {
   const isLocation = SelectUtils.editedPostAttribute('type') === 'location';
   const meta = SelectUtils.editedPostAttribute('meta');
   const hideHours = meta.hideHours ? true : false;
-  const hasAppointmentDisplay = meta.hasAppointmentDisplay ? true : false;
-  const appointmentDisplay = meta.appointmentDisplay ? meta.appointmentDisplay : {};
+  const hasDescriptonDisplay = meta.hasDescriptonDisplay ? true : false;
+  const descriptionDisplay = meta.descriptionDisplay ? meta.descriptionDisplay : {};
   const hasOperatingHours = meta.has_operating_hours ? true : false;
   const hasAppointments = meta.has_appointments ? true : false;
   const appointments = meta.appointments ? meta.appointments : {};
@@ -26,9 +26,9 @@ const Edit = () => {
   const placeholderText = meta.hours_placeholder ? meta.hours_placeholder : '';
   const libcalId = meta.libcal_id ? meta.libcal_id : '';
   const watchedVars = [
-    hasAppointmentDisplay,
+    hasDescriptonDisplay,
     hideHours,
-    appointmentDisplay,
+    descriptionDisplay,
     hasOperatingHours,
     hasAppointments,
     appointments,
@@ -64,17 +64,16 @@ const Edit = () => {
 
           <!-- Added for hide hours toggle and adding appointment description -->
           <${ToggleControl} 
-            label="Display Appointments Description in Hours page"
-            checked=${hasAppointmentDisplay}
-            onChange=${() => editPost({meta: { hasAppointmentDisplay: !hasAppointmentDisplay}})}
+            label="Display Description in Hours page"
+            checked=${hasDescriptonDisplay}
+            onChange=${() => editPost({meta: { hasDescriptonDisplay: !hasDescriptonDisplay}})}
           />
-          ${hasAppointmentDisplay && html`
+          ${hasDescriptonDisplay && html`
             <div>
               <${TextControl} 
-                label="Appointment Href Link"
-                value=${appointmentDisplay.linkUrl}
-                onChange=${linkUrl => editPost({meta: {appointmentDisplay: {...appointmentDisplay, linkUrl}}})}
-                help="Format as a sentence with 'a' tag, ie This is an <a>appointment</a> link"
+                label="Description (html allowed)"
+                value=${descriptionDisplay.linkUrl}
+                onChange=${linkUrl => editPost({meta: {descriptionDisplay: {...descriptionDisplay, linkUrl}}})}
               />
             </div>
           `}

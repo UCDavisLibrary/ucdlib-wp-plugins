@@ -81,6 +81,11 @@ export function styles() {
     ucdlib-occupancy-bar {
       margin-bottom: 1rem;
     }
+    .description-html {
+      margin-top: 0.25rem;
+      margin-bottom: 1rem;
+    }
+    
     .week-container {
       position: relative;
       overflow: hidden;
@@ -233,7 +238,7 @@ return html`
         ${location.children.length ? html`<h3 class="heading--highlight">${location.roomNumber}</h3>` : html``}
         ${location.renderAlert('u-space-mb')}
         ${location.renderOccupancyBar()}
-        ${location.data.appointmentDisplay.required ? html`${location.renderAppointmentsLink(false, true, true)}` :html``}
+        ${location.data.descriptionDisplay.required ? html`<div class="description-html">${location.renderDescription()}</div>`:html``}
         ${location.hoursPlaceholder ? html`
           <div>${unsafeHTML(location.hoursPlaceholder)}</div>
           <!-- Added conditional statements for hide hours toggle and adding appointment description -->
@@ -323,7 +328,7 @@ export function _renderChild(child){
     <div class="child">
       <h3 class="heading--highlight">${child.name}</h3>
       <!-- Added conditional statements for hide hours toggle and adding appointment description -->
-      ${(child.data.appointmentDisplay.required) ? html`${child.renderAppointmentsLink(false, true, true)}` :html``}
+      ${(child.data.descriptionDisplay.required) ? html`<div class="description-html">${child.renderDescription()}</div>` :html``}
       ${(child.data.hideHours.required) ? html`` : html`${this._renderWeeklyHours(child)}`}
       <!-- Added conditional statements for hide hours toggle and adding appointment description -->
 

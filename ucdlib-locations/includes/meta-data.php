@@ -91,13 +91,13 @@ class UCDLibPluginLocationsMetaData {
       'default' => false,
       'type' => 'boolean',
     ) );
-    register_post_meta( $this->config['postTypeSlug'], 'hasAppointmentDisplay', array(
+    register_post_meta( $this->config['postTypeSlug'], 'hasDescriptonDisplay', array(
       'show_in_rest' => true,
       'single' => true,
       'default' => false,
       'type' => 'boolean',
     ) );
-    register_post_meta( $this->config['postTypeSlug'], 'appointmentDisplay', array(
+    register_post_meta( $this->config['postTypeSlug'], 'descriptionDisplay', array(
       'show_in_rest' => [
         'schema' => [
           'type' => 'object',
