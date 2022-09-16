@@ -52,6 +52,17 @@ class UCDLibPluginLocationsLocation extends UcdThemePost {
       'appointments' => [
         'required' => $this->meta('has_appointments') ? true : false
       ],
+
+      ## Added for hide hours toggle and adding appointment description ##
+      'hideHours' => [
+        'required' => $this->meta('hideHours') ? true : false
+      ],
+      'descriptionDisplay' => [
+        'required' => $this->meta('hasDescriptonDisplay') ? true : false
+      ],
+      ## Added for hide hours toggle and adding appointment description ##
+
+
       'hoursPlaceholder' => [
         'show' => $this->meta('has_hours_placeholder') ? true : false,
         'message' => $this->meta('hours_placeholder')
@@ -77,6 +88,13 @@ class UCDLibPluginLocationsLocation extends UcdThemePost {
       $out['appointments']['link_text'] = $appointments['linkText'];
       $out['appointments']['link_url'] = $appointments['linkUrl'];
     }
+
+    ## Added for hide hours toggle and adding appointment description ##
+    if ( $out['descriptionDisplay']['required'] ) {
+      $appointmentsDisplay = $this->meta('descriptionDisplay');
+      $out['descriptionDisplay']['link_url'] = $appointmentsDisplay['linkUrl'];
+    }
+    ## Added for hide hours toggle and adding appointment description ##
     
     $occupancy = $this->meta('occupancy');
     $capacity = $occupancy['capacity'];

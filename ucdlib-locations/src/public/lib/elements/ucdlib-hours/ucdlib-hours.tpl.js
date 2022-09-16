@@ -73,7 +73,7 @@ export function styles() {
       position: static;
     }
     h3.heading--highlight {
-      margin-bottom: 1rem;
+      margin-bottom: .25rem;
     }
     .child h3.heading--highlight {
       margin-top: 1rem;
@@ -81,6 +81,11 @@ export function styles() {
     ucdlib-occupancy-bar {
       margin-bottom: 1rem;
     }
+    .description-html {
+      margin-top: 0.25rem;
+      margin-bottom: 1rem;
+    }
+    
     .week-container {
       position: relative;
       overflow: hidden;
@@ -233,9 +238,12 @@ return html`
         ${location.children.length ? html`<h3 class="heading--highlight">${location.roomNumber}</h3>` : html``}
         ${location.renderAlert('u-space-mb')}
         ${location.renderOccupancyBar()}
+        ${location.data.descriptionDisplay.required ? html`<div class="description-html">${location.renderDescription()}</div>`:html``}
         ${location.hoursPlaceholder ? html`
           <div>${unsafeHTML(location.hoursPlaceholder)}</div>
-        ` : this._renderWeeklyHours(location) }
+          <!-- Added conditional statements for hide hours toggle and adding appointment description -->
+        `:html` ${location.data.hideHours.required ? html``: html`${this._renderWeeklyHours(location)}`}`}
+          <!-- Added conditional statements for hide hours toggle and adding appointment description -->
         <div class="children">
           ${location.children.filter(c => this._surfaceChildren.includes(c.id)).map(c => this._renderChild(c))}
           ${location.hasServices && location.children.filter(c => !this._surfaceChildren.includes(c.id)).length ? html`
@@ -319,7 +327,11 @@ export function _renderChild(child){
   return html`
     <div class="child">
       <h3 class="heading--highlight">${child.name}</h3>
-      ${ this._renderWeeklyHours(child) }
+      <!-- Added conditional statements for hide hours toggle and adding appointment description -->
+      ${(child.data.descriptionDisplay.required) ? html`<div class="description-html">${child.renderDescription()}</div>` :html``}
+      ${(child.data.hideHours.required) ? html`` : html`${this._renderWeeklyHours(child)}`}
+      <!-- Added conditional statements for hide hours toggle and adding appointment description -->
+
     </div>
   `;
 }

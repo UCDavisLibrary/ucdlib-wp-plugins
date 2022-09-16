@@ -1,5 +1,6 @@
 import { html, svg } from 'lit';
 import { DateTimeUtils } from './datetime';
+import { unsafeHTML } from 'lit/directives/unsafe-html.js';
 import "../elements/ucdlib-occupancy-bar/ucdlib-occupancy-bar";
 
 /**
@@ -246,11 +247,7 @@ export class UcdlibLocation{
             <div class="value">
               ${day.hasHoursData ? html`
                 ${ day.isOpen ? 
-                    this.hasAppointments ? html`
-                      ${this._renderHours(day.hours.from, day.hours.to)}
-                      ${this.renderAppointmentsLink(false, true)}
-                    ` :
-                      this._renderHours(day.hours.from, day.hours.to) 
+                    this._renderHours(day.hours.from, day.hours.to) 
                   : html`
                     <span class="double-decker">Closed</span>`}
               ` : html`<span>?</span>`}
@@ -290,14 +287,26 @@ export class UcdlibLocation{
   }
 
   /**
+   * @method renderDescription
+   * @description Renders html text in the hours page
+   * @returns {TemplateResult}
+   */
+  renderDescription(){
+    const apptDisplay = this.data.descriptionDisplay;
+    let htmlText = apptDisplay.link_url;
+    return html`<span class="description-html">${unsafeHTML(htmlText)}</span>`;
+  }
+
+  /**
    * @method renderAppointmentsLink
    * @description Renders stylized link to location's appt booking system
    * @param {Boolean} showIcon Renders a calendar icon before link. default: true
    * @returns {TemplateResult}
    */
   renderAppointmentsLink(showIcon=true, useAltText=false){
-    if ( !this.hasAppointments ) return html``;
     const appt = this.data.appointments;
+
+    if ( !this.hasAppointments ) return html``;
     let text
     if ( useAltText ){
       text = appt.link_text_alt ? appt.link_text_alt : "Schedule a Visit";
