@@ -73,7 +73,7 @@ export function styles() {
       position: static;
     }
     h3.heading--highlight {
-      margin-bottom: 1rem;
+      margin-bottom: .25rem;
     }
     .child h3.heading--highlight {
       margin-top: 1rem;
