@@ -314,7 +314,6 @@ export class LocationsController{
       if ( !range.from || !range.to ) {
         throw new Error('Unable to construct hours date range');
       }
-
       let d = new Date(range.from.getTime());
       let weekIndex = 0;
       range.weeks.push([]);

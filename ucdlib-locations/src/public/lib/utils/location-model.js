@@ -192,6 +192,7 @@ export class UcdlibLocation{
       return range;
     }
     Object.keys(this.data.hours.data).forEach(d => {
+      d = d + ' 12:00:00'
       d = new Date(d);
       if ( !range.from ) {
         range.from = d;
