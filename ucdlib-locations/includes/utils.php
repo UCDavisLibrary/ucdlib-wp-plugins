@@ -14,8 +14,9 @@ class UCDLibPluginLocationsUtils {
     if ($dayOfWeek != 7) {
       $start->modify('-' . $dayOfWeek . 'day');
     }
+    $days = $weeks * 7 - 1;
     $end = clone $start;
-    $end->modify('+' . $weeks . 'week')->modify('-1day');
+    $end->modify('+' . $days . 'day');
 
     return array($start->format('Y-m-d'), $end->format('Y-m-d'));
   }

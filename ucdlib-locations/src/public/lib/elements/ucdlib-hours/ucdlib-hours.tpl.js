@@ -296,7 +296,7 @@ return html`
 
 export function _renderWeekLabel(week){
   return html`
-  <span class="keep-together">${this.ctl.getWeekDayString(week, 0)}</span><span> to </span><span class="keep-together">${this.ctl.getWeekDayString(week, 6)}</span>
+  <span class="keep-together">${this.ctl.getWeekDayString(week, 0)}</span><span> to </span><span class="keep-together">${this.ctl.getWeekDayString(week, week.length - 1)}</span>
   `
 }
 

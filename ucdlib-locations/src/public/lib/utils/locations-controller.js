@@ -277,6 +277,7 @@ export class LocationsController{
      * @returns 
      */
     getWeekDayString(week, index){
+      if ( !week[index] ) return;
       return `${week[index].month} ${week[index].dayOfMonth}, ${week[index].year}`;
     }
 
