@@ -10,8 +10,8 @@ const Edit = () => {
 
   // determine when to show panel
   const currentPost = SelectUtils.currentPost();
-  const isAdmin = SelectUtils.isCurrentUserAdmin();
   const isPerson = currentPost.type == 'person';
+  if ( !isPerson )  return html`<${Fragment} />`;
 
   // determine what to show in panel
   const meta = SelectUtils.editedPostAttribute('meta');
@@ -28,49 +28,45 @@ const Edit = () => {
 
 
   return html`
-    <${Fragment}>
-      ${(isPerson && isAdmin) && html`
-        <${PluginDocumentSettingPanel}
-          className=${name}
-          icon=${html`<ucdlib-icon style=${{marginLeft: '8px', width: '12px', minWidth: '12px'}} icon="ucd-public:fa-user"></ucdlib-icon>`}
-          title="User Account">
-          ${hasUserAccount ? html`
-          <${BaseControl} help=${helpText.hasAccount} />
-          ` : html`
-            <${BaseControl} help=${helpText.noAccount} />
-          `}
-          <${TextControl} 
-              label="WP Account ID" 
-              value=${userId} 
-              onChange=${(wp_user_id) => editPost({meta: {wp_user_id}})}/>
-          ${hasUserAccount ? html`
-            <div>
-              <${TextControl} 
-                disabled=${true}
-                label="Kerberos"
-                value=${user && user.username ? user.username : ''}
-              />
-              <${TextControl} 
-                disabled=${true}
-                label="UC Path ID"
-                value=${user && user.meta && user.meta['ucd-cas_ucpath-id'] ? user.meta['ucd-cas_ucpath-id'] : ''}
-              />
-              <${TextControl} 
-                disabled=${true}
-                label="IAM ID"
-                value=${user && user.meta && user.meta['ucd-cas_iam-id'] ? user.meta['ucd-cas_ucpath-id'] : ''}
-              />
-            </div>
-          ` : html`
-            <${TextControl} 
-              label="Kerberos" 
-              value=${kerberos} 
-              onChange=${(username) => editPost({meta: {username}})}/>
-          `}
-        </${PluginDocumentSettingPanel}>
-      `}
 
-    </${Fragment}>
+    <${PluginDocumentSettingPanel}
+      className=${name}
+      icon=${html`<ucdlib-icon style=${{marginLeft: '8px', width: '12px', minWidth: '12px'}} icon="ucd-public:fa-user"></ucdlib-icon>`}
+      title="User Account">
+      ${hasUserAccount ? html`
+      <${BaseControl} help=${helpText.hasAccount} />
+      ` : html`
+        <${BaseControl} help=${helpText.noAccount} />
+      `}
+      <${TextControl} 
+          label="WP Account ID" 
+          value=${userId} 
+          onChange=${(wp_user_id) => editPost({meta: {wp_user_id}})}/>
+      ${hasUserAccount ? html`
+        <div>
+          <${TextControl} 
+            disabled=${true}
+            label="Kerberos"
+            value=${user && user.username ? user.username : ''}
+          />
+          <${TextControl} 
+            disabled=${true}
+            label="UC Path ID"
+            value=${user && user.meta && user.meta['ucd-cas_ucpath-id'] ? user.meta['ucd-cas_ucpath-id'] : ''}
+          />
+          <${TextControl} 
+            disabled=${true}
+            label="IAM ID"
+            value=${user && user.meta && user.meta['ucd-cas_iam-id'] ? user.meta['ucd-cas_ucpath-id'] : ''}
+          />
+        </div>
+      ` : html`
+        <${TextControl} 
+          label="Kerberos" 
+          value=${kerberos} 
+          onChange=${(username) => editPost({meta: {username}})}/>
+      `}
+    </${PluginDocumentSettingPanel}>
   `
 }
 
