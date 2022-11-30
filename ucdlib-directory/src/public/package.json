@@ -7,7 +7,7 @@
     "author": "",
     "license": "ISC",
     "dependencies": {
-        "@ucd-lib/theme-elements": "^1.1.4",
+        "@ucd-lib/theme-elements": "^1.2.1",
         "lit": "^2.3.1"
     }
 }
