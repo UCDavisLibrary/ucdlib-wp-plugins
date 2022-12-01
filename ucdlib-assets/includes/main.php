@@ -1,8 +1,10 @@
 <?php
+require_once( __DIR__ . '/robots.php' );
 
 class UCDLibPluginAssets {
   public function __construct(){
     $this->slug = "ucdlib-assets";
+    new UCDLibPluginAssetsRobots();
 
     $config = array(
       'slug' => $this->slug,
