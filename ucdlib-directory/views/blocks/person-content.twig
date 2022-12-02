@@ -2,7 +2,7 @@
 {% set p = siteContext.post %}
 {% if 
   p.typeAggs and 
-  (p.typeAggs.post or p.typeAggs.page or p.typeAggs.exhibit or p.typeAggs.location or p.typeAggs.libguide ) %}
+  (p.typeAggs.post or p.typeAggs.exhibit or p.typeAggs.libguide ) %}
   {% set email = '&authors=' ~ p.email|replace({'@ucdavis.edu': ''}) %}
   <div class='o-box u-space-mb'>
     <h2 class='heading--h5'>Content by {{p.name_first}}</h2>
