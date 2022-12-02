@@ -69,6 +69,7 @@ class UCDLibPluginAssets {
 
 
     add_action( 'after_setup_theme', array($this, 'enqueue_editor_css'));
+    add_action( 'admin_enqueue_scripts', [$this, 'registerAdminScripts']);
     // add_filter( 'mce_css', array($this, 'enqueue_editor_css') );
     
   }
@@ -79,6 +80,12 @@ class UCDLibPluginAssets {
       require_once( __DIR__ . '/forminator.php' );
       $this->forminator = new UCDLibPluginAssetsForminator();
     }
+  }
+
+  public function registerAdminScripts(){
+    $uri = $this->config['uris']['base'] . '/admin-css';
+    wp_register_style( 'ucdlib-admin', $uri . '/ucdlib-admin.css', false, '1.0.0' );
+    wp_enqueue_style( 'ucdlib-admin' );
   }
 
   public function is_plugin_active($plugin){

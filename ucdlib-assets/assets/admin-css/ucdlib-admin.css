@@ -1,0 +1,9 @@
+@media (min-width: 782px) {
+  .edit-post-fullscreen-mode-close.components-button {
+    background-color: transparent;
+  }
+
+  .edit-post-fullscreen-mode-close.components-button::before {
+    display: none;
+  }
+}
