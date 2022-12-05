@@ -4,10 +4,11 @@
     "fields": [
         {
             "key": "field_61eb266de4c64",
-            "label": "Number of Weeks to Display",
+            "label": "Number of Weeks to Load",
             "name": "hours_weeks",
+            "aria-label": "",
             "type": "number",
-            "instructions": "On a location's hours widget, how many weeks should display beyond the current week.",
+            "instructions": "For the primary hours widget, the number of weeks worth of data that will be loaded on initialization.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -16,17 +17,40 @@
                 "id": ""
             },
             "default_value": 4,
-            "placeholder": "",
-            "prepend": "",
-            "append": "",
             "min": 1,
             "max": 12,
-            "step": 1
+            "placeholder": "",
+            "step": 1,
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "field_638e5ac29fd24",
+            "label": "Number of Months to Display",
+            "name": "hours_months",
+            "aria-label": "",
+            "type": "number",
+            "instructions": "For the primary hours widget, the number of months to display (including current month).",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": 4,
+            "min": "",
+            "max": "",
+            "placeholder": "",
+            "step": "",
+            "prepend": "",
+            "append": ""
         },
         {
             "key": "field_61eec607d28ec",
             "label": "Cache Duration",
             "name": "hours_cache_duration",
+            "aria-label": "",
             "type": "number",
             "instructions": "Number of seconds operating hours from third-party APIs should be cached. To clear all caches, hit the 'update' button on this page.",
             "required": 0,
@@ -63,5 +87,5 @@
     "active": true,
     "description": "Locations: Global Hours Settings",
     "show_in_rest": 0,
-    "modified": 1643041116
+    "modified": 1670273829
 }
