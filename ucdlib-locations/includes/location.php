@@ -277,22 +277,28 @@ class UCDLibPluginLocationsLocation extends UcdThemePost {
   }
 
   // Retrieves operating hours from springshare libcal
-  private function get_libcal_hours(){
+  public function get_libcal_hours($from=false, $to=false){
     $out = array(
       'status' => 'error',
       'data' => false,
       'source' => 'libcal'
     );
-
+    if (!$from && !$to){
+      $dateRange = UCDLibPluginLocationsUtils::getHoursDateRange();
+      $from = $dateRange[0];
+      $to = $dateRange[1];
+    }
     // check cache
-    $transient_id = 'libcal_hours_' . $this->ID;
+    $transient_id = 'libcal_hours_' . $this->ID . '?f=' . $from . 't=' . $to;
     $t = get_transient( $transient_id );
 
     // libcal api call has been made before, and is cached
     if ( $t !== false ) {
       $out['status'] = $t['status'];
       $out['cached'] = $t['cached'];
-      if ( 
+      if ( !array_key_exists('data', $t) || !$t['data'] ) {
+        $out['data'] = false;
+      } else if (
         array_key_exists('data', $t) && 
         array_key_exists('dates', $t['data'])
       ){
@@ -326,10 +332,9 @@ class UCDLibPluginLocationsLocation extends UcdThemePost {
 
       # construct GET request for libcal location
       $url = trailingslashit($creds['url_hours']) . $this->meta('libcal_id');
-      $dateRange = UCDLibPluginLocationsUtils::getHoursDateRange();
       $url_params = array(
-        'from' => $dateRange[0],
-        'to' => $dateRange[1]
+        'from' => $from,
+        'to' => $to
       );
       $url .= '?' . http_build_query($url_params);
       $headers = array(

@@ -5,6 +5,8 @@ class UCDLibPluginLocationsAPI {
 
   public function __construct( $config ){
     $this->config = $config;
+    $this->dateFmt = 'Y-m-d';
+    $this->tz = 'America/Los_Angeles';
 
     add_action( 'rest_api_init', array($this, 'register_endpoints') );
   }
@@ -35,6 +37,26 @@ class UCDLibPluginLocationsAPI {
           'description' => 'Include any children of this location',
           'type' => 'boolean',
           'default' => false
+        ]
+      ]
+    ) );
+
+    register_rest_route($this->config['slug'], 'hours', array(
+      'methods' => 'GET',
+      'callback' => array($this, 'epcb_additional_hours'),
+      'permission_callback' => function (){return true;},
+      'args' => [
+        'from' => [
+          'description' => 'Date from formatted as Y-m-d',
+          "type" => "date",
+          "required" => true,
+          "validate_callback" => function($param, $request, $key) {return $this->isValidDate($param);}
+        ],
+        'to' => [
+          'description' => 'Date to formatted as Y-m-d',
+          "type" => "string",
+          "required" => true,
+          "validate_callback" => function($param, $request, $key) {return $this->isValidDate($param);}
         ]
       ]
     ) );
@@ -124,6 +146,40 @@ class UCDLibPluginLocationsAPI {
     }
 
     return rest_ensure_response($out);
+  }
+
+  // endpoint to retrieve additional hours data for all locations
+  // used by the primary hours widget
+  public function epcb_additional_hours($request){
+    $out = [];
+
+    // since we cache all api calls, limit how much data can be retrieved at once
+    $from = DateTime::createFromFormat($this->dateFmt, $request['from'], new DateTimeZone($this->tz) );
+    $to = DateTime::createFromFormat($this->dateFmt, $request['to'], new DateTimeZone($this->tz) );
+    $interval = $from->diff($to);
+    if ( $interval->days > 93 ) {
+      return new WP_Error( 'rest_invalid_param', 'Requested date range is too wide.', array( 'status' => 400 ) );
+    }
+
+    $locations = Timber::get_posts( [
+      'post_type' => $this->config['postTypeSlug'],
+      'orderby' => 'menu_order',
+      'order' => 'ASC',
+      'nopaging' => true,
+    ] );
+    foreach ($locations as $location) {
+      $hours = $location->get_libcal_hours($from->format($this->dateFmt), $to->format($this->dateFmt));
+      $hours['id'] = $location->ID;
+      $out[] = $hours;
+    }
+    $out = array_values($out);
+    
+    return rest_ensure_response($out);
+  }
+
+  private function isValidDate( $date ){
+    $d = DateTime::createFromFormat($this->dateFmt, $date );
+    return $d && $d->format($this->dateFmt) == $date;
   }
 
   private function add_additional_fields($location, $fields){
