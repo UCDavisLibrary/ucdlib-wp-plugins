@@ -80,6 +80,10 @@ class UCDLibPluginAssets {
       require_once( __DIR__ . '/forminator.php' );
       $this->forminator = new UCDLibPluginAssetsForminator();
     }
+    if ( $this->is_plugin_active('wp-hummingbird/wp-hummingbird.php') ){
+      require_once( __DIR__ . '/hummingbird.php' );
+      $this->forminator = new UCDLibPluginAssetsHummingbird();
+    }
   }
 
   public function registerAdminScripts(){
@@ -89,7 +93,10 @@ class UCDLibPluginAssets {
   }
 
   public function is_plugin_active($plugin){
-    return in_array( $plugin, get_option( 'active_plugins', array() ), true );
+    if ( !isset( $this->activePlugins )){
+      $this->activePlugins = get_option( 'active_plugins', array() );
+    }
+    return in_array( $plugin, $this->activePlugins, true );
   }
 
   public function enqueue_editor_css(){
