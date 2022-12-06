@@ -148,6 +148,14 @@ export class UcdlibLocation{
   }
 
   /**
+   * @property {Number} monthsToDisplay
+   * @description Number of months to display operating hours (from start of this.hoursDateRange)
+   */
+  get monthsToDisplay(){
+    return this.data.hoursNumberOfMonths || 4;
+  }
+
+  /**
    * @property {Boolean} hasOccupancyData
    * @description Location has capacity and occupancy data
    */

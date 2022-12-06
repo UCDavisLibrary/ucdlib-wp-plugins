@@ -44,6 +44,7 @@ class UCDLibPluginLocationsLocation extends UcdThemePost {
     if ( ! empty( $this->core_data ) ) {
       return $this->core_data;
     }
+    $monthRange = get_field('hours_months', $this->post_type);
     $out = array(
       'id' => $this->ID,
       'labels' => [],
@@ -52,6 +53,7 @@ class UCDLibPluginLocationsLocation extends UcdThemePost {
       'appointments' => [
         'required' => $this->meta('has_appointments') ? true : false
       ],
+      'hoursNumberOfMonths' => $monthRange ? intval($monthRange) : 4,
 
       ## Added for hide hours toggle and adding appointment description ##
       'hideHours' => [

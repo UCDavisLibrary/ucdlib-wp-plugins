@@ -37,6 +37,8 @@ export default class UcdlibHours extends LitElement {
     this.render = Templates.render.bind(this);
     this.renderComplete = Templates.renderComplete.bind(this);
     this._renderWeekPaginator = Templates._renderWeekPaginator.bind(this);
+    this._renderNavigation = Templates._renderNavigation.bind(this);
+    this._renderMonthNav = Templates._renderMonthNav.bind(this);
     this._renderWeekLabel = Templates._renderWeekLabel.bind(this);
     this._renderWeeklyHours = Templates._renderWeeklyHours.bind(this);
     this._renderChild = Templates._renderChild.bind(this);
@@ -45,11 +47,13 @@ export default class UcdlibHours extends LitElement {
     this.showChildren = true;
     this.nestChildren = true;
     this.createHoursDateRange = true;
+    this.ctlTaskMode = 'onConnected';
     this.ctl = new LocationsController(this);
 
     // non-controller properties
     this.ariaLabel = "Operating Hours for UC Davis Library Locations";
-    this._activeWeekPanel = 0;
+    this._activeWeekPanel = 0
+    this._activeMonthIndex = 0
     this._visibleServices = {};
     this.surfaceChildren = '';
     
@@ -58,6 +62,29 @@ export default class UcdlibHours extends LitElement {
   willUpdate(props){
     if ( props.has('surfaceChildren') ) {
       this._surfaceChildren = this.surfaceChildren.split(',').map(x => parseInt(x))
+    }
+
+    // set active month when week changes
+    if ( props.has('_activeWeekPanel') ){
+      if ( this._activeWeekPanel == 0 ){
+        this._activeMonthIndex = 0;
+      } else if (this.ctl && this.ctl.successfulInitialFetch) {
+        const activeWeek = this.getActiveWeek();
+        let UTCMonth = 0;
+        const firstOfMonth = activeWeek.filter(x => x.dayOfMonth == 1);
+        if ( firstOfMonth.length ) {
+          UTCMonth = firstOfMonth[0].date.getUTCMonth();
+        } else if (activeWeek.length) {
+          UTCMonth = activeWeek[0].date.getUTCMonth();
+        }
+        const months = this.ctl.hoursDateRange.months;
+        for (let i = 0; i < months.length; i++) {
+          if ( months[i].UTCMonth == UTCMonth ){
+            this._activeMonthIndex = i;
+            break;
+          }
+        }
+      }
     }
   }
 
@@ -106,6 +133,11 @@ export default class UcdlibHours extends LitElement {
   _onBackwardClick(){
     if ( !this._activeWeekPanel ) return;
     this._activeWeekPanel -= 1;
+  }
+
+  _onMonthClick(i){
+    //this._activeMonthIndex = i;
+    this._activeWeekPanel = this.ctl.hoursDateRange.months[i].weekIndex;
   }
 
 }

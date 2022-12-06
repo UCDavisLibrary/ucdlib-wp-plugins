@@ -26,11 +26,12 @@ export class LocationsController{
       (this.host = host).addController(this);
 
       this.fetchTask = new Task(this.host, {task: async() => await this._getData(), autoRun: false});
-      this.hasSuccesfullyFetched = false;
+      this.successfulInitialFetch = false;
 
       this._configValues = {
         host: {default: "https://library.ucdavis.edu", hostProp: 'apiHost'},
         endpoint: {default: "wp-json/ucdlib-locations/locations", hostProp: 'apiEndpoint'},
+        hoursEndpoint: {default: "wp-json/ucdlib-locations/hours", hostProp: 'apiHoursEndpoint'},
         locationId: {default: 0, hostProp: 'location'},
         getChildren: {default: false, hostProp: 'showChildren'},
         nestChildren: {default: false, hostProp: 'nestChildren'},
@@ -171,14 +172,18 @@ export class LocationsController{
       } else {
         out = new UcdlibLocation(result);
       }
-      this.hasSuccesfullyFetched = true;
       this._data = result;
       this.data = out;
       if ( this.getConfigValue('createHoursDateRange') ){
         this._setHoursDateRange();
       }
+      this.successfulInitialFetch = true;
       this.host.requestUpdate();
       return out;
+    }
+
+    async getAdditionalHours(){
+
     }
 
     stopInterval(){
@@ -222,8 +227,6 @@ export class LocationsController{
     }
 
     renderStatus(status){
-
-
       if ( status === 'pending') {
         const containerStyles = {};
         const iconStyles = {};
@@ -277,7 +280,7 @@ export class LocationsController{
      * @returns 
      */
     getWeekDayString(week, index){
-      if ( !week[index] ) return;
+      if ( !week || !week[index] ) return '';
       return `${week[index].month} ${week[index].dayOfMonth}, ${week[index].year}`;
     }
 
@@ -286,10 +289,17 @@ export class LocationsController{
      * @description Sets date range for which we have hours data
      */
     _setHoursDateRange(){
-      const range = {from: false, to: false, weeks: []};
+      const range = {
+        from: false, 
+        to: false, 
+        weeks: [], 
+        months: [],
+        dataFetchedThrough: false};
       const ranges = [];
       const locations = Array.isArray(this.data) ? this.data : [this.data];
+      let monthsToDisplay = 4;
       for (const location of locations) {
+        monthsToDisplay = location.monthsToDisplay;
         ranges.push(location.hoursDateRange);
 
         for (const child of location.children ) {
@@ -305,16 +315,31 @@ export class LocationsController{
           }
         }
         if ( r.to ) {
-          if ( ! range.to ) {
-            range.to = r.to
-          } else if (r.to > range.to ) {
-            range.to = r.to;
+          if ( ! range.dataFetchedThrough ) {
+            range.dataFetchedThrough = r.to
+          } else if (r.to > range.dataFetchedThrough ) {
+            range.dataFetchedThrough = r.to;
           }
         }
       }
-      if ( !range.from || !range.to ) {
+
+      if ( !range.from ){
         throw new Error('Unable to construct hours date range');
       }
+
+      // set last day of date range based on number of months to display
+      let toMonth = range.from.getUTCMonth() + monthsToDisplay - 1;
+      let toYear = range.from.getUTCFullYear();
+      if ( toMonth >= 12 ) {
+        toYear += 1;
+        toMonth -= 12;
+      }
+      let toDate = new Date(toYear, toMonth + 1, 0);
+      const dayOfWeek = toDate.getUTCDay()
+      if ( dayOfWeek != 6 ) {
+        toDate = new Date(toYear, toMonth + 1, 6 - dayOfWeek);
+      }
+      range.to = toDate;
 
       let d = new Date(range.from.getTime());
       let weekIndex = 0;
@@ -323,6 +348,15 @@ export class LocationsController{
         if ( range.weeks[weekIndex].length >= 7 ){
           weekIndex += 1;
           range.weeks.push([]);
+        }
+        if ( 
+          !range.months.length ||
+          range.months[range.months.length - 1].UTCMonth != d.getUTCMonth()) {
+          range.months.push({
+            UTCMonth: d.getUTCMonth(), 
+            label: DateTimeUtils.labels().months[d.getUTCMonth()],
+            weekIndex: weekIndex
+          });
         }
         range.weeks[weekIndex].push({
           date: new Date(d.getTime()),

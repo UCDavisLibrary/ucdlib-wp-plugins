@@ -70,7 +70,7 @@ return html`
   ${this.ctl.render({
     complete: this.renderComplete,
     initial: () => this.ctl.renderStatus('pending'),
-    pending: () => html`${this.ctl.hasSuccesfullyFetched ? 
+    pending: () => html`${this.ctl.successfulInitialFetch ? 
       this.renderComplete(this.ctl.data) : this.ctl.renderStatus('pending')
     }`,
     error: () => this.ctl.renderStatus('error'),

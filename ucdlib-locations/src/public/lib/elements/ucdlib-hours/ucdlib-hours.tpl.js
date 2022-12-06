@@ -3,6 +3,8 @@ import { classMap } from 'lit/directives/class-map.js';
 import { unsafeHTML } from 'lit/directives/unsafe-html.js';
 import { LocationsController } from '../../utils/locations-controller.js';
 
+import buttonStyles from '@ucd-lib/theme-sass/2_base_class/_buttons.css';
+
 
 export function styles() {
   const elementStyles = css`
@@ -21,6 +23,32 @@ export function styles() {
     .location:last-child{
       margin-bottom: 1rem;
     }
+    .hours-nav {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .btn--month {
+      border: 1px solid var(--brand--secondary, #ffbf00);
+      padding: .65rem;
+      margin-right: var(--spacer--small, .5rem);
+      margin-bottom: 1rem;
+      font-size: 1rem;
+      min-width: auto;
+      min-height: auto;
+      transition: background-color 350ms;
+    }
+    .btn--month.active {
+      color: #fff;
+      background-color: var(--brand-primary, #022851);
+      border: 1px solid var(--brand-primary, #022851);
+    }
+    .btn--month.active:hover {
+      background-color: var(--brand-primary, #022851);
+    }
+    .btn--month:hover {
+      background-color: var(--brand--secondary, #ffbf00);
+    }
     .paginator {
       background-color: var(--brand--primary-30, #ebf3fa);
       padding: var(--spacer--small, .5rem);
@@ -28,6 +56,7 @@ export function styles() {
       align-items: center;
       justify-content: space-between;
       margin-bottom: 1rem;
+      width: 100%;
     }
     .paginator button {
       font-family: "Font Awesome 5 Free";
@@ -164,6 +193,11 @@ export function styles() {
       }
     }
     @media (min-width: 768px) {
+      .paginator {
+        flex-grow: 1;
+        min-width: 400px;
+        width: auto;
+      }
       .week {
         display: flex;
         flex-wrap: nowrap;
@@ -208,7 +242,7 @@ export function styles() {
   `;
 
   const styles = LocationsController.styles;
-  styles.push(elementStyles);
+  styles.push(buttonStyles, elementStyles);
 
   return styles;
 }
@@ -218,10 +252,17 @@ return html`
   ${this.ctl.render({
     complete: this.renderComplete,
     initial: () => this.ctl.renderStatus('pending'),
-    pending: () => html`${this.ctl.hasSuccesfullyFetched ? 
-      this.renderComplete(this.ctl.data) : this.ctl.renderStatus('pending')
+    pending: () => html`${this.ctl.successfulInitialFetch ? 
+      html`
+        ${this._renderNavigation()}
+        ${this.ctl.renderStatus('pending')}
+      ` : this.ctl.renderStatus('pending')
     }`,
-    error: () => this.ctl.renderStatus('error'),
+    error: () => html`${this.ctl.successfulInitialFetch ? 
+      html`
+        ${this._renderNavigation()}
+        ${this.ctl.renderStatus('error')}
+      ` : html`${this.ctl.renderStatus('error')}`}`,
   })}
 
 
@@ -230,7 +271,7 @@ return html`
 // Renders if api call is successful
 export function renderComplete(locations) {
 return html`
-  ${this._renderWeekPaginator()}
+  ${this._renderNavigation()}
   ${locations.map(location => html`
     <section class="location ${!location.hasHoursData && !location.hoursPlaceholder ? 'location--no-hours' : ''}">
       <h2 class="heading--underline">${location.name}</h2>
@@ -263,6 +304,40 @@ return html`
 `;}
 
 /**
+ * @function _renderNavigation
+ * @description Renders interface for navigating between date ranges
+ * @returns {TemplateResult} 
+ */
+export function _renderNavigation(){
+  return html`
+    <div class='hours-nav'>
+      ${this._renderMonthNav()}
+      ${this._renderWeekPaginator()}
+    </div>
+  `;
+}
+
+/**
+ * @function _renderMonthNav
+ * @description Renders interface for navigating by month
+ * @returns 
+ */
+export function _renderMonthNav(){
+  const months = this.ctl.hoursDateRange.months;
+  return html`
+    ${months.map((month, i) => html`
+      <button 
+          type="button"
+          class="btn btn--month ${this._activeMonthIndex == i ? 'active' : ''}"
+          ?disabled=${this.ctl.fetchTask.status != 2}
+          @click=${() => this._onMonthClick(i)}
+          >${month.label}</button>
+    `)}
+  `
+}
+
+
+/**
  * @function _renderWeekPaginator
  * @description Renders the paginator that allows user to select a new week to display
  * @returns {TemplateResult}
@@ -273,7 +348,7 @@ return html`
     <div class="paginator">
       <button 
         type="button" 
-        ?disabled=${!this._activeWeekPanel}
+        ?disabled=${!this._activeWeekPanel || this.ctl.fetchTask.status != 2}
         @click=${this._onBackwardClick}
         >&#xf053</button>
       <div class="week-label-container">
@@ -288,13 +363,14 @@ return html`
       </div>
       <button 
         type="button" 
-        ?disabled=${this._activeWeekPanel + 1 == weeks.length}
+        ?disabled=${this._activeWeekPanel + 1 == weeks.length || this.ctl.fetchTask.status != 2}
         @click=${this._onForwardClick}>&#xf054</button>
     </div>
     `;
 }
 
 export function _renderWeekLabel(week){
+  if ( !week ) return html``;
   return html`
   <span class="keep-together">${this.ctl.getWeekDayString(week, 0)}</span><span> to </span><span class="keep-together">${this.ctl.getWeekDayString(week, week.length - 1)}</span>
   `

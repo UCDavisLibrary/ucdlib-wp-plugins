@@ -28,16 +28,15 @@ class UCDLibPluginLocationsACF {
 
   // clears transients used to cache location data
   public function clear_all_transients(  ){
-    $slug = $this->config['postTypeSlug'];
     $screen = get_current_screen();
     if ( $screen->id && $screen->id == "locations_page_acf-options-settings") {
-      delete_transient('libcal_token');
-      $locations = Timber::get_posts( [
-        'post_type' => $slug,
-        'nopaging' => true,
-      ] );
-      foreach ($locations as $location) {
-        delete_transient('libcal_hours_' . $location->ID);
+      global $wpdb;
+      $transients = $wpdb->get_results(
+        "SELECT option_name AS name FROM $wpdb->options 
+        WHERE option_name LIKE '_transient_libcal%' OR option_name LIKE '_transient_safespace%'"
+      );
+      foreach ($transients as $transient) {
+        delete_transient(str_replace('_transient_', '', $transient->name));
       }
     }
   }
