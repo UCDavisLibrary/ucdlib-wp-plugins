@@ -271,7 +271,7 @@ class UCDPluginCASAuth {
     $port = intval($options[$this->slug . "_field_port"]);
     $casUri = $options[$this->slug . "_field_uri"];
     
-    phpCAS::client(CAS_VERSION_3_0, $host, $port, $casUri);
+    phpCAS::client(CAS_VERSION_3_0, $host, $port, $casUri, get_site_url());
     
     if ( array_key_exists($this->slug . "_field_validation_uri", $options) ) {
       $serviceValidate = $options[$this->slug . "_field_validation_uri"];
