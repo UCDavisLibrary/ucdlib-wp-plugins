@@ -35,4 +35,16 @@ class UCDLibPluginLocationsUtils {
     $out = array_merge($hours, ['data' => $todaysHours]);
     return $out;
   }
+
+  // deletes all transients used by this plugin
+  public static function deleteTransients(){
+    global $wpdb;
+    $transients = $wpdb->get_results(
+      "SELECT option_name AS name FROM $wpdb->options 
+      WHERE option_name LIKE '_transient_libcal%' OR option_name LIKE '_transient_safespace%'"
+    );
+    foreach ($transients as $transient) {
+      delete_transient(str_replace('_transient_', '', $transient->name));
+    }
+  }
 }

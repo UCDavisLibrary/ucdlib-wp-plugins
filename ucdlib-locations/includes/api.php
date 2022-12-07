@@ -152,20 +152,25 @@ class UCDLibPluginLocationsAPI {
   // used by the primary hours widget
   public function epcb_additional_hours($request){
     $out = [];
-
-    // since we cache all api calls, limit how much data can be retrieved at once
-    $now = new DateTime('now', new DateTimeZone('America/Los_Angeles'));
     $from = DateTime::createFromFormat($this->dateFmt, $request['from'], new DateTimeZone($this->tz) );
     $to = DateTime::createFromFormat($this->dateFmt, $request['to'], new DateTimeZone($this->tz) );
-    $interval = $from->diff($to);
-    if ( $interval->days > 93 ) {
-      return new WP_Error( 'rest_invalid_param', 'Requested date range is too wide.', array( 'status' => 400 ) );
+
+    // since this is a public endpoint, put some basic restrictions on how the libcal api can be called
+    $now = new DateTime('now', new DateTimeZone($this->tz));
+    $error = new WP_Error( 'rest_invalid_param', 'Dates improperly configured', array( 'status' => 400 ) );
+    $monthRange = get_field('hours_months', $this->config['postTypeSlug']);
+    $monthRange = $monthRange ? $monthRange : 4;
+    if ( $to < $from ) {
+      return $error;
     }
-    if ( ($now->diff($from))->days > 30 ){
-      return new WP_Error( 'rest_invalid_param', 'Requested from parameter is too early.', array( 'status' => 400 ) );
+    if ( $from < $now && ($now->diff($from))->days > 10 ) {
+      return $error;
     }
-    if ( ($now->diff($to))->days > 120 ){
-      return new WP_Error( 'rest_invalid_param', 'Requested to parameter is too late.', array( 'status' => 400 ) );
+    if ( ($from->diff($to))->days > 35 ) {
+      return $error;
+    }
+    if ( ($now->diff($to))->days > $monthRange * 31 ){
+      return $error;
     }
 
     $locations = Timber::get_posts( [
@@ -177,6 +182,9 @@ class UCDLibPluginLocationsAPI {
     foreach ($locations as $location) {
       $hours = $location->get_libcal_hours($from->format($this->dateFmt), $to->format($this->dateFmt));
       $hours['id'] = $location->ID;
+      $tz = new DateTimeZone($this->tz);
+      $tz_offset = (new DateTime('now', $tz))->format('P');
+      $hours['tzOffset'] = $tz_offset;
       $out[] = $hours;
     }
     $out = array_values($out);

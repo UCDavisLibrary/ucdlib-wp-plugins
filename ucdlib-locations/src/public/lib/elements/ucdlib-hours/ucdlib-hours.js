@@ -125,19 +125,30 @@ export default class UcdlibHours extends LitElement {
     return classes;
   }
 
-  _onForwardClick(){
+  async _onForwardClick(){
     if ( this._activeWeekPanel + 1 == this.ctl.hoursDateRange.weeks.length ) return;
-    this._activeWeekPanel += 1;
+    const weekIndex = this._activeWeekPanel + 1;
+    if ( !this.ctl.hoursDateRange.weeksFetched.includes(weekIndex) ){
+      await this.ctl.getAdditionalHours(weekIndex);
+    }
+    this._activeWeekPanel = weekIndex;
   }
 
-  _onBackwardClick(){
+  async _onBackwardClick(){
     if ( !this._activeWeekPanel ) return;
-    this._activeWeekPanel -= 1;
+    const weekIndex = this._activeWeekPanel - 1;
+    if ( !this.ctl.hoursDateRange.weeksFetched.includes(weekIndex) ){
+      await this.ctl.getAdditionalHours(weekIndex);
+    }
+    this._activeWeekPanel = weekIndex;
   }
 
-  _onMonthClick(i){
-    //this._activeMonthIndex = i;
-    this._activeWeekPanel = this.ctl.hoursDateRange.months[i].weekIndex;
+  async _onMonthClick(i){
+    const weekIndex = this.ctl.hoursDateRange.months[i].weekIndex;
+    if ( !this.ctl.hoursDateRange.weeksFetched.includes(weekIndex) ){
+      await this.ctl.getAdditionalHours(weekIndex);
+    }
+    this._activeWeekPanel = weekIndex;
   }
 
 }

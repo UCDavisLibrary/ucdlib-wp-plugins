@@ -216,6 +216,29 @@ export class UcdlibLocation{
   }
 
   /**
+   * @method addHours
+   * @description Merges new hours object with existing hours
+   * @param {Object} newHours 
+   * @param {String} tzOffset
+   */
+  addHours(newHours, tzOffset){
+    const existingHours = this.data.hours ? this.data.hours.data : {};
+    if ( 
+      !existingHours ||
+      typeof existingHours !== 'object' ||
+      Array.isArray(existingHours)
+      ) {
+      this.data.hours = {
+        'status': 'good',
+        'data': newHours,
+        'tzOffset': tzOffset
+      };
+    } else {
+      this.data.hours.data = {...this.data.hours.data, ...newHours}
+    }
+  }
+
+  /**
    * @method renderWeeklyHours
    * @description Renders the operating hours for a given week
    * @param {Array} week - An array of contiguous dates

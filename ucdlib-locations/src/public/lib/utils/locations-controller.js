@@ -182,8 +182,78 @@ export class LocationsController{
       return out;
     }
 
-    async getAdditionalHours(){
+    /**
+     * @method getAdditionalHours
+     * @description Fetches and saves hours data for specified week
+     * @param {Number} weekIndex 
+     * @returns {Boolean} true if successful
+     */
+    async getAdditionalHours(weekIndex){
+      this.fetchTask.status = 1;
+      this.host.requestUpdate();
+      await this.host.updateComplete;
 
+      const host = this.getConfigValue('host');
+      const endpoint = this.getConfigValue('hoursEndpoint');
+      const week = this.hoursDateRange.weeks[weekIndex];
+      if ( !week || !week.length ){
+        console.error(`Week '${weekIndex}' is undefined or empty`);
+        this.fetchTask.status = 3;
+        this.host.requestUpdate();
+        await this.host.updateComplete;
+        return false;
+      }
+      const from = week[0].isoKey;
+      const to = week[week.length - 1].isoKey;
+      const url = `${host}/${endpoint}?from=${from}&to=${to}`;
+      try {
+        const response = await fetch(url);
+        const results = await response.json();
+        if (!response.ok) {
+          throw new Error('Non 200 response');
+        } 
+        for (const location of results) {
+          this.addHours(location);
+        }
+        this.fetchTask.status = 2;
+      } catch (error) {
+        console.error(error);
+        this.fetchTask.status = 3;
+      }
+      this.host.requestUpdate();
+      await this.host.updateComplete;
+      this.hoursDateRange.weeksFetched.push(weekIndex);
+      return true;
+    }
+
+    /**
+     * @method addHours
+     * @description Adds additional hours to a location
+     * @param {Object} newHours 
+     * @returns 
+     */
+    addHours(newHours){
+      if ( 
+        !newHours.id || 
+        !newHours.data || 
+        typeof newHours.data !== 'object' ||
+        Array.isArray(newHours.data)
+        ) {
+        return;
+      }
+      for (const location of this.data ) {
+        if ( location.id == newHours.id ){
+          location.addHours(newHours.data, newHours.tzOffset);
+          return;
+        }
+        for (const child of location.children) {
+          if ( child.id == newHours.id ){
+            child.addHours(newHours.data, newHours.tzOffset);
+            return;
+          }
+        }
+      }
+      
     }
 
     stopInterval(){
@@ -281,7 +351,7 @@ export class LocationsController{
      */
     getWeekDayString(week, index){
       if ( !week || !week[index] ) return '';
-      return `${week[index].month} ${week[index].dayOfMonth}, ${week[index].year}`;
+      return `${week[index].month} ${week[index].dayOfMonth}`;
     }
 
     /**
@@ -294,7 +364,8 @@ export class LocationsController{
         to: false, 
         weeks: [], 
         months: [],
-        dataFetchedThrough: false};
+        weeksFetched: []};
+      let dataFetchedThrough = false;
       const ranges = [];
       const locations = Array.isArray(this.data) ? this.data : [this.data];
       let monthsToDisplay = 4;
@@ -315,10 +386,10 @@ export class LocationsController{
           }
         }
         if ( r.to ) {
-          if ( ! range.dataFetchedThrough ) {
-            range.dataFetchedThrough = r.to
-          } else if (r.to > range.dataFetchedThrough ) {
-            range.dataFetchedThrough = r.to;
+          if ( ! dataFetchedThrough ) {
+            dataFetchedThrough = r.to
+          } else if (r.to > dataFetchedThrough ) {
+            dataFetchedThrough = r.to;
           }
         }
       }
@@ -343,11 +414,15 @@ export class LocationsController{
 
       let d = new Date(range.from.getTime());
       let weekIndex = 0;
+      range.weeksFetched.push(weekIndex);
       range.weeks.push([]);
       while ( d <= range.to ) {
         if ( range.weeks[weekIndex].length >= 7 ){
           weekIndex += 1;
           range.weeks.push([]);
+          if ( d < dataFetchedThrough ){
+            range.weeksFetched.push(weekIndex);
+          }
         }
         if ( 
           !range.months.length ||
@@ -367,6 +442,10 @@ export class LocationsController{
           year: d.getUTCFullYear()
         })
         d.setDate(d.getDate() + 1);
+      }
+
+      if ( range.months.length > monthsToDisplay ){
+        range.months.pop();
       }
 
       this.hoursDateRange = range;

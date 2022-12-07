@@ -1,5 +1,7 @@
 <?php
 
+require_once( __DIR__ . '/utils.php' );
+
 class UCDLibPluginLocationsACF {
 
   public function __construct( $config ){
@@ -30,14 +32,7 @@ class UCDLibPluginLocationsACF {
   public function clear_all_transients(  ){
     $screen = get_current_screen();
     if ( $screen->id && $screen->id == "locations_page_acf-options-settings") {
-      global $wpdb;
-      $transients = $wpdb->get_results(
-        "SELECT option_name AS name FROM $wpdb->options 
-        WHERE option_name LIKE '_transient_libcal%' OR option_name LIKE '_transient_safespace%'"
-      );
-      foreach ($transients as $transient) {
-        delete_transient(str_replace('_transient_', '', $transient->name));
-      }
+      UCDLibPluginLocationsUtils::deleteTransients();
     }
   }
   

@@ -8,6 +8,7 @@ require_once( __DIR__ . '/acf.php' );
 require_once( __DIR__ . '/api.php' );
 require_once( __DIR__ . '/timber.php' );
 require_once( __DIR__ . '/meta-data.php' );
+require_once( __DIR__ . '/utils.php' );
 
 class UCDLibPluginLocations {
   public function __construct(){
@@ -34,6 +35,8 @@ class UCDLibPluginLocations {
 
     add_action( 'admin_head', array($this, 'admin_head') );
     add_action( 'admin_menu', array($this, 'add_admin_menu'));
+    add_action( $this->slug . '_cron', [$this, 'dailyCron']);
+    add_action( 'admin_init', [$this, 'scheduleDailyCron']);
 
     // enqueue all assets
     $this->assets = new UCDLibPluginLocationsAssets($config);
@@ -85,6 +88,16 @@ class UCDLibPluginLocations {
       'dashicons-location',
       25
       ); 
+  }
+
+  public function dailyCron(){
+    UCDLibPluginLocationsUtils::deleteTransients();
+  }
+
+  public function scheduleDailyCron(){
+    if ( ! wp_next_scheduled( $this->slug . '_cron' ) ) {
+      wp_schedule_event( time(), 'daily', $this->slug . '_cron' );
+    }
   }
 
 }

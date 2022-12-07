@@ -38,6 +38,9 @@ export function styles() {
       min-height: auto;
       transition: background-color 350ms;
     }
+    .btn--month:focus {
+      box-shadow: none;
+    }
     .btn--month.active {
       color: #fff;
       background-color: var(--brand-primary, #022851);
@@ -50,7 +53,7 @@ export function styles() {
       background-color: var(--brand--secondary, #ffbf00);
     }
     .paginator {
-      background-color: var(--brand--primary-30, #ebf3fa);
+      background-color: var(--brand--secondary, #ffbf00);
       padding: var(--spacer--small, .5rem);
       display: flex;
       align-items: center;
@@ -193,11 +196,6 @@ export function styles() {
       }
     }
     @media (min-width: 768px) {
-      .paginator {
-        flex-grow: 1;
-        min-width: 400px;
-        width: auto;
-      }
       .week {
         display: flex;
         flex-wrap: nowrap;
@@ -224,6 +222,13 @@ export function styles() {
       }
       .hours-to {
         display: block;
+      }
+    }
+    @media (min-width: 330px ) {
+      .paginator {
+        flex-grow: 1;
+        min-width: 250px;
+        width: auto;
       }
     }
     @media (min-width: 992px) and (max-width: 1199px) {
