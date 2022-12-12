@@ -12,17 +12,31 @@
         {% endif %}
         {{contact(department.post, 'contact-info--department text--smaller text-bold vm-teaser--person__contact')}}
       </div>
-      <div>
+      <div class=(attributes.display == 'two-column') ? 'directory-row':''>
         {% for person in department.people %}
-          {{teaser(person)}}
+          {% if attributes.display == 'two-column'%}
+            <div class='directory-column'>
+              {{teaser(person)}}
+            </div>
+          {% else %}
+            {{teaser(person)}}
+          {% endif %}   
         {% endfor %}
       </div>
     </div>
   {% endfor %}
 {% elseif attributes.people %}
+  <div class=(attributes.display == 'two-column') ? 'directory-row':''>
   {% for person in attributes.people %}
-    {{teaser(person)}}
+    {% if attributes.display == 'two-column'%}
+        <div class='directory-column'>
+          {{teaser(person)}}
+        </div>
+    {% else %}
+        {{teaser(person)}}
+    {% endif %}   
   {% endfor %}
+  </div>
 {% else %}
   {{ no_results() }}
 {% endif %}

@@ -206,3 +206,15 @@ h2.exhibit-header-intro {
   content: '*';
   color: #f93549;
 }
+.directory-row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+.directory-column {
+  float: left;
+  width: 50%;
+  padding: 10px;
+  color:red;
+}

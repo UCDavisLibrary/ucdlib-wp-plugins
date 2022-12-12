@@ -23,6 +23,11 @@ export default ( props ) => {
     {value: 'name', label: 'Alphabetical'}
   ];
 
+  const displayOptions = [
+    {value: 'single-column', label: 'Single-Column'},
+    {value: 'two-column', label: 'Two-Column'}
+  ];
+
   const asSelectOptions = (options) => {
     return options.map(o => {
       const out = {
@@ -49,6 +54,14 @@ export default ( props ) => {
       }
     </style>
   <${InspectorControls}>
+  <${PanelBody} title="Display Options">
+      <${SelectControl}
+        options=${ displayOptions }
+        value=${ attributes.display }
+        label='Display as'
+        onChange=${ v => {setAttributes({display: v})} }
+      />
+    </${PanelBody}>
     <${PanelBody} title="Query Filters">
       <div className='directory-query-inspector-controls'>
         <${TextControl} 
