@@ -288,9 +288,7 @@ return html`
         ${location.data.descriptionDisplay.required ? html`<div class="description-html">${location.renderDescription()}</div>`:html``}
         ${location.hoursPlaceholder ? html`
           <div>${unsafeHTML(location.hoursPlaceholder)}</div>
-          <!-- Added conditional statements for hide hours toggle and adding appointment description -->
         `:html` ${location.data.hideHours.required ? html``: html`${this._renderWeeklyHours(location)}`}`}
-          <!-- Added conditional statements for hide hours toggle and adding appointment description -->
         <div class="children">
           ${location.children.filter(c => this._surfaceChildren.includes(c.id)).map(c => this._renderChild(c))}
           ${location.hasServices && location.children.filter(c => !this._surfaceChildren.includes(c.id)).length ? html`

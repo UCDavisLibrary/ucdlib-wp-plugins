@@ -236,6 +236,7 @@ export class UcdlibLocation{
     } else {
       this.data.hours.data = {...this.data.hours.data, ...newHours}
     }
+    this._setHoursFor24HrStatus();
   }
 
   /**
