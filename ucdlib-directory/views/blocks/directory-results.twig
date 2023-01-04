@@ -12,10 +12,10 @@
         {% endif %}
         {{contact(department.post, 'contact-info--department text--smaller text-bold vm-teaser--person__contact')}}
       </div>
-      <div class=(attributes.display == 'two-column') ? 'directory-row':''>
+      <div>
         {% for person in department.people %}
           {% if attributes.display == 'two-column'%}
-            <div class='directory-column'>
+            <div class='l-sibling-grid--half'>
               {{teaser(person)}}
             </div>
           {% else %}
@@ -26,10 +26,10 @@
     </div>
   {% endfor %}
 {% elseif attributes.people %}
-  <div class=(attributes.display == 'two-column') ? 'directory-row':''>
+  <div>
   {% for person in attributes.people %}
     {% if attributes.display == 'two-column'%}
-        <div class='directory-column'>
+        <div class='l-sibling-grid--half'>
           {{teaser(person)}}
         </div>
     {% else %}
