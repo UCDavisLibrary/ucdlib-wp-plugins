@@ -15,7 +15,7 @@
       <div>
         {% for person in department.people %}
           {% if attributes.display == 'two-column'%}
-            <div class='l-sibling-grid--half'>
+            <div class='l-sibling-grid--half panel o-box'>
               {{teaser(person)}}
             </div>
           {% else %}
@@ -29,7 +29,7 @@
   <div>
   {% for person in attributes.people %}
     {% if attributes.display == 'two-column'%}
-        <div class='l-sibling-grid--half'>
+        <div class='l-sibling-grid--half panel o-box'>
           {{teaser(person)}}
         </div>
     {% else %}
