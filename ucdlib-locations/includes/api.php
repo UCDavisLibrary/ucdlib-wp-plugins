@@ -41,6 +41,23 @@ class UCDLibPluginLocationsAPI {
       ]
     ) );
 
+    register_rest_route($this->config['slug'], 'refresh-hours', array(
+      'methods' => 'GET',
+      'callback' => array($this, 'epcb_refresh_all_hours'),
+      'permission_callback' => function (){return true;}
+    ) );
+
+    register_rest_route($this->config['slug'], 'test', array(
+      'methods' => 'GET',
+      'callback' => function(){
+        return rest_ensure_response([
+          'time' => time(),
+          'next' => wp_next_scheduled( 'ucdlib-locations_cron' )
+        ]);
+      },
+      'permission_callback' => function (){return true;}
+    ) );
+
     register_rest_route($this->config['slug'], 'hours', array(
       'methods' => 'GET',
       'callback' => array($this, 'epcb_additional_hours'),
@@ -192,9 +209,86 @@ class UCDLibPluginLocationsAPI {
     return rest_ensure_response($out);
   }
 
+  // fetches fresh hours data for all locations from libcal
+  // deletes past transients
+  public function epcb_refresh_all_hours(){
+    global $wpdb;
+    $out = [];
+    $locations = [];
+    $validRange = UCDLibPluginLocationsUtils::getHoursDateRange();
+
+    $transients = $wpdb->get_results(
+      "SELECT option_name AS name FROM $wpdb->options 
+      WHERE option_name LIKE '_transient_libcal_hours%'"
+    );
+    if ( !count($transients) ){
+      $out['error'] = 'No hours transients in system!';
+      return rest_ensure_response($out);
+    }
+    foreach ($transients as $transient) {
+      $t = explode('?', $transient->name);
+      if ( !count($t) == 2 ) continue;
+      
+      $locationId = str_replace('_transient_libcal_hours_', '', $t[0]);
+      if ( !array_key_exists($locationId, $locations) ){
+        $out[$locationId] = [];
+      }
+
+      $dates = [];
+      parse_str($t[1], $dates);
+      $from = DateTime::createFromFormat($this->dateFmt, $dates['f'], new DateTimeZone($this->tz) );
+      $to = DateTime::createFromFormat($this->dateFmt, $dates['t'], new DateTimeZone($this->tz) );
+      $log = ['dates' => $dates];
+
+      if ( $validRange[0] < $from ){
+        $log['action'] = 'refresh';
+        if ( !array_key_exists($locationId, $locations) ){
+          $locations[$locationId] = Timber::get_post( $locationId );
+        } 
+        $location = $locations[$locationId];
+        if ( !$location ) {
+          $log['action'] = 'expire';
+          $log['message'] = 'location does not exist';
+          $out[$locationId][] = $log;
+          $this->deleteTransient($transient);
+          $log['status'] = 'good';
+          continue;
+        }
+        if ( !$location->can_get_hours()[0] ) {
+          $log['action'] = 'expire';
+          $log['message'] = 'location not configured for hours retrieval.';
+          $out[$locationId][] = $log;
+          $this->deleteTransient($transient);
+          $log['status'] = 'good';
+          continue;
+        }
+        $hours = $location->do_libcal_fetch($from->format($this->dateFmt), $to->format($this->dateFmt));
+        if ( $hours['status'] == 'error' ){
+          $log['status'] = 'error';
+          if ( array_key_exists('message', $hours)) {
+            $log['message'] = $hours['message'];
+          }
+        } else {
+          $log['status'] = 'success';
+        }
+
+      } else {
+        $log['action'] = 'expire';
+      }
+
+      $out[$locationId][] = $log; 
+      
+    }
+    return rest_ensure_response($out);
+  }
+
   private function isValidDate( $date ){
     $d = DateTime::createFromFormat($this->dateFmt, $date );
     return $d && $d->format($this->dateFmt) == $date;
+  }
+
+  private function deleteTransient( $transient ){
+    delete_transient(str_replace('_transient_', '', $transient->name));
   }
 
   private function add_additional_fields($location, $fields){

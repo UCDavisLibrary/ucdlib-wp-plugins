@@ -33,10 +33,12 @@ class UCDLibPluginLocations {
       $config['version'] = $plugin_metadata['Version'];
     } 
 
+    $this->config = $config;
+
     add_action( 'admin_head', array($this, 'admin_head') );
     add_action( 'admin_menu', array($this, 'add_admin_menu'));
-    add_action( $this->slug . '_cron', [$this, 'dailyCron']);
-    add_action( 'admin_init', [$this, 'scheduleDailyCron']);
+
+    add_action( 'init', [$this, 'registerCron'] );
 
     // enqueue all assets
     $this->assets = new UCDLibPluginLocationsAssets($config);
@@ -90,14 +92,31 @@ class UCDLibPluginLocations {
       ); 
   }
 
-  public function dailyCron(){
-    UCDLibPluginLocationsUtils::deleteTransients();
+  public function refreshHours(){
+
+    $transient_id = 'steve';
+    $x = 1;
+    $t = get_transient( $transient_id );
+    if ( $t !== false ) {
+      $x = $t + 1;
+    }
+    set_transient($transient_id, $x, 0);
   }
 
-  public function scheduleDailyCron(){
-    if ( ! wp_next_scheduled( $this->slug . '_cron' ) ) {
-      wp_schedule_event( time(), 'daily', $this->slug . '_cron' );
+  public function registerCron(){
+    add_filter( 'cron_schedules', [$this, 'setHoursCronSchedule'] );
+    add_action( $this->slug . '_cron', [$this, 'refreshHours']);
+  }
+
+  public function setHoursCronSchedule($schedules){
+    $interval = get_field('hours_cache_duration', $this->config['postTypes']['location']);
+    if ( $interval ) {
+      $schedules[$this->config['slug'] . '_hours'] = [
+        'interval' => intval($interval),
+        'display' => $interval . ' seconds'
+      ];
     }
+    return $schedules;
   }
 
 }

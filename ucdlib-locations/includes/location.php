@@ -279,19 +279,14 @@ class UCDLibPluginLocationsLocation extends UcdThemePost {
   }
 
   // Retrieves operating hours from springshare libcal
+  // Will pull from cache if it exists
   public function get_libcal_hours($from=false, $to=false){
-    $out = array(
-      'status' => 'error',
-      'data' => false,
-      'source' => 'libcal'
-    );
-    if (!$from && !$to){
-      $dateRange = UCDLibPluginLocationsUtils::getHoursDateRange();
-      $from = $dateRange[0];
-      $to = $dateRange[1];
-    }
+    ['out' => $out, 
+    'from' => $from, 
+    'to' => $to, 
+    'transient_id' => $transient_id] = $this->setup_libcal_call($from, $to);
+
     // check cache
-    $transient_id = 'libcal_hours_' . $this->ID . '?f=' . $from . 't=' . $to;
     $t = get_transient( $transient_id );
 
     // libcal api call has been made before, and is cached
@@ -314,63 +309,11 @@ class UCDLibPluginLocationsLocation extends UcdThemePost {
 
     // libcal api call not cached. need to perform.
     } else {
-
-      // check if this location can get hours
-      $can_get_hours = $this->can_get_hours();
-      if ( !$can_get_hours[0] ){
-        if ( isset($can_get_hours[1]) ) {
-          $out['message'] = $can_get_hours[1];
-        }
-        return $out;
-      }
-      $creds = get_field('api_libcal', $this->post_type);
-    
-      // get access token
-      $token = $this->get_libcal_token();
-      if ( !$token ) {
-        $out['message'] = 'Unable to get libcal API token';
-        return $out;
-      }
-
-      # construct GET request for libcal location
-      $url = trailingslashit($creds['url_hours']) . $this->meta('libcal_id');
-      $url_params = array(
-        'from' => $from,
-        'to' => $to
-      );
-      $url .= '?' . http_build_query($url_params);
-      $headers = array(
-        "Content-type" => 'application/json',
-        "Authorization" => "BEARER " . $token
-      );
-      $args = array(
-        'body'        => null,
-        'timeout'     => '10',
-        'redirection' => '5',
-        'blocking'    => true,
-        'headers'     => $headers,
-        'cookies'     => array()
-      );
-      // do GET request and cache data
-      $r = wp_remote_get($url, $args);
-      if (wp_remote_retrieve_response_code($r) == 200) {
-        $data = json_decode(wp_remote_retrieve_body($r), true);
-        $cached_data = array(
-          'status' => 'good',
-          'cached' => time(),
-          'data' => $data[0]
-        );
-        $transient_duration = get_field('hours_cache_duration', $this->post_type);
-        if ( !$transient_duration ) $transient_duration = 300;
-        set_transient( $transient_id, $cached_data, $transient_duration );
-        $out = array_merge($out, $cached_data);
-        $out['data'] = $out['data']['dates'];
-      }
-      else {
-        $out['message'] = 'Libcal API is unavailable.';
-        $out['cached'] = time();
+      $out = $this->do_libcal_fetch($from, $to);
+      if ( array_key_exists('non200', $out)){
         set_transient( $transient_id, $out, 30 );
       }
+
     }
     return $out;
   }
@@ -409,6 +352,93 @@ class UCDLibPluginLocationsLocation extends UcdThemePost {
     set_transient( $transient_id, array(false), 30 );
   }
   return false;
+  }
+
+  // do fresh hours call
+  public function do_libcal_fetch($from=false, $to=false){
+    ['out' => $out, 
+    'from' => $from, 
+    'to' => $to, 
+    'transient_id' => $transient_id] = $this->setup_libcal_call($from, $to);
+
+    // check if this location can get hours
+    $can_get_hours = $this->can_get_hours();
+    if ( !$can_get_hours[0] ){
+      if ( isset($can_get_hours[1]) ) {
+        $out['message'] = $can_get_hours[1];
+      }
+      return $out;
+    }
+    $creds = get_field('api_libcal', $this->post_type);
+  
+    // get access token
+    $token = $this->get_libcal_token();
+    if ( !$token ) {
+      $out['message'] = 'Unable to get libcal API token';
+      return $out;
+    }
+
+    # construct GET request for libcal location
+    $url = trailingslashit($creds['url_hours']) . $this->meta('libcal_id');
+    $url_params = array(
+      'from' => $from,
+      'to' => $to
+    );
+    $url .= '?' . http_build_query($url_params);
+    $headers = array(
+      "Content-type" => 'application/json',
+      "Authorization" => "BEARER " . $token
+    );
+    $args = array(
+      'body'        => null,
+      'timeout'     => '10',
+      'redirection' => '5',
+      'blocking'    => true,
+      'headers'     => $headers,
+      'cookies'     => array()
+    );
+    // do GET request and cache data
+    $r = wp_remote_get($url, $args);
+    if (wp_remote_retrieve_response_code($r) == 200) {
+      $data = json_decode(wp_remote_retrieve_body($r), true);
+      $cached_data = array(
+        'status' => 'good',
+        'cached' => time(),
+        'data' => $data[0]
+      );
+      // wp autoloads transients that dont expire, so lets set a long duration
+      set_transient( $transient_id, $cached_data, YEAR_IN_SECONDS );
+      $out = array_merge($out, $cached_data);
+      $out['data'] = $out['data']['dates'];
+    }
+    else {
+      $out['message'] = 'Libcal API is unavailable. Status code: ' . wp_remote_retrieve_response_code($r);
+      $out['non200'] = true;
+      $out['cached'] = time();
+    }
+    return $out;
+  }
+
+  private function setup_libcal_call($from, $to){
+    $config = [
+      'out' => [
+        'status' => 'error',
+        'data' => false,
+        'source' => 'libcal'
+      ]
+    ];
+    if (!$from && !$to){
+      $dateRange = UCDLibPluginLocationsUtils::getHoursDateRange();
+      $config['from'] = $dateRange[0];
+      $config['to'] = $dateRange[1];
+    } else {
+      $config['from'] = $from;
+      $config['to'] = $to;
+    }
+    $config['transient_id'] = 'libcal_hours_' . $this->ID . '?f=' . $from . '&t=' . $to;
+
+    return $config;
+
   }
 
 }
