@@ -14,15 +14,29 @@
       </div>
       <div>
         {% for person in department.people %}
-          {{teaser(person)}}
+          {% if attributes.display == 'two-column'%}
+            <div class='l-sibling-grid--half panel o-box'>
+              {{teaser(person)}}
+            </div>
+          {% else %}
+            {{teaser(person)}}
+          {% endif %}   
         {% endfor %}
       </div>
     </div>
   {% endfor %}
 {% elseif attributes.people %}
+  <div>
   {% for person in attributes.people %}
-    {{teaser(person)}}
+    {% if attributes.display == 'two-column'%}
+        <div class='l-sibling-grid--half panel o-box'>
+          {{teaser(person)}}
+        </div>
+    {% else %}
+        {{teaser(person)}}
+    {% endif %}   
   {% endfor %}
+  </div>
 {% else %}
   {{ no_results() }}
 {% endif %}
