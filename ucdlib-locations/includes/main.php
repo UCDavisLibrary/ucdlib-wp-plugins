@@ -93,14 +93,14 @@ class UCDLibPluginLocations {
   }
 
   public function refreshHours(){
-
-    $transient_id = 'steve';
-    $x = 1;
-    $t = get_transient( $transient_id );
-    if ( $t !== false ) {
-      $x = $t + 1;
-    }
-    set_transient($transient_id, $x, 0);
+    $siteurl = get_option('siteurl', '');
+    $apiurl = strpos($siteurl, 'localhost') === false ?  $siteurl : 'http://wordpress';
+    $apiurl .= "/wp-json/$this->slug/refresh-hours";
+    $args = array(
+      'timeout'     => '120',
+      'blocking'    => false
+    );
+    $r = wp_remote_get($apiurl, $args);
   }
 
   public function registerCron(){

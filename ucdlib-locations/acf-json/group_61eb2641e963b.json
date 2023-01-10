@@ -3,6 +3,24 @@
     "title": "Operating Hours",
     "fields": [
         {
+            "key": "field_63bd936862657",
+            "label": "On Setting Up Hours",
+            "name": "",
+            "aria-label": "",
+            "type": "message",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "message": "Refer to the <a href='https:\/\/github.com\/UCDavisLibrary\/ucdlib-wp-plugins\/tree\/main\/ucdlib-locations'>plugin repo readme<\/a> for additional information on how hours work.",
+            "new_lines": "wpautop",
+            "esc_html": 0
+        },
+        {
             "key": "field_61eb266de4c64",
             "label": "Number of Weeks to Load",
             "name": "hours_weeks",
@@ -87,5 +105,5 @@
     "active": true,
     "description": "Locations: Global Hours Settings",
     "show_in_rest": 0,
-    "modified": 1670273829
+    "modified": 1673368685
 }

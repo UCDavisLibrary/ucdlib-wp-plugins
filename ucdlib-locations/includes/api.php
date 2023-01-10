@@ -47,17 +47,6 @@ class UCDLibPluginLocationsAPI {
       'permission_callback' => function (){return true;}
     ) );
 
-    register_rest_route($this->config['slug'], 'test', array(
-      'methods' => 'GET',
-      'callback' => function(){
-        return rest_ensure_response([
-          'time' => time(),
-          'next' => wp_next_scheduled( 'ucdlib-locations_cron' )
-        ]);
-      },
-      'permission_callback' => function (){return true;}
-    ) );
-
     register_rest_route($this->config['slug'], 'hours', array(
       'methods' => 'GET',
       'callback' => array($this, 'epcb_additional_hours'),
@@ -218,7 +207,7 @@ class UCDLibPluginLocationsAPI {
     $validRange = UCDLibPluginLocationsUtils::getHoursDateRange();
 
     $transients = $wpdb->get_results(
-      "SELECT option_name AS name FROM $wpdb->options 
+      "SELECT option_name AS name, option_value AS value FROM $wpdb->options 
       WHERE option_name LIKE '_transient_libcal_hours%'"
     );
     if ( !count($transients) ){
@@ -267,6 +256,11 @@ class UCDLibPluginLocationsAPI {
           $log['status'] = 'error';
           if ( array_key_exists('message', $hours)) {
             $log['message'] = $hours['message'];
+          }
+          try {
+            $d = unserialize($transient->value);
+            $log['cacheAge'] = $d['cached'];
+          } catch (\Throwable $th) {
           }
         } else {
           $log['status'] = 'success';
