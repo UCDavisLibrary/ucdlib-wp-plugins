@@ -200,7 +200,7 @@ export class UcdlibLocation{
       return range;
     }
     Object.keys(this.data.hours.data).forEach(d => {
-      d = new Date(d);
+      d = new Date(d + 'T12:00:00.000Z');
       if ( !range.from ) {
         range.from = d;
       } else if ( d < range.from ) {
