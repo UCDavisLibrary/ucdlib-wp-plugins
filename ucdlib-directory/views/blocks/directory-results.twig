@@ -13,30 +13,30 @@
         {{contact(department.post, 'contact-info--department text--smaller text-bold vm-teaser--person__contact')}}
       </div>
       <div>
-        {% for person in department.people %}
-          {% if attributes.display == 'two-column'%}
-            <div class='l-sibling-grid--half panel o-box'>
-              {{teaser(person)}}
-            </div>
-          {% else %}
-            {{teaser(person)}}
-          {% endif %}   
-        {% endfor %}
+        {{_self.people_teasers(department.people, attributes)}}
       </div>
     </div>
   {% endfor %}
 {% elseif attributes.people %}
   <div>
-  {% for person in attributes.people %}
-    {% if attributes.display == 'two-column'%}
-        <div class='l-sibling-grid--half panel o-box'>
-          {{teaser(person)}}
-        </div>
-    {% else %}
-        {{teaser(person)}}
-    {% endif %}   
-  {% endfor %}
+    {{_self.people_teasers(attributes.people, attributes)}}
   </div>
 {% else %}
   {{ no_results() }}
 {% endif %}
+
+{% macro people_teasers(people, attributes) %}
+  {% if attributes.columns == 'two' %}
+    {% for row in people|batch(2) %}
+      <div class='l-2col'>
+        {% for person in row %}
+          <div class='panel {{loop.first ? "l-first" : "l-second"}}'>{{teaser(person)}}</div>
+        {% endfor %}
+      </div>
+    {% endfor %}
+  {% else %}
+    {% for person in people %}
+      {{teaser(person)}}
+    {% endfor %}
+  {% endif %}
+{% endmacro %}

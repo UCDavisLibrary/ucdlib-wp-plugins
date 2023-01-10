@@ -38,9 +38,9 @@ const settings = {
       type: 'string',
       default: 'department'
     },
-    display: {
+    columns: {
       type: 'string',
-      default: 'single-column'
+      default: 'one'
     }
   },
   edit: Edit
