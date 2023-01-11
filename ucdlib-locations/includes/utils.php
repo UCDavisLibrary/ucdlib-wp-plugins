@@ -71,13 +71,17 @@ class UCDLibPluginLocationsUtils {
       $t = explode('?', $transient->name);
       if ( !count($t) == 2 ) continue;
       
+      $dates = [];
+      parse_str($t[1], $dates);
+      if ( !array_key_exists('f', $dates) || !array_key_exists('t', $dates) ){
+        continue;
+      }
+      
       $locationId = str_replace('_transient_libcal_hours_', '', $t[0]);
       if ( !array_key_exists($locationId, $locations) ){
         $out[$locationId] = [];
       }
-
-      $dates = [];
-      parse_str($t[1], $dates);
+      
       $from = DateTime::createFromFormat(self::$dateFmt, $dates['f'], new DateTimeZone(self::$tz) );
       $to = DateTime::createFromFormat(self::$dateFmt, $dates['t'], new DateTimeZone(self::$tz) );
       $log = ['dates' => $dates];
