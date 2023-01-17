@@ -6,6 +6,7 @@
             "key": "field_62573239511c4",
             "label": "Directory Page",
             "name": "directory_page",
+            "aria-label": "",
             "type": "post_object",
             "instructions": "",
             "required": 0,
@@ -23,6 +24,26 @@
             "multiple": 0,
             "return_format": "id",
             "ui": 1
+        },
+        {
+            "key": "field_63c6bfeb6ca8a",
+            "label": "Query Elasticsearch",
+            "name": "directory_query_es",
+            "aria-label": "",
+            "type": "true_false",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "message": "Query Elasticsearch instead of mysql",
+            "default_value": 0,
+            "ui": 0,
+            "ui_on_text": "",
+            "ui_off_text": ""
         }
     ],
     "location": [
@@ -43,5 +64,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1658163282
+    "modified": 1673969714
 }

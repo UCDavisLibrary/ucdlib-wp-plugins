@@ -86,9 +86,94 @@ class UCDLibPluginDirectoryBlockTransformations {
 
   }
 
+  public static function setElasticSearch($attrs){
+    if ( !get_field('directory_query_es', 'ucdlib-directory') ) return $attrs;
+    $activePlugins = get_option( 'active_plugins', array() );
+    if ( !in_array( 'ucdlib-search/ucdlib-search.php', $activePlugins, true ) ) return $attrs;
+
+    $attrs['elasticSearch'] = true;
+    return $attrs;
+  }
+
+  public static function getEsResults($attrs){
+    if ( !array_key_exists('elasticSearch', $attrs) ||  !$attrs['elasticSearch'] ) return $attrs;
+
+    // construct es query
+    require_once( WP_PLUGIN_DIR. '/ucdlib-search/includes/client.php' );
+    $client = new UCDLibPluginSearchClient();
+    $query = [
+      'size' => 1000,
+      'fields' => ['id'],
+      '_source' => false,
+      'query' => [
+        'bool' => [
+          'must' => [],
+        ]
+      ]
+    ];
+    $filterContext = [
+      'bool' => [
+        'must' => [
+          ['term' => ['type' => 'person']]
+        ]
+      ]
+    ];
+
+    if ( $attrs['qRaw'] ){
+      $query['query']['bool']['must']['multi_match'] = [
+        'query' =>  $attrs['qRaw'],
+        'fields' => ['content', 'positionTitle', 'title^5', 'areasOfExperise.text']
+      ];
+    }
+
+    if ( count($attrs['department']) ){
+      $filterContext['bool']['must'][] = ['bool' => ['should' => [['terms' => ['departmentIds' => $attrs['department']]]]]];
+    }
+
+    if ( count($attrs['library']) ){
+      $filterContext['bool']['must'][] = ['bool' => ['should' => [['terms' => ['libraryIds' => $attrs['library']]]]]];
+    }
+
+    if ( count($attrs['directoryTag']) ){
+      $filterContext['bool']['must'][] = ['bool' => ['should' => [['terms' => ['directoryTagIds' => $attrs['directoryTag']]]]]];
+    }
+
+    $query['query']['bool']['filter'] = $filterContext;
+    $results = $client->search( $query );
+
+    // display params
+    $hideDepartments = array_key_exists('hideDepartments', $attrs) && $attrs['hideDepartments'] != 'false';
+    $orderby = $attrs['orderby'] == 'name' ? 'name' : 'department';
+    if ( $results['hits']['total']['value'] == 0 ) return $attrs;
+
+    // get timber people objects
+    $personQuery = [
+      'ignore_sticky_posts' => true,
+      'posts_per_page' => -1,
+      'post__in' => array_map(function($x){return $x['_id'];}, $results['hits']['hits']),
+      'post_type' => 'person',
+      'meta_key' => 'name_last',
+      'orderby' => $orderby == 'department' ? 'menu_order meta_value' : 'meta_value',
+      'order' => 'ASC'
+    ];
+    $people = Timber::get_posts($personQuery);
+
+    if ( $hideDepartments ){
+      $attrs['people'] = $people;
+    } else if ( $orderby == 'name' ) {
+      $attrs['people'] = $people;
+    } else {
+      $attrs['departments'] = self::assignPeopleToDepartments($people);
+    }
+    
+
+    return $attrs;
+  }
+
   // converts directory url query args to attributes
   public static function queryArgsToAttributes($attrs){
     $attrs['orderby'] = get_query_var('orderby', '');
+    $attrs['qRaw'] = get_query_var('q', ''); 
     $attrs['q'] = UCDLibPluginDirectoryUtils::explodeQueryVar('q', false, ' ');
     $attrs['library'] = UCDLibPluginDirectoryUtils::explodeQueryVar('library');
     $attrs['department'] = UCDLibPluginDirectoryUtils::explodeQueryVar('department');
@@ -108,8 +193,10 @@ class UCDLibPluginDirectoryBlockTransformations {
 
   /**
    * Gets people/departments based on url query parameters
+   * using normal mysql-powered query
    */
   public static function getDirectoryResults( $attrs=[] ){
+    if ( array_key_exists('elasticSearch', $attrs) && $attrs['elasticSearch'] ) return $attrs;
     $personQuery = [
       'post_type' => 'person',
       'meta_key' => 'name_last',
@@ -217,28 +304,33 @@ class UCDLibPluginDirectoryBlockTransformations {
     } else if ( $orderby == 'name' ) {
       $attrs['people'] = $people;
     } else {
-      $deptQuery = [
-        'post_type' => 'department',
-        'order' => 'ASC',
-        'orderby' => 'title',
-        'posts_per_page' => -1
-      ];
-      $departments = Timber::get_posts($deptQuery);
-
-      $deptWithPeople = [];
-      foreach ($departments as $dept) {
-        $deptWithPeople[$dept->ID] = ['post' => $dept, 'people' => []];
-      }
-      foreach ($people as $person) {
-        $deptId = $person->departmentId();
-        if ( $deptId && array_key_exists($deptId, $deptWithPeople)){
-          $deptWithPeople[$deptId]['people'][] = $person;
-        }
-      }
-      $attrs['departments'] = $deptWithPeople;
-
+      $attrs['departments'] = self::assignPeopleToDepartments($people);
     }
     return $attrs;
+  }
+
+  public static function assignPeopleToDepartments($people){
+    $deptQuery = [
+      'post_type' => 'department',
+      'order' => 'ASC',
+      'orderby' => 'title',
+      'posts_per_page' => -1
+    ];
+    $departments = Timber::get_posts($deptQuery);
+
+    $deptWithPeople = [];
+    foreach ($departments as $dept) {
+      $deptWithPeople[$dept->ID] = ['post' => $dept, 'people' => []];
+    }
+    foreach ($people as $person) {
+      $deptId = $person->departmentId();
+      if ( $deptId && array_key_exists($deptId, $deptWithPeople)){
+        $deptWithPeople[$deptId]['people'][] = $person;
+      }
+    }
+
+    return $deptWithPeople;
+
   }
 
   public static function widgetIcons( $attrs ){
