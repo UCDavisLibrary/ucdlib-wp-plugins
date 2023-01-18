@@ -74,8 +74,7 @@ class UCDLibPluginLocations {
    */
   public function admin_head(){
     echo "
-    <ucdlib-plugin plugin='$this->slug' style='display:none'>
-    </ucdlib-plugin>
+    <meta name='ucdlib-plugin-active' content='$this->slug' />
     ";
   }
 

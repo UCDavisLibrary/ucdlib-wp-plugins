@@ -6,7 +6,7 @@ import pluginBlocks from "./lib/blocks";
 import userPlugin from "./lib/plugins/user";
 import profilePlugin from "./lib/plugins/profile";
 
-if ( document.querySelector('ucdlib-plugin[plugin=ucdlib-directory]') ) {
+if ( document.querySelector('meta[name=ucdlib-plugin-active][content=ucdlib-directory]') ) {
   pluginBlocks.forEach(block => {
     registerBlockType( block.name, block.settings );
   });
