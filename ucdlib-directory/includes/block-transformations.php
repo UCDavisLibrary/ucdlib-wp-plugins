@@ -323,9 +323,11 @@ class UCDLibPluginDirectoryBlockTransformations {
       $deptWithPeople[$dept->ID] = ['post' => $dept, 'people' => []];
     }
     foreach ($people as $person) {
-      $deptId = $person->departmentId();
-      if ( $deptId && array_key_exists($deptId, $deptWithPeople)){
-        $deptWithPeople[$deptId]['people'][] = $person;
+      $deptIds = $person->departmentIds();
+      foreach ($person->departmentIds() as $deptId) {
+        if ( $deptId && array_key_exists($deptId, $deptWithPeople)){
+          $deptWithPeople[$deptId]['people'][] = $person;
+        }
       }
     }
 
