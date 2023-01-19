@@ -201,7 +201,7 @@ const Edit = () => {
     let value = field == 'from' ? exhibitDateFrom : exhibitDateTo;
     if ( value && value.length == 8) {
       value = `${value.slice(0,4)}-${value.slice(4,6)}-${value.slice(6,8)}T12:00:00Z`;
-    } else {
+    } else if (value) {
       console.warn(`${field} date was saved in incorrect format: ${value}`);
       value = null;
     }
