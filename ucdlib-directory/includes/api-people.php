@@ -128,6 +128,8 @@ class UCDLibPluginDirectoryAPIPeople {
       $out['photo'] = new ArrayObject();
     }
 
+    // keep for backwards compatibility
+    // remove when person teaser brand element is updated
     $dept = $profile->department();
     if ( $dept ) {
       $out['department'] = [
@@ -137,6 +139,16 @@ class UCDLibPluginDirectoryAPIPeople {
     } else {
       $out['department'] = new ArrayObject();
     }
+
+    $out['departments'] = [];
+    $depts = $profile->departments();
+    foreach ($depts as $dept) {
+      $out['departments'][] = [
+        'id' => $dept->ID,
+        'title' => $dept->title()
+      ];
+    }
+
 
     return rest_ensure_response($out);
 

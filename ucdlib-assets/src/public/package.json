@@ -23,7 +23,7 @@
         "slick-carousel": "^1.8.1"
     },
     "devDependencies": {
-        "@ucd-lib/cork-app-build": "^0.4.1",
+        "@ucd-lib/cork-app-build": "^0.4.2",
         "breakpoint-sass": "^2.7.1",
         "cork-app-utils": "^1.0.5",
         "css-loader": "^5.2.4",

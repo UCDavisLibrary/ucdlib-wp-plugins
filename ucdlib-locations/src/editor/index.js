@@ -8,7 +8,7 @@ import corePlugin from "./lib/plugins/core";
 
 import "../public";
 
-if ( document.querySelector('ucdlib-plugin[plugin=ucdlib-locations]') ) {
+if ( document.querySelector('meta[name=ucdlib-plugin-active][content=ucdlib-locations]') ) {
   if ( select('core/editor') ){
     pluginBlocks.forEach(block => {
       registerBlockType( block.name, block.settings );

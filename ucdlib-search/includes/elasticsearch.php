@@ -1,5 +1,5 @@
 <?php
-
+require_once( __DIR__ . '/client.php' );
 require_once( __DIR__ . '/document.php' );
 require_once( __DIR__ . '/config.php' );
 
@@ -13,7 +13,8 @@ class UCDLibPluginSearchElasticsearch {
     } 
     $this->config = $config;
     
-    $this->client = $this->createClient();
+    $client = new UCDLibPluginSearchClient($config);
+    $this->client = $client->client;
 
     $this->currentPage = 0;
     $this->pageSize = get_option('posts_per_page');
@@ -29,14 +30,6 @@ class UCDLibPluginSearchElasticsearch {
     }
   }
 
-  /**
-   * Make the elasticsearch client, which is loaded with all other php dependencies via composer by the theme.
-   */
-  public function createClient(){
-    $c = $this->config->elasticsearch;
-    $host = 'http://' . $c['username'] . ':' . $c['password'] . '@' . $c['host'] . ':' . $c['port'];
-    return Elasticsearch\ClientBuilder::create()->setHosts([$host])->build();
-  }
 
   /**
    * Runs right before main wp query is performed.

@@ -26,7 +26,8 @@ class UCDLibPluginDirectoryBlocks extends UCDThemeBlockRenderer {
       'transform' => ['widgetIcons']
     ],
     'ucdlib-directory/filters' => [
-      'twig' => '@ucdlib-directory/blocks/directory-filters.twig'
+      'twig' => '@ucdlib-directory/blocks/directory-filters.twig',
+      'transform' => ['setElasticSearch']
     ],
     'ucdlib-directory/meet' => [
       'twig' => '@ucdlib-directory/blocks/person-meet.twig',
@@ -47,7 +48,7 @@ class UCDLibPluginDirectoryBlocks extends UCDThemeBlockRenderer {
     ],
     'ucdlib-directory/results' => [
       'twig' => '@ucdlib-directory/blocks/directory-results.twig',
-      'transform' => ['queryArgsToAttributes', 'getDirectoryResults']
+      'transform' => ['queryArgsToAttributes', 'setElasticSearch' ,'getDirectoryResults', 'getEsResults']
     ],
     'ucdlib-directory/sort' => [
       'twig' => '@ucdlib-directory/blocks/directory-sort.twig'

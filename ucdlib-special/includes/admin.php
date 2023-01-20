@@ -14,8 +14,7 @@ class UCDLibPluginSpecialAdmin {
   public function admin_head(){
     $slug = $this->config->slug;
     echo "
-    <ucdlib-plugin plugin='$slug' style='display:none'>
-    </ucdlib-plugin>
+    <meta name='ucdlib-plugin-active' content='$slug' />
     ";
   }
 

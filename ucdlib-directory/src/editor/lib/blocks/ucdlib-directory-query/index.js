@@ -37,6 +37,10 @@ const settings = {
     orderby: {
       type: 'string',
       default: 'department'
+    },
+    columns: {
+      type: 'string',
+      default: 'one'
     }
   },
   edit: Edit

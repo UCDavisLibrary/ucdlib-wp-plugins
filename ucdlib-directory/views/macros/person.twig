@@ -13,9 +13,9 @@
           {% if person.positionTitle %}
             <li>{{person.positionTitle}}</li>
           {% endif %}
-          {% if person.department %}
-            <li>{{person.department.title}}</li>
-          {% endif %}
+          {% for department in person.departments %}
+            <li>{{department.title}}</li>
+          {% endfor %}
         </ul>
       {% endif %}
       {{_self.contact(person, 'text--smaller u-space-mb--small vm-teaser--person__contact')}}

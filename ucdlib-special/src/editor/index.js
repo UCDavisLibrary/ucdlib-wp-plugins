@@ -5,7 +5,7 @@ import { select } from "@wordpress/data";
 import blocks from "./lib/blocks";
 import plugins from "./lib/plugins";
 
-if ( document.querySelector('ucdlib-plugin[plugin=ucdlib-special]') ) {
+if ( document.querySelector('meta[name=ucdlib-plugin-active][content=ucdlib-special]') ) {
   blocks.forEach(block => {
     registerBlockType( block.name, block.settings );
   });

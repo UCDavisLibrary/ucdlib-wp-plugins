@@ -163,14 +163,17 @@ class UCDLibPluginLocationsAPI {
     if ( $to < $from ) {
       return $error;
     }
+    // cant get past dates
     if ( $from < $now && ($now->diff($from))->days > 10 ) {
       return $error;
     }
-    if ( ($from->diff($to))->days > 35 ) {
+    // enforce weekly increments starting on sunday
+    if ( (($from->diff($to))->days != 6) || $from->format('w') !== '0') {
       return $error;
     }
-    if ( ($now->diff($to))->days > $monthRange * 31 ){
-      return $error;
+    // cant go too far in future
+    if ( ($now->diff($from))->days > $monthRange * 31 ){
+      //return $error;
     }
 
     $locations = Timber::get_posts( [

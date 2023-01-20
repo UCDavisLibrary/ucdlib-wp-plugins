@@ -356,7 +356,7 @@ export class LocationsController{
 
     /**
      * @method _setHoursDateRange
-     * @description Sets date range for which we have hours data
+     * @description Sets date range for which we allow users to retrieve data
      */
     _setHoursDateRange(){
       const range = {
@@ -405,10 +405,10 @@ export class LocationsController{
         toYear += 1;
         toMonth -= 12;
       }
-      let toDate = new Date(toYear, toMonth + 1, 0);
+      let toDate = new Date(Date.UTC(toYear, toMonth + 1, 0, 12));
       const dayOfWeek = toDate.getUTCDay()
       if ( dayOfWeek != 6 ) {
-        toDate = new Date(toYear, toMonth + 1, 6 - dayOfWeek);
+        toDate = new Date(Date.UTC(toYear, toMonth + 1, 6 - dayOfWeek, 12));
       }
       range.to = toDate;
 

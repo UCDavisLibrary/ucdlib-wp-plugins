@@ -98,7 +98,7 @@ return html`
         <span>${this.widgetTitle}</span>
       </h5>
       <div class="field-container">
-        <label for="keyword">Name</label>
+        <label for="keyword">${this.dbSrc == 'es' ? 'Name or Keyword' : 'Name'}</label>
         <div class='flex'>
           <input id='keyword' .value=${this.keyword} type="text" @input=${e => this.keyword = e.target.value}>
         </div>

@@ -10,7 +10,8 @@ export default ( props ) => {
 
   // component state
   const [ positionTitle, setPositionTitle ] = useState( "" );
-  const [ positionDepartment, setPositionDepartment ] = useState( {id: 0, name: ""} );
+  const emptyDepartment = {id: 0, name: ""};
+  const [ positionDepartment, setPositionDepartment ] = useState( [emptyDepartment] );
   const [ isOpen, setOpen ] = useState( false );
   const openModal = () => setOpen( true );
   const closeModal = () => setOpen( false );
@@ -31,18 +32,20 @@ export default ( props ) => {
   })
 
   useEffect(() => {
-    const dept = departments.find(({id}) => id == meta.position_dept);
+    const selectedDepts = meta.position_dept.map(deptId => {
+      return departments.find(({id}) => id == deptId);
+    }).filter(x => x !== undefined);
     
-    if ( dept ) {
-      setPositionDepartment({id: meta.position_dept, name: dept.title.rendered});
+    
+    if ( selectedDepts.length ) {
+      const depts = selectedDepts.map(d => {return {id: d.id, name: d.title.rendered}});
+      setPositionDepartment([...depts, emptyDepartment]);
     }
   }, [departments, meta.position_dept])
 
 
-
-
   const saveData = () => {
-    const position_dept = parseInt(positionDepartment.id);
+    const position_dept = positionDepartment.map(d => d.id).filter(d => d !== 0);
     const meta = {
       position_title: positionTitle, 
       position_dept
@@ -52,11 +55,24 @@ export default ( props ) => {
     closeModal();
   }
 
+  const deptChoices = [{value: 0, label: 'Select a Department'}, ...departments.map(d => {return {value: d.id, label: d.title.rendered}})];
+
+  const updateDepartment = (deptId, i) => {
+    //console.log(departments);
+    const depts = [...positionDepartment];
+    depts[i] = {id: deptId, name: deptChoices.find(({value}) => value == deptId).label};
+    setPositionDepartment(depts);
+  }
+
   const canSave = (() => {
-    return positionTitle && positionDepartment.id;
+    return positionTitle && positionDepartment.length && positionDepartment[0].id;
   })();
 
-  const deptChoices = [{value: 0, label: 'Select a Department'}, ...departments.map(d => {return {value: d.id, label: d.title.rendered}})];
+  const removeDepartment = (i) => {
+    const before = positionDepartment.slice(0, i);
+    const after = positionDepartment.slice(i+1);
+    setPositionDepartment([...before, ...after]);
+  };
 
   return html`
   <div ...${ blockProps }>
@@ -67,8 +83,8 @@ export default ( props ) => {
         <h2 style=${{opacity: .8}}>Enter your title...</h2>
       `}
 
-      ${positionDepartment.id ? html`
-        <h3>${positionDepartment.name}</h3>
+      ${positionDepartment.length && positionDepartment[0].id ? html`
+        <h3>${positionDepartment.filter(d => d.id).map(d => d.name).join(", ")}</h3>
       ` : html`
         <h3 style=${{opacity: .8}}>Enter your department...</h3>
       `}
@@ -78,12 +94,20 @@ export default ( props ) => {
     ${isOpen && html`
       <${Modal} title="Your Title and Department" isDismissible=${false}>
         <${TextControl} label="Title" value=${positionTitle} onChange=${(v) => setPositionTitle(v)}/>
-        <${SelectControl} 
-          label="Department"
-          value=${positionDepartment.id}
-          options=${deptChoices}
-          onChange=${id => setPositionDepartment({id, name: deptChoices.find(({value}) => value == id).label})}
-        />
+        ${positionDepartment.map((d, i) => html`
+          <div key=${d.id} style=${{display: 'flex'}}>
+            <${SelectControl} 
+              label="${d.id == 0 ? 'Add additional department' : 'Department'}"
+              value=${d.id}
+              options=${deptChoices}
+              onChange=${id => updateDepartment(id, i)}
+            />
+            ${d.id != 0 && html`
+              <${Button} style=${{marginLeft: '5px', paddingTop: '10px'}}isDestructive=${true} onClick=${() => removeDepartment(i)} variant='link'>delete</${Button}>
+            `}
+          </div>
+        `)}
+
         <${Button} variant="primary" disabled=${!canSave} onClick=${saveData}>Save</${Button}>
       </${Modal}>
     `}

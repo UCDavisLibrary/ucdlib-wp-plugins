@@ -198,7 +198,13 @@ const Edit = () => {
   // exhibit to/from date picker
   const datePickerDropdown = (onClose, field) => {
     const setter = field == 'from' ? setExhibitDateFrom : setExhibitDateTo;
-    const value = field == 'from' ? exhibitDateFrom : exhibitDateTo;
+    let value = field == 'from' ? exhibitDateFrom : exhibitDateTo;
+    if ( value && value.length == 8) {
+      value = `${value.slice(0,4)}-${value.slice(4,6)}-${value.slice(6,8)}T12:00:00Z`;
+    } else if (value) {
+      console.warn(`${field} date was saved in incorrect format: ${value}`);
+      value = null;
+    }
     const onChange = (v) => {
       setter(v.split('T')[0].replace(/-/g, ''));
       onClose();

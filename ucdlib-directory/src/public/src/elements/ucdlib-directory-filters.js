@@ -12,6 +12,7 @@ export default class UcdlibDirectoryFilters extends LitElement {
       keyLibrary: {type: String},
       keyDepartment: {type: String},
       keyDirectoryTag: {type: String},
+      dbSrc: {type: String, attribute: 'db-src'},
       url: {state: true},
       keyword: {state: true},
       orderby: {state: true},
@@ -28,7 +29,7 @@ export default class UcdlibDirectoryFilters extends LitElement {
     super();
     this.render = render.bind(this);
     this.mobileVisibility = new MobileVisibilityController(this, 'UCDLibDirectoryFilters');
-
+    this.dbSrc = 'wp';
     this.widgetTitle = 'Directory Filters';
 
     // default url param keys

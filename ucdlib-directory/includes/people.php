@@ -185,7 +185,7 @@ class UCDLibPluginDirectoryPeople {
     ) );
     register_post_meta( $slug, 'position_dept', array(
       'show_in_rest' => true,
-      'single' => true,
+      'single' => false,
       'default' => 0,
       'type' => 'number',
     ) );
@@ -376,7 +376,21 @@ class UCDLibPluginDirectoryPeople {
     }
 
     $context = Timber::context();
+    $title = "Page Not Found";
+    $context['title'] = $title;
     status_header(404);
+
+    $widgetArea =  Timber::get_widgets( 'four-oh-four' );
+    if ( trim($widgetArea) ) {
+      $context['content'] = $widgetArea;
+    } else {
+      $context['content'] = "<p>Sorry, we couldn't find what you're looking for.</p>";
+    }
+
+    $context['breadcrumbs'] = [
+      ['link' => '/', 'title' => 'Home'],
+      ['link' => "", 'title' => $title]
+    ];
     $views = $GLOBALS['UcdSite']->views;
     $templates = array( $views->getTemplate('404'));
     Timber::render( $templates, $context );
@@ -403,11 +417,18 @@ class UCDLibPluginDirectoryPeople {
   // add new columns to the admin table
   public function add_admin_list_column( $column_key, $post_id ) {
     if ( $column_key ==  'department') {
-      $department = get_post_meta($post_id, 'position_dept', true);
-      if ( $department ) {
-        $department_name = get_the_title($department);
+      $departments = get_post_meta($post_id, 'position_dept', false);
+      $department_names = [];
+      if ( $departments ) {
+        foreach ($departments as $department) {
+          $department_name = get_the_title($department);
+          if ( $department_name ) {
+            $department_names[] = $department_name;
+          }
+        }
+        
       }
-      echo (!empty($department_name)) ? __($department_name, 'textdomain') : __('-', 'textdomain');
+      echo (count($department_names)) ? __(implode(', ', $department_names), 'textdomain') : __('-', 'textdomain');
     }
 
   }
@@ -603,15 +624,36 @@ class UCDLibPluginDirectoryPerson extends UcdThemePost {
     return $this->expertiseAreas;
   }
 
+  protected $departmentIds;
+  public function departmentIds(){
+    if ( ! empty( $this->departmentIds ) ) {
+      return $this->departmentIds;
+    }
+    $ids = get_post_meta($this->ID, 'position_dept', false);
+    $ids = $ids ? $ids : [];
+    $this->departmentIds = $ids;
+    return $this->departmentIds;
+  }
+
+  // returns first department only
+  // for backwards compatibility
   protected $departmentId;
   public function departmentId(){
     if ( ! empty( $this->departmentId ) ) {
       return $this->departmentId;
     }
-    $this->departmentId = $this->meta('position_dept');
+    $deptIds = $this->departmentIds();
+    if ( count($deptIds) ){
+      $this->departmentId = $deptIds[0];
+    } else {
+      $this->departmentId = NULL;
+    }
+    
     return $this->departmentId;
   }
 
+  // returns first department only
+  // for backwards compatibility
   protected $department;
   public function department(){
     if ( ! empty( $this->department ) ) {
@@ -625,6 +667,25 @@ class UCDLibPluginDirectoryPerson extends UcdThemePost {
     }
 
     return $this->department;
+  }
+
+  protected $departments;
+  public function departments(){
+    if ( ! empty( $this->departments ) ) {
+      return $this->departments;
+    }
+    $this->departments = [];
+    $deptIds = $this->departmentIds();
+    if ( count($deptIds) ) {
+      $this->departments = Timber::get_posts([
+        'post_type' => 'department',
+        'ignore_sticky_posts' => true,
+        'posts_per_page' => -1,
+        'post__in' => $deptIds,
+        'orderby' => 'post__in'
+      ]);
+    }
+    return $this->departments;
   }
 
   protected $appointmentLink;

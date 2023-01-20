@@ -23,6 +23,11 @@ export default ( props ) => {
     {value: 'name', label: 'Alphabetical'}
   ];
 
+  const columnOptions = [
+    {value: 'one', label: 'One'},
+    {value: 'two', label: 'Two'}
+  ];
+
   const asSelectOptions = (options) => {
     return options.map(o => {
       const out = {
@@ -80,6 +85,12 @@ export default ( props ) => {
       </div>
     </${PanelBody}>
     <${PanelBody} title="Results Display">
+      <${SelectControl}
+          options=${ columnOptions }
+          value=${ attributes.columns }
+          label='Number of Columns:'
+          onChange=${ v => {setAttributes({columns: v})} }
+        />
       <${SelectControl}
         options=${ sortOptions }
         value=${ attributes.orderby }
