@@ -186,7 +186,6 @@ class UCDLibPluginDirectoryPeople {
     register_post_meta( $slug, 'position_dept', array(
       'show_in_rest' => true,
       'single' => false,
-      'default' => 0,
       'type' => 'number',
     ) );
     register_post_meta( $slug, 'position_title', array(

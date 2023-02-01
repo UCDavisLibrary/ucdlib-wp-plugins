@@ -18,7 +18,7 @@ export default ( props ) => {
 
   // metadata from post
   const meta = SelectUtils.meta();
-  const { editPost } = useDispatch( 'core/editor', [ meta.position_title, meta.position_dept ] );
+  const { editPost } = useDispatch( 'core/editor', [ meta.position_title, meta.position_dept.length ] );
   useEffect(() => {
     if ( meta.position_title ) {
       setPositionTitle(meta.position_title);
@@ -45,7 +45,7 @@ export default ( props ) => {
 
 
   const saveData = () => {
-    const position_dept = positionDepartment.map(d => d.id).filter(d => d !== 0);
+    const position_dept = positionDepartment.map(d => parseInt(d.id)).filter(d => d !== 0 && !isNaN(d) );
     const meta = {
       position_title: positionTitle, 
       position_dept
