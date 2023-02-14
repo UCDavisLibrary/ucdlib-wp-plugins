@@ -54,17 +54,13 @@ class UCDLibPluginLocationsLocation extends UcdThemePost {
         'required' => $this->meta('has_appointments') ? true : false
       ],
       'hoursNumberOfMonths' => $monthRange ? intval($monthRange) : 4,
-
-      ## Added for hide hours toggle and adding appointment description ##
       'hideHours' => [
         'required' => $this->meta('hideHours') ? true : false
       ],
+      'openPrefix' => $this->meta('open_prefix'),
       'descriptionDisplay' => [
         'required' => $this->meta('hasDescriptonDisplay') ? true : false
       ],
-      ## Added for hide hours toggle and adding appointment description ##
-
-
       'hoursPlaceholder' => [
         'show' => $this->meta('has_hours_placeholder') ? true : false,
         'message' => $this->meta('hours_placeholder')

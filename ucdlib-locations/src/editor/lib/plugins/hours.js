@@ -25,6 +25,7 @@ const Edit = () => {
   const hasPlaceholder = meta.has_hours_placeholder ? true : false;
   const placeholderText = meta.hours_placeholder ? meta.hours_placeholder : '';
   const libcalId = meta.libcal_id ? meta.libcal_id : '';
+  const openPrefix = meta.open_prefix ? meta.open_prefix :'';
   const watchedVars = [
     hasDescriptonDisplay,
     hideHours,
@@ -35,11 +36,10 @@ const Edit = () => {
     hasOccupancy,
     occupancy,
     hasPlaceholder,
-    placeholderText
+    placeholderText,
+    openPrefix
   ];
   const { editPost } = useDispatch( 'core/editor', watchedVars );
-
-
 
   return html`
     <${Fragment}>
@@ -54,15 +54,21 @@ const Edit = () => {
             onChange=${() => editPost({meta: { has_operating_hours: !hasOperatingHours}})}
           />
           ${hasOperatingHours && html`
-            <${TextControl} 
-              label="Libcal ID"
-              value=${libcalId}
-              onChange=${libcal_id => editPost({meta: {libcal_id}})}
-              help="Can be found here: https://ucdavis.libcal.com/admin/hours"
-            />
+            <div>
+              <${TextControl} 
+                label="Libcal ID"
+                value=${libcalId}
+                onChange=${libcal_id => editPost({meta: {libcal_id}})}
+                help="Can be found here: https://ucdavis.libcal.com/admin/hours"
+              />
+              <${TextControl} 
+                label="Today's Hours Prefix Label"
+                value=${openPrefix}
+                onChange=${open_prefix => editPost({meta: {open_prefix}})}
+                help="Displays before open hours on any Today's Hours widget."
+              />
+            </div>
           `}
-
-          <!-- Added for hide hours toggle and adding appointment description -->
           <${ToggleControl} 
             label="Display Description in Hours page"
             checked=${hasDescriptonDisplay}
@@ -82,8 +88,6 @@ const Edit = () => {
             checked=${hideHours}
             onChange=${() => editPost({meta: { hideHours: !hideHours}})}
           />
-          <!-- Added for hide hours toggle and adding appointment description -->
-
           <${ToggleControl} 
             label="Has Appointments"
             checked=${hasAppointments}

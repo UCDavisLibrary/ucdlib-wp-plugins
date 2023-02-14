@@ -37,6 +37,10 @@ export class UcdlibLocation{
     return this.data.labels.room_number;
   }
 
+  get openPrefix(){
+    return this.data.openPrefix || '';
+  }
+
   /**
    * @property {Boolean} hasAppointments
    * @description Location has appointments
@@ -335,7 +339,7 @@ export class UcdlibLocation{
    * @param {Boolean} showIcon Renders a calendar icon before link. default: true
    * @returns {TemplateResult}
    */
-  renderAppointmentsLink(showIcon=true, useAltText=false){
+  renderAppointmentsLink(showIcon=false, useAltText=false){
     const appt = this.data.appointments;
 
     if ( !this.hasAppointments ) return html``;
@@ -514,6 +518,7 @@ export class UcdlibLocation{
       fromIso = DateTimeUtils.convertTimeToIso(from);
     } catch (error) {
       console.warn('Unable to convert time to iso');
+      return html``;
     }
     from = `${from.slice(0, -2)} ${from.slice(-2)}`;
     to = `${to.slice(0, -2)} ${to.slice(-2)}`;

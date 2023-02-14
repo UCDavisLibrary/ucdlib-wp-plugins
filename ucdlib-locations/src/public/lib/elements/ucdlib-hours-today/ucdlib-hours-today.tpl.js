@@ -10,50 +10,26 @@ export function styles() {
     .hide {
       display: none;
     }
-
+    [hidden] {
+      display: none !important;
+    }
     .location-status.hide {
       display: none;
     }
     .heading--underline.hide {
       display: none;
     }
-
     .children.children--none {
       display: none;
     }
-
     .child.child--no-hours {
       display: none;
     }
-
     .child .name {
       font-weight: 700;
     }
-    .child-details {
-      display: block;
-      flex-wrap: wrap;
-    }
-    .child-details .separator {
-      display: none;
-      padding: 0 5px;
-    }
-
-    @media (min-width: 400px) and (max-width: 991px) {
-      .child-details {
-        display: flex;
-      }
-      .child-details.child-details--appts .separator {
-        display: block;
-      }
-    }
-
-    @media (min-width: 1400px) {
-      .child-details {
-        display: flex;
-      }
-      .child-details.child-details--appts .separator {
-        display: block;
-      }
+    .keep-together {
+      white-space: nowrap;
     }
   `;
 
@@ -101,13 +77,12 @@ export function renderComplete(location) {
         <div class="child-details ${child.hasAppointments ? 'child-details--appts' : ''}">
 
         ${!child.data.hideHours.required ? html`
-          <div>${child.isOpenToday ? 
-            child.renderHoursToday() : 
+          <div>${child.isOpenToday ? html`
+            <span ?hidden=${child.openPrefix ? false : true}>${child.openPrefix}</span>
+            <span class='keep-together'>${child.renderHoursToday()}</span>`: 
             html`<span class="double-decker">Closed</span>`}
           </div>
-          <span class="separator">|</span>
         `:html``}
-
         <div>${child.renderAppointmentsLink()}</div>
         </div>
       </div>
