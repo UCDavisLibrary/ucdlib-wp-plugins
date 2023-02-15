@@ -122,7 +122,7 @@ class UCDLibPluginDirectoryBlockTransformations {
     if ( $attrs['qRaw'] ){
       $query['query']['bool']['must']['multi_match'] = [
         'query' =>  $attrs['qRaw'],
-        'fields' => ['content', 'positionTitle', 'title^5', 'areasOfExperise.text']
+        'fields' => ['content', 'positionTitle', 'title^5', 'areasOfExperise.text', 'departmentNames.text', 'libraryNames.text', 'directoryTagNames.text']
       ];
     }
 
