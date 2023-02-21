@@ -320,17 +320,21 @@ class UCDPluginCASAuth {
     $attributes = phpCAS::getAttributes();
     if ( !is_array($attributes) ) return;
 
-    if ( array_key_exists("ucdPersonIAMID", $attributes) ) {
-      update_user_meta( $user->ID, $this->slug . "_iam-id", $attributes['ucdPersonIAMID'] );
-    }
-    if ( array_key_exists("employeeNumber", $attributes) ) {
-      update_user_meta( $user->ID, $this->slug . "_ucpath-id", $attributes['employeeNumber'] );
-    }
-    if ( array_key_exists("title", $attributes) ) {
-      update_user_meta( $user->ID, $this->slug . "_appt_title", $attributes['title'] );
-    }
-    if ( array_key_exists("ucdAppointmentDepartmentCode", $attributes) ) {
-      update_user_meta( $user->ID, $this->slug . "_dept_code", $attributes['ucdAppointmentDepartmentCode'] );
+    $attrMap = [
+      ['cas' => 'ucdPersonIAMID', 'wp' => 'iam-id'],
+      ['cas' => 'employeeNumber', 'wp' => 'ucpath-id'],
+      ['cas' => 'title', 'wp' => 'appt_title'],
+      ['cas' => 'ucdAppointmentDepartmentCode', 'wp' => 'dept_code']
+    ];
+
+    foreach ($attrMap as $attr) {
+      if ( array_key_exists($attr['cas'], $attributes) ) {
+        $k =  $this->slug . "_" . $attr['wp'];
+        $v = get_user_meta($user->ID, $k, true);
+        if ( $attributes[$attr['cas']] != $v) {
+          update_user_meta( $user->ID, $k, $attributes[$attr['cas']] );
+        }
+      }
     }
   }
 
