@@ -21,6 +21,13 @@ class UCDLibPluginDirectoryUtils {
           'items' => [
             'type' => 'object',
             'properties' => [
+              'icon' => [
+                'type' => 'object',
+                'properties' => [
+                  'icon' => ['type' => 'string'],
+                  'iconSet' => ['type' => 'string']
+                ]
+              ],
               'type' => ['type' => 'string'],
               'value' => ['type' => 'string'],
               'label' => ['type' => 'string'],
@@ -135,7 +142,23 @@ class UCDLibPluginDirectoryUtils {
     if ( is_array($attrs['websites']) ) {
       foreach ($attrs['websites'] as $website) {
         if ( array_key_exists('value', $website) && $website['value'] ) {
-          $icon = array_key_exists('type', $website) && $website['type'] && array_key_exists($website['type'], $icons) ? $icons[$website['type']] : $defaultIcon;
+          if ( 
+            array_key_exists('icon', $website) && 
+            array_key_exists('icon', $website['icon']) &&
+            array_key_exists('iconSet', $website['icon']) &&
+            $website['icon']['icon'] &&
+            $website['icon']['iconSet']
+            ){
+              $icon = $website['icon']['iconSet'] . ':' . $website['icon']['icon'];
+          } elseif (
+            array_key_exists('type', $website) &&
+            $website['type'] &&
+            array_key_exists($website['type'], $icons)
+            ) {
+            $icon = $icons[$website['type']];
+          } else {
+            $icon = $defaultIcon;
+          }
           $attrs['icons'][] = $icon;
           $contact[] = [
             'value' => $website['value'],
