@@ -1,0 +1,5 @@
+{% if not post.hide_author %}
+  {% for author in post.additional_authors %}
+    <li>{{author.title}}</li>
+  {% endfor %}
+{% endif %}

@@ -1,6 +1,7 @@
 <?php
 
 require_once( __DIR__ . '/acf.php' );
+require_once( __DIR__ . '/additional-authors.php');
 require_once( __DIR__ . '/api-filters.php' );
 require_once( __DIR__ . '/areas-of-expertise.php' );
 require_once( __DIR__ . '/blocks.php' );
@@ -17,6 +18,7 @@ class UCDLibPluginDirectory {
     $this->config = $this->getConfig();
 
     $this->acf = new UCDLibPluginDirectoryACF( $this->config );
+    $this->additionalAuthors = new UCDLibPluginDirectoryAdditionalAuthors( $this->config );
     $this->apiFilters = new UCDLibPluginDirectoryAPIFilters( $this->config );
     $this->blocks = new UCDLibPluginDirectoryBlocks( $this->config );
     $this->departments = new UCDLibPluginDirectoryDepartments( $this->config );
