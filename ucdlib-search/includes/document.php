@@ -129,4 +129,29 @@ class UCDLibPluginSearchDocument {
     }
     return $this->author;
   }
+
+  protected $additionalAuthors;
+  public function additionalAuthors(){
+    if ( ! empty( $this->additionalAuthors ) ) {
+      return $this->additionalAuthors;
+    }
+    $this->additionalAuthors = [];
+    if ( $this->post && $this->post->additional_authors() ){
+      $this->additionalAuthors = $this->post->additional_authors();
+    }
+    return $this->additionalAuthors;
+  }
+
+  protected $hideOgAuthor;
+  public function hideOgAuthor(){
+    if ( ! empty( $this->hideOgAuthor ) ) {
+      return $this->hideOgAuthor;
+    }
+    if ( $this->post && $this->post->hide_og_author() ){
+      $this->hideOgAuthor = $this->post->hide_og_author();
+    } else {
+      $this->hideOgAuthor = false;
+    }
+    return $this->hideOgAuthor;
+  }
 }

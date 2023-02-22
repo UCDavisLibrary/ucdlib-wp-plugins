@@ -26,7 +26,13 @@
 
           <div class="list--pipe">
             {% if result.showAuthor %}
-              <li>{{author}}</li>
+              {% if result.additionalAuthors %}
+                <li>{{not result.hideOgAuthor ? author ~ ', '}}
+                  {% for author in result.additionalAuthors %}{{author.title}}{% if not loop.last %},&nbsp;{% endif %}{% endfor %}
+                </li>
+              {% else %}
+                <li>{{author}}</li>
+              {% endif %}
             {% endif %}
             {% if result.showPublishedDate %}
               <li>{{result.date}}</li>
