@@ -36,9 +36,6 @@ class UCDLibPluginSearchDocument {
   }
 
   public function title(){
-    if( $this->hasHighlight && array_key_exists('title', $this->document['highlight']) ) {
-      return $this->document['highlight']['title'][0];
-    }
     return $this->document['_source']['title'];
   }
 
