@@ -18,6 +18,11 @@ class UCDLibPluginLocationsBlocks extends UCDThemeBlockRenderer {
         'twig' => $this->twigPath('hours'),
         'transform' => ['getSiteUrl']
       ],
+      "$this->slug/map-building" => [
+        'twig' => $this->twigPath('map-building')
+      ],
+      "$this->slug/map-space-legend" => [],
+      "$this->slug/map-space-legend-item" => [],
       "$this->slug/sign-hours" => [
         'twig' => $this->twigPath('sign-hours'),
         'transform' => ['getSiteUrl']
