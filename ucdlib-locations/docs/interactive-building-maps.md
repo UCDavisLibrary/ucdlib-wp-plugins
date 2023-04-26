@@ -4,11 +4,15 @@
 
 ```html
 <ucdlib-map-building>
+  <script type="application/json">
+    {
+      "bottomLayer": "/wp-content/2023/04/shields-ll-bottom",
+    }
+  </script>
   <ucdlib-map-space-legend>
     <script type="application/json">
       {
         "title": "Study Spaces",
-        "bottomLayer": "/wp-content/2023/04/shields-ll-bottom",
         "spaces": [
             {
             "slug": "silent",

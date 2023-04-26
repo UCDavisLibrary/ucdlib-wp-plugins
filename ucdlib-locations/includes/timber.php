@@ -9,6 +9,7 @@ class UCDLibPluginLocationsTimber {
     $this->config = $config;
     add_filter( 'timber/locations', array($this, 'add_timber_locations') );
     add_filter( 'timber/post/classmap', array($this, 'extend_post') );
+    add_filter( 'timber/twig', array( $this, 'add_to_twig' ), 10 );
   }
 
   /**
@@ -25,6 +26,28 @@ class UCDLibPluginLocationsTimber {
     );
 
     return array_merge( $classmap, $custom_classmap );
+  }
+
+  public function add_to_twig( $twig ) {
+    $twig->addFunction( new Twig\TwigFunction( 'get_space_legend_props', array( $this, 'get_space_legend_props' ) ) );
+    return $twig;
+  }
+
+  public function get_space_legend_props( $block ){
+    $props = [
+      'spaces' => []
+    ];
+    $props['title'] = array_key_exists('title', $block->attributes) ? $block->attributes['title'] : 'Study Spaces';
+    foreach ( $block->inner_blocks as $space ) {
+      if ( !array_key_exists('label', $space->attributes) || !array_key_exists('slug', $space->attributes) ) continue;
+      $props['spaces'][] = [
+        'title' => $space->attributes['label'],
+        'slug' => $space->attributes['slug'],
+        'color' => array_key_exists('brandColor', $space->attributes) ? $space->attributes['brandColor'] : 'admin-blue',
+        'icon' => array_key_exists('icon', $space->attributes) ? $space->attributes['icon'] : 'ucd-public:fa-star'
+      ];
+    }
+    return $props;
   }
 
   

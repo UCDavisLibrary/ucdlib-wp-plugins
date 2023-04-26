@@ -1,6 +1,6 @@
 import { html } from "@ucd-lib/brand-theme-editor/lib/utils";
 import { useBlockProps, InnerBlocks} from '@wordpress/block-editor';
-import { TextControl } from "@wordpress/components";
+import { TextControl, BaseControl } from "@wordpress/components";
 
 export default ( props ) => {
   const { attributes, setAttributes } = props;
@@ -30,7 +30,14 @@ export default ( props ) => {
           value=${attributes.title}
           onChange=${(title) => setAttributes({title})}
         />
-        <${InnerBlocks} ...${innerBlocksProps} />
+        <div style=${{marginTop: '1rem'}}>
+          <label>
+            <${BaseControl}>
+              <${BaseControl.VisualLabel} style=${{fontWeight: '700'}}>Legend Items</${BaseControl.VisualLabel}>
+            </${BaseControl}>
+          </label>
+          <${InnerBlocks} ...${innerBlocksProps} />
+        </div>
       </div>
     </div>
 
