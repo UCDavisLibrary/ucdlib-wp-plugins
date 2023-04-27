@@ -41,7 +41,7 @@ export function styles() {
 
 export function render() { 
 return html`
-  <button id="selected-switch" class="mdc-switch mdc-switch--selected" type="button" role="switch" aria-checked="true">
+  <button id="selected-switch" @click=${this._onClick} class="mdc-switch mdc-switch--selected" type="button" role="switch" aria-checked="true" disabled>
     <div class="mdc-switch__track"></div>
     <div class="mdc-switch__handle-track">
       <div class="mdc-switch__handle">

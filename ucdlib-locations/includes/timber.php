@@ -41,7 +41,7 @@ class UCDLibPluginLocationsTimber {
     foreach ( $block->inner_blocks as $space ) {
       if ( !array_key_exists('label', $space->attributes) || !array_key_exists('slug', $space->attributes) ) continue;
       $props['spaces'][] = [
-        'title' => $space->attributes['label'],
+        'label' => $space->attributes['label'],
         'slug' => $space->attributes['slug'],
         'color' => array_key_exists('brandColor', $space->attributes) ? $space->attributes['brandColor'] : 'admin-blue',
         'icon' => array_key_exists('icon', $space->attributes) ? $space->attributes['icon'] : 'ucd-public:fa-star'
