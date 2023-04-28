@@ -4,11 +4,13 @@ import { useBlockProps, InnerBlocks} from '@wordpress/block-editor';
 export default ( props ) => {
   const spaceBlock = 'ucdlib-locations/map-space-legend';
   const legendBlock = 'ucdlib-locations/map-legend';
-  const ALLOWED_BLOCKS = [ spaceBlock, legendBlock ];
+  const floorsBlock = 'ucdlib-locations/map-floors';
+  const ALLOWED_BLOCKS = [ spaceBlock, legendBlock, floorsBlock ];
   const blockProps = useBlockProps();
   const defaultTemplate = [
     [spaceBlock],
-    [legendBlock]
+    [legendBlock],
+    [floorsBlock]
   ];
   const innerBlocksProps ={
     allowedBlocks: ALLOWED_BLOCKS,

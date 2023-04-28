@@ -47,6 +47,7 @@
       {
         "title": "Lower Level",
         "subTitle": "Call Numbers: A,B,D - DD",
+        "navText": "L",
         "topLayer": "/wp-content/2023/04/shields-ll-bottom",
         "layers": [
           {
@@ -92,7 +93,9 @@ This element introduces several new gutenberg blocks:
 - `ucdlib-locations-map-floors`  
   Parent to *ucdlib-locations-map-floor* blocks.
 - `ucdlib-locations-map-floor`  
-  Can only be placed in *ucdlib-locations-map-floors* block. Allows user to upload map and space layers.
+  Can only be placed in *ucdlib-locations-map-floors* block. Allows user to upload floor map and set metadata.
+- `ucdlib-locations-map-floor-layer`  
+- Can only be placed in *ucdlib-locations-map-floor-layer* block. Allows user to upload floor zone layers.
 - `ucdlib-locations-map-legend`  
   Parent to *ucdlib-locations-map-legend-item* blocks.
 - `ucdlib-locations-map-legend-item`  

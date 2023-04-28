@@ -31,6 +31,7 @@ class UCDLibPluginLocationsTimber {
   public function add_to_twig( $twig ) {
     $twig->addFunction( new Twig\TwigFunction( 'get_space_legend_props', array( $this, 'get_space_legend_props' ) ) );
     $twig->addFunction( new Twig\TwigFunction( 'get_legend_props', array( $this, 'get_legend_props' ) ) );
+    $twig->addFunction( new Twig\TwigFunction( 'get_floor_props', array( $this, 'get_floor_props' ) ) );
     return $twig;
   }
 
@@ -63,6 +64,19 @@ class UCDLibPluginLocationsTimber {
         'icon' => array_key_exists('icon', $item->attributes) ? $item->attributes['icon'] : 'ucd-public:fa-star'
       ];
     }
+    return $props;
+  }
+
+  public function get_floor_props( $block ){
+    $props = [
+      'layers' => []
+    ];
+    $propKeys = ['title', 'subTitle', 'navText'];
+    foreach ( $propKeys as $key ) {
+      $props[$key] = array_key_exists($key, $block->attributes) ? $block->attributes[$key] : '';
+    }
+    //foreach ( $block->inner_blocks as $layer ) {
+    //}
     return $props;
   }
 

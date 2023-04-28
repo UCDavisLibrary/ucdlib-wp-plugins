@@ -1,6 +1,7 @@
 import { html, css } from 'lit';
 
 import layoutStyles from '@ucd-lib/theme-sass/5_layout/_l-basic.css.js';
+import headingStyles from '@ucd-lib/theme-sass/1_base_html/_headings.css.js';
 import gridStyles from '@ucd-lib/theme-sass/5_layout/_l-grid-regions.css.js';
 import oBoxStyles from '@ucd-lib/theme-sass/3_objects/_index.css.js';
 import spaceUtils from "@ucd-lib/theme-sass/6_utility/_u-space.css.js";
@@ -13,10 +14,62 @@ export function styles() {
     [hidden] {
       display: none !important;
     }
+    .nav-buttons {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      justify-content: space-between;
+    }
+    .nav {
+      border-bottom: 4px dashed #FFBF00;
+      padding-bottom: 1.5rem;
+      margin-bottom: 2rem;
+    }
+    .nav h4 {
+      margin-right: 1rem;
+    }
+    .navButton {
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #13639E;
+      margin: .5rem 0.5rem;
+      width: 3.5rem;
+      height: 3.5rem;
+      min-height: 3.5rem;
+      min-width: 3.5rem;
+      cursor: pointer;
+      background-color: #E5E5E5;
+      border: 4px solid #E5E5E5;
+    }
+    .navButton h2 {
+      margin: 0;
+      padding: 0;
+    }
+    .navButton.selected {
+      border-color: #FFBF00;
+    }
+    .navButton:hover {
+      border-color: #3375BC;
+    }
+    .navButton.selected:hover {
+      border-color: #FFBF00;
+    }
+    @media screen and (min-width: 480px) {
+      .nav {
+        display: flex;
+        align-items: center;
+      }
+      .nav-buttons {
+        justify-content: unset;
+      }
+    }
   `;
 
   return [
     elementStyles,
+    headingStyles,
     layoutStyles,
     gridStyles,
     oBoxStyles,
@@ -29,7 +82,23 @@ return html`
   <div>
     <div class="l-basic--flipped">
       <div class="l-content o-box">
-        Content
+        <div class='nav' ?hidden=${this.floors.length == 0}>
+          <h4>Level:</h4>
+          <div class='nav-buttons'>
+            ${this.floors.map(floor => html`
+              <a @click=${e => this._onFloorSelect(floor)} class='navButton ${this.selectedFloorIndex == floor.propIndex ? "selected" : ""}'>
+                <h2>${floor.navText}</h2>
+              </a>
+            `)}
+          </div>
+        </div>
+        <div>
+          ${this.floors.map(floor => html`
+            <div ?hidden=${this.selectedFloorIndex != floor.propIndex}>
+              <slot name="${floor.slotName}"></slot>
+            </div>
+          `)}
+        </div>
       </div>
       <div 
         class="l-sidebar-second">
@@ -46,10 +115,8 @@ return html`
           @items-update=${e => this._onLegendUpdate(e.detail)}>
           <slot name="legend"></slot>
         </div>
-        
       </div>
     </div>
-    
   </div>
 
 `;}

@@ -1,14 +1,14 @@
 import { html } from "@ucd-lib/brand-theme-editor/lib/utils";
 import { useBlockProps, InnerBlocks} from '@wordpress/block-editor';
-import { TextControl, BaseControl } from "@wordpress/components";
+import { BaseControl } from "@wordpress/components";
 
 export default ( props ) => {
   const { attributes, setAttributes } = props;
-  const legendItem = 'ucdlib-locations/map-legend-item';
-  const ALLOWED_BLOCKS = [ legendItem ];
+  const floorBlock = 'ucdlib-locations/map-floor';
+  const ALLOWED_BLOCKS = [ floorBlock ];
   const blockProps = useBlockProps();
   const defaultTemplate = [
-    [legendItem]
+    [floorBlock]
   ];
   const innerBlocksProps ={
     allowedBlocks: ALLOWED_BLOCKS,
@@ -24,19 +24,11 @@ export default ( props ) => {
   return html`
     <div ...${ blockProps }>
       <div style=${containerStyle}>
-        <h3>Static Legend</h3>
-        <p>Use this section to add/remove items from the building map legend.</p>
-        <${TextControl}
-          label="Legend Title"
-          value=${attributes.title}
-          onChange=${(title) => setAttributes({title})}
-        />
+        <h3>Floor Maps</h3>
+        <p>Use this section to add/remove floors to the building.</p>
+        <p>TODO: image upload for base image</p>
         <div style=${{marginTop: '1rem'}}>
-          <label>
-            <${BaseControl}>
-              <${BaseControl.VisualLabel} style=${{fontWeight: '700'}}>Legend Items</${BaseControl.VisualLabel}>
-            </${BaseControl}>
-          </label>
+          <h4>Floors</h4>
           <${InnerBlocks} ...${innerBlocksProps} />
         </div>
       </div>

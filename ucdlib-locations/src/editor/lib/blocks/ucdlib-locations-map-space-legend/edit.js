@@ -24,7 +24,7 @@ export default ( props ) => {
   return html`
     <div ...${ blockProps }>
       <div style=${containerStyle}>
-        <h3>Customize Spaces</h3>
+        <h3>Spaces</h3>
         <p>Use this section to register the toggleable spaces that may appear on a floor map.</p>
         <${TextControl}
           label="Legend Title"

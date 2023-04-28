@@ -9,7 +9,9 @@ export default class UcdlibMapBuilding extends LitElement {
       hasSpacesEle: {state: true},
       hideSpacesSlot: {state: true},
       hasLegendEle: {state: true},
-      hideLegendSlot: {state: true}
+      hideLegendSlot: {state: true},
+      floors: {state: true},
+      selectedFloorIndex: {state: true},
     }
   }
 
@@ -24,6 +26,8 @@ export default class UcdlibMapBuilding extends LitElement {
     this.hideSpacesSlot = false;
     this.hasLegendEle = false;
     this.hideLegendSlot = false;
+    this.floors = [];
+    this.selectedFloorIndex = 0;
 
     new MutationObserverController(this, {childList: true, subtree: false});
   }
@@ -35,12 +39,51 @@ export default class UcdlibMapBuilding extends LitElement {
       this.hasSpacesEle = true;
       if ( !spaces.spaces ) this.hideSpacesSlot = true;
     }
+
     const legend = this.querySelector('ucdlib-map-legend');
     if ( legend && !this.hasLegendEle ) {
       legend.setAttribute('slot', 'legend');
       this.hasLegendEle = true;
       if ( !legend.items ) this.hideLegendSlot = true;
     }
+
+    const floorEles = Array.from(this.querySelectorAll('ucdlib-map-floor'));
+    const floors = [];
+    floorEles.forEach((floor, i) => {
+      const slotName = `floor-${i}`;
+      floor.setAttribute('slot', slotName);
+      const d = {
+        slotName,
+        propIndex: i,
+        ele: floor,
+      };
+      let floorProps = floor.querySelector('script[type="application/json"]');
+      if ( floorProps ) {
+        floorProps = JSON.parse(floorProps.text);
+        if ( floorProps.navText ) {
+          d.navText = floorProps.navText
+        } else if ( floorProps.title ) {
+          d.navText = floorProps.title[0];
+        } else {
+          d.navText = '?';
+        };
+
+        if ( floorProps.layers ){
+          d.layers = floorProps.layers;
+        } else {
+          d.layers = [];
+        }
+      }
+      floors.push(d);
+    });
+    this.floors = floors;
+  }
+
+  _onFloorSelect(floor){
+    this.selectedFloorIndex = floor.propIndex
+
+    // now enable/disable layer toggles
+    console.log(floor.layers);
   }
 
   _onSpaceUpdate(detail) {
