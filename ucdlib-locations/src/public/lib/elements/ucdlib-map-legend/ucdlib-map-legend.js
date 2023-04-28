@@ -1,13 +1,13 @@
 import { LitElement } from 'lit';
-import {render, styles} from "./ucdlib-map-space-legend.tpl.js";
+import {render, styles} from "./ucdlib-map-legend.tpl.js";
 import {MutationObserverController} from "@ucd-lib/theme-elements/utils/controllers";
 
-export default class UcdlibMapSpaceLegend extends LitElement {
+export default class UcdlibMapLegend extends LitElement {
 
   static get properties() {
     return {
       propsSetFromScript: {state: true},
-      spaces: {state: true},
+      items: {state: true},
       legendTitle: {state: true}
     }
   }
@@ -20,15 +20,15 @@ export default class UcdlibMapSpaceLegend extends LitElement {
     super();
     this.render = render.bind(this);
     this.propsSetFromScript = false;
-    this.spaces = [];
+    this.items = [];
     this.legendTitle = '';
 
     new MutationObserverController(this, {childList: true, subtree: false});
   }
 
   willUpdate(props) {
-    if ( props.has('spaces') ) {
-      this.dispatchEvent(new CustomEvent('spaces-update', {bubbles: true, composed: true, detail: {spaces: this.spaces}}));
+    if ( props.has('items') ) {
+      this.dispatchEvent(new CustomEvent('items-update', {bubbles: true, composed: true, detail: {items: this.items}}));
     }
   }
 
@@ -41,7 +41,7 @@ export default class UcdlibMapSpaceLegend extends LitElement {
     const script = this.querySelector('script[type="application/json"]');
     if ( script && !this.propsSetFromScript ) {
       const data = JSON.parse(script.text);
-      if ( Array.isArray(data.spaces) ) this.spaces = data.spaces;
+      if ( Array.isArray(data.items) ) this.items = data.items;
       if ( data.title ) this.legendTitle = data.title;
       this.propsSetFromScript = true;
     }
@@ -49,4 +49,4 @@ export default class UcdlibMapSpaceLegend extends LitElement {
 
 }
 
-customElements.define('ucdlib-map-space-legend', UcdlibMapSpaceLegend);
+customElements.define('ucdlib-map-legend', UcdlibMapLegend);

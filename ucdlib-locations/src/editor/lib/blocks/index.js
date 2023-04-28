@@ -5,6 +5,8 @@ import hoursToday from "./ucdlib-locations-hours-today";
 import mapBuilding from "./ucdlib-locations-map-building";
 import mapBuildingSpaceLegend from "./ucdlib-locations-map-space-legend";
 import mapBuildingSpaceLegendItem from "./ucdlib-locations-map-space-legend-item"
+import mapBuildingLegend from "./ucdlib-locations-map-legend";
+import mapBuildingLegendItem from "./ucdlib-locations-map-legend-item"
 import signSection from "./ucdlib-locations-sign-section";
 import signSections from "./ucdlib-locations-sign-sections";
 import signText from "./ucdlib-locations-sign-text";
@@ -19,6 +21,8 @@ export default [
   mapBuilding,
   mapBuildingSpaceLegend,
   mapBuildingSpaceLegendItem,
+  mapBuildingLegend,
+  mapBuildingLegendItem,
   signSection,
   signSections,
   signText,

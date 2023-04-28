@@ -21,6 +21,8 @@ class UCDLibPluginLocationsBlocks extends UCDThemeBlockRenderer {
       "$this->slug/map-building" => [
         'twig' => $this->twigPath('map-building')
       ],
+      "$this->slug/map-legend" => [],
+      "$this->slug/map-legend-item" => [],
       "$this->slug/map-space-legend" => [],
       "$this->slug/map-space-legend-item" => [],
       "$this->slug/sign-hours" => [

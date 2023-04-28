@@ -4,11 +4,11 @@ import { TextControl, BaseControl } from "@wordpress/components";
 
 export default ( props ) => {
   const { attributes, setAttributes } = props;
-  const toggleItem = 'ucdlib-locations/map-space-legend-item';
-  const ALLOWED_BLOCKS = [ toggleItem ];
+  const legendItem = 'ucdlib-locations/map-legend-item';
+  const ALLOWED_BLOCKS = [ legendItem ];
   const blockProps = useBlockProps();
   const defaultTemplate = [
-    [toggleItem]
+    [legendItem]
   ];
   const innerBlocksProps ={
     allowedBlocks: ALLOWED_BLOCKS,
@@ -24,8 +24,8 @@ export default ( props ) => {
   return html`
     <div ...${ blockProps }>
       <div style=${containerStyle}>
-        <h3>Customize Spaces</h3>
-        <p>Use this section to register the toggleable spaces that may appear on a floor map.</p>
+        <h3>Customize the Static Legend</h3>
+        <p>Use this section to add/remove items from the building map legend.</p>
         <${TextControl}
           label="Legend Title"
           value=${attributes.title}

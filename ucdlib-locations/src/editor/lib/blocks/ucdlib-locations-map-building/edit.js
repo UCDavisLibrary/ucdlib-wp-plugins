@@ -3,10 +3,12 @@ import { useBlockProps, InnerBlocks} from '@wordpress/block-editor';
 
 export default ( props ) => {
   const spaceBlock = 'ucdlib-locations/map-space-legend';
-  const ALLOWED_BLOCKS = [ spaceBlock ];
+  const legendBlock = 'ucdlib-locations/map-legend';
+  const ALLOWED_BLOCKS = [ spaceBlock, legendBlock ];
   const blockProps = useBlockProps();
   const defaultTemplate = [
-    [spaceBlock]
+    [spaceBlock],
+    [legendBlock]
   ];
   const innerBlocksProps ={
     allowedBlocks: ALLOWED_BLOCKS,
@@ -16,7 +18,8 @@ export default ( props ) => {
     templateLock: 'all'
   };
   const containerStyle = {
-    marginBottom: '4rem'
+    marginBottom: '4rem',
+    paddingBottom: '2rem',
   }
 
   return html`

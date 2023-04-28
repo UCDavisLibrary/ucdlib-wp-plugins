@@ -4,6 +4,10 @@
       <ucdlib-map-space-legend>
         <script type="application/json"> {{get_space_legend_props(b)|json_encode()}}</script>
       </ucdlib-map-space-legend>
+    {% elseif b.name == 'ucdlib-locations/map-legend' %}
+       <ucdlib-map-legend>
+        <script type="application/json"> {{get_legend_props(b)|json_encode()}}</script>
+      </ucdlib-map-legend>
     {% endif %}
   {% endfor %}
 

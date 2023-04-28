@@ -30,6 +30,7 @@ class UCDLibPluginLocationsTimber {
 
   public function add_to_twig( $twig ) {
     $twig->addFunction( new Twig\TwigFunction( 'get_space_legend_props', array( $this, 'get_space_legend_props' ) ) );
+    $twig->addFunction( new Twig\TwigFunction( 'get_legend_props', array( $this, 'get_legend_props' ) ) );
     return $twig;
   }
 
@@ -45,6 +46,21 @@ class UCDLibPluginLocationsTimber {
         'slug' => $space->attributes['slug'],
         'color' => array_key_exists('brandColor', $space->attributes) ? $space->attributes['brandColor'] : 'admin-blue',
         'icon' => array_key_exists('icon', $space->attributes) ? $space->attributes['icon'] : 'ucd-public:fa-star'
+      ];
+    }
+    return $props;
+  }
+
+  public function get_legend_props( $block ){
+    $props = [
+      'items' => []
+    ];
+    $props['title'] = array_key_exists('title', $block->attributes) ? $block->attributes['title'] : 'Map Legend';
+    foreach ( $block->inner_blocks as $item ) {
+      if ( !array_key_exists('label', $item->attributes) ) continue;
+      $props['items'][] = [
+        'label' => $item->attributes['label'],
+        'icon' => array_key_exists('icon', $item->attributes) ? $item->attributes['icon'] : 'ucd-public:fa-star'
       ];
     }
     return $props;
