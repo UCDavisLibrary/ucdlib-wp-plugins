@@ -9,6 +9,7 @@ import mapBuildingLegend from "./ucdlib-locations-map-legend";
 import mapBuildingLegendItem from "./ucdlib-locations-map-legend-item";
 import mapFloor from "./ucdlib-locations-map-floor";
 import mapFloors from "./ucdlib-locations-map-floors";
+import MapFloorLayer from "./ucdlib-locations-map-floor-layer";
 import signSection from "./ucdlib-locations-sign-section";
 import signSections from "./ucdlib-locations-sign-sections";
 import signText from "./ucdlib-locations-sign-text";
@@ -27,6 +28,7 @@ export default [
   mapBuildingLegendItem,
   mapFloor,
   mapFloors,
+  MapFloorLayer,
   signSection,
   signSections,
   signText,

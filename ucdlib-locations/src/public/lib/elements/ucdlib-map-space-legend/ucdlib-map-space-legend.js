@@ -8,7 +8,8 @@ export default class UcdlibMapSpaceLegend extends LitElement {
     return {
       propsSetFromScript: {state: true},
       spaces: {state: true},
-      legendTitle: {state: true}
+      legendTitle: {state: true},
+      toggleState: {state: true},
     }
   }
 
@@ -22,13 +23,19 @@ export default class UcdlibMapSpaceLegend extends LitElement {
     this.propsSetFromScript = false;
     this.spaces = [];
     this.legendTitle = '';
+    this.toggleState = {};
 
     new MutationObserverController(this, {childList: true, subtree: false});
   }
 
   willUpdate(props) {
-    if ( props.has('spaces') ) {
+    if ( props.has('spaces') && this.spaces ) {
       this.dispatchEvent(new CustomEvent('spaces-update', {bubbles: true, composed: true, detail: {spaces: this.spaces}}));
+      const toggleState = {};
+      this.spaces.forEach(space => {
+        toggleState[space.slug] = true;
+      });
+      this.toggleState = toggleState;
     }
   }
 
@@ -45,6 +52,16 @@ export default class UcdlibMapSpaceLegend extends LitElement {
       if ( data.title ) this.legendTitle = data.title;
       this.propsSetFromScript = true;
     }
+  }
+
+  /**
+   * @description When a space is toggled, update the toggle state and dispatch event with state for all toggled spaces
+   * @param {*} e 
+   */
+  _onSpaceToggle(e) {
+    this.toggleState[e.detail.slug] = e.detail.checked;
+    const updated = [e.detail.slug];
+    this.dispatchEvent(new CustomEvent('spaces-toggle', {bubbles: true, composed: true, detail: {spaces: this.toggleState, updated}}));
   }
 
 }

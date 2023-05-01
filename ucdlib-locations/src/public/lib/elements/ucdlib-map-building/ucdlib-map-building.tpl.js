@@ -106,7 +106,7 @@ return html`
           class='o-box u-space-mb'
           ?hidden=${this.hideSpacesSlot} 
           @spaces-update=${e => this._onSpaceUpdate(e.detail)} 
-          @space-toggle=${e => console.log(e.detail)}>
+          @spaces-toggle=${e => console.log(e.detail)}>
           <slot name="spaces"></slot>
         </div>
         <div 

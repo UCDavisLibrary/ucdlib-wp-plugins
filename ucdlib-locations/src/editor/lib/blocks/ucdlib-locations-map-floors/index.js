@@ -15,6 +15,10 @@ const settings = {
     "customClassName": false
   },
   attributes: {
+    bottomLayerId: {
+      type: 'number',
+      default: 0
+    }
   },
   edit: Edit,
   save: Save

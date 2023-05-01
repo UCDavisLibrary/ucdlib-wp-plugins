@@ -4,7 +4,7 @@ import Edit from './edit';
 const name = 'ucdlib-locations/map-space-legend-item';
 const settings = {
   api_version: 2,
-	title: "Toggleable Space Legend Item",
+	title: "Toggle",
   parent: [ 'ucdlib-locations/map-space-legend' ],
 	description: "Register a space type, so that it can be toggled on/off in the legend",
 	icon: UCDIcons.renderPublic('fa-toggle-on'),

@@ -26,6 +26,10 @@ const settings = {
     navText: {
       type: 'string',
       default: ''
+    },
+    topLayerId: {
+      type: 'number',
+      default: 0
     }
   },
   edit: Edit,

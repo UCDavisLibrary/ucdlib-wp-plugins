@@ -50,7 +50,7 @@ return html`
         <div class='row'>
           <ucdlib-icon icon=${space.icon} class=${space.color}></ucdlib-icon>
           <div class='space-label'>${space.label}</div>
-          <ucdlib-mdc-switch slug=${space.slug}></ucdlib-mdc-switch>
+          <ucdlib-mdc-switch slug=${space.slug} @space-toggle=${this._onSpaceToggle}></ucdlib-mdc-switch>
         </div>
       `)}
     </div>
