@@ -22,10 +22,12 @@ class UCDLibPluginLocationsBlocks extends UCDThemeBlockRenderer {
         'twig' => $this->twigPath('map-building')
       ],
       "$this->slug/map-floors" => [
-        'twig' => $this->twigPath('map-floors')
+        'twig' => $this->twigPath('map-floors'),
+        "provides_context" => ["map-floors/bottomLayerId" => 'bottomLayerId']
       ],
       "$this->slug/map-floor" => [
-        'twig' => $this->twigPath('map-floor')
+        'twig' => $this->twigPath('map-floor'),
+        "uses_context" => ["map-floors/bottomLayerId"],
       ],
       "$this->slug/map-floor-layer" => [],
       "$this->slug/map-legend" => [],

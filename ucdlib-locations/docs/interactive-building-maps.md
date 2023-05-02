@@ -4,11 +4,6 @@
 
 ```html
 <ucdlib-map-building>
-  <script type="application/json">
-    {
-      "bottomLayer": "/wp-content/2023/04/shields-ll-bottom",
-    }
-  </script>
   <ucdlib-map-space-legend>
     <script type="application/json">
       {
@@ -49,6 +44,7 @@
         "subTitle": "Call Numbers: A,B,D - DD",
         "navText": "L",
         "topLayer": "/wp-content/2023/04/shields-ll-bottom",
+        "bottomLayer": "/wp-content/2023/04/shields-ll-bottom",
         "layers": [
           {
             "slug": "silent",
@@ -73,14 +69,14 @@ Displays the menu/legend that allows user to toggle a map layer on/off. Emits th
 ```json
 {"slug": "silent", "on": true}
 ```
-All toggle sliders are disabled by default, and `enableSliders(slugs[])` is called by `ucdlib-map-building` on initial load or when a floor changes.
+All toggle sliders are disabled by default, and `enableSwitches(slugs[])` is called by `ucdlib-map-building` on initial load or when a floor changes.
 There is only one per `ucdlib-map-building` element
 
 ### ucdlib-map-legend
 Displays the static map lengend. There is only one per `ucdlib-map-building` element
 
 ### ucdlib-map-floor
-Displays the static bottom + top layers, and dynamic space layers. `ucdlib-building-map` element calls `showLayer('slug')` or `hideLayer('slug')` method, which arranges active layers in css `background-image` property.
+Displays the static bottom + top layers, and dynamic space layers. `ucdlib-building-map` element calls `showLayers(['slug1', 'slug2'])`, method, which displays active layers.
 
 ### mdc-switch
 The `ucdlib-map-space-legend` requires a toggle switch that is not in the UCD brand. This component simply loads the [material design switch component](https://www.npmjs.com/package/@material/switch). Whenever you update the component version, you will have to run the `generate-css` script.

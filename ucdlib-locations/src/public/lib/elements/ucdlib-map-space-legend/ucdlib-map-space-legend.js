@@ -10,6 +10,7 @@ export default class UcdlibMapSpaceLegend extends LitElement {
       spaces: {state: true},
       legendTitle: {state: true},
       toggleState: {state: true},
+      switchLoadCount: {state: true}
     }
   }
 
@@ -24,6 +25,7 @@ export default class UcdlibMapSpaceLegend extends LitElement {
     this.spaces = [];
     this.legendTitle = '';
     this.toggleState = {};
+    this.switchLoadCount = 0;
 
     new MutationObserverController(this, {childList: true, subtree: false});
   }
@@ -39,6 +41,21 @@ export default class UcdlibMapSpaceLegend extends LitElement {
     }
   }
 
+  /**
+   * @description Enable the switches for the given slugs - disable all others
+   * @param {Array} slugs - array of slugs to enable
+   */
+  enableSwitches(slugs=[]){
+    this.spaces.forEach(space => {
+      if ( slugs.includes(space.slug) ) {
+        space.disabled = false;
+      } else {
+        space.disabled = true;
+      }
+    });
+    this.requestUpdate();
+  }
+
 
   /**
    * @description When the child list mutates, check if there is a script tag
@@ -48,7 +65,12 @@ export default class UcdlibMapSpaceLegend extends LitElement {
     const script = this.querySelector('script[type="application/json"]');
     if ( script && !this.propsSetFromScript ) {
       const data = JSON.parse(script.text);
-      if ( Array.isArray(data.spaces) ) this.spaces = data.spaces;
+      if ( Array.isArray(data.spaces) ) {
+        this.spaces = data.spaces.map(space => {
+          space.disabled = true;
+          return space;
+        });
+      }
       if ( data.title ) this.legendTitle = data.title;
       this.propsSetFromScript = true;
     }
@@ -62,6 +84,13 @@ export default class UcdlibMapSpaceLegend extends LitElement {
     this.toggleState[e.detail.slug] = e.detail.checked;
     const updated = [e.detail.slug];
     this.dispatchEvent(new CustomEvent('spaces-toggle', {bubbles: true, composed: true, detail: {spaces: this.toggleState, updated}}));
+  }
+
+  _onSwitchLoad(){
+    this.switchLoadCount += 1;
+    if ( this.switchLoadCount >= this.spaces.length ) {
+      this.dispatchEvent(new CustomEvent('switches-loaded', {bubbles: true, composed: true}));
+    }
   }
 
 }

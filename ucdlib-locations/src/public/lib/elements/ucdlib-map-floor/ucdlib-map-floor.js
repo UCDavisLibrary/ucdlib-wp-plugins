@@ -11,6 +11,10 @@ export default class UcdlibMapFloor extends LitElement {
       subTitle: {state: true},
       navText: {state: true},
       layers: {state: true},
+      topLayer: {state: true},
+      bottomLayer: {state: true},
+      bottomSrc: {state: true},
+      bottomOpacity: {state: true},
     }
   }
 
@@ -26,17 +30,47 @@ export default class UcdlibMapFloor extends LitElement {
     this.subTitle = '';
     this.navText = '';
     this.layers = [];
+    this.topLayer = '';
+    this.bottomLayer = '';
+    this.bottomSrc = '';
+    this.bottomOpacity = 0;
 
     new MutationObserverController(this, {childList: true, subtree: false});
+  }
+
+  willUpdate(props) {
+    if ( props.has('bottomLayer') || props.has('layers') || props.has('topLayer')) {
+      if ( this.bottomLayer ){
+        this.bottomSrc = this.bottomLayer;
+        this.bottomOpacity = 1;
+      } else if ( this.layers.length ) {
+        this.bottomSrc = this.layers[0].src;
+        this.bottomOpacity = 0;
+      } else if (this.topLayer) {
+        this.bottomSrc = this.topLayer;
+        this.bottomOpacity = 0;
+      }
+      else {
+        this.bottomSrc = '';
+        this.bottomOpacity = 0;
+      }
+    }
   }
 
   _onChildListMutation(){
     const script = this.querySelector('script[type="application/json"]');
     if ( script && !this.propsSetFromScript ) {
       const data = JSON.parse(script.text);
-      if ( Array.isArray(data.layers) ) this.layers = data.layers;
+      if ( Array.isArray(data.layers) ) {
+        this.layers = data.layers.map(layer => {
+          layer.visible = true;
+          return layer;
+        });
+      };
       if ( data.title ) this.floorTitle = data.title;
       if ( data.subTitle ) this.subTitle = data.subTitle;
+      if ( data.topLayer ) this.topLayer = data.topLayer;
+      if ( data.bottomLayer ) this.bottomLayer = data.bottomLayer;
       if ( data.navText ) {
         this.navText = data.navText
       } else if(this.floorTitle) {
@@ -44,7 +78,16 @@ export default class UcdlibMapFloor extends LitElement {
       };
 
       this.propsSetFromScript = true;
+      this.dispatchEvent(new CustomEvent('props-loaded', {bubbles: true, composed: true}));
     }
+  }
+
+  showLayers(slugs=[]){
+    this.layers.forEach(layer => {
+      layer.visible = slugs.includes(layer.slug);
+    });
+    this.requestUpdate();
+
   }
 
 }

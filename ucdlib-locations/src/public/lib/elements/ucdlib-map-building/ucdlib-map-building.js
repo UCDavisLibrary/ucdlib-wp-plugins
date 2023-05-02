@@ -6,12 +6,17 @@ export default class UcdlibMapBuilding extends LitElement {
 
   static get properties() {
     return {
-      hasSpacesEle: {state: true},
+      spacesEle: {state: true},
       hideSpacesSlot: {state: true},
-      hasLegendEle: {state: true},
+      spacesEleLoaded: {state: true},
+      legendEle: {state: true},
       hideLegendSlot: {state: true},
       floors: {state: true},
+      floorElesLoaded: {state: true},
+      isReady: {state: true},
       selectedFloorIndex: {state: true},
+      floorTitle: {state: true},
+      floorSubTitle: {state: true}
     }
   }
 
@@ -22,29 +27,63 @@ export default class UcdlibMapBuilding extends LitElement {
   constructor() {
     super();
     this.render = render.bind(this);
-    this.hasSpacesEle = false;
+    this.spacesEle = undefined;
     this.hideSpacesSlot = false;
-    this.hasLegendEle = false;
+    this.spacesEleLoaded = false;
+    this.floorElesLoaded = false;
+    this.isReady = false;
+    this.legendEle = undefined;
     this.hideLegendSlot = false;
     this.floors = [];
     this.selectedFloorIndex = 0;
+    this.floorTitle = '';
+    this.floorSubTitle = '';
 
     new MutationObserverController(this, {childList: true, subtree: false});
   }
 
+  willUpdate(props){
+    if (props.has('floors') && this.floors.length ){
+      this._onSlottedEleReady('floor');
+    }
+  }
+
+  updateActiveFloorLayers(layers){
+    const floor = this.floors[this.selectedFloorIndex];
+    if ( !floor ) return;
+    if ( !floor.ele ) return;
+    floor.ele.showLayers(layers);
+  }
+
   _onChildListMutation(){
     const spaces = this.querySelector('ucdlib-map-space-legend');
-    if ( spaces && !this.hasSpacesEle ) {
+    if ( spaces && !this.spacesEle ) {
       spaces.setAttribute('slot', 'spaces');
-      this.hasSpacesEle = true;
-      if ( !spaces.spaces ) this.hideSpacesSlot = true;
+      this.spacesEle = spaces;
+      let spacesProps = spaces.querySelector('script[type="application/json"]');
+      if ( spacesProps ) {
+        spacesProps = JSON.parse(spacesProps.text);
+        if ( !Array.isArray(spacesProps.spaces) || !spacesProps.spaces.length ){
+          this.hideSpacesSlot = true;
+        } 
+      } else {
+        this.hideSpacesSlot = true;
+      }
     }
 
     const legend = this.querySelector('ucdlib-map-legend');
-    if ( legend && !this.hasLegendEle ) {
+    if ( legend && !this.legendEle ) {
       legend.setAttribute('slot', 'legend');
-      this.hasLegendEle = true;
-      if ( !legend.items ) this.hideLegendSlot = true;
+      this.legendEle = legend;
+      let legendProps = legend.querySelector('script[type="application/json"]');
+      if ( legendProps ) {
+        legendProps = JSON.parse(legendProps.text);
+        if ( !Array.isArray(legendProps.items) || !legendProps.items.length ){
+          this.hideLegendSlot = true;
+        }
+      } else {
+        this.hideLegendSlot = true;
+      }
     }
 
     const floorEles = Array.from(this.querySelectorAll('ucdlib-map-floor'));
@@ -67,6 +106,8 @@ export default class UcdlibMapBuilding extends LitElement {
         } else {
           d.navText = '?';
         };
+        d.title = floorProps.title || '';
+        d.subTitle = floorProps.subTitle || '';
 
         if ( floorProps.layers ){
           d.layers = floorProps.layers;
@@ -80,10 +121,39 @@ export default class UcdlibMapBuilding extends LitElement {
   }
 
   _onFloorSelect(floor){
+    if ( !this.isReady ) return;
     this.selectedFloorIndex = floor.propIndex
+    this.floorTitle = floor.title;
+    this.floorSubTitle = floor.subTitle;
 
-    // now enable/disable layer toggles
-    console.log(floor.layers);
+    this.spacesEle.enableSwitches(floor.layers.map(l => l.slug));
+
+    // tell floor what layers to show
+    const slugs = Object.keys(this.spacesEle.toggleState)
+      .map(k => this.spacesEle.toggleState[k] ? k : null)
+      .filter(k => k)
+    this.updateActiveFloorLayers(slugs);
+  }
+
+  _onSpacesToggle(detail){
+    if ( !this.isReady ) return;
+    const slugs = Object.keys(detail.spaces)
+    .map(k => detail.spaces[k] ? k : null)
+    .filter(k => k)
+    this.updateActiveFloorLayers(slugs);
+  }
+
+  _onSlottedEleReady(eleSlug){
+    if ( eleSlug === 'spaces-legend' ){
+      this.spacesEleLoaded = true;
+    }
+    if ( eleSlug === 'floor' ){
+      this.floorElesLoaded = true;
+    }
+    if ( this.spacesEleLoaded && this.floorElesLoaded ) {
+      this.isReady = true;
+      this._onFloorSelect(this.floors[this.selectedFloorIndex]);
+    }
   }
 
   _onSpaceUpdate(detail) {

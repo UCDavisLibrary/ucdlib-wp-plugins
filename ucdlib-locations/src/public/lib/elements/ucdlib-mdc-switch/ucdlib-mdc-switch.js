@@ -8,6 +8,7 @@ export default class UcdlibMdcSwitch extends LitElement {
     return {
       switch: {state: true},
       slug: {type: String},
+      disabled: {type: Boolean}
     }
   }
 
@@ -19,15 +20,23 @@ export default class UcdlibMdcSwitch extends LitElement {
     super();
     this.render = render.bind(this);
     this.slug = '';
+    this.disabled = false;
+  }
+
+  willUpdate(props){
+    if ( props.has('disabled') ) {
+      if ( this.disabled ) this.disable();
+      else this.enable();
+    }
   }
 
   disable(){
-    if ( !this.isLoaded ) return;
+    if ( !this.isLoaded() ) return;
     this.switch.disabled = true;
   }
 
   enable(){
-    if ( !this.isLoaded ) return;
+    if ( !this.isLoaded() ) return;
     this.switch.disabled = false;
   }
 
@@ -36,7 +45,7 @@ export default class UcdlibMdcSwitch extends LitElement {
   }
 
   async _onClick(){
-    if ( !this.isLoaded ) return;
+    if ( !this.isLoaded() ) return;
 
     // wait for the switch to update
     await new Promise(resolve => setTimeout(resolve, 100));
@@ -49,7 +58,7 @@ export default class UcdlibMdcSwitch extends LitElement {
   firstUpdated(){
     const ele = this.renderRoot.querySelector('#selected-switch');
     if ( ele ) this.switch = new MDCSwitch(ele);
-    this.enable(); // remove me
+    this.dispatchEvent(new CustomEvent('switch-loaded', {bubbles: true, composed: true}));
   }
 
 }

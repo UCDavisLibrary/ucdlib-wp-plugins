@@ -4,6 +4,27 @@
 // See 'transform' property in $registry array in blocks class.
 class UCDLibPluginLocationsBlockTransformations {
 
+  /**
+   * Retrieves image object and saves in "image" attribute
+   */
+  public static function getImage($attrs=array()){
+    $new = array();
+
+    if ( array_key_exists('imageId', $attrs) ){
+      $new['image'] = Timber::get_post($attrs['imageId']);
+    }
+    if ( array_key_exists('topLayerId', $attrs) ){
+      $new['topLayer'] = Timber::get_post($attrs['topLayerId']);
+    }
+    if ( array_key_exists('bottomLayerId', $attrs) ){
+      $new['bottomLayer'] = Timber::get_post($attrs['bottomLayerId']);
+    }
+
+    $attrs = array_merge($attrs, $new);
+
+    return $attrs;
+  }
+
   static function getCurrentLocationId($attrs){
     if ( !array_key_exists('locationId', $attrs) || !$attrs['locationId'] ) {
       $attrs['locationId'] = get_the_ID();

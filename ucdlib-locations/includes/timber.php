@@ -1,6 +1,7 @@
 <?php
 
 require_once( __DIR__ . '/location.php' );
+require_once( __DIR__ . '/block-transformations.php' );
 
 // Sets up all Timber-related functionality
 class UCDLibPluginLocationsTimber {
@@ -75,8 +76,25 @@ class UCDLibPluginLocationsTimber {
     foreach ( $propKeys as $key ) {
       $props[$key] = array_key_exists($key, $block->attributes) ? $block->attributes[$key] : '';
     }
-    //foreach ( $block->inner_blocks as $layer ) {
-    //}
+    if ( array_key_exists('map-floors/bottomLayerId', $block->context) && $block->context['map-floors/bottomLayerId'] ) {
+      $block->attributes['bottomLayerId'] = $block->context['map-floors/bottomLayerId'];
+    }
+    $block->attributes = UCDLibPluginLocationsBlockTransformations::getImage($block->attributes);
+    if ( array_key_exists('topLayer', $block->attributes) && $block->attributes['topLayer'] ) {
+      $props['topLayer'] = $block->attributes['topLayer']->src();
+    }
+    if ( array_key_exists('bottomLayer', $block->attributes) && $block->attributes['bottomLayer'] ) {
+      $props['bottomLayer'] = $block->attributes['bottomLayer']->src();
+    }
+    foreach ( $block->inner_blocks as $layer ) {
+      if ( !array_key_exists('spaceSlug', $layer->attributes) ) continue;
+      $layer->attributes = UCDLibPluginLocationsBlockTransformations::getImage($layer->attributes);
+      if ( !array_key_exists('image', $layer->attributes) || !$layer->attributes['image']) continue;
+      $props['layers'][] = [
+        'slug' => $layer->attributes['spaceSlug'],
+        'src' => $layer->attributes['image']->src(),
+      ];
+    }
     return $props;
   }
 

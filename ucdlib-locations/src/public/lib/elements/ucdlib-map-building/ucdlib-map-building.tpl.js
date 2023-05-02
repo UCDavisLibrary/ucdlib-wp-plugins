@@ -1,7 +1,9 @@
 import { html, css } from 'lit';
 
-import layoutStyles from '@ucd-lib/theme-sass/5_layout/_l-basic.css.js';
 import headingStyles from '@ucd-lib/theme-sass/1_base_html/_headings.css.js';
+import headingClasses from '@ucd-lib/theme-sass/2_base_class/_headings.css.js';
+import layoutStyles from '@ucd-lib/theme-sass/5_layout/_l-basic.css.js';
+import containerStyles from '@ucd-lib/theme-sass/5_layout/_l-container.css.js';
 import gridStyles from '@ucd-lib/theme-sass/5_layout/_l-grid-regions.css.js';
 import oBoxStyles from '@ucd-lib/theme-sass/3_objects/_index.css.js';
 import spaceUtils from "@ucd-lib/theme-sass/6_utility/_u-space.css.js";
@@ -23,7 +25,7 @@ export function styles() {
     .nav {
       border-bottom: 4px dashed #FFBF00;
       padding-bottom: 1.5rem;
-      margin-bottom: 2rem;
+      margin-bottom: 2rem !important;
     }
     .nav h4 {
       margin-right: 1rem;
@@ -69,7 +71,9 @@ export function styles() {
 
   return [
     elementStyles,
+    containerStyles,
     headingStyles,
+    headingClasses,
     layoutStyles,
     gridStyles,
     oBoxStyles,
@@ -80,18 +84,22 @@ export function styles() {
 export function render() { 
 return html`
   <div>
+    <div class='nav l-container' ?hidden=${this.floors.length < 2}>
+      <h4>Level:</h4>
+      <div class='nav-buttons'>
+        ${this.floors.map(floor => html`
+          <a @click=${e => this._onFloorSelect(floor)} class='navButton ${this.selectedFloorIndex == floor.propIndex ? "selected" : ""}'>
+            <h2>${floor.navText}</h2>
+          </a>
+        `)}
+      </div>
+    </div>
+    <div class='l-container' ?hidden=${!this.floorTitle && !this.floorSubTitle}>
+      <h2 ?hidden=${!this.floorTitle}>${this.floorTitle}</h2>
+      <h3 ?hidden=${!this.floorSubTitle} class="heading--auxiliary">${this.floorSubTitle}</h3>
+    </div>
     <div class="l-basic--flipped">
       <div class="l-content o-box">
-        <div class='nav' ?hidden=${this.floors.length == 0}>
-          <h4>Level:</h4>
-          <div class='nav-buttons'>
-            ${this.floors.map(floor => html`
-              <a @click=${e => this._onFloorSelect(floor)} class='navButton ${this.selectedFloorIndex == floor.propIndex ? "selected" : ""}'>
-                <h2>${floor.navText}</h2>
-              </a>
-            `)}
-          </div>
-        </div>
         <div>
           ${this.floors.map(floor => html`
             <div ?hidden=${this.selectedFloorIndex != floor.propIndex}>
@@ -106,7 +114,8 @@ return html`
           class='o-box u-space-mb'
           ?hidden=${this.hideSpacesSlot} 
           @spaces-update=${e => this._onSpaceUpdate(e.detail)} 
-          @spaces-toggle=${e => console.log(e.detail)}>
+          @switches-loaded=${e => this._onSlottedEleReady('spaces-legend')}
+          @spaces-toggle=${e => this._onSpacesToggle(e.detail)}>
           <slot name="spaces"></slot>
         </div>
         <div 
