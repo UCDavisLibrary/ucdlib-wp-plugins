@@ -25,7 +25,7 @@ export function styles() {
     .nav {
       border-bottom: 4px dashed #FFBF00;
       padding-bottom: 1.5rem;
-      margin-bottom: 2rem !important;
+      margin-bottom: 1rem !important;
     }
     .nav h4 {
       margin-right: 1rem;
@@ -84,17 +84,19 @@ export function styles() {
 export function render() { 
 return html`
   <div>
-    <div class='nav' ?hidden=${this.floors.length < 2}>
-      <h4>Level:</h4>
-      <div class='nav-buttons'>
-        ${this.floors.map(floor => html`
-          <a @click=${e => this._onFloorSelect(floor)} class='navButton ${this.selectedFloorIndex == floor.propIndex ? "selected" : ""}'>
-            <h2>${floor.navText}</h2>
-          </a>
-        `)}
+    <div class='o-box u-space-pt--flush' ?hidden=${this.floors.length < 2}>
+      <div class='nav'>
+        <h4>Level:</h4>
+        <div class='nav-buttons'>
+          ${this.floors.map(floor => html`
+            <a @click=${e => this._onFloorSelect(floor)} class='navButton ${this.selectedFloorIndex == floor.propIndex ? "selected" : ""}'>
+              <h2>${floor.navText}</h2>
+            </a>
+          `)}
+        </div>
       </div>
     </div>
-    <div ?hidden=${!this.floorTitle && !this.floorSubTitle}>
+    <div ?hidden=${!this.floorTitle && !this.floorSubTitle} class='o-box'>
       <h2 ?hidden=${!this.floorTitle}>${this.floorTitle}</h2>
       <h3 ?hidden=${!this.floorSubTitle} class="heading--auxiliary">${this.floorSubTitle}</h3>
     </div>
