@@ -84,7 +84,7 @@ export function styles() {
 export function render() { 
 return html`
   <div>
-    <div class='nav l-container' ?hidden=${this.floors.length < 2}>
+    <div class='nav' ?hidden=${this.floors.length < 2}>
       <h4>Level:</h4>
       <div class='nav-buttons'>
         ${this.floors.map(floor => html`
@@ -94,7 +94,7 @@ return html`
         `)}
       </div>
     </div>
-    <div class='l-container' ?hidden=${!this.floorTitle && !this.floorSubTitle}>
+    <div ?hidden=${!this.floorTitle && !this.floorSubTitle}>
       <h2 ?hidden=${!this.floorTitle}>${this.floorTitle}</h2>
       <h3 ?hidden=${!this.floorSubTitle} class="heading--auxiliary">${this.floorSubTitle}</h3>
     </div>
