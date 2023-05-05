@@ -21,7 +21,7 @@ class UCDLibPluginLocationsUtils {
     $end = clone $start;
     $end->modify('+' . $days . 'day');
 
-    return array($start->format('Y-m-d'), $end->format('Y-m-d'));
+    return array($start->format(self::$dateFmt), $end->format(self::$dateFmt));
   }
 
   public static function getTodaysHours($hours){
@@ -43,7 +43,7 @@ class UCDLibPluginLocationsUtils {
   public static function deleteTransients(){
     global $wpdb;
     $transients = $wpdb->get_results(
-      "SELECT option_name AS name FROM $wpdb->options 
+      "SELECT option_name AS name FROM $wpdb->options
       WHERE option_name LIKE '_transient_libcal%' OR option_name LIKE '_transient_safespace%'"
     );
     foreach ($transients as $transient) {
@@ -58,9 +58,11 @@ class UCDLibPluginLocationsUtils {
     $out = [];
     $locations = [];
     $validRange = self::getHoursDateRange();
+    $validStart = DateTime::createFromFormat(self::$dateFmt, $validRange[0], new DateTimeZone(self::$tz) );
+    $validStart->modify('-14 day');
 
     $transients = $wpdb->get_results(
-      "SELECT option_name AS name, option_value AS value FROM $wpdb->options 
+      "SELECT option_name AS name, option_value AS value FROM $wpdb->options
       WHERE option_name LIKE '_transient_libcal_hours%'"
     );
     if ( !count($transients) ){
@@ -70,33 +72,33 @@ class UCDLibPluginLocationsUtils {
     foreach ($transients as $transient) {
       $t = explode('?', $transient->name);
       if ( !count($t) == 2 ) continue;
-      
+
       $dates = [];
       parse_str($t[1], $dates);
       if ( !array_key_exists('f', $dates) || !array_key_exists('t', $dates) ){
         continue;
       }
-      
+
       $locationId = str_replace('_transient_libcal_hours_', '', $t[0]);
       if ( !array_key_exists($locationId, $locations) ){
         $out[$locationId] = [];
       }
-      
+
       $from = DateTime::createFromFormat(self::$dateFmt, $dates['f'], new DateTimeZone(self::$tz) );
       $to = DateTime::createFromFormat(self::$dateFmt, $dates['t'], new DateTimeZone(self::$tz) );
-      $log = ['dates' => $dates];
+      $log = ['dates' => $dates, 'fromThreshold' => $validStart->format(self::$dateFmt)];
 
-      if ( $validRange[0] < $from ){
+      if ( $validStart <= $from ){
         $log['action'] = 'refresh';
         if ( !array_key_exists($locationId, $locations) ){
           $locations[$locationId] = Timber::get_post( $locationId );
-        } 
+        }
         $location = $locations[$locationId];
         if ( !$location ) {
           $log['action'] = 'expire';
           $log['message'] = 'location does not exist';
           $out[$locationId][] = $log;
-          self::deleteTransient($transient);
+          $log['transientDeleted'] = self::deleteTransient($transient);
           $log['status'] = 'good';
           continue;
         }
@@ -104,7 +106,7 @@ class UCDLibPluginLocationsUtils {
           $log['action'] = 'expire';
           $log['message'] = 'location not configured for hours retrieval.';
           $out[$locationId][] = $log;
-          self::deleteTransient($transient);
+          $log['transientDeleted'] = self::deleteTransient($transient);
           $log['status'] = 'good';
           continue;
         }
@@ -125,15 +127,16 @@ class UCDLibPluginLocationsUtils {
 
       } else {
         $log['action'] = 'expire';
+        $log['transientDeleted'] = self::deleteTransient($transient);
       }
 
-      $out[$locationId][] = $log; 
-      
+      $out[$locationId][] = $log;
+
     }
     return $out;
   }
 
   public static function deleteTransient( $transient ){
-    delete_transient(str_replace('_transient_', '', $transient->name));
+    return delete_transient(str_replace('_transient_', '', $transient->name));
   }
 }
