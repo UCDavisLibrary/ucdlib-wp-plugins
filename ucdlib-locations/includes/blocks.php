@@ -64,13 +64,33 @@ class UCDLibPluginLocationsBlocks extends UCDThemeBlockRenderer {
     ];
 
     add_action('block_categories_all', array($this, 'addCategories'), 10,2);
-    
+    add_filter('ucd-theme/customizer/block-colors', array($this, 'addBlockColorsToCustomizer'));
+    add_filter('ucd-theme/site/block-settings', array($this, 'filterBlockSettings'));
+
   }
 
   public static $transformationClass = 'UCDLibPluginLocationsBlockTransformations';
 
   public function twigPath($block){
     return '@' . $this->config['slug'] . "/blocks/$block.twig";
+  }
+
+  public function addBlockColorsToCustomizer($blocks){
+    $blocks[] = [
+      'slug' => "$this->slug/map-space-legend-item",
+      'label' => 'Floor Map Space Legend Item'
+    ];
+    return $blocks;
+  }
+
+  public function filterBlockSettings($settings){
+    $blocksWithColors = ["$this->slug/map-space-legend-item"];
+    foreach($blocksWithColors as $block){
+      $selectedColors = get_theme_mod('colors_blocks_' . $block, false);
+      if (!$selectedColors || !is_array($selectedColors) || !count($selectedColors) ) continue;
+      $settings['color--' . $block] = $selectedColors;
+    }
+    return $settings;
   }
 
   /**
@@ -89,7 +109,7 @@ class UCDLibPluginLocationsBlocks extends UCDThemeBlockRenderer {
         'icon'  => null,
       ),
     );
-      
+
 
     return array_merge($block_categories, $customCategories);
   }

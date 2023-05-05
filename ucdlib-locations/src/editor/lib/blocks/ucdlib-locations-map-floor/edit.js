@@ -1,10 +1,11 @@
 import { html, SelectUtils } from "@ucd-lib/brand-theme-editor/lib/utils";
 import { useBlockProps, InnerBlocks} from '@wordpress/block-editor';
-import { BaseControl, TextControl } from "@wordpress/components";
+import { BaseControl, TextControl, ToggleControl } from "@wordpress/components";
 import { ImagePicker } from "@ucd-lib/brand-theme-editor/lib/block-components";
+import { useSelect } from "@wordpress/data";
 
 export default ( props ) => {
-  const { attributes, setAttributes } = props;
+  const { attributes, setAttributes, clientId } = props;
   const layerBlock = 'ucdlib-locations/map-floor-layer';
   const ALLOWED_BLOCKS = [ layerBlock ];
   const blockProps = useBlockProps();
@@ -38,6 +39,22 @@ export default ( props ) => {
     topLayerImagePickerStyles.flexGrow = 1;
   }
 
+  const disableShowOnLoadToggle = useSelect( ( select ) => {
+    if ( attributes.showOnLoad ) return false;
+    let parent = select( 'core/block-editor' ).getBlockParentsByBlockName(clientId, 'ucdlib-locations/map-floors') || [];
+    if ( parent.length == 0 ) {
+      console.log('disableShowOnLoadToggle: no parent found');
+      return true;
+    }
+    parent = select( 'core/block-editor' ).getBlocksByClientId( parent[0] )[0];
+    for (const floor of parent.innerBlocks) {
+      if ( floor.attributes && floor.attributes.showOnLoad ) {
+        return true;
+      }
+    }
+    return false;
+  });
+
   return html`
     <div ...${ blockProps }>
       <div style=${containerStyle}>
@@ -57,6 +74,13 @@ export default ( props ) => {
           help=${'Only applicable if more than one floor exists. By default, will use first character of title.'}
           onChange=${(navText) => setAttributes({navText})}
         />
+        <${ToggleControl}
+            label="Floor is Selected/Visible on Page Load"
+            checked=${attributes.showOnLoad}
+            onChange=${() => setAttributes({showOnLoad: !attributes.showOnLoad})}
+            disabled=${disableShowOnLoadToggle}
+            help=${disableShowOnLoadToggle ? 'Only one floor can be selected/visible on page load.' : ''}
+          />
         <div style=${{marginTop: '1rem'}}>
           <label>
             <${BaseControl}>
@@ -64,7 +88,7 @@ export default ( props ) => {
             </${BaseControl}>
           </label>
           <div style=${topLayerImagePickerStyles}>
-            <${ImagePicker} 
+            <${ImagePicker}
               imageId=${attributes.topLayerId}
               image=${topLayerImage}
               onSelect=${onSelectImage}

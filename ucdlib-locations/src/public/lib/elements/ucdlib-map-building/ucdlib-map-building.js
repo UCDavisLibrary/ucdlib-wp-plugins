@@ -65,7 +65,7 @@ export default class UcdlibMapBuilding extends LitElement {
         spacesProps = JSON.parse(spacesProps.text);
         if ( !Array.isArray(spacesProps.spaces) || !spacesProps.spaces.length ){
           this.hideSpacesSlot = true;
-        } 
+        }
       } else {
         this.hideSpacesSlot = true;
       }
@@ -114,6 +114,8 @@ export default class UcdlibMapBuilding extends LitElement {
         } else {
           d.layers = [];
         }
+
+        if ( floorProps.showOnLoad ) this.selectedFloorIndex = i;
       }
       floors.push(d);
     });

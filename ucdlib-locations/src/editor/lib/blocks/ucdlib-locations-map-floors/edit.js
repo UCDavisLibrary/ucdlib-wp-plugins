@@ -22,12 +22,6 @@ export default ( props ) => {
     border: '1px solid #ffbf00'
   }
 
-  const bottomLayerContainerStyle = {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-  }
-
   const bottomLayerImage = SelectUtils.image(attributes.bottomLayerId)
 
   const onSelectImage = (image) => {
@@ -37,24 +31,35 @@ export default ( props ) => {
     setAttributes({bottomLayerId: 0});
   }
 
+  const renderBaseLayer = () => {
+    const bottomLayerContainerStyle = {
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+    }
+    return html`
+      <h4>Building Base Image Layer</h4>
+      <div style=${bottomLayerContainerStyle}>
+        <div style=${{maxWidth: '250px', backgroundColor: '#ececec', padding: '1rem'}}>
+          <${ImagePicker}
+            imageId=${attributes.bottomLayerId}
+            image=${bottomLayerImage}
+            onSelect=${onSelectImage}
+            onRemove=${onRemoveImage}
+            defaultImageId=${0}
+            notPanel=${true}
+          />
+        </div>
+      </div>
+    `;
+  }
+
   return html`
     <div ...${ blockProps }>
       <div style=${containerStyle}>
         <h3>Floor Maps</h3>
         <p>Use this section to add/remove floors to the building.</p>
-        <h4>Building Base Image Layer</h4>
-        <div style=${bottomLayerContainerStyle}>
-          <div style=${{maxWidth: '250px', backgroundColor: '#ececec', padding: '1rem'}}>
-            <${ImagePicker} 
-              imageId=${attributes.bottomLayerId}
-              image=${bottomLayerImage}
-              onSelect=${onSelectImage}
-              onRemove=${onRemoveImage}
-              defaultImageId=${0}
-              notPanel=${true}
-            />
-          </div>
-        </div>
+
         <div style=${{marginTop: '1rem'}}>
           <h4>Floors</h4>
           <${InnerBlocks} ...${innerBlocksProps} />

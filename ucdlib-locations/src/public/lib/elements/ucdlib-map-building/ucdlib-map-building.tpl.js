@@ -23,40 +23,48 @@ export function styles() {
       justify-content: space-between;
     }
     .nav {
-      border-bottom: 4px dashed #FFBF00;
+      border-bottom: 4px dotted #FFBF00;
       padding-bottom: 1.5rem;
       margin-bottom: 1rem !important;
     }
     .nav h4 {
       margin-right: 1rem;
     }
-    .navButton {
+    .nav-button {
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
       color: #13639E;
-      margin: .5rem 0.5rem;
-      width: 3.5rem;
-      height: 3.5rem;
-      min-height: 3.5rem;
-      min-width: 3.5rem;
+      margin: .5rem .25rem;
+      width: 2.5rem;
+      height: 2.5rem;
+      min-height: 2.5rem;
+      min-width: 2.5rem;
       cursor: pointer;
       background-color: #E5E5E5;
       border: 4px solid #E5E5E5;
     }
-    .navButton h2 {
+    .nav-button h2 {
       margin: 0;
       padding: 0;
     }
-    .navButton.selected {
+    .nav-button.selected {
       border-color: #FFBF00;
     }
-    .navButton:hover {
+    .nav-button:hover {
       border-color: #3375BC;
     }
-    .navButton.selected:hover {
+    .nav-button.selected:hover {
       border-color: #FFBF00;
+    }
+    @media screen and (min-width: 400px) {
+      .nav-button {
+        width: 3rem;
+        height: 3rem;
+        min-height: 3rem;
+        min-width: 3rem;
+      }
     }
     @media screen and (min-width: 480px) {
       .nav {
@@ -65,6 +73,14 @@ export function styles() {
       }
       .nav-buttons {
         justify-content: unset;
+        flex-wrap: nowrap;
+      }
+      .nav-button {
+        margin: .5rem .5rem;
+        width: 3.5rem;
+        height: 3.5rem;
+        min-height: 3.5rem;
+        min-width: 3.5rem;
       }
     }
   `;
@@ -81,7 +97,7 @@ export function styles() {
   ];
 }
 
-export function render() { 
+export function render() {
 return html`
   <div>
     <div class='o-box u-space-pt--flush' ?hidden=${this.floors.length < 2}>
@@ -89,7 +105,7 @@ return html`
         <h4>Level:</h4>
         <div class='nav-buttons'>
           ${this.floors.map(floor => html`
-            <a @click=${e => this._onFloorSelect(floor)} class='navButton ${this.selectedFloorIndex == floor.propIndex ? "selected" : ""}'>
+            <a @click=${e => this._onFloorSelect(floor)} class='nav-button ${this.selectedFloorIndex == floor.propIndex ? "selected" : ""}'>
               <h2>${floor.navText}</h2>
             </a>
           `)}
@@ -110,19 +126,19 @@ return html`
           `)}
         </div>
       </div>
-      <div 
+      <div
         class="l-sidebar-second">
-        <div 
+        <div
           class='o-box u-space-mb'
-          ?hidden=${this.hideSpacesSlot} 
-          @spaces-update=${e => this._onSpaceUpdate(e.detail)} 
+          ?hidden=${this.hideSpacesSlot}
+          @spaces-update=${e => this._onSpaceUpdate(e.detail)}
           @switches-loaded=${e => this._onSlottedEleReady('spaces-legend')}
           @spaces-toggle=${e => this._onSpacesToggle(e.detail)}>
           <slot name="spaces"></slot>
         </div>
-        <div 
+        <div
           class='o-box u-space-mb'
-          ?hidden=${this.hideLegendSlot} 
+          ?hidden=${this.hideLegendSlot}
           @items-update=${e => this._onLegendUpdate(e.detail)}>
           <slot name="legend"></slot>
         </div>

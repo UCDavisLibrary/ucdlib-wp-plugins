@@ -76,6 +76,7 @@ class UCDLibPluginLocationsTimber {
     foreach ( $propKeys as $key ) {
       $props[$key] = array_key_exists($key, $block->attributes) ? $block->attributes[$key] : '';
     }
+    $props['showOnLoad'] = array_key_exists('showOnLoad', $block->attributes) ? $block->attributes['showOnLoad'] : false;
     if ( array_key_exists('map-floors/bottomLayerId', $block->context) && $block->context['map-floors/bottomLayerId'] ) {
       $block->attributes['bottomLayerId'] = $block->context['map-floors/bottomLayerId'];
     }
@@ -83,9 +84,12 @@ class UCDLibPluginLocationsTimber {
     if ( array_key_exists('topLayer', $block->attributes) && $block->attributes['topLayer'] ) {
       $props['topLayer'] = $block->attributes['topLayer']->src();
     }
-    if ( array_key_exists('bottomLayer', $block->attributes) && $block->attributes['bottomLayer'] ) {
-      $props['bottomLayer'] = $block->attributes['bottomLayer']->src();
-    }
+
+    // Disable bottom layer feature for now, might need to revisit
+    //if ( array_key_exists('bottomLayer', $block->attributes) && $block->attributes['bottomLayer'] ) {
+    //  $props['bottomLayer'] = $block->attributes['bottomLayer']->src();
+    // }
+
     foreach ( $block->inner_blocks as $layer ) {
       if ( !array_key_exists('spaceSlug', $layer->attributes) ) continue;
       $layer->attributes = UCDLibPluginLocationsBlockTransformations::getImage($layer->attributes);
@@ -98,5 +102,5 @@ class UCDLibPluginLocationsTimber {
     return $props;
   }
 
-  
+
 }

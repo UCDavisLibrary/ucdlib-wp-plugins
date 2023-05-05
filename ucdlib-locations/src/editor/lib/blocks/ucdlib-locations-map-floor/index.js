@@ -34,6 +34,10 @@ const settings = {
     bottomLayerId: {
       type: 'number',
       default: 0
+    },
+    showOnLoad: {
+      type: 'boolean',
+      default: false
     }
   },
   edit: Edit,

@@ -10,7 +10,7 @@ export default ( props ) => {
   const iconPickerRef = createRef();
 
   const onIconChangeRequest = () => {
-    
+
     if ( iconPickerRef.current ){
       iconPickerRef.current.openModal();
     }
@@ -24,34 +24,34 @@ export default ( props ) => {
   return html`
     <div ...${ blockProps} >
     <${BlockControls} group="block">
-      <${ToolbarColorPicker} 
+      <${ToolbarColorPicker}
         onChange=${(value) => {setAttributes( {brandColor: value ? value.slug : "" } )}}
         value=${attributes.brandColor}
-        ucdBlock="panel-with-icon"
+        ucdBlock="ucdlib-locations/map-space-legend-item"
       />
     </${BlockControls}>
       <div style=${{display:'flex', alignItems: 'center'}}>
-        <ucdlib-icon 
-          class=${attributes.brandColor} 
+        <ucdlib-icon
+          class=${attributes.brandColor}
           style=${{cursor: 'pointer'}}
           onClick=${onIconChangeRequest}
           icon=${attributes.icon}>
         </ucdlib-icon>
         <div style=${{margin: '0 1rem'}}>
-          <${TextControl} 
+          <${TextControl}
             value=${attributes.slug}
             onChange=${(slug) => setAttributes({slug})}
             placeholder="A unique id, e.g. 'silent-zone'"
           />
         </div>
 
-        <${TextControl} 
+        <${TextControl}
           value=${attributes.label}
           onChange=${(label) => setAttributes({label})}
           placeholder="Label displayed to public"
         />
       </div>
-      <${IconPicker} 
+      <${IconPicker}
         ref=${iconPickerRef}
         onChange=${v => setIcon(v)}
         selectedIcon=${attributes.icon}
