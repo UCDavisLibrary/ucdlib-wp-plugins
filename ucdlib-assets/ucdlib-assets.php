@@ -9,3 +9,5 @@
 
 require_once( __DIR__ . '/includes/main.php' );
 new UCDLibPluginAssets();
+
+require_once( __DIR__ . '/includes/forminator-rt/forminator-rt-addon-plugin.php' );
