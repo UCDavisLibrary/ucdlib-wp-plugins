@@ -15,13 +15,10 @@ foreach ( $template_vars as $key => $val ) {
 <div class="forminator-integration-popup__header">
 
 	<h3 id="forminator-integration-popup__title" class="sui-box-title sui-lg" style="overflow: initial; white-space: normal; text-overflow: initial;">
-		<?php
-		/* translators: ... */
-		echo esc_html( sprintf( __( 'Pick %1$s Queues', 'forminator' ), 'RT' ) );
-		?>
+		<?php esc_html_e( 'Success', 'forminator' ); ?>
 	</h3>
 
-  <p id="forminator-integration-popup__description" class="sui-description"><?php esc_html_e( 'Form editors will only be able to select from the queues that you pick.', 'forminator' ); ?></p>
+  <p id="forminator-integration-popup__description" class="sui-description"><?php esc_html_e( 'RT has been successfully integrated!', 'forminator' ); ?></p>
 
 
   <?php if ( ! empty( $vars['error_message'] ) ) : ?>
@@ -48,5 +45,5 @@ foreach ( $template_vars as $key => $val ) {
 
     </div>
   <?php endif; ?>
-
+  <p></p>
 </div>

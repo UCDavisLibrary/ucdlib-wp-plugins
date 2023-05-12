@@ -19,6 +19,9 @@ final class Forminator_Addon_Rt extends Forminator_Addon_Abstract {
 	protected $_image_x2 = '';
   protected $_position = 10;
 
+  protected $_form_settings = 'Forminator_Addon_Rt_Form_Settings';
+	protected $_form_hooks    = 'Forminator_Addon_Rt_Form_Hooks';
+
   protected $rtApiPath = 'REST/2.0';
 
 	public function __construct() {
@@ -53,13 +56,28 @@ final class Forminator_Addon_Rt extends Forminator_Addon_Abstract {
 	 * @return bool
 	 */
 	public function is_connected() {
-		return false;
-	}
+		try {
+			// check if its active.
+			if ( ! $this->is_active() ) {
+				throw new Forminator_Addon_Rt_Exception( __( 'RT is not active', 'forminator' ) );
+			}
 
-  public function register_integration_sections() {
-		return array(
-			'authorize' => array( $this, 'authorize_page_callback' ),
-		);
+			$is_connected = $this->rt_integration_complete();
+
+		} catch ( Forminator_Addon_Rt_Exception $e ) {
+			$is_connected = false;
+		}
+
+		/**
+		 * Filter connected status of Rt
+		 *
+		 * @since 1.0
+		 *
+		 * @param bool $is_connected
+		 */
+		$is_connected = apply_filters( 'forminator_addon_rt_is_connected', $is_connected );
+
+		return $is_connected;
 	}
 
 	/**
@@ -129,6 +147,7 @@ final class Forminator_Addon_Rt extends Forminator_Addon_Abstract {
 			'rt_secret'         => '',
 			'rt_secret_error'   => '',
 			'error_message'       => '',
+      'is_active' => $this->is_active() ? 'active' : 'not active',
 		);
 
 		$has_errors = false;
@@ -179,6 +198,7 @@ final class Forminator_Addon_Rt extends Forminator_Addon_Abstract {
 					}
 					$settings_values['rt_host'] = $rt_host;
 					$settings_values['rt_secret'] = $rt_secret;
+          $settings_values['queues_selected'] = $this->get_queues_selected();
 
 					$this->save_settings_values( $settings_values );
 
@@ -222,7 +242,10 @@ final class Forminator_Addon_Rt extends Forminator_Addon_Abstract {
 		$template = forminator_addon_rt_dir() . 'views/settings/pick-queues.php';
 
 		$buttons = [];
-    $template_params = [];
+    $queues = [];
+    $template_params = [
+      'queues_selected' => $this->get_queues_selected(true),
+    ];
     $has_errors = false;
     $is_submit  = ! empty( $submitted_data );
 
@@ -262,12 +285,10 @@ final class Forminator_Addon_Rt extends Forminator_Addon_Abstract {
         }
         $has_errors = true;
       }
-    } catch ( Forminator_Addon_Rt_Exception $e ) {
+    } catch ( Exception $e) {
       $template_params['error_message'] = 'Error retrieving queues list:' . $e->getMessage();
       $has_errors = true;
     }
-    $settings_values['test'] = $submitted_data;
-    $this->save_settings_values( $settings_values );
     if ( $is_submit ) {
 			$queues_selected = isset( $submitted_data['queues_selected'] ) ? $submitted_data['queues_selected'] : [];
 
@@ -278,9 +299,19 @@ final class Forminator_Addon_Rt extends Forminator_Addon_Abstract {
 			}
 
 			if ( ! $has_errors ) {
-				// validate api.
 				try {
-					$settings_values['queues_selected'] = $queues_selected;
+          $queues_to_set = [];
+          foreach ($queues as $q) {
+            if ( in_array($q['id'], $queues_selected)) {
+              $queues_to_set[] = [
+                'id' => $q['id'],
+                'name' => $q['Name'],
+              ];
+            }
+          }
+					$settings_values['queues_selected'] = $queues_to_set;
+          $settings_values['rt_host'] = $rt_host;
+          $settings_values['rt_secret'] = $rt_secret;
 
 					$this->save_settings_values( $settings_values );
 
@@ -303,11 +334,29 @@ final class Forminator_Addon_Rt extends Forminator_Addon_Abstract {
   public function confirm_access( $submitted_data ) {
     $template = forminator_addon_rt_dir() . 'views/settings/confirm.php';
     $has_errors = false;
-    $template_params = false;
+    $template_params = [
+      'is_active' => $this->is_active()
+    ];
     $buttons = [];
     $buttons['close'] = array(
       'markup' => self::get_button_markup( esc_html__( 'Close', 'forminator' ), 'forminator-addon-close forminator-integration-popup__close' ),
     );
+    try {
+      if ( ! $this->is_active() ) {
+        $activated = Forminator_Addon_Loader::get_instance()->activate_addon( $this->get_slug() );
+        if ( $activated ) {
+          $template_params['is_active'] = true;
+        } else {
+          $last_message = Forminator_Addon_Loader::get_instance()->get_last_error_message();
+          throw new Forminator_Addon_Rt_Exception( $last_message );
+        }
+      }
+    } catch ( Forminator_Addon_Rt_Exception $e ) {
+      $template_params['error_message'] = $e->getMessage();
+      $has_errors = true;
+    }
+
+
     return array(
 			'html'       => self::get_template( $template, $template_params ),
 			'buttons'    => $buttons,
@@ -316,7 +365,7 @@ final class Forminator_Addon_Rt extends Forminator_Addon_Abstract {
 		);
   }
 
-  public function rt_integration_complete( $submitted_data ) {
+  public function rt_integration_complete( ) {
     $rt_host = $this->get_rt_host();
     $rt_secret = $this->get_rt_secret();
     $queues_selected = $this->get_queues_selected();
@@ -326,24 +375,6 @@ final class Forminator_Addon_Rt extends Forminator_Addon_Abstract {
 		}
 
 		return false;
-  }
-
-  public function authorize_page_callback( $query_args ) {
-    $settings_values = $this->get_settings_values();
-		$template = forminator_addon_rt_dir() . 'views/settings/authorize.php';
-
-    $template_params = [
-      'error_message' => '',
-			'is_close'      => false,
-    ];
-
-    try {
-      $template_params['is_close'] = true;
-    } catch (Exception $e) {
-      $template_params['error_message'] = $e->getMessage();
-    }
-
-    return self::get_template( $template, $template_params );
   }
 
 
@@ -387,7 +418,7 @@ final class Forminator_Addon_Rt extends Forminator_Addon_Abstract {
 		return $rt_secret;
 	}
 
-  public function get_queues_selected(){
+  public function get_queues_selected($justIds = false){
     $settings_values = $this->get_settings_values();
     $queues_selected = [];
     if ( isset( $settings_values ['queues_selected'] ) ) {
@@ -397,6 +428,14 @@ final class Forminator_Addon_Rt extends Forminator_Addon_Abstract {
       if ( isset( $settings['queues_selected'] ) ) {
 				$queues_selected = $settings['queues_selected'];
 			}
+    }
+    if($justIds){
+      $queues_selected = array_map(function($queue){
+        if ( isset( $queue['id'] ) ) {
+          return $queue['id'];
+        }
+      }, $queues_selected);
+      $queues_selected = array_filter($queues_selected);
     }
     return $queues_selected;
   }

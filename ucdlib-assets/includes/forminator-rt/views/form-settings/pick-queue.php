@@ -3,8 +3,8 @@
 $vars = array(
 	'error_message' => [],
   'queues' => [],
-  'queues_selected' => [],
-  'queues_selected_error' => ''
+  'queue' => [],
+  'queue_error' => ''
 );
 /** @var array $template_vars */
 foreach ( $template_vars as $key => $val ) {
@@ -20,11 +20,11 @@ foreach ( $template_vars as $key => $val ) {
 	<h3 id="forminator-integration-popup__title" class="sui-box-title sui-lg" style="overflow: initial; white-space: normal; text-overflow: initial;">
 		<?php
 		/* translators: ... */
-		echo esc_html( sprintf( __( 'Pick %1$s Queues', 'forminator' ), 'RT' ) );
+		echo esc_html( sprintf( __( 'Pick a %1$s Queue', 'forminator' ), 'RT' ) );
 		?>
 	</h3>
 
-  <p id="forminator-integration-popup__description" class="sui-description"><?php esc_html_e( 'Form editors will only be able to select from the queues that you pick.', 'forminator' ); ?></p>
+  <p id="forminator-integration-popup__description" class="sui-description"><?php esc_html_e( 'When the form is submitted, a ticket will be created in the following queue', 'forminator' ); ?></p>
 
 
   <?php if ( ! empty( $vars['error_message'] ) ) : ?>
@@ -55,17 +55,17 @@ foreach ( $template_vars as $key => $val ) {
 </div>
 
 <form>
-  <input type="hidden" name='dummy' style='display:none;'>
-  <div class="sui-form-field <?php echo esc_attr( ! empty( $vars['queues_selected_error'] ) ? 'sui-form-field-error' : '' ); ?>">
-		<label class="sui-label"><?php esc_html_e( 'Select From Queues Your API Key Has Access To:', 'forminator' ); ?></label>
-		<select class="sui-select" multiple name="queues_selected[]" data-placeholder="<?php esc_html_e( 'Please Select At Least One Queue', 'forminator' ); ?>">
+  <div class="sui-form-field <?php echo esc_attr( ! empty( $vars['queue_error'] ) ? 'sui-form-field-error' : '' ); ?>">
+		<label class="sui-label"><?php esc_html_e( 'Queue', 'forminator' ); ?></label>
+		<select class="sui-select" name="queue">
+      <option value=""><?php esc_html_e( 'Select a Queue', 'forminator' ); ?></option>
       <?php foreach ( $vars['queues'] as $queue ) : ?>
         <option value="<?php echo $queue['id']; ?>"
-         <?php selected($queue['id'], array_search($queue['id'], $vars['queues_selected']) === false ? '' : $queue['id']);?>><?php echo $queue['Name']; ?></option>
+         <?php selected($queue['id'], $vars['queue']);?>><?php echo $queue['name']; ?></option>
       <?php endforeach; ?>
     </select>
-		<?php if ( ! empty( $vars['queues_selected_error'] ) ) : ?>
-			<span class="sui-error-message"><?php echo esc_html( $vars['queues_selected_error'] ); ?></span>
+		<?php if ( ! empty( $vars['queue_error'] ) ) : ?>
+			<span class="sui-error-message"><?php echo esc_html( $vars['queue_error'] ); ?></span>
 		<?php endif; ?>
 	</div>
 
