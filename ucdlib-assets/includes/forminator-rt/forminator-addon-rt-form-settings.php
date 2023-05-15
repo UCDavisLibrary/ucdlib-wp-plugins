@@ -22,20 +22,33 @@ class Forminator_Addon_Rt_Form_Settings extends Forminator_Addon_Form_Settings_A
     $settings = $this->get_form_settings_values();
     $has_errors = false;
     $buttons = [];
+    $is_close = false;
     $template_params = array(
 			'queue' => isset( $settings['queue'] ) ? $settings['queue'] : '',
 			'queue_error' => '',
 			'queues' => $this->addon->get_queues_selected(),
 		);
-    $is_submit  = ! empty( $submitted_data );
 
+    $is_submit  = ! empty( $submitted_data );
     if ( $is_submit ) {
       if ( empty( isset($submitted_data['queue']) ? $submitted_data['queue'] : '' ) ) {
 				$template_params['queue_error'] = __( 'Please select a queue', 'forminator' );
 				$has_errors = true;
-			}
+			} else {
+        $this->save_form_settings_values([
+          'queue' => $submitted_data['queue']
+        ]);
+        $is_close = true;
+      }
     }
 
+    if ( $this->pick_queue_is_completed() ){
+      $buttons['disconnect']['markup'] = Forminator_Addon_Abstract::get_button_markup(
+				esc_html__( 'Deactivate', 'forminator' ),
+				'sui-button-ghost sui-tooltip sui-tooltip-top-center forminator-addon-form-disconnect',
+				esc_html__( 'Deactivate this Rt Integration from this Form.', 'forminator' )
+			);
+    }
     $buttons['next']['markup'] = '<div class="sui-actions-right">' .
     Forminator_Addon_Abstract::get_button_markup( esc_html__( 'CONNECT', 'forminator' ), 'forminator-addon-next' ) .
     '</div>';
@@ -45,12 +58,27 @@ class Forminator_Addon_Rt_Form_Settings extends Forminator_Addon_Form_Settings_A
 			'buttons'    => $buttons,
 			'redirect'   => false,
 			'has_errors' => $has_errors,
+      'is_close'   => $is_close,
 		);
 
   }
 
   public function pick_queue_is_completed(){
-    return false;
+    $settings = $this->get_form_settings_values();
+    return array_key_exists('queue', $settings) && !empty($settings['queue']);
+  }
+
+  public function is_form_settings_complete(){
+    return $this->pick_queue_is_completed();
+  }
+
+  public function get_queue(){
+    $settings = $this->get_form_settings_values();
+    $queue = '';
+    if ( array_key_exists('queue', $settings) && !empty($settings['queue']) ){
+      $queue = $settings['queue'];
+    }
+    return $queue;
   }
 
 }

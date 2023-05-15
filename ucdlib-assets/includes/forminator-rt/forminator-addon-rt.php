@@ -88,7 +88,41 @@ final class Forminator_Addon_Rt extends Forminator_Addon_Abstract {
 	 * @return bool
 	 */
 	public function is_form_connected( $form_id ) {
-		return false;
+		try {
+			$form_settings_instance = null;
+			if ( ! $this->is_connected() ) {
+				throw new Forminator_Addon_Rt_Exception( __( ' Rt is not connected', 'forminator' ) );
+			}
+
+			$form_settings_instance = $this->get_addon_settings( $form_id, 'form' );
+			if ( ! $form_settings_instance instanceof Forminator_Addon_Rt_Form_Settings ) {
+				throw new Forminator_Addon_Rt_Exception( __( 'Invalid Form Settings of Rt', 'forminator' ) );
+			}
+
+			// Mark as active when there is at least one active connection.
+			if ( false === $form_settings_instance->is_form_settings_complete() ) {
+				throw new Forminator_Addon_Rt_Exception( __( 'No active Rt connection found in this form', 'forminator' ) );
+			}
+
+			$is_form_connected = true;
+
+		} catch ( Forminator_Addon_Rt_Exception $e ) {
+			$is_form_connected = false;
+		}
+
+		/**
+		 * Filter connected status of Rt with the form
+		 *
+		 * @since 1.0
+		 *
+		 * @param bool                                      $is_form_connected
+		 * @param int                                       $form_id                Current Form ID.
+		 * @param Forminator_Addon_Rt_Form_Settings|null $form_settings_instance Instance of form settings, or null when unavailable.
+		 *
+		 */
+		$is_form_connected = apply_filters( 'forminator_addon_rt_is_form_connected', $is_form_connected, $form_id, $form_settings_instance );
+
+		return $is_form_connected;
 	}
 
   public function is_settings_available() {
