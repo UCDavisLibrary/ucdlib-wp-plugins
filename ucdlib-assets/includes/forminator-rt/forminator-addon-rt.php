@@ -1,5 +1,6 @@
 <?php
 
+require_once dirname( __FILE__ ) . '/forminator-addon-rt-api.php';
 require_once dirname( __FILE__ ) . '/forminator-addon-rt-exception.php';
 
 final class Forminator_Addon_Rt extends Forminator_Addon_Abstract {
@@ -23,6 +24,7 @@ final class Forminator_Addon_Rt extends Forminator_Addon_Abstract {
 	protected $_form_hooks    = 'Forminator_Addon_Rt_Form_Hooks';
 
   protected $rtApiPath = 'REST/2.0';
+  private static $_api = null;
 
 	public function __construct() {
 		// late init to allow translation.
@@ -123,6 +125,14 @@ final class Forminator_Addon_Rt extends Forminator_Addon_Abstract {
 		$is_form_connected = apply_filters( 'forminator_addon_rt_is_form_connected', $is_form_connected, $form_id, $form_settings_instance );
 
 		return $is_form_connected;
+	}
+
+  public function get_api( $rt_host='', $rt_secret='', $queue='' ) {
+		if ( is_null( self::$_api ) ) {
+			self::$_api = new Forminator_Addon_Rt_Api( $rt_host, $rt_secret, $queue );
+		}
+
+		return self::$_api;
 	}
 
   public function is_settings_available() {
