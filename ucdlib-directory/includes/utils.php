@@ -86,7 +86,7 @@ class UCDLibPluginDirectoryUtils {
       'google-scholar' => $defaultIcon,
       'linkedin' => 'ucd-public:fa-linkedin',
       'orcid' => 'ucd-public:fa-orcid',
-      'twitter' => 'ucd-public:fa-twitter',
+      'twitter' => 'ucd-public:x-twitter',
       'other' => $defaultIcon
     ];
     $attrs['icons'] = [];
@@ -142,8 +142,8 @@ class UCDLibPluginDirectoryUtils {
     if ( is_array($attrs['websites']) ) {
       foreach ($attrs['websites'] as $website) {
         if ( array_key_exists('value', $website) && $website['value'] ) {
-          if ( 
-            array_key_exists('icon', $website) && 
+          if (
+            array_key_exists('icon', $website) &&
             array_key_exists('icon', $website['icon']) &&
             array_key_exists('iconSet', $website['icon']) &&
             $website['icon']['icon'] &&
