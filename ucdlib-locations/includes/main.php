@@ -31,7 +31,7 @@ class UCDLibPluginLocations {
 
     if ( ! empty( $plugin_metadata['Version'] ) ) {
       $config['version'] = $plugin_metadata['Version'];
-    } 
+    }
 
     $this->config = $config;
 
@@ -80,7 +80,7 @@ class UCDLibPluginLocations {
 
   public function add_admin_menu(){
 
-    add_menu_page( 
+    add_menu_page(
       __( 'Locations', 'textdomain' ),
       'Locations',
       "edit_posts",
@@ -88,11 +88,16 @@ class UCDLibPluginLocations {
       '',
       'dashicons-location',
       25
-      ); 
+      );
   }
 
   public function refreshHours(){
-    UCDLibPluginLocationsUtils::refreshAllHours();
+    try {
+      UCDLibPluginLocationsUtils::refreshAllHours();
+    } catch (Exception $e) {
+      error_log('Error refreshing hours: ' . $e->getMessage());
+    }
+
   }
 
   public function registerCron(){
