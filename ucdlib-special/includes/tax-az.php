@@ -30,8 +30,8 @@ class UCDLibPluginSpecialTaxAZ {
     $args = [
       'labels' => $labels,
       'description' => 'Collections categorized by first letter',
-      'public' => true,
-      'publicly_queryable' => true,
+      'public' => false,
+      'publicly_queryable' => false,
       'hierarchical' => false,
       'show_ui' => true,
       'show_in_nav_menus' => false,
@@ -41,11 +41,11 @@ class UCDLibPluginSpecialTaxAZ {
     ];
 
     register_taxonomy(
-      $slug, 
+      $slug,
       [$this->postType],
       $args
     );
-    
+
   }
 
   public function register_query_vars( $qvars ) {
