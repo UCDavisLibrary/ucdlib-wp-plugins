@@ -46,6 +46,22 @@ export default class UcdlibMapBuilding extends LitElement {
     if (props.has('floors') && this.floors.length ){
       this._onSlottedEleReady('floor');
     }
+    if ( props.has('isReady') && this.isReady) {
+      const requestedFloor = this.getFloorFromUrlParam();
+      if ( requestedFloor ) {
+        this._onFloorSelect(requestedFloor);
+      }
+    }
+  }
+
+  getFloorFromUrlParam(){
+    const urlParams = new URLSearchParams(window.location.search);
+    let floorParam = urlParams.get('floor');
+    if ( !floorParam ) return;
+    floorParam = floorParam.toLowerCase();
+    const floor = this.floors.find(f => f.navText.toLowerCase() === floorParam);
+    if ( !floor ) return;
+    return floor;
   }
 
   updateActiveFloorLayers(layers){
@@ -122,7 +138,7 @@ export default class UcdlibMapBuilding extends LitElement {
     this.floors = floors;
   }
 
-  _onFloorSelect(floor){
+  _onFloorSelect(floor, args={}){
     if ( !this.isReady ) return;
     this.selectedFloorIndex = floor.propIndex
     this.floorTitle = floor.title;
@@ -135,6 +151,16 @@ export default class UcdlibMapBuilding extends LitElement {
       .map(k => this.spacesEle.toggleState[k] ? k : null)
       .filter(k => k)
     this.updateActiveFloorLayers(slugs);
+
+    if ( !args.noUrlUpdate ) {
+      this.updateFloorUrlParam(floor);
+    }
+  }
+
+  updateFloorUrlParam(floor){
+    const urlParams = new URLSearchParams(window.location.search);
+    urlParams.set('floor', floor.navText.toLowerCase());
+    window.history.replaceState({}, null, `${window.location.pathname}?${urlParams.toString()}`);
   }
 
   _onSpacesToggle(detail){
@@ -154,7 +180,7 @@ export default class UcdlibMapBuilding extends LitElement {
     }
     if ( this.spacesEleLoaded && this.floorElesLoaded ) {
       this.isReady = true;
-      this._onFloorSelect(this.floors[this.selectedFloorIndex]);
+      this._onFloorSelect(this.floors[this.selectedFloorIndex], {noUrlUpdate: true});
     }
   }
 
