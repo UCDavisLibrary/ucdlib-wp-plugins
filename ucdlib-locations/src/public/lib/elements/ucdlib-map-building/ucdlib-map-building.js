@@ -159,7 +159,7 @@ export default class UcdlibMapBuilding extends LitElement {
 
   updateFloorUrlParam(floor){
     const urlParams = new URLSearchParams(window.location.search);
-    urlParams.set('floor', floor.navText.toLowerCase());
+    urlParams.set('floor', floor.navText.toUpperCase());
     window.history.replaceState({}, null, `${window.location.pathname}?${urlParams.toString()}`);
   }
 
