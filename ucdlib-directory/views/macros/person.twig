@@ -1,4 +1,4 @@
-{% macro teaser(person) %}
+{% macro teaser(person, kwargs={}) %}
   <article class='vm-teaser vm-teaser--person'>
     {% if person.teaser_image %}
         <div class="vm-teaser__figure" style="width:20%;max-width:135px;" role='img' aria-label='{{person.teaser_image.alt}}'>
@@ -17,6 +17,19 @@
             <li>{{department.title}}</li>
           {% endfor %}
         </ul>
+      {% endif %}
+      {% if kwargs.showExpertise and person.expertiseAreas %}
+        <div class='u-space-mb--small'>
+         <span>Expertise: </span>
+          {% apply spaceless %}
+            {% for tag in person.expertiseAreas %}
+              <span>{{tag.name}}</span>
+              {% if not loop.last and loop.length > 1 %}
+                <span>, </span>
+              {% endif %}
+            {% endfor %}
+          {% endapply %}
+        </div>
       {% endif %}
       {{_self.contact(person, 'text--smaller u-space-mb--small vm-teaser--person__contact')}}
       {% if person.libraries %}
@@ -43,7 +56,7 @@
         {% endif %}
       {% endfor %}
     {% endapply %}
-    </span> 
+    </span>
   {% endif %}
 {% endmacro %}
 

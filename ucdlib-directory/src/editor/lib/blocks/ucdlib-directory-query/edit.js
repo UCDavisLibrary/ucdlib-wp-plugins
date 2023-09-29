@@ -1,6 +1,6 @@
 import { html, SelectUtils } from "@ucd-lib/brand-theme-editor/lib/utils";
 import { useBlockProps, InspectorControls } from '@wordpress/block-editor';
-import { PanelBody, SelectControl, TextControl } from '@wordpress/components';
+import { PanelBody, SelectControl, TextControl, ToggleControl } from '@wordpress/components';
 import { decodeEntities } from "@wordpress/html-entities";
 import { useEffect } from '@wordpress/element';
 
@@ -56,7 +56,7 @@ export default ( props ) => {
   <${InspectorControls}>
     <${PanelBody} title="Query Filters">
       <div className='directory-query-inspector-controls'>
-        <${TextControl} 
+        <${TextControl}
           value=${attributes.q.join(' ')}
           label='Name'
           onChange=${ v => {setAttributes({q: v.split(' ')})}}
@@ -96,6 +96,11 @@ export default ( props ) => {
         value=${ attributes.orderby }
         label='Sort by'
         onChange=${ v => {setAttributes({orderby: v})} }
+      />
+      <${ToggleControl}
+        label=${"Show Areas of Expertise"}
+        checked=${attributes.showExpertise}
+        onChange=${() => setAttributes({showExpertise: !attributes.showExpertise})}
       />
     </${PanelBody}>
   </${InspectorControls}>

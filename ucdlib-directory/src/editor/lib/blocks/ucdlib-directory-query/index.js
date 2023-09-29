@@ -41,6 +41,10 @@ const settings = {
     columns: {
       type: 'string',
       default: 'one'
+    },
+    showExpertise: {
+      type: 'boolean',
+      default: false
     }
   },
   edit: Edit

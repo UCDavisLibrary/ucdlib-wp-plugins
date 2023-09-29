@@ -30,13 +30,13 @@
     {% for row in people|batch(2) %}
       <div class='l-2col'>
         {% for person in row %}
-          <div class='panel {{loop.first ? "l-first" : "l-second"}}'>{{teaser(person)}}</div>
+          <div class='panel {{loop.first ? "l-first" : "l-second"}}'>{{teaser(person, {showExpertise: attributes.showExpertise})}}</div>
         {% endfor %}
       </div>
     {% endfor %}
   {% else %}
     {% for person in people %}
-      {{teaser(person)}}
+      {{teaser(person, {showExpertise: attributes.showExpertise})}}
     {% endfor %}
   {% endif %}
 {% endmacro %}
