@@ -22,11 +22,6 @@ class UCDLibPluginAssetsRobots {
    */
   public function interceptRobotsTxt( $output, $public ) {
 
-    // TODO: remove this part after google has reindex our dev sites
-    $output = "User-agent: *\nDisallow: /wp-admin/\nAllow: /wp-admin/admin-ajax.php\n\n";
-    $output .= "Sitemap: $this->site_url/wp-sitemap.xml";
-    return $output;
-
     if ( $this->isProd ) {
       $output = "User-agent: *\nDisallow: /wp-admin/\nAllow: /wp-admin/admin-ajax.php\n\n";
       $output .= "Sitemap: $this->prodUrl/wp-sitemap.xml";
@@ -49,6 +44,7 @@ class UCDLibPluginAssetsRobots {
         'nofollow' => true
       ];
     }
+    $robots = ['all' => true];
     return $robots;
   }
 
