@@ -36,15 +36,12 @@ class UCDLibPluginAssetsRobots {
    * Generates the <meta name='robots'> tag
    */
   public function robotsMeta($robots){
-    if ( $this->isProd ){
-      $robots = ['all' => true];
-    } else {
+    if ( !$this->isProd ){
       $robots = [
         'noindex' => true,
         'nofollow' => true
       ];
     }
-    $robots = ['all' => true];
     return $robots;
   }
 
