@@ -13,6 +13,10 @@ When a range of hours for a location are retrieved, they are cached as long-live
 
 The cron job should delete past transients, but if this process fails (or if you are in development), you can completely clear the transients by using the wp cli command `wp --allow-root eval-file ./wp-content/plugins/ucdlib-locations/includes/cli/delete-transients.php`. 
 
+To verify that the process is running, use `wp --allow-root cron event list` and then look for the `ucdlib-locations_cron` hook.
+
+### Localhost
+
 When developing on localhost, wp cron does NOT spawn jobs according to the specified schedule, so your hours will not automatically update. You have a couple options to get around this:
    
 1. To get the cron to work, you must change your `HOST_PORT` to 80 and the `siteurl` and `home` wp_options to `http://localhost`. 
