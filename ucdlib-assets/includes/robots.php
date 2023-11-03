@@ -34,7 +34,9 @@ class UCDLibPluginAssetsRobots {
     if ( !$this->isProd ){
       $robots = [
         'noindex' => true,
-        'nofollow' => true
+        'nofollow' => true,
+        'follow' => false,
+        'index' => false
       ];
     }
     return $robots;
