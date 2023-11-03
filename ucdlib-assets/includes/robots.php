@@ -17,17 +17,12 @@ class UCDLibPluginAssetsRobots {
 
   /**
    * Dynamically generates robots.txt
-   * By default, don't allow indexing
-   * Turn on for production site
+   * Always allow robots since we're using the <meta name='robots'> tag to control indexing
    */
   public function interceptRobotsTxt( $output, $public ) {
 
-    if ( $this->isProd ) {
-      $output = "User-agent: *\nDisallow: /wp-admin/\nAllow: /wp-admin/admin-ajax.php\n\n";
-      $output .= "Sitemap: $this->prodUrl/wp-sitemap.xml";
-    } else {
-      $output = "User-agent: *\nDisallow: /\n";
-    }
+    $output = "User-agent: *\nDisallow: /wp-admin/\nAllow: /wp-admin/admin-ajax.php\n\n";
+    $output .= "Sitemap: $this->prodUrl/wp-sitemap.xml";
 
     return $output;
   }
