@@ -48,14 +48,12 @@
 {% macro library_locations(person) %}
   {% if person.libraries %}
     <span class="icon icon--location">
-    {% apply spaceless %}
       {% for library in person.libraries %}
         <span>{{library.name}}</span>
-        {% if not loop.last and loop.length > 1 %}
+        {%- if not loop.last and loop.length > 1 -%}
           <span>, </span>
-        {% endif %}
+        {%- endif -%}
       {% endfor %}
-    {% endapply %}
     </span>
   {% endif %}
 {% endmacro %}
