@@ -2,6 +2,11 @@
 
 // Service Type taxonomy
 class UCDLibPluginDirectoryServiceTypes {
+
+  public $config;
+  public $slug;
+  public $postType;
+
   public function __construct($config){
     $this->config = $config;
     $this->slug = $this->config['taxSlugs']['service-type'];
@@ -56,11 +61,11 @@ class UCDLibPluginDirectoryServiceTypes {
     ];
 
     register_taxonomy(
-      $slug, 
+      $slug,
       [$this->postType],
       $args
     );
-    
+
   }
 
   // register metadata associated with each taxonomy term
@@ -98,10 +103,10 @@ class UCDLibPluginDirectoryServiceTypes {
   public function add_to_menu(){
     $label = 'Service Types';
     add_submenu_page(
-      $this->config['slug'], 
-      $label, 
-      $label, 
-      $this->config['capabilities']['manage_directory'], 
+      $this->config['slug'],
+      $label,
+      $label,
+      $this->config['capabilities']['manage_directory'],
       "edit-tags.php?taxonomy=$this->slug&post_type=$this->postType",
       false );
   }

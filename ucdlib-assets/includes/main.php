@@ -2,6 +2,12 @@
 require_once( __DIR__ . '/robots.php' );
 
 class UCDLibPluginAssets {
+
+  public $slug;
+  public $config;
+  public $activePlugins;
+  public $forminator;
+
   public function __construct(){
     $this->slug = "ucdlib-assets";
     new UCDLibPluginAssetsRobots();
@@ -30,7 +36,7 @@ class UCDLibPluginAssets {
     } else {
       $config['bundleVersion'] = (new DateTime())->getTimestamp();
     }
-    
+
 
     // static asset uris
     $config['uris'] = array(
@@ -71,7 +77,7 @@ class UCDLibPluginAssets {
     add_action( 'after_setup_theme', array($this, 'enqueue_editor_css'));
     add_action( 'admin_enqueue_scripts', [$this, 'registerAdminScripts']);
     // add_filter( 'mce_css', array($this, 'enqueue_editor_css') );
-    
+
   }
 
   // registers customizations to third party plugins
@@ -134,17 +140,17 @@ class UCDLibPluginAssets {
 
     if ( $this->config['isDevEnv'] ){
       wp_enqueue_script(
-        $slug, 
-        $this->config['uris']['js'] . "/editor/dev/" . $file, 
-        array(), 
-        $this->config['bundleVersion'], 
+        $slug,
+        $this->config['uris']['js'] . "/editor/dev/" . $file,
+        array(),
+        $this->config['bundleVersion'],
         true);
 
     } else {
       wp_enqueue_script(
-        $slug, 
-        $this->config['uris']['js'] . "/editor/dist/" . $file, 
-        array(), 
+        $slug,
+        $this->config['uris']['js'] . "/editor/dist/" . $file,
+        array(),
         $this->config['bundleVersion'],
         true);
     }
@@ -161,10 +167,10 @@ class UCDLibPluginAssets {
         array(),
         $this->config['bundleVersion']
       );
-      wp_enqueue_style( 
+      wp_enqueue_style(
         $slug,
         $this->config['uris']['css'] . "/ucdlib-dev.css",
-        array(), 
+        array(),
         $this->config['bundleVersion']
       );
     } else {
@@ -174,10 +180,10 @@ class UCDLibPluginAssets {
         array(),
         $this->config['bundleVersion']
       );
-      wp_enqueue_style( 
+      wp_enqueue_style(
         $slug,
         $this->config['uris']['css'] . "/ucdlib.css",
-        array(), 
+        array(),
         $this->config['bundleVersion']
       );
     }

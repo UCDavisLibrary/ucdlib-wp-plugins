@@ -4,6 +4,13 @@
  * @classdesc Does user authentication and authorization
  */
 class UCDPluginCASAuth {
+
+  public $slug;
+  public $env;
+  public $optionsSlug;
+  public $fieldsSlug;
+  private $_options;
+
   public function __construct($slug, $env){
     $this->slug = $slug;
     $this->env = $env;
@@ -43,10 +50,10 @@ class UCDPluginCASAuth {
     if ( phpCAS::isAuthenticated() ){
       $kerb = phpCAS::getUser();
       $user = get_user_by('login', $kerb);
-      
+
       // user is blacklisted, deny access
-      if ( 
-        $user && 
+      if (
+        $user &&
         $this->userIsBlackListed($kerb) &&
         !$this->userHasEnvironmentalAccess($kerb)
         ){
@@ -71,7 +78,7 @@ class UCDPluginCASAuth {
           $newUser = get_user_by('id', $newUserId);
           $this->loginExistingUser($newUser);
         }
-        
+
       } else {
         $this->do403();
       }
@@ -95,7 +102,7 @@ class UCDPluginCASAuth {
    * @description user is guaranteed admin access from environmental variable
    * @param kerb - Kerberos id
    * @return Boolean
-   * 
+   *
    */
   public function userHasEnvironmentalAccess($kerb){
     if ( !$this->env["ensure_users"] ) return false;
@@ -126,7 +133,7 @@ class UCDPluginCASAuth {
     if ( !array_key_exists($this->fieldsSlug . "prevent_deptlist", $options) ){
       return $this->userIsInWhiteListedDepartment();
     }
-    
+
     return true;
   }
 
@@ -182,7 +189,7 @@ class UCDPluginCASAuth {
   public function createUser($kerb){
     $attributes = phpCAS::getAttributes();
     $options = $this->get_options();
-    
+
     $user = array('user_login' => $kerb);
     $user["user_pass"] = substr( hash("whirlpool", time()), 0, 8);
 
@@ -207,8 +214,8 @@ class UCDPluginCASAuth {
       if ( array_key_exists('displayName', $attributes) ) {
         $user['display_name'] = $attributes['displayName'];
       }
-      if ( 
-        array_key_exists('eduPersonAffiliation', $attributes) && 
+      if (
+        array_key_exists('eduPersonAffiliation', $attributes) &&
         $attributes['eduPersonAffiliation'] == 'student' &&
         get_role('student_employee') ){
           $user['role'] = 'student_employee';
@@ -270,9 +277,9 @@ class UCDPluginCASAuth {
     }
     $port = intval($options[$this->slug . "_field_port"]);
     $casUri = $options[$this->slug . "_field_uri"];
-    
+
     phpCAS::client(CAS_VERSION_3_0, $host, $port, $casUri, get_site_url());
-    
+
     if ( array_key_exists($this->slug . "_field_validation_uri", $options) ) {
       $serviceValidate = $options[$this->slug . "_field_validation_uri"];
       if ( $serviceValidate ){
@@ -305,7 +312,7 @@ class UCDPluginCASAuth {
       } else {
         phpCAS::setCasServerCACert(WP_PLUGIN_DIR . "/$this->slug/" . $cert_path);
       }
-      
+
     } else {
       phpCAS::setNoCasServerValidation();
     }

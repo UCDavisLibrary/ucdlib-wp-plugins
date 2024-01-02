@@ -3,6 +3,9 @@
 // Customizations to Advanced Custom Fields
 class UCDLibPluginSpecialACF {
 
+  public $config;
+  public $menuSlug;
+
   public function __construct( $config ){
     $this->config = $config;
     $this->menuSlug = $this->config->slug . "-settings";
@@ -43,5 +46,5 @@ class UCDLibPluginSpecialACF {
       delete_transient('ucdlib-special-az-university-archive');
     }
   }
-  
+
 }

@@ -9,6 +9,15 @@ require_once( get_template_directory() . "/includes/classes/post.php");
 
 // the "collection" post type
 class UCDLibPluginSpecialCollections {
+
+  public $config;
+  public $slug;
+  public $manuscriptSlug;
+  public $UASlug;
+  public $api;
+  public $taxAZ;
+  public $subjects;
+
   public function __construct( $config ){
     $this->config = $config;
     $this->slug = $config->postTypes['collection'];
@@ -45,7 +54,7 @@ class UCDLibPluginSpecialCollections {
       ['ucd-theme/special-subject'],
       ['ucd-theme/special-additional-info'],
     ];
-    
+
     $labels = array(
       'name'                  => _x( 'Collections', 'Post type general name', 'textdomain' ),
       'singular_name'         => _x( 'Collection', 'Post type singular name', 'textdomain' ),
@@ -98,11 +107,11 @@ class UCDLibPluginSpecialCollections {
       'capability_type' => 'collection',
       'map_meta_cap' => true,
       'supports' => array(
-        'title', 
-        'editor', 
-        // 'author', 
-        'thumbnail', 
-        'excerpt', 
+        'title',
+        'editor',
+        // 'author',
+        'thumbnail',
+        'excerpt',
         //'revisions',
         'page-attributes',
         'custom-fields'
@@ -194,7 +203,7 @@ class UCDLibPluginSpecialCollections {
   // set the twig to call
   public function set_template($templates, $context){
     if ( $context['post']->post_type !== $this->slug ) return $templates;
-    
+
     $templates = array_merge( array("@" . $this->config->slug . "/collection.twig"), $templates );
     return $templates;
   }
@@ -225,7 +234,7 @@ class UCDLibPluginSpecialCollections {
 // custom post class when using timber::get_post()
 // is available in context as 'post'
 class UCDLibPluginSpecialCollection extends UcdThemePost {
-  
+
   protected $core_data;
   public function core_data(){
     if ( ! empty( $this->core_data ) ) {
@@ -475,7 +484,7 @@ class UCDLibPluginSpecialCollection extends UcdThemePost {
       return $this->referenceInfoLinks;
     }
 
-    $referenceInfoLinks = [];    
+    $referenceInfoLinks = [];
     $links = $this->meta('links');
 
     foreach ((array) $links as $link) {

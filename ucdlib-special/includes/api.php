@@ -1,6 +1,8 @@
 <?php
 class UCDLibPluginSpecialAPI {
 
+  public $config;
+
   public function __construct( $config ){
     $this->config = $config;
     add_action( 'rest_api_init', array($this, 'register_endpoints') );
@@ -81,7 +83,7 @@ class UCDLibPluginSpecialAPI {
 
     $out = array(
       "callNumber" => $outPnx["delivery"]["holding"][0]["callNumber"],
-      "title" => $outPnx["pnx"]["display"]["title"], 
+      "title" => $outPnx["pnx"]["display"]["title"],
       "date" => array_key_exists("creationdate", $outPnx["pnx"]["display"]) ? $outPnx["pnx"]["display"]["creationdate"]  : null,
       "author" => array_key_exists("aucorp", $outPnx["pnx"]["addata"]) ? $outPnx["pnx"]["addata"]["aucorp"]  : null,
       "corp" =>  array_key_exists("aucorp", $outPnx["pnx"]["addata"]) ? $outPnx["pnx"]["addata"]["aucorp"]  : null,
@@ -93,9 +95,9 @@ class UCDLibPluginSpecialAPI {
     );
 
     $out = json_encode($out);
-  
+
     return rest_ensure_response( json_decode($out));
 
   }
-  
+
 }

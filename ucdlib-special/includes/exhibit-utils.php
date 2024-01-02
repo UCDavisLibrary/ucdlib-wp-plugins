@@ -160,7 +160,6 @@ class UCDLibPluginSpecialExhibitUtils {
       $tax_query['relation'] = 'AND';
       $wp_query['tax_query'] = $tax_query;
     }
-    //var_dump( $wp_query );
     $exhibits = Timber::get_posts($wp_query);
     return $exhibits;
   }

@@ -92,6 +92,10 @@ class UCDLibPluginSearchConfig {
   public $menuTitle = 'UCD Library Search';
   public $menuTitleSlug = 'ucd-library-search';
 
+  public $entryPoint;
+  public $version;
+  public $elasticsearch;
+
   public function __construct(){
     $this->entryPoint = plugin_dir_path( __DIR__ ) . $this->slug . '.php';
     // Get version number from entrypoint doc string

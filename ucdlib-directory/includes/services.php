@@ -4,6 +4,10 @@ require_once( __DIR__ . '/utils.php' );
 
 // Sets up the service post type
 class UCDLibPluginDirectoryServices {
+
+  public $config;
+  public $slug;
+
   public function __construct($config){
     $this->config = $config;
     $this->slug = $config['postSlugs']['service'];
@@ -17,11 +21,11 @@ class UCDLibPluginDirectoryServices {
   public function register(){
     $template = [
       [
-        'ucdlib-directory/description', 
+        'ucdlib-directory/description',
         ['placeholder' => 'About this service...']
       ],
       [
-        'ucdlib-directory/contact', 
+        'ucdlib-directory/contact',
         [
           'placeholder' => 'Service contact info...',
           'allowAppointment' => false,
@@ -73,11 +77,11 @@ class UCDLibPluginDirectoryServices {
       'capability_type' => $this->slug,
       'map_meta_cap' => true,
       'supports' => array(
-        'title', 
-        'editor', 
-        //'author', 
-        //'thumbnail', 
-        // 'excerpt', 
+        'title',
+        'editor',
+        //'author',
+        //'thumbnail',
+        // 'excerpt',
         //'revisions',
         'page-attributes',
         'custom-fields'
@@ -99,7 +103,7 @@ class UCDLibPluginDirectoryServices {
     // register custom metadata for this post type
     public function register_post_meta(){
       $slug = $this->slug;
-  
+
       register_post_meta( $slug, 'description', array(
         'show_in_rest' => true,
         'single' => true,
@@ -135,7 +139,7 @@ class UCDLibPluginDirectoryService extends UcdThemePost {
       $this->iconsUsed[] = $icon;
     }
 
-    
+
     $this->contactInfo = $attrs;
     return $this->contactInfo;
   }

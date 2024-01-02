@@ -2,6 +2,10 @@
 
 class UCDLibPluginAssetsRobots {
 
+  public $site_url;
+  public $prodUrl;
+  public $isProd;
+
   public function __construct(){
     $this->site_url = get_site_url();
     $this->prodUrl = 'https://library.ucdavis.edu';

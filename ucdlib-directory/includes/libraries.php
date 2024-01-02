@@ -2,6 +2,10 @@
 
 // Sets up library taxonomy
 class UCDLibPluginDirectoryLibraries {
+
+  public $config;
+  public $slug;
+
   public function __construct($config){
     $this->config = $config;
     $this->slug = $this->config['taxSlugs']['library'];
@@ -46,7 +50,7 @@ class UCDLibPluginDirectoryLibraries {
     ];
 
     register_taxonomy(
-      $this->config['taxSlugs']['library'], 
+      $this->config['taxSlugs']['library'],
       [$this->config['postSlugs']['service'], $this->config['postSlugs']['person']],
       $args
     );

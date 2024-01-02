@@ -4,6 +4,11 @@ require_once( __DIR__ . '/elasticsearch.php' );
 require_once( __DIR__ . '/config.php' );
 
 class UCDLibPluginSearch {
+
+  public $config;
+  public $acf;
+  public $elasticsearch;
+
   public function __construct(){
     $this->config = new UCDLibPluginSearchConfig();
 

@@ -2,6 +2,10 @@
 
 class UCDLibPluginMigrationMetaData {
 
+  public $config;
+  public $statusSlug;
+  public $statuses;
+
   function __construct( $config ){
 
     $this->config = $config;
@@ -36,7 +40,7 @@ class UCDLibPluginMigrationMetaData {
   function add_page_column($columns){
     return array_merge($columns, [$this->statusSlug => __('Migration Status', 'textdomain')]);
   }
-  
+
   function make_page_column_sortable($columns){
     $columns[$this->statusSlug] = $this->statusSlug;
     return $columns;

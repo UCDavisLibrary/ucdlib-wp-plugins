@@ -3,6 +3,9 @@
 // Customizations to Advanced Custom Fields
 class UCDLibPluginDirectoryACF {
 
+  public $config;
+  public $menuSlug;
+
   public function __construct( $config ){
     $this->config = $config;
     $this->menuSlug = $this->config['slug'] . "-settings";
@@ -42,5 +45,5 @@ class UCDLibPluginDirectoryACF {
         delete_transient('directory_page_link');
       }
     }
-  
+
 }

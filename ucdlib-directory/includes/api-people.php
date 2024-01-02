@@ -2,6 +2,8 @@
 
 class UCDLibPluginDirectoryAPIPeople {
 
+  public $config;
+
   public function __construct( $config ){
     $this->config = $config;
 
@@ -20,7 +22,7 @@ class UCDLibPluginDirectoryAPIPeople {
       'methods' => 'GET',
       'callback' => array($this, 'epcb_person'),
       'permission_callback' => function (){return true;},
-      'args' => [        
+      'args' => [
         'field' => [
           'description' => 'The type of term being used for query',
           "type" => "string",
@@ -50,7 +52,7 @@ class UCDLibPluginDirectoryAPIPeople {
           ['user' => $user->ID, 'profile' => 'wp_user_id'],
           ['user' => $user->user_login, 'profile' => 'username']
         ];
-        
+
         foreach ($profileFields as $fields) {
           $profiles = Timber::get_posts([
             'post_type' =>$this->config['postSlugs']['person'],
@@ -170,8 +172,8 @@ class UCDLibPluginDirectoryAPIPeople {
         'name_first' => $post->name_first()
       ];
     }
-    
+
     return rest_ensure_response($out);
   }
-  
+
 }

@@ -1,6 +1,9 @@
 <?php
 
 class UCDLibPluginSpecialAdmin {
+
+  public $config;
+
   public function __construct( $config ){
     $this->config = $config;
     add_action( 'admin_head', array($this, 'admin_head') );
@@ -19,7 +22,7 @@ class UCDLibPluginSpecialAdmin {
   }
 
   public function add_admin_menu(){
-    add_menu_page( 
+    add_menu_page(
       __( 'Archives and Special Collections', 'textdomain' ),
       'Archives and Special Collections',
       'edit_posts',
@@ -27,6 +30,6 @@ class UCDLibPluginSpecialAdmin {
       '',
       'dashicons-media-document',
       25
-      ); 
+      );
   }
 }

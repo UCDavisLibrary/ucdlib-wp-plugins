@@ -2,6 +2,10 @@
 
 // Sets up block patterns for this plugin
 class UCDLibPluginLocationsPatterns {
+
+  public $config;
+  public $slug;
+
   public function __construct($config){
     $this->config = $config;
     $this->slug = $config['slug'];
@@ -53,7 +57,7 @@ class UCDLibPluginLocationsPatterns {
     return "
     <!-- wp:ucd-theme/object-box -->
     <!-- wp:ucd-theme/heading {\"content\":\"At This Library\"} /-->
-    
+
     <!-- wp:list {\"className\":\"list\u002d\u002darrow\"} -->
     <ul class=\"list--arrow\"><li></li></ul>
     <!-- /wp:list -->

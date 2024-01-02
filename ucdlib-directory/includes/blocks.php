@@ -4,16 +4,19 @@ require_once( get_template_directory() . '/includes/classes/block-renderer.php' 
 
 // Set up server-side rendering for gutenberg directory blocks
 class UCDLibPluginDirectoryBlocks extends UCDThemeBlockRenderer {
+
+  public $config;
+
   public function __construct($config){
     parent::__construct();
     $this->config = $config;
 
     add_action('block_categories_all', array($this, 'addCategories'), 10,2);
     add_action( 'init', array( $this, 'register_blocks'));
-    
+
   }
   public static $transformationClass = 'UCDLibPluginDirectoryBlockTransformations';
-  
+
   public static $registry = [
     'ucdlib-directory/bio' => [
       'twig' => '@ucdlib-directory/blocks/person-bio.twig'
@@ -88,7 +91,7 @@ class UCDLibPluginDirectoryBlocks extends UCDThemeBlockRenderer {
         'icon'  => null,
       )
     );
-      
+
 
     return array_merge($block_categories, $customCategories);
   }

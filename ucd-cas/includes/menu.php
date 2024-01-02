@@ -1,5 +1,12 @@
 <?php
 class UCDPluginCASMenu {
+
+  public $slug;
+  public $env;
+  public $optionsSlug;
+  public $capability;
+  public $title;
+
   public function __construct($slug, $env){
     $this->slug = $slug;
     $this->env = $env;
@@ -24,8 +31,8 @@ class UCDPluginCASMenu {
   }
 
   public function registerOptionsDefaults(){
-    register_setting( 
-      $this->slug, 
+    register_setting(
+      $this->slug,
       $this->optionsSlug,
       array(
         "type" => "array",
@@ -49,7 +56,7 @@ class UCDPluginCASMenu {
     $sectionSlug = $this->slug . "_section_connection";
     add_settings_section(
       $sectionSlug,
-      "Connection", 
+      "Connection",
       array($this, "displaySectionConnection"),
       $this->slug
     );
@@ -70,7 +77,7 @@ class UCDPluginCASMenu {
     $sectionSlug = $this->slug . "_section_authorization";
     add_settings_section(
       $sectionSlug,
-      "Authorization", 
+      "Authorization",
       array($this, "displaySectionAuthorization"),
       $this->slug
     );

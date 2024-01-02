@@ -3,10 +3,14 @@
 require_once( __DIR__ . '/config.php' );
 
 class UCDLibPluginSearchClient {
+
+  public $config;
+  public $client;
+
   public function __construct( $config=false ){
     if ( !$config ) {
       $config = new UCDLibPluginSearchConfig();
-    } 
+    }
     $this->config = $config;
 
     $this->client = $this->createClient();

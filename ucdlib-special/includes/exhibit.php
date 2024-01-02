@@ -7,6 +7,13 @@ require_once( get_template_directory() . "/includes/classes/post.php");
 
 // the "exhibit" post type
 class UCDLibPluginSpecialExhibits {
+
+  public $config;
+  public $slug;
+  public $api;
+  public $curators;
+  public $locations;
+
   public function __construct( $config ){
     $this->config = $config;
     $this->slug = $config->postTypes['exhibit'];
@@ -22,7 +29,7 @@ class UCDLibPluginSpecialExhibits {
     add_action( 'widgets_init', [$this, 'register_sidebar'] );
     add_filter( 'timber/post/classmap', array($this, 'extend_timber_post') );
     add_filter( 'query_vars', [$this, 'register_query_vars'] );
-    
+
 
     add_filter( 'ucd-theme/context/single', array($this, 'set_context') );
     add_filter( 'ucd-theme/templates/single', array($this, 'set_template'), 10, 2 );
@@ -31,7 +38,7 @@ class UCDLibPluginSpecialExhibits {
 
   // registers the post type
   public function register(){
-    
+
     $labels = array(
       'name'                  => _x( 'Exhibits', 'Post type general name', 'textdomain' ),
       'singular_name'         => _x( 'Exhibit', 'Post type singular name', 'textdomain' ),
@@ -77,11 +84,11 @@ class UCDLibPluginSpecialExhibits {
       //'template' => $template,
       //'template_lock' => 'all',
       'supports' => array(
-        'title', 
-        'editor', 
-        'author', 
-        'thumbnail', 
-        'excerpt', 
+        'title',
+        'editor',
+        'author',
+        'thumbnail',
+        'excerpt',
         //'revisions',
         'page-attributes',
         'custom-fields'
@@ -160,11 +167,11 @@ class UCDLibPluginSpecialExhibits {
       global $pagenow;
       if (
         'post.php' === $pagenow &&
-        isset($_GET['post']) && 
+        isset($_GET['post']) &&
         get_post_type( $_GET['post'] ) == $this->slug
         ){
           $settings['pageColors'] = 'hero-banner';
-        } else if ( 
+        } else if (
         'post-new.php' === $pagenow &&
         isset($_GET['post_type']) &&
         $_GET['post_type'] == $this->slug
@@ -172,7 +179,7 @@ class UCDLibPluginSpecialExhibits {
         $settings['pageColors'] = 'hero-banner';
       }
     }
-    
+
     return $settings;
   }
 
@@ -206,14 +213,14 @@ class UCDLibPluginSpecialExhibits {
 
     $context['config'] = $this->config;
     $context['sidebar'] = trim(Timber::get_widgets( $this->slug ));
-    
+
     return $context;
   }
 
   // set the twig to call
   public function set_template($templates, $context){
     if ( $context['post']->post_type !== $this->slug ) return $templates;
-    
+
     $templates = array_merge( array("@" . $this->config->slug . "/exhibit.twig"), $templates );
     return $templates;
   }
@@ -375,8 +382,8 @@ class UCDLibPluginSpecialExhibitPage extends UcdThemePost {
     if ( ! empty( $this->exhibitIsPast ) ) {
       return $this->exhibitIsPast;
     }
-    if ( 
-      $this->exhibitIsPermanent() || 
+    if (
+      $this->exhibitIsPermanent() ||
       !$this->exhibitIsPhysical() ||
       !$this->exhibitDateTo() ){
       $this->exhibitIsPast = false;
@@ -387,7 +394,7 @@ class UCDLibPluginSpecialExhibitPage extends UcdThemePost {
       $end = new DateTime($end, $tz);
       $now = new DateTime('today', $tz);
       $this->exhibitIsPast = $now > $end;
-    } 
+    }
 
     return $this->exhibitIsPast;
   }
@@ -442,8 +449,8 @@ class UCDLibPluginSpecialExhibitPage extends UcdThemePost {
     $curators = $this->exhibit()->meta('curators');
     if ( count($curators) ) {
       $q = [
-        'post__in' => $curators, 
-        'ignore_sticky_posts' => true, 
+        'post__in' => $curators,
+        'ignore_sticky_posts' => true,
         'post_type' => 'any',
         'orderby' => 'post__in'
       ];

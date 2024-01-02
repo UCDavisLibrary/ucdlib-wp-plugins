@@ -4,64 +4,68 @@ require_once( get_template_directory() . '/includes/classes/block-renderer.php' 
 
 // Set up server-side rendering for gutenberg location blocks
 class UCDLibPluginLocationsBlocks extends UCDThemeBlockRenderer {
+
+  public $config;
+  public $slug;
+
+  public static $registry = [
+    "ucdlib-locations/hours-today" => [
+      'twig' => "@ucdlib-locations/blocks/hours-today.twig",
+      'transform' => ['getCurrentLocationId', 'getSiteUrl']
+    ],
+    "ucdlib-locations/hours" => [
+      'twig' => "@ucdlib-locations/blocks/hours.twig",
+      'transform' => ['getSiteUrl']
+    ],
+    "ucdlib-locations/map-building" => [
+      'twig' => "@ucdlib-locations/blocks/map-buiding.twig"
+    ],
+    "ucdlib-locations/map-floors" => [
+      'twig' => "@ucdlib-locations/blocks/map-floors.twig",
+      "provides_context" => ["map-floors/bottomLayerId" => 'bottomLayerId']
+    ],
+    "ucdlib-locations/map-floor" => [
+      'twig' => "@ucdlib-locations/blocks/map-floor.twig",
+      "uses_context" => ["map-floors/bottomLayerId"],
+    ],
+    "ucdlib-locations/map-floor-layer" => [],
+    "ucdlib-locations/map-legend" => [],
+    "ucdlib-locations/map-legend-item" => [],
+    "ucdlib-locations/map-space-legend" => [],
+    "ucdlib-locations/map-space-legend-item" => [],
+    "ucdlib-locations/sign-hours" => [
+      'twig' => "@ucdlib-locations/blocks/sign-hours.twig",
+      'transform' => ['getSiteUrl']
+    ],
+    "ucdlib-locations/sign-section" => [
+      'twig' => "@ucdlib-locations/blocks/sign-section.twig",
+      'transform' => ['signSectionStyle']
+    ],
+    "ucdlib-locations/sign-sections" => [
+      'twig' => "@ucdlib-locations/blocks/sign-sections.twig",
+    ],
+    "ucdlib-locations/sign-text" => [
+      'twig' => "@ucdlib-locations/blocks/sign-text.twig",
+      'transform' => ['signSectionStyle']
+    ],
+    "ucdlib-locations/address" => [
+      'twig' => "@ucdlib-locations/blocks/address.twig",
+      'transform' => ['getAddress']
+    ],
+    "ucdlib-locations/teasers" => [
+      'twig' => "@ucdlib-locations/blocks/teasers.twig",
+      'transform' => ['addIcons']
+    ],
+    "ucdlib-locations/teaser" => [
+      'twig' => "@ucdlib-locations/blocks/teaser.twig",
+      'transform' => ['getLocation', 'getSiteUrl']
+    ]
+  ];
+
   public function __construct($config){
     parent::__construct();
     $this->config = $config;
     $this->slug = $config['slug'];
-
-    $this->registry = [
-      "$this->slug/hours-today" => [
-        'twig' => $this->twigPath('hours-today'),
-        'transform' => ['getCurrentLocationId', 'getSiteUrl']
-      ],
-      "$this->slug/hours" => [
-        'twig' => $this->twigPath('hours'),
-        'transform' => ['getSiteUrl']
-      ],
-      "$this->slug/map-building" => [
-        'twig' => $this->twigPath('map-building')
-      ],
-      "$this->slug/map-floors" => [
-        'twig' => $this->twigPath('map-floors'),
-        "provides_context" => ["map-floors/bottomLayerId" => 'bottomLayerId']
-      ],
-      "$this->slug/map-floor" => [
-        'twig' => $this->twigPath('map-floor'),
-        "uses_context" => ["map-floors/bottomLayerId"],
-      ],
-      "$this->slug/map-floor-layer" => [],
-      "$this->slug/map-legend" => [],
-      "$this->slug/map-legend-item" => [],
-      "$this->slug/map-space-legend" => [],
-      "$this->slug/map-space-legend-item" => [],
-      "$this->slug/sign-hours" => [
-        'twig' => $this->twigPath('sign-hours'),
-        'transform' => ['getSiteUrl']
-      ],
-      "$this->slug/sign-section" => [
-        'twig' => $this->twigPath('sign-section'),
-        'transform' => ['signSectionStyle']
-      ],
-      "$this->slug/sign-sections" => [
-        'twig' => $this->twigPath('sign-sections')
-      ],
-      "$this->slug/sign-text" => [
-        'twig' => $this->twigPath('sign-text'),
-        'transform' => ['signSectionStyle']
-      ],
-      "$this->slug/address" => [
-        'twig' => $this->twigPath('address'),
-        'transform' => ['getAddress']
-      ],
-      "$this->slug/teasers" => [
-        'twig' => $this->twigPath('teasers'),
-        'transform' => ['addIcons']
-      ],
-      "$this->slug/teaser" => [
-        'twig' => $this->twigPath('teaser'),
-        'transform' => ['getLocation', 'getSiteUrl']
-      ]
-    ];
 
     add_action('block_categories_all', array($this, 'addCategories'), 10,2);
     add_filter('ucd-theme/customizer/block-colors', array($this, 'addBlockColorsToCustomizer'));

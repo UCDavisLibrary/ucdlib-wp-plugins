@@ -4,6 +4,13 @@
  * Wrapper class for an elasticsearch document "hit"
  */
 class UCDLibPluginSearchDocument {
+
+  public $config;
+  public $document;
+  public $post;
+  public $type;
+  public $hasHighlight;
+
   public function __construct($document, $config){
     $this->config = $config;
     $this->document = $document;
@@ -89,9 +96,9 @@ class UCDLibPluginSearchDocument {
       return $this->showAuthor;
     }
 
-    if ( 
+    if (
       $this->author() &&
-      $this->post && 
+      $this->post &&
       $this->post->post_type == 'post' &&
       !$this->post->meta('ucd_hide_author')
       ) {

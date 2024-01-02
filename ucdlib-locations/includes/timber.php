@@ -6,6 +6,8 @@ require_once( __DIR__ . '/block-transformations.php' );
 // Sets up all Timber-related functionality
 class UCDLibPluginLocationsTimber {
 
+  public $config;
+
   public function __construct( $config ){
     $this->config = $config;
     add_filter( 'timber/locations', array($this, 'add_timber_locations') );

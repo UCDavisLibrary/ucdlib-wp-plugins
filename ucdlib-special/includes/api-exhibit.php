@@ -4,6 +4,8 @@ require_once( __DIR__ . '/exhibit-utils.php' );
 
 class UCDLibPluginSpecialAPIExhibit {
 
+  public $config;
+
   public function __construct( $config ){
     $this->config = $config;
 
@@ -119,5 +121,5 @@ class UCDLibPluginSpecialAPIExhibit {
 
     return $out;
   }
-  
+
 }

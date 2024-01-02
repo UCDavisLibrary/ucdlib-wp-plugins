@@ -5,6 +5,10 @@ require_once( get_template_directory() . "/includes/classes/post.php");
 
 // Sets up the department post type
 class UCDLibPluginDirectoryDepartments {
+
+  public $config;
+  public $slug;
+
   public function __construct($config){
     $this->config = $config;
     $this->slug = $config['postSlugs']['department'];
@@ -19,11 +23,11 @@ class UCDLibPluginDirectoryDepartments {
   public function register(){
     $template = [
       [
-        'ucdlib-directory/description', 
+        'ucdlib-directory/description',
         ['placeholder' => 'About this department...']
       ],
       [
-        'ucdlib-directory/contact', 
+        'ucdlib-directory/contact',
         [
           'placeholder' => 'Department contact info...',
           'allowAppointment' => false,
@@ -75,11 +79,11 @@ class UCDLibPluginDirectoryDepartments {
       'template' => $template,
       'template_lock' => 'insert',
       'supports' => array(
-        'title', 
-        'editor', 
-        //'author', 
-        //'thumbnail', 
-        // 'excerpt', 
+        'title',
+        'editor',
+        //'author',
+        //'thumbnail',
+        // 'excerpt',
         //'revisions',
         'page-attributes',
         'custom-fields'
@@ -101,7 +105,7 @@ class UCDLibPluginDirectoryDepartments {
     // register custom metadata for this post type
     public function register_post_meta(){
       $slug = $this->slug;
-  
+
       register_post_meta( $slug, 'description', array(
         'show_in_rest' => true,
         'single' => true,
@@ -147,12 +151,12 @@ class UCDLibPluginDirectoryDepartment extends UcdThemePost {
     $attrs['phones'] = $this->meta('contactPhone');
     $attrs['appointmentUrl'] = '';
     $attrs = UCDLibPluginDirectoryUtils::formatContactList($attrs);
-    
+
     foreach ($attrs['icons'] as $icon) {
       $this->iconsUsed[] = $icon;
     }
 
-    
+
     $this->contactInfo = $attrs;
     return $this->contactInfo;
   }

@@ -3,6 +3,10 @@
 require_once( get_template_directory() . "/includes/classes/post.php");
 
 class UCDLibPluginLocationsSigns {
+
+  public $config;
+  public $slug;
+
   public function __construct( $config ){
     $this->config = $config;
     $this->slug = $config['postTypes']['sign'];
@@ -14,7 +18,7 @@ class UCDLibPluginLocationsSigns {
   }
 
   public function register(){
-    
+
     $labels = array(
       'name'                  => _x( 'Digital Signs', 'Post type general name', 'textdomain' ),
       'singular_name'         => _x( 'Digital Sign', 'Post type singular name', 'textdomain' ),
@@ -44,15 +48,15 @@ class UCDLibPluginLocationsSigns {
 
     $template = [
       ['ucdlib-locations/sign-sections', ['lock' => ['remove' => true]], [
-        ['ucdlib-locations/sign-section', 
+        ['ucdlib-locations/sign-section',
           ['backgroundColor' => '#022851', 'textColor' => '#fff', 'alignItems' => 'center'],
           [['ucdlib-locations/sign-text', ['placeholder' => 'SIGN HEADER', 'size' => 'lg']]]
         ],
-        ['ucdlib-locations/sign-section', 
+        ['ucdlib-locations/sign-section',
           ['flexGrow' => '1', 'justifyContent' => 'center', 'alignItems' => 'center'],
           [['ucdlib-locations/sign-text', ['placeholder' => 'Body text...']]]
         ],
-        ['ucdlib-locations/sign-section', 
+        ['ucdlib-locations/sign-section',
           [ 'alignItems' => 'center' ],
           [['ucdlib-locations/sign-text', ['placeholder' => 'footer text', 'size' => 'sm']]]
         ],
@@ -76,7 +80,7 @@ class UCDLibPluginLocationsSigns {
       'template' => $template,
       //'template_lock' => 'all',
       'supports' => array(
-        'title', 
+        'title',
         'editor',
         'page-attributes',
         'custom-fields'
@@ -95,7 +99,7 @@ class UCDLibPluginLocationsSigns {
   // set the twig to call
   public function set_template($templates, $context){
     if ( $context['post']->post_type !== $this->slug ) return $templates;
-    
+
     $templates = array_merge( array("@" . $this->config['slug'] . "/sign.twig"), $templates );
     return $templates;
   }

@@ -3,6 +3,11 @@
 // Areas of Expertise taxonomy
 // Is not filterable in people directory, just shows on person profile
 class UCDLibPluginDirectoryAreasOfExpertise {
+
+  public $config;
+  public $slug;
+  public $postType;
+
   public function __construct($config){
     $this->config = $config;
     $this->slug = $this->config['taxSlugs']['expertise'];
@@ -46,21 +51,21 @@ class UCDLibPluginDirectoryAreasOfExpertise {
     ];
 
     register_taxonomy(
-      $this->slug, 
+      $this->slug,
       [$this->postType],
       $args
     );
-    
+
   }
 
   // add to plugin admin menu
   public function add_to_menu(){
     $label = 'Areas of Expertise';
     add_submenu_page(
-      $this->config['slug'], 
-      $label, 
-      $label, 
-      $this->config['capabilities']['manage_directory'], 
+      $this->config['slug'],
+      $label,
+      $label,
+      $this->config['capabilities']['manage_directory'],
       "edit-tags.php?taxonomy=$this->slug&post_type=$this->postType",
       false );
   }

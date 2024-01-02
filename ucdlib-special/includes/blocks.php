@@ -4,51 +4,52 @@ require_once( get_template_directory() . '/includes/classes/block-renderer.php' 
 
 // Set up server-side rendering for gutenberg collection blocks
 class UCDLibPluginSpecialBlocks extends UCDThemeBlockRenderer {
+
+  public $config;
+  public $slug;
+
+  public static $registry = [
+    "ucdlib-special/collection" => [
+      'twig' => "@ucdlib-special/blocks/collection.twig",
+    ],
+    "ucdlib-special/collection-results" => [
+      'twig' => "@ucdlib-special/blocks/collection-results.twig",
+      'transform' => ['collectionQueryArgsToAttributes', 'getCollectionFiltResults']
+    ],
+    "ucdlib-special/exhibit-curators" => [
+      'twig' => "@ucdlib-special/blocks/exhibit-curators.twig",
+    ],
+    "ucdlib-special/exhibit-highlight" => [
+      'twig' => "@ucdlib-special/blocks/exhibit-highlight.twig",
+      'transform' => ['getExhibit']
+    ],
+    "ucdlib-special/exhibit-location" => [
+      'twig' => "@ucdlib-special/blocks/exhibit-location.twig"
+    ],
+    "ucdlib-special/exhibit-online" => [
+      'twig' => "@ucdlib-special/blocks/exhibit-online.twig",
+      'transform' => ['getOnlineExhibits']
+    ],
+    "ucdlib-special/exhibit-past" => [
+      'twig' => "@ucdlib-special/blocks/exhibit-past.twig",
+      'transform' => ['getPastExhibits']
+    ],
+    "ucdlib-special/exhibit-query" => [
+      'twig' => "@ucdlib-special/blocks/exhibit-query.twig",
+      'transform' => ['hideExhibitExcerpt', 'getExhibits']
+    ],
+    "ucdlib-special/exhibit-subnav" => [
+      'twig' => "@ucdlib-special/blocks/exhibit-subnav.twig",
+    ],
+  ];
+
   public function __construct($config){
     parent::__construct();
     $this->config = $config;
     $this->slug = $config->slug;
 
-    /**
-     * list custom blocks here for server-side rendering. e.g.:
-     */
-    $this->registry = [
-      "$this->slug/collection" => [
-        'twig' => $this->twigPath('collection'),
-      ],
-      "$this->slug/collection-results" => [
-        'twig' => $this->twigPath('collection-results'),
-        'transform' => ['collectionQueryArgsToAttributes', 'getCollectionFiltResults']
-      ],
-      "$this->slug/exhibit-curators" => [
-        'twig' => $this->twigPath('exhibit-curators')
-      ],
-      "$this->slug/exhibit-highlight" => [
-        'twig' => $this->twigPath('exhibit-highlight'),
-        'transform' => ['getExhibit']
-      ],
-      "$this->slug/exhibit-location" => [
-        'twig' => $this->twigPath('exhibit-location')
-      ],
-      "$this->slug/exhibit-online" => [
-        'twig' => $this->twigPath('exhibit-online'),
-        'transform' => ['getOnlineExhibits']
-      ],
-      "$this->slug/exhibit-past" => [
-        'twig' => $this->twigPath('exhibit-past'),
-        'transform' => ['getPastExhibits']
-      ],
-      "$this->slug/exhibit-query" => [
-        'twig' => $this->twigPath('exhibit-query'),
-        'transform' => ['hideExhibitExcerpt', 'getExhibits']
-      ],
-      "$this->slug/exhibit-subnav" => [
-        'twig' => $this->twigPath('exhibit-subnav')
-      ],
-    ];
-
     add_action('block_categories_all', array($this, 'addCategories'), 10,2);
-    
+
   }
 
   public static $transformationClass = 'UCDLibPluginSpecialBlockTransformations';

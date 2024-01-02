@@ -3,6 +3,12 @@ require_once( __DIR__ . '/meta-data.php' );
 require_once( __DIR__ . '/redirection.php' );
 
 class UCDLibPluginMigration {
+
+  public $slug;
+  public $config;
+  public $metaData;
+  public $redirection;
+
   public function __construct(){
     $this->slug = "ucdlib-migration";
 
@@ -18,7 +24,7 @@ class UCDLibPluginMigration {
 
     if ( ! empty( $plugin_metadata['Version'] ) ) {
       $config['version'] = $plugin_metadata['Version'];
-    } 
+    }
     $this->config = $config;
 
     add_action( 'admin_head', array($this, 'admin_head') );

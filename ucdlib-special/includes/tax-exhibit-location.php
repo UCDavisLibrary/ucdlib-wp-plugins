@@ -2,6 +2,10 @@
 
 // Organization Curator Taxonomy
 class UCDLibPluginSpecialExhibitLocations {
+
+  public $config;
+  public $slug;
+
   public function __construct($config){
     $this->config = $config;
     $this->slug = $config->taxonomies['location'];
@@ -49,11 +53,11 @@ class UCDLibPluginSpecialExhibitLocations {
     ];
 
     register_taxonomy(
-      $this->slug, 
+      $this->slug,
       [$this->config->postTypes['exhibit']],
       $args
     );
-    
+
   }
 
   // hides taxonomy box on exhibit pages

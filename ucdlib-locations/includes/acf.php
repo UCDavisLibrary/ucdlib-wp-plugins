@@ -4,6 +4,8 @@ require_once( __DIR__ . '/utils.php' );
 
 class UCDLibPluginLocationsACF {
 
+  public $config;
+
   public function __construct( $config ){
     $this->config = $config;
 
@@ -58,7 +60,7 @@ class UCDLibPluginLocationsACF {
         'display' => $interval . ' seconds'
       ];
     }
-    
+
     return $schedules;
   }
 
@@ -69,5 +71,5 @@ class UCDLibPluginLocationsACF {
       UCDLibPluginLocationsUtils::deleteTransients();
     }
   }
-  
+
 }

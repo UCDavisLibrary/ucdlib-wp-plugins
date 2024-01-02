@@ -31,6 +31,13 @@ class UCDLibPluginSpecialConfig {
     ]
   ];
 
+  public $slug;
+  public $postTypes;
+  public $taxonomies;
+  public $capabilities;
+  public $entryPoint;
+  public $version;
+
   public function __construct(){
     $this->slug = self::$config['slug'];
     $this->postTypes = self::$config['postTypes'];

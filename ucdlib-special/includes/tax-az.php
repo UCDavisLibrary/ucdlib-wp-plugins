@@ -1,6 +1,11 @@
 <?php
 
 class UCDLibPluginSpecialTaxAZ {
+
+  public $config;
+  public $postType;
+  public $slug;
+
   public function __construct( $config ){
     $this->config = $config;
     $this->postType = $this->config->postTypes['collection'];

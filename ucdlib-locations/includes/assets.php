@@ -2,6 +2,10 @@
 
 class UCDLibPluginLocationsAssets {
 
+  public $config;
+  public $isDevEnv;
+  public $uris;
+
   public function __construct( $config ) {
     $this->config = $config;
     $this->isDevEnv = getenv('UCDLIB_LOCATIONS_ENV') == 'dev';

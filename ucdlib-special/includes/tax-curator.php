@@ -2,6 +2,10 @@
 
 // Organization Curator Taxonomy
 class UCDLibPluginSpecialCurators {
+
+  public $config;
+  public $slug;
+
   public function __construct($config){
     $this->config = $config;
     $this->slug = $config->taxonomies['curator'];
@@ -52,11 +56,11 @@ class UCDLibPluginSpecialCurators {
     ];
 
     register_taxonomy(
-      $this->slug, 
+      $this->slug,
       [$this->config->postTypes['exhibit']],
       $args
     );
-    
+
   }
 
   // hides taxonomy box on exhibit pages
@@ -88,14 +92,14 @@ class UCDLibPluginSpecialCurators {
         }
       }
     }
-    
+
     return $context;
   }
-  
+
   // set the twig to call
   public function set_template($templates, $context){
     if ( $context['term']->taxonomy !== $this->slug ) return $templates;
-    
+
     $templates = array_merge( array("@" . $this->config->slug . "/curator.twig"), $templates );
     return $templates;
   }

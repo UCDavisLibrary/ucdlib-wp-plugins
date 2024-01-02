@@ -13,6 +13,21 @@ require_once( __DIR__ . '/service-types.php' );
 require_once( __DIR__ . '/services.php' );
 
 class UCDLibPluginDirectory {
+
+  public $config;
+  public $slug;
+  public $acf;
+  public $additionalAuthors;
+  public $apiFilters;
+  public $blocks;
+  public $departments;
+  public $directoryTags;
+  public $libraries;
+  public $people;
+  public $serviceTypes;
+  public $services;
+  public $areasOfExpertise;
+
   public function __construct(){
     $this->slug = "ucdlib-directory";
     $this->config = $this->getConfig();
@@ -40,7 +55,7 @@ class UCDLibPluginDirectory {
   public function add_admin_menu(){
     $people = $this->config['postSlugs']['personPlural'];
 
-    add_menu_page( 
+    add_menu_page(
       __( 'Directory', 'textdomain' ),
       'Directory',
       "edit_$people",
@@ -48,7 +63,7 @@ class UCDLibPluginDirectory {
       '',
       'dashicons-networking',
       25
-      ); 
+      );
   }
 
   public function getConfig(){
@@ -138,22 +153,22 @@ class UCDLibPluginDirectory {
     // admin
     $role = get_role( 'administrator' );
     foreach ($capabilities as $capability) {
-      $role->add_cap( $capability ); 
+      $role->add_cap( $capability );
     }
 
     // editor
     $role = get_role( 'editor' );
     $role->add_cap( "edit_$people" );
-    $role->add_cap( "edit_published_$people" ); 
+    $role->add_cap( "edit_published_$people" );
     $role->add_cap( "publish_$people" );
     $role->add_cap( "edit_$depts" );
     $role->add_cap( "edit_$services" );
 
-    // author 
+    // author
     $role = get_role( 'author' );
     $role->add_cap( "edit_$people" );
-    $role->add_cap( "edit_published_$people" ); 
-    $role->add_cap( "publish_$people" ); 
+    $role->add_cap( "edit_published_$people" );
+    $role->add_cap( "publish_$people" );
     $role->add_cap( "edit_$depts" );
     $role->add_cap( "edit_$services" );
 
@@ -170,7 +185,7 @@ class UCDLibPluginDirectory {
     $role->add_cap( "edit_published_$people" );
     $role->add_cap( "edit_$depts" );
     $role->add_cap( "edit_$services" );
-    
+
     add_role('directory_manager', 'Directory Manager', $capabilities);
 
   }

@@ -2,6 +2,11 @@
 require_once( __DIR__ . '/block-transformations.php' );
 
 class UCDLibPluginSpecialTaxSubject {
+
+  public $config;
+  public $slug;
+  public $postType;
+
   public function __construct( $config ){
     $this->config = $config;
     $this->slug = $config->taxonomies['subject'];
@@ -67,7 +72,7 @@ class UCDLibPluginSpecialTaxSubject {
     ];
 
     register_taxonomy(
-      $slug, 
+      $slug,
       [$this->postType],
       $args
     );
@@ -119,7 +124,7 @@ class UCDLibPluginSpecialTaxSubject {
     } else {
       update_term_meta($term_id, 'teaserText', '');
     }
-    
+
   }
 
   // add data to view context
@@ -140,14 +145,14 @@ class UCDLibPluginSpecialTaxSubject {
     }
     $context['breadcrumbs'] = $crumbs;
 
-    $context['sidebar'] = trim(Timber::get_widgets( $this->slug ));    
+    $context['sidebar'] = trim(Timber::get_widgets( $this->slug ));
     return $context;
   }
-  
+
   // set the twig to call
   public function set_template($templates, $context){
     if ( $context['term']->taxonomy !== $this->slug ) return $templates;
-    
+
     $templates = array_merge( array("@" . $this->config->slug . "/subject.twig"), $templates );
     return $templates;
   }
@@ -179,7 +184,7 @@ class UCDLibPluginSpecialTaxSubject {
 
     return array_merge($classmap, $custom_classmap);
   }
-  
+
 }
 
 class UCDLibPluginSpecialTaxSubjectTerm extends \Timber\Term {

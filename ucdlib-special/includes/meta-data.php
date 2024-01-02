@@ -2,6 +2,8 @@
 
 class UCDLibPluginSpecialMetaData {
 
+  public $config;
+
   function __construct( $config ) {
     $this->config = $config;
     add_action('init', [$this, 'register_post_meta']);
@@ -48,7 +50,7 @@ class UCDLibPluginSpecialMetaData {
         ),
         "subject" => [],
         "title" => '',
-      ]      
+      ]
     ) );
     register_post_meta( $this->config->postTypes['collection'], 'almaRecordId', array(
       'show_in_rest' => true,

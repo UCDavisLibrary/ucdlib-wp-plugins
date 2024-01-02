@@ -3,6 +3,11 @@
 // Directory Tag taxonomy
 // includes 'subject areas'
 class UCDLibPluginDirectoryDirectoryTags {
+
+  public $config;
+  public $slug;
+  public $postType;
+
   public function __construct($config){
     $this->config = $config;
     $this->slug = $this->config['taxSlugs']['directory'];
@@ -56,11 +61,11 @@ class UCDLibPluginDirectoryDirectoryTags {
     ];
 
     register_taxonomy(
-      $this->slug, 
+      $this->slug,
       [$this->postType],
       $args
     );
-    
+
   }
 
   // register metadata associated with each taxonomy term
@@ -93,10 +98,10 @@ class UCDLibPluginDirectoryDirectoryTags {
   public function add_to_menu(){
     $label = 'Subjects and Directory Tags';
     add_submenu_page(
-      $this->config['slug'], 
-      $label, 
-      $label, 
-      $this->config['capabilities']['manage_directory'], 
+      $this->config['slug'],
+      $label,
+      $label,
+      $this->config['capabilities']['manage_directory'],
       "edit-tags.php?taxonomy=$this->slug&post_type=$this->postType",
       false );
   }

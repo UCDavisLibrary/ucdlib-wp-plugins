@@ -11,6 +11,19 @@ require_once( __DIR__ . '/meta-data.php' );
 require_once( __DIR__ . '/utils.php' );
 
 class UCDLibPluginLocations {
+
+  public $slug;
+  public $config;
+  public $assets;
+  public $blocks;
+  public $patterns;
+  public $postTypes;
+  public $signs;
+  public $acf;
+  public $api;
+  public $timber;
+  public $metaData;
+
   public function __construct(){
     $this->slug = "ucdlib-locations";
 

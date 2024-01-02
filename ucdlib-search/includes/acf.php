@@ -2,6 +2,8 @@
 
 class UCDLibPluginSearchACF {
 
+  public $config;
+
   public function __construct( $config, $doHooks=true ){
     $this->config = $config;
     if ( $doHooks ){

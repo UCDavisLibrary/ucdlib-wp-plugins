@@ -1,6 +1,9 @@
 <?php
 
 class UCDLibPluginLocationsMetaData {
+
+  public $config;
+
   function __construct( $config ) {
     $this->config = $config;
     add_action('init', [$this, 'register_hours']);

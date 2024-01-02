@@ -1,5 +1,10 @@
 <?php
 class UCDPluginCASMetaData {
+
+  public $slug;
+  public $env;
+  public $userMetaFields;
+
   public function __construct($slug, $env){
     $this->slug = $slug;
     $this->env = $env;
@@ -21,7 +26,7 @@ class UCDPluginCASMetaData {
       register_meta('user', $field['slug'], array(
         "type" => "string",
         "single" => true,
-        "show_in_rest" => true 
+        "show_in_rest" => true
       ));
     }
 

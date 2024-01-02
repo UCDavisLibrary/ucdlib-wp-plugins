@@ -6,6 +6,12 @@ require_once( __DIR__ . '/utils.php' );
 
 // Sets up the person post type
 class UCDLibPluginDirectoryPeople {
+
+  public $config;
+  public $slug;
+  public $slugPlural;
+  public $api;
+
   public function __construct($config){
     $this->config = $config;
     $this->slug = $this->config['postSlugs']['person'];
@@ -36,11 +42,11 @@ class UCDLibPluginDirectoryPeople {
 
     $template = [
       [
-        'ucdlib-directory/name', 
+        'ucdlib-directory/name',
         ["lock" => ["move" => true, "remove" => true]]
       ],
       [
-        'ucdlib-directory/title', 
+        'ucdlib-directory/title',
         ["lock" => ["move" => true, "remove" => true]]
       ],
       [
@@ -114,11 +120,11 @@ class UCDLibPluginDirectoryPeople {
       'template' => $template,
       //'template_lock' => 'all',
       'supports' => array(
-        'title', 
-        'editor', 
-        'author', 
-        'thumbnail', 
-        // 'excerpt', 
+        'title',
+        'editor',
+        'author',
+        'thumbnail',
+        // 'excerpt',
         //'revisions',
         'page-attributes',
         'custom-fields'
@@ -132,7 +138,7 @@ class UCDLibPluginDirectoryPeople {
   public function set_context($context){
     if ( $context['post']->post_type !== $this->slug ) return $context;
     $p = $context['post'];
-    
+
     // custom breadcrumbs that include the directory page
     $crumbs = [
       ['title' => 'Home', 'link' => '/'],
@@ -151,7 +157,7 @@ class UCDLibPluginDirectoryPeople {
 
   public function set_template($templates, $context){
     if ( $context['post']->post_type !== $this->slug ) return $templates;
-    
+
     $templates = array_merge( array("@" . $this->config['slug'] . "/person.twig"), $templates );
     return $templates;
   }
@@ -293,7 +299,7 @@ class UCDLibPluginDirectoryPeople {
   public function add_shortcut_to_profile(){
     $profile_page = $this->get_profile_editor_page();
 
-    add_menu_page( 
+    add_menu_page(
       __( 'Your Profile', 'textdomain' ),
       'Your Profile',
       'edit_posts',
@@ -301,7 +307,7 @@ class UCDLibPluginDirectoryPeople {
       '',
       'dashicons-admin-users',
       20
-      ); 
+      );
 
       // change name of default profile menu
       global $menu;
@@ -346,7 +352,7 @@ class UCDLibPluginDirectoryPeople {
     $slug = $this->config['postSlugs']['person'];
     global $wp_query;
     if ( !isset( $wp_query->query_vars['author'] ) ) return;
-    
+
     $author = Timber::get_user( $wp_query->query_vars['author'] );
     if ( !$author ) return;
 
@@ -425,7 +431,7 @@ class UCDLibPluginDirectoryPeople {
             $department_names[] = $department_name;
           }
         }
-        
+
       }
       echo (count($department_names)) ? __(implode(', ', $department_names), 'textdomain') : __('-', 'textdomain');
     }
@@ -647,7 +653,7 @@ class UCDLibPluginDirectoryPerson extends UcdThemePost {
     } else {
       $this->departmentId = NULL;
     }
-    
+
     return $this->departmentId;
   }
 
@@ -715,7 +721,7 @@ class UCDLibPluginDirectoryPerson extends UcdThemePost {
       $this->iconsUsed[] = $icon;
     }
 
-    
+
     $this->contactInfo = $attrs;
     return $this->contactInfo;
   }
@@ -752,7 +758,7 @@ class UCDLibPluginDirectoryPerson extends UcdThemePost {
     } catch (\Throwable $th) {
       return $this->typeAggs;
     }
-    
+
     $this->typeAggs = [];
     foreach ($results as $t) {
       $this->typeAggs[$t['key']] = $t['doc_count'];

@@ -2,11 +2,13 @@
 
 // Settings for the 'Redirection' third-party plugin
 class UCDLibPluginMigrationRedirection {
+
+  public $config;
   function __construct( $config ){
 
     $this->config = $config;
     add_filter( 'redirection_role', array($this, 'setBaseRole'));
-    
+
     add_filter( 'redirection_capability_check', array($this, 'setGranularCapabilities'), 10, 2 );
 
   }

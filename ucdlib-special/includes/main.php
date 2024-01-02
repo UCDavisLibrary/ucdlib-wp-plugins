@@ -11,6 +11,17 @@ require_once( __DIR__ . '/exhibit.php' );
 // primary class for special collections plugin
 // all actions and filters are applied here
 class UCDLibPluginSpecial {
+
+  public $slug;
+  public $config;
+  public $acf;
+  public $admin;
+  public $blocks;
+  public $collection;
+  public $api;
+  public $metaData;
+  public $exhibit;
+
   public function __construct(){
     $this->slug = "ucdlib-special";
 
@@ -23,7 +34,7 @@ class UCDLibPluginSpecial {
 
     // config values. slugs and what not.
     $this->config = new UCDLibPluginSpecialConfig();
-    
+
     // advanced custom fields config. handles plugin settings menu
     $this->acf = new UCDLibPluginSpecialACF( $this->config );
 
@@ -64,7 +75,7 @@ class UCDLibPluginSpecial {
     // admin needs everything
     $role = get_role( 'administrator' );
     foreach ($capabilities as $capability) {
-      $role->add_cap( $capability ); 
+      $role->add_cap( $capability );
     }
 
     add_role('exhibit_manager', 'Exhibit Manager', [$capabilities['manage_exhibits'] => true]);
@@ -72,7 +83,7 @@ class UCDLibPluginSpecial {
 
     $role = get_role( 'collection_manager' );
     foreach ($capabilities as $capability) {
-      $role->add_cap( $capability ); 
+      $role->add_cap( $capability );
     }
   }
 

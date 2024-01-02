@@ -1,6 +1,10 @@
 <?php
 
 class UCDLibPluginLocationsPostTypes {
+
+  public $config;
+  public $slug;
+
   public function __construct( $config ){
     $this->config = $config;
     $this->slug = $config['slug'];
@@ -25,7 +29,7 @@ class UCDLibPluginLocationsPostTypes {
   // register location twig view
   public function getLocationTemplate( $templates, $context ){
     if ( $context['post']->post_type !== 'location' ) return $templates;
-    
+
     $templates = array_merge( array("@" . $this->config['slug'] . "/location.twig"), $templates );
 
     return $templates;
@@ -72,11 +76,11 @@ class UCDLibPluginLocationsPostTypes {
 			  'with_front'	  => false
 		  ),
       'supports' => array(
-        'title', 
-        'editor', 
-        //'author', 
-        'thumbnail', 
-        // 'excerpt', 
+        'title',
+        'editor',
+        //'author',
+        'thumbnail',
+        // 'excerpt',
         //'revisions',
         'page-attributes',
         'custom-fields'

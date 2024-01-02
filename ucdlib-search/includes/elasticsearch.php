@@ -7,12 +7,21 @@ require_once( __DIR__ . '/config.php' );
  * Class for hijacking the main wp search, and returning results from elasticsearch.
  */
 class UCDLibPluginSearchElasticsearch {
+
+  public $config;
+  public $client;
+  public $currentPage;
+  public $pageSize;
+  public $searchQuery;
+  public $authors;
+  public $authorsQuery;
+
   public function __construct( $config=false, $doHooks=true ){
     if ( !$config ) {
       $config = new UCDLibPluginSearchConfig();
-    } 
+    }
     $this->config = $config;
-    
+
     $client = new UCDLibPluginSearchClient($config);
     $this->client = $client->client;
 
@@ -45,7 +54,7 @@ class UCDLibPluginSearchElasticsearch {
       $this->searchQuery = get_search_query();
       $this->authorsQuery = get_query_var('authors');
       $this->setAuthors();
-      
+
       // stop wp from throwing a 404 when no posts are returned
       $query->set( 'posts_per_page', 1 );
       $query->set( 'paged', 1);
@@ -62,7 +71,7 @@ class UCDLibPluginSearchElasticsearch {
         if ( strpos($a, '@') === false ) {
           $a = $a . '@ucdavis.edu';
         }
-        return $a;}, 
+        return $a;},
         explode(',', $this->authorsQuery ));
     }
   }
@@ -74,7 +83,7 @@ class UCDLibPluginSearchElasticsearch {
   public function resetWpSearch(){
     global $wp_query;
     if ( ! is_admin() && $wp_query->is_main_query() && is_search() ) {
-      
+
       // some things are derived from the search query, such as the title tag
       $wp_query->set('s', $this->searchQuery);
     }
@@ -94,7 +103,7 @@ class UCDLibPluginSearchElasticsearch {
       $f['isSelected'] = array_key_exists('urlArg', $f) && in_array(strtolower($f['urlArg']), $v );
       $facets[] = $f;
     }
-    
+
     $this->typeFacets = $facets;
     return $this->typeFacets;
   }
@@ -141,7 +150,7 @@ class UCDLibPluginSearchElasticsearch {
       $context['lastPage'] = ceil($context['found_posts'] / $this->pageSize);
       $context['is404'] =  $context['hasPages'] && $this->currentPage > $context['lastPage'];
       if ( $context['hasPages'] ){
-        global $wp;  
+        global $wp;
         $current_url = home_url(add_query_arg(array($_GET), $wp->request));
         $current_url = preg_replace( '/page\/\d+/', '', $current_url );
         $current_url = parse_url($current_url);
@@ -325,7 +334,7 @@ class UCDLibPluginSearchElasticsearch {
       if ( count($documentTypes) ) {
         $documentTypeFilter['bool']['should'][] = ['terms' => ['type' => $documentTypes]];
       }
-      
+
       if ( count($documentSubTypes) ){
         foreach ($documentSubTypes as $termField => $t) {
           $documentTypeFilter['bool']['should'][] = ['terms' => [$termField => $t] ];
@@ -342,8 +351,8 @@ class UCDLibPluginSearchElasticsearch {
     }
 
     // put together filter context
-    if ( 
-      count( $documentTypeFilter) || 
+    if (
+      count( $documentTypeFilter) ||
       count( $authorFilter )
       ){
       $filterContext = ['bool' => ['must' => []]];
@@ -366,7 +375,7 @@ class UCDLibPluginSearchElasticsearch {
     }
 
     $response = $this->client->search($params);
-  
+
   return $response;
   }
 

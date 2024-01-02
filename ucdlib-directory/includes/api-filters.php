@@ -2,6 +2,8 @@
 
 class UCDLibPluginDirectoryAPIFilters {
 
+  public $config;
+
   public function __construct( $config ){
     $this->config = $config;
 
@@ -115,9 +117,9 @@ class UCDLibPluginDirectoryAPIFilters {
         $out[$slug]['tag'][] = $t;
       }
     }
-    
-    
+
+
     return rest_ensure_response($out);
   }
-  
+
 }

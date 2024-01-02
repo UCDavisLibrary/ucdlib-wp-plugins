@@ -3,6 +3,10 @@ require_once( __DIR__ . '/utils.php' );
 
 class UCDLibPluginLocationsAPI {
 
+  public $config;
+  public $dateFmt;
+  public $tz;
+
   public function __construct( $config ){
     $this->config = $config;
     $this->dateFmt = 'Y-m-d';
@@ -79,7 +83,7 @@ class UCDLibPluginLocationsAPI {
     foreach ($locations as $location) {
       $loc = $location->core_data();
       $loc = array_merge($loc, $this->add_additional_fields($location, $fields) );
-      
+
       if ( $request['format'] === 'nested' ){
         $loc['children'] = array();
         if ( $loc['parent'] ){
@@ -96,7 +100,7 @@ class UCDLibPluginLocationsAPI {
     if ( count($children) ){
       foreach ( $children as $child ) {
         if ( array_key_exists($child['parent'], $out) ) {
-          $out[$child['parent']]['children'][] = $child; 
+          $out[$child['parent']]['children'][] = $child;
         } else {
           $out[$child['id']] = $child;
         }
@@ -191,7 +195,7 @@ class UCDLibPluginLocationsAPI {
       $out[] = $hours;
     }
     $out = array_values($out);
-    
+
     return rest_ensure_response($out);
   }
 
@@ -227,5 +231,5 @@ class UCDLibPluginLocationsAPI {
     "type" => "array",
     "default" => []
   );
-  
+
 }

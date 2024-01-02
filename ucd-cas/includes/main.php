@@ -4,6 +4,13 @@ require_once( __DIR__ . '/meta-data.php' );
 require_once( __DIR__ . '/menu.php' );
 
 class UCDPluginCAS {
+
+  public $slug;
+  public $env;
+  public $metaData;
+  public $menu;
+  public $auth;
+
   public function __construct(){
     $this->slug = "ucd-cas";
     $this->env = array(

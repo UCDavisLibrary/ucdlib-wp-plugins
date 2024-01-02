@@ -4,6 +4,9 @@
  * Adds ability to associate and display multliple "person" post types with a post
  */
 class UCDLibPluginDirectoryAdditionalAuthors {
+
+  public $config;
+
   public function __construct( $config ){
     $this->config = $config;
 
