@@ -18,7 +18,7 @@ class UCDLibPluginLocationsBlocks extends UCDThemeBlockRenderer {
       'transform' => ['getSiteUrl']
     ],
     "ucdlib-locations/map-building" => [
-      'twig' => "@ucdlib-locations/blocks/map-buiding.twig"
+      'twig' => "@ucdlib-locations/blocks/map-building.twig"
     ],
     "ucdlib-locations/map-floors" => [
       'twig' => "@ucdlib-locations/blocks/map-floors.twig",
