@@ -32,6 +32,7 @@ class UCDLibPluginDirectoryPeople {
 
     add_action( 'ucd-cas/login', array($this, 'transfer_ownership'), 10, 2 );
     add_action( 'ucd-theme/template/author', array($this, 'redirect_author'));
+    add_filter( 'ucd-theme/context/single', array($this, 'redirectPastEmployee'), 9 );
     add_filter( 'ucd-theme/context/single', array($this, 'set_context') );
     add_filter( 'ucd-theme/templates/single', array($this, 'set_template'), 10, 2 );
 
@@ -132,6 +133,21 @@ class UCDLibPluginDirectoryPeople {
     );
 
     register_post_type( $this->config['postSlugs']['person'], $args );
+  }
+
+  // if employee is past employee, redirect to directory page
+  public function redirectPastEmployee($context){
+    if ( $context['post']->post_type !== $this->slug ) return $context;
+    $p = $context['post'];
+    if ( $p->pastEmployee() ) {
+      $directory_page = get_field('directory_page', $this->config['slug']);
+      if ( $directory_page ) {
+        $directory_page = Timber::get_post($directory_page);
+        wp_redirect($directory_page->link());
+        exit;
+      }
+    }
+    return $context;
   }
 
   // add data to view context
