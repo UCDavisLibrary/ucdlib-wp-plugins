@@ -10,7 +10,7 @@
         "@lit-labs/react": "^1.0.5",
         "@lit-labs/task": "^1.1.2",
         "@ucd-lib/brand-theme-editor": "file:../../../../ucdlib-theme-wp/src/editor",
-        "@ucd-lib/theme-sass": "^5.0.14",
+        "@ucd-lib/theme-sass": "^6.0.1",
         "classnames": "^2.3.1",
         "lit": "^2.2.6"
     }
