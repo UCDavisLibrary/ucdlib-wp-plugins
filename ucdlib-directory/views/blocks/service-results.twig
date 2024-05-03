@@ -3,6 +3,9 @@
   {% for serviceType in attributes.serviceTypes %}
     <div>
       <h2>{{serviceType.term.name}}</h2>
+      {% if serviceType.term.description %}
+        <p>{{serviceType.term.description}}</p>
+      {% endif %}
       {% for service in serviceType.services %}
         <div class='u-space-mb'>
           <div><strong>{{service.title}}</strong></div>
