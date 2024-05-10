@@ -17,8 +17,8 @@ const Edit = () => {
   const hidePronouns = meta.hide_pronouns ? true : false;
   const hideLibraries = meta.hide_libraries ? true : false;
   const hideDirectoryTags = meta.hide_tags ? true : false;
-  const hideExpertiseAreas = meta.hide_expertise_areas ? true : false; 
-  const hideBio = meta.hide_bio ? true : false; 
+  const hideExpertiseAreas = meta.hide_expertise_areas ? true : false;
+  const hideBio = meta.hide_bio ? true : false;
   const pastEmployee = meta.pastEmployee | false;
   const { editPost } = useDispatch( 'core/editor', [ hidePronouns, hideLibraries, hideDirectoryTags, hideExpertiseAreas, hideBio, pastEmployee ] );
 
@@ -27,35 +27,36 @@ const Edit = () => {
     <${Fragment}>
       ${(isPerson) && html`
         <${PluginDocumentSettingPanel}
+          name=${name}
           className=${name}
           icon=${html`<ucdlib-icon style=${{marginLeft: '8px', width: '18px', minWidth: '18px'}} icon="ucd-public:fa-user-gear"></ucdlib-icon>`}
           title="Profile Settings">
-          <${ToggleControl} 
+          <${ToggleControl}
             label="No Longer Employed at Library"
             checked=${pastEmployee}
             onChange=${() => editPost({meta: { pastEmployee: !pastEmployee}})}
           />
-          <${ToggleControl} 
+          <${ToggleControl}
             label="Hide Pronouns"
             checked=${hidePronouns}
             onChange=${() => editPost({meta: { hide_pronouns: !hidePronouns}})}
           />
-          <${ToggleControl} 
+          <${ToggleControl}
             label="Hide Library Locations"
             checked=${hideLibraries}
             onChange=${() => editPost({meta: { hide_libraries: !hideLibraries}})}
           />
-          <${ToggleControl} 
+          <${ToggleControl}
             label="Hide Bio"
             checked=${hideBio}
             onChange=${() => editPost({meta: { hide_bio: !hideBio}})}
           />
-          <${ToggleControl} 
+          <${ToggleControl}
             label="Hide Directory Tags"
             checked=${hideDirectoryTags}
             onChange=${() => editPost({meta: { hide_tags: !hideDirectoryTags}})}
           />
-          <${ToggleControl} 
+          <${ToggleControl}
             label="Hide Areas of Expertise"
             checked=${hideExpertiseAreas}
             onChange=${() => editPost({meta: { hide_expertise_areas: !hideExpertiseAreas}})}

@@ -10,7 +10,7 @@ import { useState } from '@wordpress/element';
 
 const name = 'ucdlib-special-collection';
 
-const runController = (recordId, meta, editPost) => { 
+const runController = (recordId, meta, editPost) => {
   if(recordId === ''){
     return
   }
@@ -77,7 +77,7 @@ const runController = (recordId, meta, editPost) => {
     } else {
       extent = result.extent ? result.extent[0] : '';
     }
-    
+
     let links;
     if (meta.fetchedData && meta.links !== meta.fetchedData.links) {
       links = meta.links;
@@ -91,13 +91,13 @@ const runController = (recordId, meta, editPost) => {
     } else {
       subject = [...result.tags];
     }
-    
+
     let title = result.title ? result.title[0] : '';
     // let currentTitle = wp.data.select( 'core/editor' ).getEditedPostAttribute( 'title' );
     wp.data.dispatch( 'core/editor' ).editPost( { title } );
 
-    const fetchedData = { 
-      creator: result.author ? result.author[0] : '', 
+    const fetchedData = {
+      creator: result.author ? result.author[0] : '',
       callNumber: result.callNumber,
       creator: result.corp ? result.corp[0] : '',
       inclusiveDates: result.date ? result.date[0] : '',
@@ -156,7 +156,7 @@ const Edit = () => {
         renderedTitle.classList.remove('title-modified');
     }
   }
-  
+
   if ( !isCollection) return html`<${Fragment} />`
 
   let titleHasChanged = false;
@@ -165,36 +165,37 @@ const Edit = () => {
     titleHasChanged = true;
   }
 
-  
+
 
   return html`
     <${Fragment}>
       ${isCollection && html`
         <${PluginDocumentSettingPanel}
+          name=${name}
           className=${name}
           icon=${html`<ucdlib-icon style=${{marginLeft: '8px', width: '12px', minWidth: '12px'}} icon="ucd-public:fa-file-invoice"></ucdlib-icon>`}
           title="This Collection">
-            <${SelectControl} 
+            <${SelectControl}
               options=${collectionTypeOptions}
               label="Collection Type"
               value=${collectionType}
               onChange=${collectionType => editPost({meta: {collectionType}})}
-            /> 
-            <${TextControl} 
+            />
+            <${TextControl}
               value=${almaRecordId}
               label="Alma Record ID"
               onChange=${almaRecordId => editPost({meta: {almaRecordId}})}
             />
-            <${Button} 
+            <${Button}
               variant="primary"
               onClick=${searchRecordId}
               style=${{ marginBottom: '.5em' }}
               >Search Record ID
             </${Button}>
-            
+
             <${HorizontalRule} />
 
-            <${Button} 
+            <${Button}
               variant="primary"
               onClick=${revertTitle}
               className='is-destructive'
