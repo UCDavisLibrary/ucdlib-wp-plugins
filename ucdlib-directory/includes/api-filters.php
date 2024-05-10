@@ -33,7 +33,7 @@ class UCDLibPluginDirectoryAPIFilters {
     $slug = $this->config['taxSlugs']['service-type'];
     $terms = Timber::get_terms([
       'taxonomy' => $slug,
-      'orderby'  => 'name',
+      'orderby'  => 'term_order',
       'order'    => 'ASC',
     ]);
     $out[$slug] = array_map(function($t) {
