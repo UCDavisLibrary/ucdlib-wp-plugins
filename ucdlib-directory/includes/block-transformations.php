@@ -141,10 +141,11 @@ class UCDLibPluginDirectoryBlockTransformations {
     $query['query']['bool']['filter'] = $filterContext;
     $results = $client->search( $query );
 
+    if ( $results['hits']['total']['value'] == 0 ) return $attrs;
+
     // display params
     $hideDepartments = array_key_exists('hideDepartments', $attrs) && $attrs['hideDepartments'] != 'false';
-    $orderby = $attrs['orderby'] == 'name' ? 'name' : 'department';
-    if ( $results['hits']['total']['value'] == 0 ) return $attrs;
+    $orderby = self::directoryOrderby($attrs['orderby']);
 
     // get timber people objects
     $personQuery = [
@@ -153,19 +154,19 @@ class UCDLibPluginDirectoryBlockTransformations {
       'post__in' => array_map(function($x){return $x['_id'];}, $results['hits']['hits']),
       'post_type' => 'person',
       'meta_key' => 'name_last',
-      'orderby' => $orderby == 'department' ? 'menu_order meta_value' : 'meta_value',
+      'orderby' => $orderby['query'],
       'order' => 'ASC'
     ];
     $people = Timber::get_posts($personQuery);
 
     if ( $hideDepartments ){
       $attrs['people'] = $people;
-    } else if ( $orderby == 'name' ) {
-      $attrs['people'] = $people;
-    } else {
+    } else if ( $orderby['attr'] == 'department' ) {
       $attrs['departments'] = self::assignPeopleToDepartments($people);
+    } else {
+      $attrs['people'] = $people;
     }
-    
+
 
     return $attrs;
   }
@@ -173,12 +174,28 @@ class UCDLibPluginDirectoryBlockTransformations {
   // converts directory url query args to attributes
   public static function queryArgsToAttributes($attrs){
     $attrs['orderby'] = get_query_var('orderby', '');
-    $attrs['qRaw'] = get_query_var('q', ''); 
+    $attrs['qRaw'] = get_query_var('q', '');
     $attrs['q'] = UCDLibPluginDirectoryUtils::explodeQueryVar('q', false, ' ');
     $attrs['library'] = UCDLibPluginDirectoryUtils::explodeQueryVar('library');
     $attrs['department'] = UCDLibPluginDirectoryUtils::explodeQueryVar('department');
     $attrs['directoryTag'] = UCDLibPluginDirectoryUtils::explodeQueryVar('directory-tag');
     return $attrs;
+  }
+
+  public static function directoryOrderby($orderby){
+    $out = [
+      'attr' => 'department',
+      'query' => 'menu_order meta_value'
+    ];
+    if ( $orderby == 'name' ) {
+      $out['attr'] = 'name';
+      $out['query'] = 'meta_value';
+    } else if ( $orderby == 'rand' ) {
+      $out['attr'] = 'rand';
+      $out['query'] = 'rand';
+    }
+
+    return $out;
   }
 
   public static function setDefaultQueryAttributes( $attrs ){
@@ -187,7 +204,7 @@ class UCDLibPluginDirectoryBlockTransformations {
     foreach ($vars as $var) {
       if ( !array_key_exists($var, $attrs) ) $attrs[$var] = [];
     }
-    
+
     return $attrs;
   }
 
@@ -222,13 +239,8 @@ class UCDLibPluginDirectoryBlockTransformations {
       ]
     ];
 
-    // set order of results
-    $orderby = $attrs['orderby'] == 'name' ? 'name' : 'department';
-    if ( $orderby == 'department' ){
-      $personQuery['orderby'] = 'menu_order meta_value';
-    } else {
-      $personQuery['orderby'] = 'meta_value';
-    }
+    $orderby = self::directoryOrderby($attrs['orderby']);
+    $personQuery['orderby'] = $orderby['query'];
 
     // keyword search. needs to search both name and areas of expertise taxonomy
     $kwQueryVar =  array_filter($attrs['q'], function($x){return $x;});
@@ -301,10 +313,10 @@ class UCDLibPluginDirectoryBlockTransformations {
 
     if ( $hideDepartments ){
       $attrs['people'] = $people;
-    } else if ( $orderby == 'name' ) {
-      $attrs['people'] = $people;
-    } else {
+    } else if ( $orderby['attr'] == 'department' ) {
       $attrs['departments'] = self::assignPeopleToDepartments($people);
+    } else {
+      $attrs['people'] = $people;
     }
     return $attrs;
   }
