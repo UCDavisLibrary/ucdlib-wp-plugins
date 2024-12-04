@@ -9,7 +9,7 @@
     "dependencies": {
         "@lit-labs/task": "^1.1.3",
         "@ucd-lib/cork-app-build": "^0.3.0",
-        "@ucd-lib/theme-elements": "^2.0.1",
+        "@ucd-lib/theme-elements": "^3.0.5",
         "@ucd-lib/theme-sass": "^6.0.1",
         "lit": "^2.3.1"
     }
