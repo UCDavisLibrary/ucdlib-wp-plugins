@@ -1,14 +1,14 @@
 {% from getUcdMacro('links') import focal_link %}
 {% set p = siteContext.post %}
-{% if 
-  p.typeAggs and 
+{% if
+  p.typeAggs and
   (p.typeAggs.post or p.typeAggs.exhibit or p.typeAggs.libguide ) %}
   {% set email = '&authors=' ~ p.email|replace({'@ucdavis.edu': ''}) %}
   <div class='o-box u-space-mb'>
     <h2 class='heading--h5'>Content by {{p.name_first}}</h2>
     {% if p.typeAggs.post %}
       {% set text = 'News Posts (' ~ p.typeAggs.post ~ ')' %}
-      {{ focal_link({text, href: '/?s&type=news' ~ email, icon: 'ucd-public:fa-newspaper', brandColor: 'arboretum'}) }}
+      {{ focal_link({text, href: '/?s&type=news&sortby=date' ~ email, icon: 'ucd-public:fa-newspaper', brandColor: 'arboretum'}) }}
     {% endif %}
 
     {% if p.typeAggs.exhibit %}

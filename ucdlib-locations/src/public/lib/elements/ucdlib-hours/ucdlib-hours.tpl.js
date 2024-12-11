@@ -118,7 +118,7 @@ export function styles() {
       margin-top: 0.25rem;
       margin-bottom: 1rem;
     }
-    
+
     .week-container {
       position: relative;
       overflow: hidden;
@@ -253,18 +253,18 @@ export function styles() {
   return styles;
 }
 
-export function render() { 
+export function render() {
 return html`
   ${this.ctl.render({
     complete: this.renderComplete,
     initial: () => this.ctl.renderStatus('pending'),
-    pending: () => html`${this.ctl.successfulInitialFetch ? 
+    pending: () => html`${this.ctl.successfulInitialFetch ?
       html`
         ${this._renderNavigation()}
         ${this.ctl.renderStatus('pending')}
       ` : this.ctl.renderStatus('pending')
     }`,
-    error: () => html`${this.ctl.successfulInitialFetch ? 
+    error: () => html`${this.ctl.successfulInitialFetch ?
       html`
         ${this._renderNavigation()}
         ${this.ctl.renderStatus('error')}
@@ -295,13 +295,13 @@ return html`
             <div class="services ${this._visibleServices[location.id] ? 'visible' : ''}">
               ${location.children.filter(c => !this._surfaceChildren.includes(c.id)).map(c => this._renderChild(c))}
             </div>
-            <a class="services-toggle" 
+            <a class="services-toggle"
               @click=${() => this.toggleServiceVisibility(location.id)}>
               ${this._visibleServices[location.id] ? 'Hide' : 'Show'} hours for ${location.shortName} Library services <span class="chevron">&#xf078</span></a>
           ` : html``}
         </div>
 
-        
+
       </div>
     </section>
   `)}
@@ -310,7 +310,7 @@ return html`
 /**
  * @function _renderNavigation
  * @description Renders interface for navigating between date ranges
- * @returns {TemplateResult} 
+ * @returns {TemplateResult}
  */
 export function _renderNavigation(){
   return html`
@@ -324,13 +324,13 @@ export function _renderNavigation(){
 /**
  * @function _renderMonthNav
  * @description Renders interface for navigating by month
- * @returns 
+ * @returns
  */
 export function _renderMonthNav(){
   const months = this.ctl.hoursDateRange.months;
   return html`
     ${months.map((month, i) => html`
-      <button 
+      <button
           type="button"
           class="btn btn--month ${this._activeMonthIndex == i ? 'active' : ''}"
           ?disabled=${this.ctl.fetchTask.status != 2}
@@ -350,8 +350,8 @@ export function _renderMonthNav(){
   const weeks = this.ctl.hoursDateRange.weeks;
     return html`
     <div class="paginator">
-      <button 
-        type="button" 
+      <button
+        type="button"
         ?disabled=${!this._activeWeekPanel || this.ctl.fetchTask.status != 2}
         @click=${this._onBackwardClick}
         >&#xf053</button>
@@ -365,8 +365,8 @@ export function _renderMonthNav(){
           </div>
         `)}
       </div>
-      <button 
-        type="button" 
+      <button
+        type="button"
         ?disabled=${this._activeWeekPanel + 1 == weeks.length || this.ctl.fetchTask.status != 2}
         @click=${this._onForwardClick}>&#xf054</button>
     </div>
@@ -407,11 +407,9 @@ export function _renderChild(child){
   return html`
     <div class="child">
       <h3 class="heading--highlight">${child.name}</h3>
-      <!-- Added conditional statements for hide hours toggle and adding appointment description -->
+      ${child.renderOccupancyBar()}
       ${(child.data.descriptionDisplay.required) ? html`<div class="description-html">${child.renderDescription()}</div>` :html``}
       ${(child.data.hideHours.required) ? html`` : html`${this._renderWeeklyHours(child)}`}
-      <!-- Added conditional statements for hide hours toggle and adding appointment description -->
-
     </div>
   `;
 }

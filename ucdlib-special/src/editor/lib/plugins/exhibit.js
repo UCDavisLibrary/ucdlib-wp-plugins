@@ -1,7 +1,7 @@
 import { Fragment } from "@wordpress/element";
 import { PluginPostStatusInfo } from '@wordpress/edit-post';
 import { useDispatch } from "@wordpress/data";
-import { 
+import {
   CheckboxControl,
   DatePicker,
   Dropdown,
@@ -11,7 +11,7 @@ import {
   TextareaControl,
   __experimentalText as Text,
   ToggleControl,
-  Modal, 
+  Modal,
   Button } from '@wordpress/components';
 import { useEffect, useState } from '@wordpress/element';
 import apiFetch from '@wordpress/api-fetch';
@@ -19,7 +19,7 @@ import { html, SelectUtils } from "@ucd-lib/brand-theme-editor/lib/utils";
 import { ImagePicker } from "@ucd-lib/brand-theme-editor/lib/block-components";
 
 /**
- * Allows user to set metadata for an exhibit 
+ * Allows user to set metadata for an exhibit
  * by clicking a button in the publish panel that will open a modal.
  * If the current exhbit page is a child, metadata will be read from and written to the top-level ancestor.
  */
@@ -34,16 +34,16 @@ const Edit = () => {
   const curatorOrgs = SelectUtils.terms('curator', {per_page: '-1', orderby: 'name', order: 'asc'});
   const locations = SelectUtils.terms('exhibit-location', {per_page: '-1', orderby: 'name', order: 'asc'});
   const locationOptions = [
-    {value: '', label: 'Select a location', disabled: true},
+    {value: '', label: 'Select a location'},
     ...locations.map(l => {return {value: l.id, label: l.name}})
   ];
   const [ peoplePosts, setPeoplePosts ] = useState( [] );
   useEffect(() => {
     const path = `ucdlib-directory/people`;
-    apiFetch( {path} ).then( 
+    apiFetch( {path} ).then(
       ( r ) => {
         setPeoplePosts(r);
-      }, 
+      },
       (error) => {
         setPeoplePosts([]);
         console.warn(error);
@@ -171,7 +171,7 @@ const Edit = () => {
       return;
     }
     const path = `ucdlib-special/exhibit-page/${parent}`;
-    apiFetch( {path} ).then( 
+    apiFetch( {path} ).then(
       ( r ) => {
         setParentError(false);
         setTopExhibit(r.exhibitId);
@@ -187,7 +187,7 @@ const Edit = () => {
         setExhibitLocations(r.exhibitLocations.map(loc => loc.term_id));
         setExhibitLocationDirections( r.exhibitLocationDirections);
         setExhibitLocationMap(r.exhibitLocationMap.id)
-      }, 
+      },
       (error) => {
         setParentError(true);
         setStateFromCurrentPage();
@@ -211,7 +211,7 @@ const Edit = () => {
     }
     const onReset = () => {
       setter(null);
-      onClose(); 
+      onClose();
     }
     return html`
       <div>
@@ -254,24 +254,24 @@ const Edit = () => {
               ` : html`
                 <div>
                   <div style=${{marginBottom: '15px'}}>
-                    <${TextControl} 
+                    <${TextControl}
                       label='Exhibit Title'
                       value=${exhibitTitle}
                       onChange=${(v) => setExhibitTitle(v)}
                     />
                   </div>
-                  <${ToggleControl} 
+                  <${ToggleControl}
                     label='Exhibit has an Online Component'
                     checked=${exhibitIsOnline}
                     onChange=${() => {setExhibitIsOnline(!exhibitIsOnline)}}
                   />
-                  <${ToggleControl} 
+                  <${ToggleControl}
                     label='Exhibit has/had a Physical Installation'
                     checked=${exhibitIsPhysical}
                     onChange=${() => {setExhibitIsPhysical(!exhibitIsPhysical)}}
                   />
                   ${ exhibitIsPhysical && html`
-                    <${ToggleControl} 
+                    <${ToggleControl}
                       label='Exhibit is a Permanent Installation'
                       checked=${exhibitIsPermanent}
                       onChange=${() => {setExhibitIsPermanent(!exhibitIsPermanent)}}
@@ -281,9 +281,9 @@ const Edit = () => {
                     <div>
                       <h3>Dates</h3>
                       <div style=${{margin: '10px 0'}}>
-                        <${Dropdown} 
+                        <${Dropdown}
                           renderToggle=${({onToggle }) => html`
-                            <div onClick=${onToggle} style=${{cursor:'pointer'}}> 
+                            <div onClick=${onToggle} style=${{cursor:'pointer'}}>
                               <span>Start: </span>
                               <span>${dateLabel(exhibitDateFrom)}</span>
                             </div>
@@ -292,9 +292,9 @@ const Edit = () => {
                         />
                       </div>
                       <div style=${{margin: '10px 0'}}>
-                        <${Dropdown} 
+                        <${Dropdown}
                           renderToggle=${({onToggle }) => html`
-                            <div onClick=${onToggle} style=${{cursor:'pointer'}}> 
+                            <div onClick=${onToggle} style=${{cursor:'pointer'}}>
                               <span>End: </span>
                               <span>${dateLabel(exhibitDateTo)}</span>
                             </div>
@@ -311,7 +311,7 @@ const Edit = () => {
                       <h4>Curating Organizations:</h4>
                       ${curatorOrgs.map(org => html`
                         <div key=${org.id}>
-                          <${CheckboxControl} 
+                          <${CheckboxControl}
                             label=${org.name}
                             checked=${exhibitCuratorOrgs.includes(org.id)}
                             onChange=${ () => setExhibitCuratorOrgs(toggleArrayMember(org.id, exhibitCuratorOrgs))}
@@ -338,10 +338,10 @@ const Edit = () => {
                     <div>
                       <h3>Exhibit Location</h3>
                       <div style=${{marginBottom: '10px'}}>
-                        <${SelectControl} 
+                        <${SelectControl}
                           options=${locationOptions}
                           value=${exhibitLocations.length ? exhibitLocations[0] : ''}
-                          onChange=${id => setExhibitLocations([id])}
+                          onChange=${id => setExhibitLocations(id ? [id] : [])}
                         />
                         <${TextareaControl}
                           label="Directions to Exhibit"
@@ -351,7 +351,7 @@ const Edit = () => {
                           placeholder='This exhibit is located...'
                         />
                         <h4>Directional Map</h4>
-                        <${ImagePicker} 
+                        <${ImagePicker}
                           notPanel=${true}
                           imageId=${exhibitLocationMap}
                           image=${exhibitLocationMapObject}

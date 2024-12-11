@@ -1,11 +1,11 @@
 import { useState, useEffect } from "@wordpress/element";
 import { PluginDocumentSettingPanel } from '@wordpress/edit-post';
 import { useDispatch, useSelect } from "@wordpress/data";
-import { 
-  SelectControl, 
-  PanelRow, 
-  BaseControl, 
-  Button, 
+import {
+  SelectControl,
+  PanelRow,
+  BaseControl,
+  Button,
   Modal } from '@wordpress/components';
 import apiFetch from '@wordpress/api-fetch';
 import { addQueryArgs, getPath } from '@wordpress/url';
@@ -48,17 +48,17 @@ const Edit = () => {
           target: permaPath,
           status: 'enabled',
           action: 'url'
-        }, 
+        },
         per_page: 200,
         orderby: "last_count",
         direction: 'desc'
       });
-      apiFetch( {path} ).then( 
+      apiFetch( {path} ).then(
         ( r ) => {
           setRedirects(r.items.filter(redirect => {
             return redirect.action_data.url == `/${permaPath}` || redirect.action_data.url == permalink;
           }));
-        }, 
+        },
         (error) => {
           console.warn('Unable to retrieve redirect list.')
         })
@@ -74,10 +74,11 @@ const Edit = () => {
 
   return html`
     <${PluginDocumentSettingPanel}
+      name=${name}
       className=${name}
       title="Migration">
       <${PanelRow}>
-        <${SelectControl} 
+        <${SelectControl}
           label="Content Status"
           value=${pageMeta.migration_status}
           options=${statusOptions}

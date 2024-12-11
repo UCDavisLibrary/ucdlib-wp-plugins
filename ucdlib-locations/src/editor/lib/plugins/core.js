@@ -1,7 +1,7 @@
 import { Fragment } from "@wordpress/element";
 import { PluginDocumentSettingPanel } from '@wordpress/edit-post';
 import { useDispatch } from "@wordpress/data";
-import { 
+import {
   ToggleControl,
   SelectControl,
   TextControl } from '@wordpress/components';
@@ -64,6 +64,7 @@ const Edit = () => {
     <${Fragment}>
       ${isLocation && html`
         <${PluginDocumentSettingPanel}
+          name=${name}
           className=${name}
           icon=${html`<ucdlib-icon style=${{marginLeft: '8px', width: '15px', minWidth: '15px'}} icon="ucd-public:fa-building-circle-exclamation"></ucdlib-icon>`}
           title="This Location">
@@ -80,32 +81,32 @@ const Edit = () => {
             }
           </style>
           <div style=${{marginBottom: '15px'}}>
-            <${TextControl} 
+            <${TextControl}
               value=${labelShort}
               label="Short Label"
               onChange=${label_short => editPost({meta: {label_short}})}
               help="Less than 15 characters or so..."
             />
-            <${TextControl} 
+            <${TextControl}
               value=${address}
               label="Address to Display"
               onChange=${display_address => editPost({meta: {display_address}})}
             />
-            <${TextControl} 
+            <${TextControl}
               value=${roomNumber}
               label="Room Number"
               onChange=${room_number => editPost({meta: {room_number}})}
             />
           </div>
           <div style=${{marginBottom: '15px'}}>
-            <${ToggleControl} 
+            <${ToggleControl}
               label="Show Alert Notification"
               checked=${hasAlert}
               onChange=${ () => editPost({meta: {has_alert: !hasAlert}})}
               help="Displayed on hours and visit pages."
             />
             ${hasAlert && html`
-              <${TextControl} 
+              <${TextControl}
                 label="Notification"
                 value=${alertText}
                 onChange=${alert_text => editPost({meta: {alert_text}})}
@@ -113,21 +114,21 @@ const Edit = () => {
             `}
           </div>
           <div>
-            <${ToggleControl} 
+            <${ToggleControl}
               label="Custom Location Page"
               checked=${hasRedirect}
               onChange=${ () => editPost({meta: {has_redirect: !hasRedirect}})}
               help="Any requests to this page will be redirected to a custom url"
             />
             ${hasRedirect && html`
-              <${LinkControl} 
+              <${LinkControl}
                 settings=${[]}
                 value=${redirect}
                 onRemove=${() => onRedirectChange()}
                 onChange=${v => onRedirectChange(v)}/>
             `}
           </div>
-          <${SelectControl} 
+          <${SelectControl}
             options=${parentOptions}
             value=${locationParent}
             label="Parent Location"
