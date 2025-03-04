@@ -19,6 +19,25 @@ class UCDLibPluginAssets {
       'isDevEnv' => getenv('UCD_THEME_ENV') == 'dev',
     );
 
+    $mainBuildInfo = $this->readBuildInfo('main-wp-website.json');
+    if ( $mainBuildInfo ) {
+      $appVersion = $this->getBuildVersion($mainBuildInfo);
+      if ( $appVersion ) {
+        putenv('APP_VERSION=' . $appVersion);
+      }
+      if ( array_key_exists('date', $mainBuildInfo) ) {
+        putenv('BUILD_TIME=' . $mainBuildInfo['date']);
+      }
+    }
+
+    $themeBuildInfo = $this->readBuildInfo('ucdlib-theme-wp.json');
+    if ( $themeBuildInfo ) {
+      $websiteTag = $this->getBuildVersion($themeBuildInfo);
+      if ( $websiteTag ) {
+        putenv('WEBSITE_TAG=' . $websiteTag);
+      }
+    }
+
     // Build params
     $config['buildParams'] = array(
       "APP_VERSION" => getenv('APP_VERSION'),
@@ -26,17 +45,10 @@ class UCDLibPluginAssets {
       "WEBSITE_TAG" => getenv('WEBSITE_TAG')
     );
 
-    if ( $config['buildParams'][ "APP_VERSION"] ) {
-      if ( substr_compare($config['buildParams'][ "APP_VERSION"], '-1', -strlen('-1')) === 0 ) {
-        $config['bundleVersion'] = (new DateTime())->getTimestamp();
-      } else {
-        $config['bundleVersion'] = $config['buildParams'][ "APP_VERSION"];
-      }
-
-    } else {
-      $config['bundleVersion'] = (new DateTime())->getTimestamp();
+    $config['bundleVersion'] = (new DateTime())->getTimestamp();
+    if ( !$config['isDevEnv'] && $config['buildParams']["BUILD_TIME"] ) {
+      $config['bundleVersion'] = $config['buildParams']["BUILD_TIME"];
     }
-
 
     // static asset uris
     $config['uris'] = array(
@@ -78,6 +90,28 @@ class UCDLibPluginAssets {
     add_action( 'admin_enqueue_scripts', [$this, 'registerAdminScripts']);
     // add_filter( 'mce_css', array($this, 'enqueue_editor_css') );
 
+  }
+
+  // reads build info from a cork-build-info file
+  public function readBuildInfo($filename) {
+    $filePath = '/cork-build-info/' . $filename;
+    if (!file_exists($filePath)) {
+      return null;
+    }
+    $jsonContent = file_get_contents($filePath);
+    return json_decode($jsonContent, true);
+  }
+
+  public function getBuildVersion($buildInfo){
+    if ( array_key_exists('tag', $buildInfo) ) {
+      return $buildInfo['tag'];
+    } else if ( array_key_exists('branch', $buildInfo) ) {
+      return $buildInfo['branch'];
+    } else if ( array_key_exists('imageTag', $buildInfo) ) {
+      $imageTag = explode(':', $buildInfo['imageTag']);
+      return end($imageTag);
+    }
+    return null;
   }
 
   // registers customizations to third party plugins
