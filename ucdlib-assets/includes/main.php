@@ -1,5 +1,6 @@
 <?php
 require_once( __DIR__ . '/robots.php' );
+require_once( __DIR__ . '/log.php' );
 
 class UCDLibPluginAssets {
 
@@ -7,10 +8,14 @@ class UCDLibPluginAssets {
   public $config;
   public $activePlugins;
   public $forminator;
+  public $hummingbird;
+  public $log;
+
 
   public function __construct(){
     $this->slug = "ucdlib-assets";
     new UCDLibPluginAssetsRobots();
+    $this->log = new UCDLibPluginAssetsLog();
 
     $config = array(
       'slug' => $this->slug,
@@ -122,7 +127,7 @@ class UCDLibPluginAssets {
     }
     if ( $this->is_plugin_active('wp-hummingbird/wp-hummingbird.php') ){
       require_once( __DIR__ . '/hummingbird.php' );
-      $this->forminator = new UCDLibPluginAssetsHummingbird();
+      $this->hummingbird = new UCDLibPluginAssetsHummingbird();
     }
   }
 
