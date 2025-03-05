@@ -108,11 +108,11 @@ class UCDLibPluginAssets {
   }
 
   public function getBuildVersion($buildInfo){
-    if ( array_key_exists('tag', $buildInfo) ) {
+    if ( !empty($buildInfo['tag']) ) {
       return $buildInfo['tag'];
-    } else if ( array_key_exists('branch', $buildInfo) ) {
+    } else if ( !empty($buildInfo['branch']) ) {
       return $buildInfo['branch'];
-    } else if ( array_key_exists('imageTag', $buildInfo) ) {
+    } else if ( !empty($buildInfo['imageTag']) ) {
       $imageTag = explode(':', $buildInfo['imageTag']);
       return end($imageTag);
     }
