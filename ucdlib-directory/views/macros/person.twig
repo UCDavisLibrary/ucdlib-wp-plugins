@@ -2,12 +2,12 @@
   <article class='vm-teaser vm-teaser--person'>
     {% if person.teaser_image %}
         <div class="vm-teaser__figure" style="width:20%;max-width:135px;" role='img' aria-label='{{person.teaser_image.alt}}'>
-          <a href="{{person.link}}" style="display:block;background-image:url({{person.teaser_image.src}})" class="aspect--1x1 u-background-image">
+          <a aria-label="{{person.name_first}} {{person.name_last}}" href="{{person.link}}" style="display:block;background-image:url({{person.teaser_image.src}})" class="aspect--1x1 u-background-image">
         </a>
       </div>
     {% endif %}
     <div class="vm-teaser__body">
-      <h3 class="vm-teaser__title"><a href="{{person.link}}">{{person.name_first}} {{person.name_last}}</a></h3>
+      <div class="vm-teaser__title"><a href="{{person.link}}">{{person.name_first}} {{person.name_last}}</a></div>
       {% if person.positionTitle or person.department %}
         <ul class='u-space-mb--small list--pipe'>
           {% if person.positionTitle %}

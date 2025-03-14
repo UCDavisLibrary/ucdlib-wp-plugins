@@ -1,0 +1,108 @@
+.location-address {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+
+  ucdlib-icon {
+    margin-right: 10px;
+    color: #73abdd;
+  }
+
+  .heading--h5 {
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+}
+
+.location-alert {
+  margin-top: .25rem;
+}
+
+.teaser--location {
+  margin-bottom: 2rem;
+  --list-pipe-pipe: #4c4c4c;
+  --o-media-gutter: var(--o-media-gutter-default, 1rem);
+  --o-media-gutter--right: var(--o-media-gutter-default, 1rem);
+  --o-media-gutter--left: 0;
+  color: var(--category-brand-contrast-color, #4c4c4c);
+  font-size: 0.875rem;
+  line-height: 1.3;
+
+  .teaser--image {
+    display: block;
+  }
+
+  .icon-ucdlib {
+    --category-brand: #c10230;
+    color: var(--category-brand);
+
+    ucdlib-icon {
+      color: var(--category-brand, #73abdd);
+      margin-right: 0.6rem;
+      margin-left: 0.15rem;
+      min-width: 0.8rem;
+      min-height: 0.8rem;
+      width: 0.8rem;
+      height: 0.8rem;
+    }
+
+  }
+  .icon--circle-arrow-right {
+    --category-brand: #ffbf00;
+  }
+  .teaser--location--featured {
+    background-color: #ebf3fa;
+    padding: 1.5rem;
+  }
+  .vm-teaser__figure {
+    width: 20%;
+    max-width: 135px;
+  }
+
+}
+@media (min-width: 768px){
+  .teaser--location--featured .vm-teaser__figure {
+    margin-right: 1.5rem;
+  }
+  .teaser--location {
+    font-size: 1rem;
+  }
+}
+body.digital-sign {
+  display: block;
+  height: 100vh;
+  min-height: 100vh;
+  width: 100vw;
+  min-width: 100vw;
+  overflow-y: hidden;
+  line-height: 1.3;
+}
+.digital-sign-sections {
+  display: flex;
+  height: 100%;
+  flex-flow: column;
+  justify-content: space-between;
+}
+.digital-sign-section {
+  display: flex;
+  flex-flow: column;
+}
+.digital-sign-text {
+  font-size: calc(100vh/12);
+
+  &.digital-sign-text--xs {
+    font-size: calc(100vh/20);
+  }
+  &.digital-sign-text--sm {
+    font-size: calc(100vh/16);
+  }
+  &.digital-sign-text--md {
+    font-size: calc(100vh/12);
+  }
+  &.digital-sign-text--lg {
+    font-size: calc(100vh/8);
+  }
+  &.digital-sign-text--xl {
+    font-size: calc(100vh/6);
+  }
+}

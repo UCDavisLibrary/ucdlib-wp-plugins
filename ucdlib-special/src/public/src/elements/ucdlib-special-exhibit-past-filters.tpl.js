@@ -8,6 +8,9 @@ export function styles() {
     :host {
       display: block;
     }
+    [hidden] {
+      display: none !important;
+    }
     .row-label {
       margin-right: 1rem;
       font-weight: 700;
@@ -48,20 +51,22 @@ export function styles() {
   ];
 }
 
-export function render() { 
+export function render() {
 return html`
   <div class='main'>
   <div class='row-label'>Display: </div>
     <div class='year-container'>
-        <select id="year" @input=${this.onYearInput} role="link">
-          <option value='0' ?selected=${this.year == 0}>All Years</option>
-          ${this.yearOptions.map(year => html`
-            <option value=${year} ?selected=${year == this.year}>${year}</option>
-          `)}
-        </select>
-      </div>
+      <label for="year" hidden>Year</label>
+      <select id="year" @input=${this.onYearInput}>
+        <option value='0' ?selected=${this.year == 0}>All Years</option>
+        ${this.yearOptions.map(year => html`
+          <option value=${year} ?selected=${year == this.year}>${year}</option>
+        `)}
+      </select>
+    </div>
     <div>
-      <select id="curator" @input=${this.onCuratorInput} role="link">
+      <label for="curator" hidden>Curator</label>
+      <select id="curator" @input=${this.onCuratorInput}>
         <option value='0' ?selected=${this.curator == 0}>All Curators</option>
         ${this.curatorOptions.map(curator => html`
           <option value=${curator.id} ?selected=${curator.id == this.curator}>${curator.name}</option>

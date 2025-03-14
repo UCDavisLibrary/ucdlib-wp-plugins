@@ -1,0 +1,57 @@
+.curator-widget {
+  border: 2px solid #ffdf80;
+  padding: 1rem;
+
+  .subsection-label {
+    font-style: italic;
+  }
+
+  .previous-display {
+    font-style: italic;
+    font-size: .75rem;
+    margin-top: 1.5rem;
+    color: rgb(119, 119, 119);
+  }
+  .curation-note {
+    font-style: italic;
+    font-size: .75rem;
+    margin-top: .5rem;
+    color: rgb(119, 119, 119);
+  }
+  .org-link {
+    text-decoration: none;
+  }
+  .org-link:hover {
+    text-decoration: underline;
+  }
+  .curator-name {
+    font-weight: 700;
+  }
+}
+.hero-banner {
+  .hero-banner__summary {
+    font-size: 1.2rem;
+    line-height: 1.3;
+    margin-top: .5rem;
+  }
+
+  &.hero-banner--no-background {
+    background-color: #022851;
+  }
+}
+.vm-teaser--exhibit {
+  .vm-teaser--exhibit__curators {
+    font-style: italic;
+    font-size: 0.875rem;
+    color: #4c4c4c;
+  }
+}
+h2.exhibit-header-intro {
+  margin-bottom: .25rem;
+  margin-top: 0;
+}
+
+.title-modified::after {
+  content: '*';
+  color: #f93549;
+}
