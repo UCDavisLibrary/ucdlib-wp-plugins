@@ -8,9 +8,9 @@ const name = 'ucdlib-directory-profile';
 
 const Edit = () => {
 
-  // determine when to show panel
-  const currentPost = SelectUtils.currentPost();
-  const isPerson = currentPost.type == 'person';
+  if ( !['person'].includes(SelectUtils.editedPostAttribute('type')) ){
+    return html`<${Fragment} />`;
+  }
 
   // get page metadata to show in panel
   const meta = SelectUtils.editedPostAttribute('meta');
@@ -25,44 +25,42 @@ const Edit = () => {
 
   return html`
     <${Fragment}>
-      ${(isPerson) && html`
-        <${PluginDocumentSettingPanel}
-          name=${name}
-          className=${name}
-          icon=${html`<ucdlib-icon style=${{marginLeft: '8px', width: '18px', minWidth: '18px'}} icon="ucd-public:fa-user-gear"></ucdlib-icon>`}
-          title="Profile Settings">
-          <${ToggleControl}
-            label="No Longer Employed at Library"
-            checked=${pastEmployee}
-            onChange=${() => editPost({meta: { pastEmployee: !pastEmployee}})}
-          />
-          <${ToggleControl}
-            label="Hide Pronouns"
-            checked=${hidePronouns}
-            onChange=${() => editPost({meta: { hide_pronouns: !hidePronouns}})}
-          />
-          <${ToggleControl}
-            label="Hide Library Locations"
-            checked=${hideLibraries}
-            onChange=${() => editPost({meta: { hide_libraries: !hideLibraries}})}
-          />
-          <${ToggleControl}
-            label="Hide Bio"
-            checked=${hideBio}
-            onChange=${() => editPost({meta: { hide_bio: !hideBio}})}
-          />
-          <${ToggleControl}
-            label="Hide Directory Tags"
-            checked=${hideDirectoryTags}
-            onChange=${() => editPost({meta: { hide_tags: !hideDirectoryTags}})}
-          />
-          <${ToggleControl}
-            label="Hide Areas of Expertise"
-            checked=${hideExpertiseAreas}
-            onChange=${() => editPost({meta: { hide_expertise_areas: !hideExpertiseAreas}})}
-          />
-        </${PluginDocumentSettingPanel}>
-      `}
+      <${PluginDocumentSettingPanel}
+        name=${name}
+        className=${name}
+        icon=${html`<ucdlib-icon style=${{marginLeft: '8px', width: '18px', minWidth: '18px'}} icon="ucd-public:fa-user-gear"></ucdlib-icon>`}
+        title="Profile Settings">
+        <${ToggleControl}
+          label="No Longer Employed at Library"
+          checked=${pastEmployee}
+          onChange=${() => editPost({meta: { pastEmployee: !pastEmployee}})}
+        />
+        <${ToggleControl}
+          label="Hide Pronouns"
+          checked=${hidePronouns}
+          onChange=${() => editPost({meta: { hide_pronouns: !hidePronouns}})}
+        />
+        <${ToggleControl}
+          label="Hide Library Locations"
+          checked=${hideLibraries}
+          onChange=${() => editPost({meta: { hide_libraries: !hideLibraries}})}
+        />
+        <${ToggleControl}
+          label="Hide Bio"
+          checked=${hideBio}
+          onChange=${() => editPost({meta: { hide_bio: !hideBio}})}
+        />
+        <${ToggleControl}
+          label="Hide Directory Tags"
+          checked=${hideDirectoryTags}
+          onChange=${() => editPost({meta: { hide_tags: !hideDirectoryTags}})}
+        />
+        <${ToggleControl}
+          label="Hide Areas of Expertise"
+          checked=${hideExpertiseAreas}
+          onChange=${() => editPost({meta: { hide_expertise_areas: !hideExpertiseAreas}})}
+        />
+      </${PluginDocumentSettingPanel}>
 
     </${Fragment}>
   `

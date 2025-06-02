@@ -129,8 +129,11 @@ const runController = (recordId, meta, editPost) => {
 }
 
 const Edit = () => {
-  // get metadata
+
   const isCollection = SelectUtils.editedPostAttribute('type') === 'collection';
+  if ( !isCollection) return html`<${Fragment} />`
+
+  // get metadata
   const meta = SelectUtils.editedPostAttribute('meta');
   const collectionType = meta.collectionType || 'manuscript';
   const almaRecordId = meta.almaRecordId;
@@ -156,8 +159,6 @@ const Edit = () => {
         renderedTitle.classList.remove('title-modified');
     }
   }
-
-  if ( !isCollection) return html`<${Fragment} />`
 
   let titleHasChanged = false;
   let currentTitle = wp.data.select( 'core/editor' ).getEditedPostAttribute( 'title' );
