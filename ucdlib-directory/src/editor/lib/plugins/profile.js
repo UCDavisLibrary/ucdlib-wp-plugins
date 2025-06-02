@@ -1,6 +1,6 @@
 import { html, SelectUtils } from "@ucd-lib/brand-theme-editor/lib/utils";
 import { Fragment } from "@wordpress/element";
-import { PluginDocumentSettingPanel } from '@wordpress/edit-post';
+import { PluginDocumentSettingPanel } from '@wordpress/editor';
 import { useDispatch } from "@wordpress/data";
 import { BaseControl, TextControl, ToggleControl } from '@wordpress/components';
 

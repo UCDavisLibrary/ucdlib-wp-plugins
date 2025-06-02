@@ -1,5 +1,5 @@
 import { Fragment } from "@wordpress/element";
-import { PluginDocumentSettingPanel } from '@wordpress/edit-post';
+import { PluginDocumentSettingPanel } from '@wordpress/editor';
 import { useDispatch } from "@wordpress/data";
 import {
   ToggleControl,

@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useController } from '@lit-labs/react/use-controller.js';
 import { ApiController } from "./controller";
 import { Fragment } from "@wordpress/element";
-import { PluginDocumentSettingPanel } from '@wordpress/edit-post';
+import { PluginDocumentSettingPanel } from '@wordpress/editor';
 import { useDispatch } from "@wordpress/data";
 import { TextControl, SelectControl, Button, HorizontalRule } from "@wordpress/components";
 import { html, SelectUtils } from "@ucd-lib/brand-theme-editor/lib/utils";

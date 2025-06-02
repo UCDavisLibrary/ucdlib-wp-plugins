@@ -1,14 +1,12 @@
 import { Fragment } from "@wordpress/element";
-import { PluginDocumentSettingPanel } from '@wordpress/edit-post';
+import { PluginDocumentSettingPanel } from '@wordpress/editor';
 import { useDispatch } from "@wordpress/data";
 import {
   ToggleControl,
   SelectControl,
   TextControl } from '@wordpress/components';
 import { html, SelectUtils } from "@ucd-lib/brand-theme-editor/lib/utils";
-
-const {__experimentalLinkControl } = wp.blockEditor;
-const LinkControl = __experimentalLinkControl;
+import { LinkControl } from '@wordpress/block-editor';
 
 const name = 'ucdlib-locations-core';
 

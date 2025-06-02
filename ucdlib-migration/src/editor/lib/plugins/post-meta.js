@@ -1,5 +1,5 @@
 import { useState, useEffect } from "@wordpress/element";
-import { PluginDocumentSettingPanel } from '@wordpress/edit-post';
+import { PluginDocumentSettingPanel } from '@wordpress/editor';
 import { useDispatch, useSelect } from "@wordpress/data";
 import {
   SelectControl,
