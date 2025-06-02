@@ -89,12 +89,23 @@ class UCDLibPluginAssets {
     add_filter( 'timber/context', array( $this, 'addGoogleAnalytics' ) );
     //add_action('wp_head', [$this, 'addGoogleAnalytics']);
     add_action( 'admin_footer', [$this, 'highlightCustomTaxonomyPages']);
+    add_filter('ucd-theme/admin-variable/editor-script', [$this, 'updateEditorScriptVariable' ]);
 
 
     add_action( 'after_setup_theme', array($this, 'enqueue_editor_css'));
     add_action( 'admin_enqueue_scripts', [$this, 'registerAdminScripts']);
     // add_filter( 'mce_css', array($this, 'enqueue_editor_css') );
 
+  }
+
+  public function updateEditorScriptVariable(){
+    $file = "ucdlib-editor.js";
+    $url = $this->config['uris']['js'] . "/editor/dist/" . $file;
+    if ( $this->config['isDevEnv'] ){
+      $url = $this->config['uris']['js'] . "/editor/dev/" . $file;
+    }
+    $url .= '?v=' . $this->config['bundleVersion'];
+    return $url;
   }
 
   // reads build info from a cork-build-info file
