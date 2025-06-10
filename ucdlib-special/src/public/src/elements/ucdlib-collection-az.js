@@ -53,7 +53,7 @@ export default class UcdlibCollectionAZ extends LitElement {
     this.keySort = 'collection-az';
     this.defaultSort = 'a';
     this.sort = this.defaultSort;
-    
+
     this.parseLocation();
 
   }
@@ -63,7 +63,7 @@ export default class UcdlibCollectionAZ extends LitElement {
     this.checksExist();
   }
 
-  
+
   checksExist(){
     let emptyArray = this.noResult.split(",");
     for(let x of emptyArray) {
@@ -71,7 +71,7 @@ export default class UcdlibCollectionAZ extends LitElement {
       if ( a ) {
         a["exists"] = false;
       }
-    }  
+    }
   }
 
   parseLocation() {
@@ -79,7 +79,13 @@ export default class UcdlibCollectionAZ extends LitElement {
     this.urlParams = new URLSearchParams(window.location.search);
     this.sort = this.urlParams.get(this.keySort) || this.defaultSort;
   }
-  
+
+  onAlphaKeydown(e, v) {
+    if ( e.key == 'Enter' || e.key == ' ' ) {
+      this.onAlphaInput(v);
+    }
+  }
+
   onAlphaInput(v) {
     if ( !v.exists || v.value == this.selectedLetter ) return;
     v = v.value;

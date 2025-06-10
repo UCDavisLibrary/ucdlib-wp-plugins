@@ -1,0 +1,20 @@
+.vm-teaser--person__contact {
+  a.icon-ucdlib ucdlib-icon, span.icon-ucdlib ucdlib-icon {
+    margin-right: .75rem;
+  }
+  .icon--location:before {
+    font-size: .9em;
+  }
+}
+.vm-teaser--person {
+  .icon--location:before {
+    font-size: .9em;
+  }
+}
+.contact-info.contact-info--department {
+  .additional-text {
+    font-weight: 500;
+  }
+}
+
+

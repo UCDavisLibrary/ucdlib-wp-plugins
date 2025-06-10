@@ -8,12 +8,37 @@ export function styles() {
     :host {
       display: block;
     }
+    .h5 {
+      margin: 0.75em 0 0.25em;
+      padding: 0;
+      color: var(--forced-contrast-heading-primary, #022851);
+      font-size: 1rem;
+      font-style: normal;
+      font-weight: 800;
+      line-height: 1.2;
+      font-size: 1rem;
+    }
+    :where(:not([class*=block-field-])) > .h5:first-child {
+      margin-top: 0;
+    }
+    .h5 a {
+      color: var(--forced-contrast, #022851);
+      text-decoration: underline;
+    }
+    .h5 a:hover, .h5 a:focus {
+      color: var(--forced-contrast, #022851);
+      text-decoration: none;
+    }
+    @media (min-width: 768px) {
+      .h5 {
+        font-size: 1.207rem;
+      }
+    }
     [hidden] {
       display: none !important;
     }
     .container {
-      display: flex;
-      align-items: center;
+      display: block;
     }
     .label {
       font-style: italic;
@@ -29,6 +54,13 @@ export function styles() {
     .ss-value-text {
       cursor: auto;
     }
+
+    @media (min-width: 480px) {
+      .container {
+        display: flex;
+        align-items: center;
+    }
+  }
   `;
 
   return [
@@ -39,10 +71,10 @@ export function styles() {
   ];
 }
 
-export function render() { 
+export function render() {
 return html`
   <div class='container' ?hidden=${this.authors.length == 0}>
-    <h5 class='label'>Content by: </h5>
+    <div class='h5 label'>Content by: </div>
     <div class='ss-main'>
       <div class='ss-multi-selected'>
         <div class='ss-values'>

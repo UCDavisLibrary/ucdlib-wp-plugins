@@ -38,13 +38,13 @@
       {# 500 error #}
       {% if error_in_search %}
           <div class="alert alert--error">Something went wrong when getting your results. Please try again later.</div>
-      
+
       {# at least one result found #}
       {% elseif found_posts %}
 
-        <h5 class="search-results-message">{{ found_posts }} results {{search_query ? 'for "' ~ search_query ~ '"'}}</h5>
+        <div class="h5 search-results-message">{{ found_posts }} results {{search_query ? 'for "' ~ search_query ~ '"'}}</div>
         {% if hasSuggestion %}
-          <h5 class="search-results-message">Similar keyword: <a href="?s={{suggest.text|url_encode}}">{{suggest.highlighted}}</a> </h5>
+          <div class="h5 search-results-message">Similar keyword: <a href="?s={{suggest.text|url_encode}}">{{suggest.highlighted}}</a> </div>
         {% endif %}
 
         <div class="search-results u-space-mt--large">
@@ -63,19 +63,19 @@
             ellipses>
           </ucd-theme-pagination>
         {% endif %}
-      
+
       {# no results #}
       {% else %}
         {% if not authors or (authors and search_query) %}
-          <h5 class="search-results-message">Sorry, we're having trouble finding "{{search_query}}"</h5>
+          <div class="h5 search-results-message">Sorry, we're having trouble finding "{{search_query}}"</div>
         {% else %}
-          <h5 class="search-results-message">No results</h5>
+          <div class="h5 search-results-message">No results</div>
         {% endif %}
         {% if hasSuggestion %}
-            <h5 class="search-results-message">Similar keyword: <a href="?s={{suggest.text|url_encode}}">{{suggest.highlighted}}</a> </h5>
+            <div class="h5 search-results-message">Similar keyword: <a href="?s={{suggest.text|url_encode}}">{{suggest.highlighted}}</a> </div>
         {% endif %}
 
-        <h5>Suggestions:</h5>
+        <div class='h5'>Suggestions:</div>
         <ul class="list--arrow">
           {% if not authors or (authors and search_query) %}
             <li>Check for typos and spelling errors</li>

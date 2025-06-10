@@ -8,6 +8,9 @@ export function styles() {
     :host {
       display: block;
     }
+    [hidden] {
+      display: none !important;
+    }
     .main {
       display: flex;
       align-items: center;
@@ -55,32 +58,31 @@ export function styles() {
   ];
 }
 
-export function render() { 
+export function render() {
 return html`
   <div class='main'>
     <div class='radio'>
       <div class='sort-label'>Sort by: </div>
       <div class='sort-title-container'>
-        <input 
-          @input=${() => this.onSortInput('title')} 
-          id="sort-title" name="sort-title" 
-          type="radio" 
-          role="link"
+        <input
+          @input=${() => this.onSortInput('title')}
+          id="sort-title" name="sort-title"
+          type="radio"
           ?checked=${this.sort == 'title'}>
           <label for="sort-title">A - Z</label>
       </div>
       <div>
-        <input 
-          @input=${() => this.onSortInput('date')} 
-          id="sort-date" name="sort-date" 
+        <input
+          @input=${() => this.onSortInput('date')}
+          id="sort-date" name="sort-date"
           type="radio"
-          role="link"
           ?checked=${this.sort == 'date'}>
           <label for="sort-date">Newest First</label>
       </div>
     </div>
     <div>
-      <select id="curator" @input=${this.onCuratorInput} role="link">
+      <label for="curator" hidden>Curator</label>
+      <select id="curator" @input=${this.onCuratorInput}>
         <option value='0' ?selected=${this.curator == 0}>All Curators</option>
         ${this.curatorOptions.map(curator => html`
           <option value=${curator.id} ?selected=${curator.id == this.curator}>${curator.name}</option>

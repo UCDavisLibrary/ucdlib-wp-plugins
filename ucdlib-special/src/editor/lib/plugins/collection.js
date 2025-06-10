@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useController } from '@lit-labs/react/use-controller.js';
 import { ApiController } from "./controller";
 import { Fragment } from "@wordpress/element";
-import { PluginDocumentSettingPanel } from '@wordpress/edit-post';
+import { PluginDocumentSettingPanel } from '@wordpress/editor';
 import { useDispatch } from "@wordpress/data";
 import { TextControl, SelectControl, Button, HorizontalRule } from "@wordpress/components";
 import { html, SelectUtils } from "@ucd-lib/brand-theme-editor/lib/utils";
@@ -129,8 +129,11 @@ const runController = (recordId, meta, editPost) => {
 }
 
 const Edit = () => {
-  // get metadata
+
   const isCollection = SelectUtils.editedPostAttribute('type') === 'collection';
+  if ( !isCollection) return html`<${Fragment} />`
+
+  // get metadata
   const meta = SelectUtils.editedPostAttribute('meta');
   const collectionType = meta.collectionType || 'manuscript';
   const almaRecordId = meta.almaRecordId;
@@ -156,8 +159,6 @@ const Edit = () => {
         renderedTitle.classList.remove('title-modified');
     }
   }
-
-  if ( !isCollection) return html`<${Fragment} />`
 
   let titleHasChanged = false;
   let currentTitle = wp.data.select( 'core/editor' ).getEditedPostAttribute( 'title' );

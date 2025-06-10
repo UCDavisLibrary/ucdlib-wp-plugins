@@ -39,7 +39,7 @@
           <div>Online Exhibit</div>
         {% elseif exhibit.exhibitIsPast %}
           <div>Past Exhibit</div>
-        {% endif %} 
+        {% endif %}
       </div>
       <div class="hero-banner__button-group">
         <a class="hero-banner__button" href='{{exhibit.exhibitLink}}'>Exhibit Details</a>
@@ -55,7 +55,7 @@
   {% set showByline = showLocation or showDates %}
   <article class='vm-teaser vm-teaser--exhibit'>
     {% if exhibit.teaser_image %}
-      <div class="vm-teaser__figure category" style="width:20%;max-width:135px;" role='img' aria-label='{{exhibit.teaser_image.alt}}'>
+      <div class="vm-teaser__figure category" style="width:20%;max-width:135px;">
         <a href="{{exhibit.link}}" style="display:block;background-image:url({{exhibit.teaser_image.src}})" class="aspect--1x1 u-background-image" aria-label='{{exhibit.title}}'>
         </a>
       </div>
