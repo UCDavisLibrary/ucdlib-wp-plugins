@@ -7,7 +7,7 @@ export default ( props ) => {
   const blockProps = useBlockProps();
 
   const locationId = attributes.locationId;
-  const locations = SelectUtils.posts({per_page: '-1', orderby: 'title', order: 'asc'}, 'location');
+  const locations = SelectUtils.posts({per_page: 100, orderby: 'title', order: 'asc'}, 'location');
   const locationOptions = [
     { value: 0, label: 'Select a Location', isDisabled: true},
     ...locations.map(l => {return {label: l.title.raw, value: l.id}})
@@ -29,14 +29,14 @@ export default ( props ) => {
     </div>
     <${InspectorControls}>
       <${PanelBody} title="Block Settings">
-        <${SelectControl} 
+        <${SelectControl}
           options=${locationOptions}
           value=${locationId}
           label="Location"
           help="Will display hours for selected location"
           onChange=${locationId => setAttributes({locationId: parseInt(locationId)})}
         />
-        <${RangeControl} 
+        <${RangeControl}
           label="Refresh Rate"
           help="In minutes..."
           min="1"

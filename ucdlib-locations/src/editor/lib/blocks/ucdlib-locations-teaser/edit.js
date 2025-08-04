@@ -6,7 +6,7 @@ export default ( props ) => {
   const { attributes, setAttributes } = props;
   const blockProps = useBlockProps();
 
-  const locations = SelectUtils.posts({per_page: '-1', orderby: 'title', order: 'asc'}, 'location');
+  const locations = SelectUtils.posts({per_page: 100, orderby: 'title', order: 'asc'}, 'location');
   const locationOptions = [
     { value: 0, label: 'Choose a location', disabled: true },
     ...locations.map(l => {return {label: l.title.raw, value: l.id}})
@@ -17,7 +17,7 @@ export default ( props ) => {
   const imgSrc = SelectUtils.previewImage(location, imgAspectRatio);
 
   const locationSelect = () => html`
-    <${SelectControl} 
+    <${SelectControl}
       options=${locationOptions}
       value=${attributes.locationId}
       label="Location"
@@ -90,7 +90,7 @@ export default ( props ) => {
     <${InspectorControls}>
       <${PanelBody} title="Teaser Settings">
         ${locationSelect()}
-        <${ToggleControl} 
+        <${ToggleControl}
           label='Featured'
           checked=${attributes.featured}
           onChange=${() => setAttributes({featured: !attributes.featured})}
