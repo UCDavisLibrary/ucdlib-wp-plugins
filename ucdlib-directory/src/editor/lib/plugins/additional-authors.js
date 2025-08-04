@@ -1,10 +1,10 @@
 import { Fragment } from "@wordpress/element";
-import { PluginPostStatusInfo } from '@wordpress/edit-post';
+import { PluginPostStatusInfo } from '@wordpress/editor';
 import { useDispatch } from "@wordpress/data";
-import { 
+import {
     FormTokenField,
     ToggleControl,
-    Modal, 
+    Modal,
     Button } from '@wordpress/components';
 import { useEffect, useState } from '@wordpress/element';
 import apiFetch from '@wordpress/api-fetch';
@@ -23,10 +23,10 @@ import { html, SelectUtils } from "@ucd-lib/brand-theme-editor/lib/utils";
   const [ peoplePosts, setPeoplePosts ] = useState( [] );
   useEffect(() => {
     const path = `ucdlib-directory/people`;
-    apiFetch( {path} ).then( 
+    apiFetch( {path} ).then(
       ( r ) => {
         setPeoplePosts(r);
-      }, 
+      },
       (error) => {
         setPeoplePosts([]);
         console.warn(error);
@@ -93,7 +93,7 @@ import { html, SelectUtils } from "@ucd-lib/brand-theme-editor/lib/utils";
                 onChange=${ onAuthorChange }
               />
               ${hasAdditionalAuthors && html`
-                <${ToggleControl} 
+                <${ToggleControl}
                   label='Hide Original Author'
                   checked=${hideOgAuthor}
                   onChange=${() => {editPost({meta: {ucd_hide_og_author: !postMeta.ucd_hide_og_author}})}}
