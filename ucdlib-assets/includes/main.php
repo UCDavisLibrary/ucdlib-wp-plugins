@@ -82,6 +82,7 @@ class UCDLibPluginAssets {
 
     add_action( 'init', [$this, 'registerPluginCustomizations']);
     add_action( 'wp_enqueue_scripts', array($this, "enqueue_scripts") );
+    add_action( 'enqueue_block_assets', array($this, "enqueue_block_assets") );
     add_action( 'wp_enqueue_scripts', array($this, "deregister_public"), 1000);
     add_action( 'enqueue_block_editor_assets', array($this, "enqueue_block_editor_assets"), 3);
     add_action( 'enqueue_block_editor_assets', array($this, "deregister_block_editor_assets"), 1000);
@@ -96,6 +97,24 @@ class UCDLibPluginAssets {
     add_action( 'admin_enqueue_scripts', [$this, 'registerAdminScripts']);
     // add_filter( 'mce_css', array($this, 'enqueue_editor_css') );
 
+  }
+
+  public function enqueue_block_assets(){
+    if ( is_admin() ) {
+
+      $slug = 'ucdlib-editor-public';
+      $url = $this->config['isDevEnv'] ?
+        $this->config['uris']['js'] . "/dev/ucdlib.js" :
+        $this->config['uris']['js'] . "/dist/ucdlib.js";
+      wp_enqueue_script(
+        $slug,
+        $url,
+        array(),
+        $this->config['bundleVersion']
+      );
+
+      wp_deregister_script('ucd-editor-public');
+      }
   }
 
   public function updateEditorScriptVariable(){
