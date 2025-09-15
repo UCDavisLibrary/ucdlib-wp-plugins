@@ -6,8 +6,8 @@ export default ( props ) => {
   const { attributes, setAttributes } = props;
   const blockProps = useBlockProps();
 
-  const locations = SelectUtils.posts({per_page: '-1', orderby: 'title', order: 'asc'}, 'location');
-  
+  const locations = SelectUtils.posts({per_page: 100, orderby: 'title', order: 'asc'}, 'location');
+
   const locationOptions = locations
     .filter(l => l.meta.location_parent != 0)
     .map(l => {return {label: l.title.raw, value: l.id}});
@@ -38,7 +38,7 @@ export default ( props ) => {
     <${InspectorControls}>
       <${PanelBody} title="Widget Settings">
         <div className='hours-inspector-controls'>
-          <${SelectControl} 
+          <${SelectControl}
             options=${locationOptions}
             multiple=${true}
             value=${attributes.surfaceChildren}

@@ -40,7 +40,7 @@ const Edit = () => {
   const { editPost } = useDispatch( 'core/editor', watchedVars );
   const currentId = SelectUtils.editedPostAttribute('id');
 
-  const locations = SelectUtils.posts({per_page: '-1', orderby: 'title', order: 'asc'}, 'location');
+  const locations = SelectUtils.posts({per_page: 100, orderby: 'title', order: 'asc'}, 'location');
   const parentOptions = [
     { value: 0, label: 'Select a Location'},
     ...locations.map(l => {return {label: l.title.raw, value: l.id}}).filter(l => l.value != currentId)

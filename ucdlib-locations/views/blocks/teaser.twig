@@ -6,7 +6,7 @@
   {% set more_text = 'More' ~ label ~ ' Info' %}
   <div>
     <div class="u-space-mb">
-      <h3 class="vm-teaser__title"><a href="{{location.link}}">{{location.title}}</a></h3>
+      <div class="vm-teaser__title"><a href="{{location.link}}">{{location.title}}</a></div>
       {% set display_address =  location.meta('display_address') %}
       {% if display_address %}
         <div>

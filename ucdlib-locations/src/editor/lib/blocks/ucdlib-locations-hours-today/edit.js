@@ -9,7 +9,7 @@ export default ( props ) => {
   const currentPage = SelectUtils.editedPostAttribute('id');
   const locationId = attributes.locationId ? attributes.locationId : currentPage;
 
-  const locations = SelectUtils.posts({per_page: '-1', orderby: 'title', order: 'asc'}, 'location');
+  const locations = SelectUtils.posts({per_page: 100, orderby: 'title', order: 'asc'}, 'location');
   const locationOptions = [
     { value: 0, label: 'This Location'},
     ...locations.map(l => {return {label: l.title.raw, value: l.id}}).filter(l => l.value != currentPage)
@@ -49,26 +49,26 @@ export default ( props ) => {
     </div>
     <${InspectorControls}>
       <${PanelBody} title="Widget Settings">
-        <${SelectControl} 
+        <${SelectControl}
           options=${locationOptions}
           value=${currentPage == locationId ? 0 : locationId}
           label="Location"
           help="Will display hours for selected location"
           onChange=${locationId => setAttributes({locationId: parseInt(locationId)})}
         />
-        <${ToggleControl} 
+        <${ToggleControl}
           label='Hide Title'
           checked=${attributes.hideTitle}
           onChange=${() => setAttributes({hideTitle: !attributes.hideTitle})}
         />
         ${!attributes.hideTitle && html`
-          <${TextControl} 
+          <${TextControl}
             value=${attributes.widgetTitle}
             label="Title Text"
             onChange=${widgetTitle => setAttributes({widgetTitle})}
           />
         `}
-        <${ToggleControl} 
+        <${ToggleControl}
           label="Show Children"
           checked=${attributes.showChildren}
           onChange=${setShowChildren}
@@ -76,13 +76,13 @@ export default ( props ) => {
         />
         ${attributes.showChildren && html`
           <div>
-            <${ToggleControl} 
+            <${ToggleControl}
               label="Only Show Children"
               checked=${attributes.onlyShowChildren}
               onChange=${() => setAttributes({onlyShowChildren: !attributes.onlyShowChildren})}
               help="Will hide the hours of the parent location."
             />
-            <${TextControl} 
+            <${TextControl}
               label="Only Show Selected Children"
               value=${attributes.childFilter}
               onChange=${childFilter => setAttributes({childFilter})}
@@ -90,19 +90,19 @@ export default ( props ) => {
             />
           </div>
         `}
-        <${ToggleControl} 
+        <${ToggleControl}
           label="Hide 'See more' link"
           checked=${attributes.hideSeeMore}
           onChange=${() => setAttributes({hideSeeMore: !attributes.hideSeeMore})}
         />
         ${!attributes.hideSeeMore && html`
-          <${TextControl} 
+          <${TextControl}
             label="'See More' link text"
             value=${attributes.seeMoreText}
             onChange=${seeMoreText => setAttributes({seeMoreText})}
           />
         `}
-        <${ToggleControl} 
+        <${ToggleControl}
           label="Make Flush"
           checked=${attributes.flush}
           onChange=${() => setAttributes({flush: !attributes.flush})}
