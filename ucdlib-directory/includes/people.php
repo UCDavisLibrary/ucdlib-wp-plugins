@@ -71,6 +71,10 @@ class UCDLibPluginDirectoryPeople {
         ["lock" => ["move" => true, "remove" => true]]
       ],
       [
+        'ucdlib-directory/research-highlights',
+        ["lock" => ["move" => true, "remove" => true]]
+      ],
+      [
         'ucdlib-directory/tags',
         ["lock" => ["move" => true, "remove" => true]]
       ]
@@ -266,6 +270,12 @@ class UCDLibPluginDirectoryPeople {
       'type' => 'boolean',
     ) );
     register_post_meta( $slug, 'hide_expertise_areas', array(
+      'show_in_rest' => true,
+      'single' => true,
+      'default' => false,
+      'type' => 'boolean',
+    ) );
+    register_post_meta( $slug, 'hide_research_highlights', array(
       'show_in_rest' => true,
       'single' => true,
       'default' => false,
@@ -643,6 +653,19 @@ class UCDLibPluginDirectoryPerson extends UcdThemePost {
       $this->expertiseAreas = $this->terms(['taxonomy' => 'expertise-areas', 'orderby' => 'name', 'order' => 'ASC']);
     }
     return $this->expertiseAreas;
+  }
+
+  protected $researchHighlights;
+  public function researchHighlights(){
+    if( ! empty( $this->researchHighlights ) ) {
+      return $this->researchHighlights;
+    }
+    if( $this->meta('hide_research_highlights')) {
+      $this->researchHighlights = [];
+    } else {
+      $this->researchHighlights = $this->terms(['taxonomy' => 'research-highlights', 'orderby' => 'name', 'order' => 'ASC']);
+    }
+    return $this->researchHighlights;
   }
 
   protected $departmentIds;

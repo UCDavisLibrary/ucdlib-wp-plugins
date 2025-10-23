@@ -224,6 +224,7 @@ class UCDLibPluginDirectoryBlockTransformations {
     ];
     $tax_query = [];
     $expertiseAreas = [];
+    $researchHighlights = [];
     $hideDepartments = array_key_exists('hideDepartments', $attrs) && $attrs['hideDepartments'] != 'false';
     $meta_query = [
       [

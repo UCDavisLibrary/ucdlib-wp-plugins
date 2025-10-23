@@ -31,8 +31,87 @@ class UCDLibPluginDirectoryAPIPeople {
         ]
       ]
     ) );
+
+    register_rest_route($this->config['slug'], 'research-highlights/(?P<id>[^/]+)', array(
+      'methods' => 'GET',
+      'callback' => array($this, 'epcb_research_highlights'),
+      'permission_callback' => function (){return true;}
+    ) );
   }
 
+  public function epcb_research_highlights($request){
+    $expertId = $request['id'];
+    $out = [];
+
+    $url = 'https://experts.ucdavis.edu/api/expert/' . rawurlencode($expertId);
+    $response = wp_remote_get($url, ['timeout' => 20]);
+
+    if ( is_wp_error( $response ) ) {
+      return new WP_Error( 'rest_not_found', 'This research highlights does not exist.', array( 'status' => 404 ) );
+    }
+
+    $resp = json_decode(wp_remote_retrieve_body( $response ), true);
+
+    $graph = is_array($resp) && isset($resp['@graph'])
+      ? $resp['@graph']
+      : (isset($resp->{'@graph'}) ? $resp->{'@graph'} : []);
+
+    
+
+    $favourites = array_filter($graph, function($item) {
+      if (!is_array($item)) {
+        return false;
+      }
+
+      if (array_key_exists('ucdlib:favourite', $item) && $item['ucdlib:favourite'] === true) {
+        return true;
+      }     
+        
+      if (!isset($item['relatedBy']) || !is_array($item['relatedBy'])) {
+        return false;
+      }
+
+      $related = $item['relatedBy'];
+
+      if (is_array($related) && array_key_exists('ucdlib:favourite', $related)) {
+        return $related['ucdlib:favourite'] === true;
+      }
+
+      if (is_array($related) && array_is_list($related)) {
+        foreach ($related as $rel) {
+          if (is_array($rel) && array_key_exists('ucdlib:favourite', $rel)) {
+            if ($rel['ucdlib:favourite'] === true) {
+              return true;
+            }
+          }
+        }
+      }
+      return false;
+    });
+      
+
+    $out = array_values(array_map(function($item) {
+      return [
+        'id'             => $item['@id']             ?? '',
+        'type'           => $item['@type']           ?? [],
+        'volume'         => $item['volume']          ?? '',
+        'author'         => $item['author']          ?? [],
+        'issn'           => $item['ISSN']            ?? '',
+        'eissn'          => $item['eissn']           ?? '',
+        'abstract'       => $item['abstract']        ?? '',
+        'title'          => $item['title']           ?? '',
+        'url'            => $item['url']             ?? '',
+        'issuedDate'     => $item['issued']          ?? '',
+        'status'         => $item['status']          ?? '',
+        'containerTitle' => $item['container-title']  ?? '',
+        'publisher'      => $item['publisher']       ?? '',
+        'page'           => $item['page']            ?? '',
+      ];
+    }, $favourites));
+    
+    return rest_ensure_response( $out );
+  }
+  
   // endpoint for looking up a single person
   public function epcb_person( $request ) {
     $term = $request['term'];

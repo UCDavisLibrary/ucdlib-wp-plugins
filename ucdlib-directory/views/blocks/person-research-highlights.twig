@@ -1,0 +1,11 @@
+{%set p = siteContext.post %}
+{% if p.researchHighlights %}
+    <div>
+        <h2 class = "heading--auxiliary">Research Highlights</h2>
+        <p>
+        {% apply spaceless %}
+          <p>This individual's research highlights</p>
+        {% endapply %}
+        </p>
+    </div>
+{% endif %}
