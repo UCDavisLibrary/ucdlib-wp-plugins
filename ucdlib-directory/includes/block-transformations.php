@@ -22,6 +22,7 @@ class UCDLibPluginDirectoryBlockTransformations {
     return $attrs;
   }
 
+
   public static function getServiceResults( $attrs=[] ){
     $serviceQuery = [
       'post_type' => 'service',
@@ -96,6 +97,46 @@ class UCDLibPluginDirectoryBlockTransformations {
     $attrs['elasticSearch'] = true;
     return $attrs;
   }
+
+// public static function setResearchHighlights( $context ) {
+//   // Always return a clean array
+//   if ( !is_array($context) ) {
+//     $context = is_object($context) ? (array) $context : [];
+//   }
+
+//   // Ensure siteContext exists
+//   if ( !isset($context['siteContext']) || !is_array($context['siteContext']) ) {
+//     $context['siteContext'] = [];
+//   }
+
+//   // Get the current post ID
+//   $post_id = null;
+//   if ( isset($context['siteContext']['post']) && is_object($context['siteContext']['post']) ) {
+//     $post_id = $context['siteContext']['post']->ID ?? null;
+//   }
+//   if ( !$post_id ) $post_id = get_the_ID();
+
+//   // --- Read meta ---
+//   $raw_json = get_post_meta($post_id, 'research_highlights_formatted', true);
+//   $decoded = [];
+
+//   if ( is_string($raw_json) && $raw_json !== '' ) {
+//     $tmp = json_decode($raw_json, true);
+//     if ( json_last_error() === JSON_ERROR_NONE && is_array($tmp) ) {
+//       $decoded = $tmp;
+//     } else {
+//       error_log("RH decode error (" . json_last_error_msg() . ") for post {$post_id}");
+//     }
+//   }
+
+//   // Add to siteContext
+//   $context['siteContext']['items'] = $decoded;
+//   $context['siteContext']['hide_research_highlights'] =
+//     (bool) get_post_meta($post_id, 'hide_research_highlights', true);
+
+//   return $context;
+// }
+
 
   public static function getEsResults($attrs){
     if ( !array_key_exists('elasticSearch', $attrs) ||  !$attrs['elasticSearch'] ) return $attrs;

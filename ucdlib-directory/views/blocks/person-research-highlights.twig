@@ -1,11 +1,9 @@
-{%set p = siteContext.post %}
-{% if p.researchHighlights %}
-    <div>
-        <h2 class = "heading--auxiliary">Research Highlights</h2>
-        <p>
-        {% apply spaceless %}
-          <p>This individual's research highlights</p>
-        {% endapply %}
-        </p>
-    </div>
+{% set hide = attributes.hideResearchHighlights == 1 or attributes.hideResearchHighlights is same as(true) %}
+
+{% if not hide %}
+  <ucdlib-directory-research-highlights
+    expert-id="{{ attributes.expertId }}"
+    data-lazy="true"
+    class="u-space-mb">
+  </ucdlib-directory-research-highlights>
 {% endif %}

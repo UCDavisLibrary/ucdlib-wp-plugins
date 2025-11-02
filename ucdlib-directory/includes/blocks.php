@@ -75,6 +75,7 @@ class UCDLibPluginDirectoryBlocks extends UCDThemeBlockRenderer {
     ],
     'ucdlib-directory/research-highlights' => [
       'twig' => '@ucdlib-directory/blocks/person-research-highlights.twig'
+      // 'transform' => ['setResearchHighlights']
     ]
   ];
 

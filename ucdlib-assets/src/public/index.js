@@ -22,7 +22,7 @@ class DynamicScriptLoader {
       },
       {
         name: 'directory',
-        cssQuery: ['ucdlib-directory-filters', 'ucdlib-directory-sort', 'ucdlib-directory-service-filters']
+        cssQuery: ['ucdlib-directory-filters', 'ucdlib-directory-sort', 'ucdlib-directory-service-filters', 'ucdlib-directory-research-highlights']
       },
       {
         name: 'special',

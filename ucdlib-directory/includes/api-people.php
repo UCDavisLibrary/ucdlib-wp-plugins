@@ -52,11 +52,18 @@ class UCDLibPluginDirectoryAPIPeople {
 
     $resp = json_decode(wp_remote_retrieve_body( $response ), true);
 
-    $graph = is_array($resp) && isset($resp['@graph'])
+    $graph_unfiltered = is_array($resp) && isset($resp['@graph'])
       ? $resp['@graph']
       : (isset($resp->{'@graph'}) ? $resp->{'@graph'} : []);
 
-    
+    $graph = array_values(array_filter($graph_unfiltered , function ($item) {
+      $types = is_array($item['@type']) ? $item['@type'] : [$item['@type']];
+      foreach ($types as $t) {
+        if (is_string($t) && strcasecmp($t, 'Work') === 0) {
+          return true;
+        }
+      }
+    }));
 
     $favourites = array_filter($graph, function($item) {
       if (!is_array($item)) {
@@ -88,12 +95,18 @@ class UCDLibPluginDirectoryAPIPeople {
       }
       return false;
     });
+
+    if(count($favourites) === 0){
+      $favourites = array_slice($graph, 0, 3);
+    } else {
+      $favourites = array_slice($favourites, 0, 3);
+    }
       
 
     $out = array_values(array_map(function($item) {
       return [
         'id'             => $item['@id']             ?? '',
-        'type'           => $item['@type']           ?? [],
+        'type'           => $item['type']           ?? [],
         'volume'         => $item['volume']          ?? '',
         'author'         => $item['author']          ?? [],
         'issn'           => $item['ISSN']            ?? '',
@@ -104,12 +117,13 @@ class UCDLibPluginDirectoryAPIPeople {
         'issuedDate'     => $item['issued']          ?? '',
         'status'         => $item['status']          ?? '',
         'containerTitle' => $item['container-title']  ?? '',
+        'publication'    => $item['hasPublicationVenue']['name']     ??  '',
         'publisher'      => $item['publisher']       ?? '',
         'page'           => $item['page']            ?? '',
       ];
     }, $favourites));
     
-    return rest_ensure_response( $out );
+    return rest_ensure_response( $favourites );
   }
   
   // endpoint for looking up a single person

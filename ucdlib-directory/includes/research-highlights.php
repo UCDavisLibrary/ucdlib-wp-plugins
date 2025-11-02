@@ -5,20 +5,36 @@ class UCDDirectoryResearchHighlights {
   public $config;
   public $slug;
   public $postType;
+  
 
   public function __construct($config) {
     $this->config = $config;
     $this->slug = $this->config['taxSlugs']['research-highlights'];
     $this->postType = $this->config['postSlugs']['person'];
 
-    // run regiser function on init hook
-    // add_action( 'init', array($this, 'register') );
+    add_action( 'init', [$this, 'register_post_meta']);
 
-    // run add_to_menu on admin_menu hook
-    // add_action( 'admin_menu', array($this, 'add_to_menu'));
-
-    // run expand_parent_menu on parent_file hook
-    // add_action( 'parent_file',  array($this, 'expand_parent_menu') );
+    add_filter('ucdlib_directory_people_post_type', function($default){
+      return $this->config['postSlugs']['person']; 
+    });
+    add_filter('ucdlib_directory_research_highlights_block_name', function($default){
+      return 'ucdlib-directory/research-highlights';
+    });
+    add_filter('ucdlib_directory_research_highlights_meta_map', function($map){
+      return [
+        'hideResearchHighlights'=> 'hide_research_highlights'
+      ];
+    });
+    add_filter('ucdlib_directory_research_highlights_insert_after', function($default){
+      return 'ucdlib-directory/expertise-areas';
+    });
+    add_filter('ucdlib_directory_research_highlights_insert_position', function($default){
+      return 'end';
+    });
+    add_filter('ucdlib/directory/research_highlights_default_attrs', function($attrs, $post_id){
+      if (empty($attrs['expertId'])) $attrs['expertId'] = '';
+      return $attrs;
+    }, 10, 2);
   }
 
   // register taxonomy
@@ -59,6 +75,31 @@ class UCDDirectoryResearchHighlights {
       $args
     );
 
+  }
+
+
+  // register custom metadata for this post type
+  public function register_post_meta() {
+    // IMPORTANT: use the post type, not the taxonomy slug
+    $post_type = $this->postType; // e.g. 'person'
+
+    register_post_meta( $post_type, 'research_highlights_formatted', [
+      'show_in_rest' => true,
+      'single'       => true,
+      'type'         => 'string',     // we'll save JSON.stringify([...]) from edit.js
+      'default'      => '[]',         // make default consistent with sanitize
+      'auth_callback'=> function() {  // adjust if you need to restrict
+        return current_user_can('edit_posts');
+      },
+      'sanitize_callback' => function($v){
+          $s = (string)$v;
+          if ($s === '') return '[]';
+          json_decode($s, true);
+          return json_last_error() === JSON_ERROR_NONE ? $s : '[]';
+        }
+    ] );
+
+    UCDLibPluginDirectoryUtils::registerContactMeta( $post_type );
   }
 
   // add to plugin admin menu

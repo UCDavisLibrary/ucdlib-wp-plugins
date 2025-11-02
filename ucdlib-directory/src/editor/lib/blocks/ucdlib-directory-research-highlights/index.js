@@ -5,16 +5,23 @@ const name = 'ucdlib-directory/research-highlights';
 const settings = {
   api_version: 2,
   title: "Research Highlights",
-  parent: [],
   description: "Highlight your research works",
   icon: UCDIcons.renderPublic('fa-flask'),
-  category: 'ucdlib-directory-person',
+  category: 'ucdlib-directory',
   keywords: [ 'research', 'highlights', 'works' ],
   supports: {
     "html": false,
     "customClassName": false
   },
   attributes: {
+    expertId: {
+      "type": "string",
+      "default": ""
+    },
+    hideResearchHighlights: {
+      "type": "boolean",
+      "default": false
+    }
   },
   edit: Edit
 };

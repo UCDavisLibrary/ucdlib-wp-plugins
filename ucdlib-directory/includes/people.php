@@ -36,6 +36,7 @@ class UCDLibPluginDirectoryPeople {
     add_filter( 'ucd-theme/context/single', array($this, 'set_context') );
     add_filter( 'ucd-theme/templates/single', array($this, 'set_template'), 10, 2 );
 
+
   }
 
   // register 'person' post type
@@ -288,6 +289,12 @@ class UCDLibPluginDirectoryPeople {
       'type' => 'boolean',
     ) );
     register_post_meta( $slug, 'hide_contact', array(
+      'show_in_rest' => true,
+      'single' => true,
+      'default' => false,
+      'type' => 'boolean',
+    ) );
+    register_post_meta( $slug, 'has_research_highlights', array(
       'show_in_rest' => true,
       'single' => true,
       'default' => false,
