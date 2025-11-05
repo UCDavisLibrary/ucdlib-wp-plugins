@@ -4,7 +4,6 @@ require_once( __DIR__ . '/acf.php' );
 require_once( __DIR__ . '/additional-authors.php');
 require_once( __DIR__ . '/api-filters.php' );
 require_once( __DIR__ . '/areas-of-expertise.php' );
-require_once( __DIR__ . '/research-highlights.php' );
 require_once( __DIR__ . '/blocks.php' );
 require_once( __DIR__ . '/departments.php' );
 require_once( __DIR__ . '/directory-tags.php' );
@@ -45,7 +44,6 @@ class UCDLibPluginDirectory {
     $this->serviceTypes = new UCDLibPluginDirectoryServiceTypes( $this->config );
     $this->services = new UCDLibPluginDirectoryServices( $this->config );
     $this->areasOfExpertise = new UCDLibPluginDirectoryAreasOfExpertise( $this->config );
-    $this->researchHighlights = new UCDDirectoryResearchHighlights( $this->config );
 
     add_action( 'admin_menu', array($this, 'add_admin_menu'));
     add_action( 'admin_head', array($this, 'admin_head') );
@@ -90,7 +88,6 @@ class UCDLibPluginDirectory {
         'library' => 'library',
         'directory' => 'directory-tag',
         'expertise' => 'expertise-areas',
-        'research-highlights' => 'research-highlights'
       ],
       'postSlugs' => [
         'service' => $service,

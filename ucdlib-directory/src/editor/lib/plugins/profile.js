@@ -18,10 +18,10 @@ const Edit = () => {
   const hideLibraries = meta.hide_libraries ? true : false;
   const hideDirectoryTags = meta.hide_tags ? true : false;
   const hideExpertiseAreas = meta.hide_expertise_areas ? true : false;
-  const hideResearchHiglights = meta.hide_research_highlights ? true : false;
+  const hideResearchHighlights = meta.hide_research_highlights ? true : false;
   const hideBio = meta.hide_bio ? true : false;
   const pastEmployee = meta.pastEmployee | false;
-  const { editPost } = useDispatch( 'core/editor', [ hidePronouns, hideLibraries, hideDirectoryTags, hideExpertiseAreas, hideResearchHiglights, hideBio, pastEmployee ] );
+  const { editPost } = useDispatch( 'core/editor', [ hidePronouns, hideLibraries, hideDirectoryTags, hideExpertiseAreas, hideResearchHighlights, hideBio, pastEmployee ] );
 
 
   return html`
@@ -63,8 +63,8 @@ const Edit = () => {
         />
         <${ToggleControl}
           label="Hide Research Highlights"
-          checked=${hideResearchHiglights}
-          onChange=${() => editPost({meta: { hide_research_highlights: !hideResearchHiglights}})}
+          checked=${hideResearchHighlights}
+          onChange=${() => editPost({meta: { hide_research_highlights: !hideResearchHighlights}})}
         />
       </${PluginDocumentSettingPanel}>
 

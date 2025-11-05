@@ -1,119 +1,65 @@
 import { html, SelectUtils } from "@ucd-lib/brand-theme-editor/lib/utils";
-import { useBlockProps} from '@wordpress/block-editor';
-import { PluginDocumentSettingPanel } from '@wordpress/editor';
-import { PanelBody, TextControl, Button, Notice, Modal } from '@wordpress/components';
-import { Fragment, useState, useCallback, useEffect } from '@wordpress/element';
-import apiFetch from '@wordpress/api-fetch';
+import { useBlockProps, InspectorControls } from '@wordpress/block-editor';
+import { PanelBody, TextControl, Button } from '@wordpress/components';
+import { Fragment, useState } from '@wordpress/element';
+import { useDispatch } from '@wordpress/data';
 
-export default ( props ) => {
-  const { attributes, setAttributes } = props; 
-
+export default () => {
   const blockProps = useBlockProps();
-  const [ isOpen, setOpen ] = useState( false );
-  const openModal = () => setOpen( true );
-  const closeModal = () => setOpen( false );
-  const [query, setQuery] = useState('');
-  const [error, setError] = useState('');
-  const [searchedId, setSearchedId] = useState('');
+  const { editPost } = useDispatch('core/editor');
 
-  const meta = SelectUtils.editedPostAttribute('meta');
-  const hideResearchHighlights = meta.hide_research_highlights ? meta.hide_research_highlights : false;
+  const rawMeta = SelectUtils.editedPostAttribute('meta') || {};
 
-  useEffect(() => {
-    setAttributes({ hideResearchHighlights });
-  }, [hideResearchHighlights, setAttributes]);
+  const expertId = rawMeta.aggie_experts_id || '';
+  const hideResearchHighlights = !!rawMeta.hide_research_highlights;
+  
+  const [query, setQuery] = useState(expertId);
 
+  const saveExpertId = async () => {
+    const q = (query || '').trim();
+    await editPost({ meta: { ...rawMeta, aggie_experts_id: q } });
+  };
 
-
-  useEffect(() => {
-    if (query.trim() === '') {
-      setAttributes({ expertId: '' });
-      setSearchedId('');
-      setError('');
-    }
-  }, [query, setAttributes]);
-
-  const fetchHighlights = useCallback(async () => {
-    const q = query.trim();
-
-    if (!q) {
-      setAttributes({ expertId: '' });
-      setSearchedId('');
-      setError('');
-      return;
-    }
-
-    try {
-      setError('');
-      const path = `ucdlib-directory/research-highlights/${encodeURIComponent(query)}`;
-      const data = await apiFetch({ path });
-      if (Array.isArray(data) && data.length > 0) {
-        setAttributes({ expertId: q });
-        setSearchedId(q);
-      } else {
-        setAttributes({ expertId: '' });
-        setSearchedId('');
-        setError(`No results found for Expert ID: ${q}`);
-      }
-    } catch (err) {
-        setAttributes({ expertId: '' });
-        setSearchedId('');
-        setError(`API request failed${err?.message ? `: ${err.message}` : ''}`);
-    }
-  }, [query, setAttributes]);
-
-  const clearAll = useCallback(() => {
+  const clearExpertId = async () => {
     setQuery('');
-    setAttributes({ expertId: '' });
-    setSearchedId('');
-    setError('');
-  }, [setAttributes]);
+    await editPost({ meta: { ...rawMeta, aggie_experts_id: '' } });
+  };
 
-    return html`
+
+  return html`
     <${Fragment}>
-            <${PluginDocumentSettingPanel}
-                name="ucdlib-directory-research-highlights"
-                className="ucdlib-directory-research-highlights"
-                icon=${html`<ucdlib-icon style=${{marginLeft: '8px', width: '18px', minWidth: '18px'}} icon="ucd-public:fa-flask"></ucdlib-icon>`}
-                title="Research Highlights">
-                <${PanelBody} initialOpen=${ true }>
-                    <${TextControl}
-                        value=${ query }
-                        label="Expert Record ID"
-                        onChange=${ ( value ) => setQuery( value ) }
-                        placeholder="Search Expert ID..."
-                    />
-             
-                    <${Button}
-                        variant="primary"
-                        onClick=${ fetchHighlights }
-                        style=${{ marginBottom: '.5em', marginTop: '.5em' }}
-                        >Search Expert ID
-                    <//>
-                    <${Button} variant="secondary" onClick=${clearAll} isDestructive=${false}>
-                      Clear
-                    <//>
+      <${InspectorControls}>
+        <${PanelBody} title="Research Highlights" initialOpen=${true}>
+          <${TextControl}
+            value=${query}
+            label="Expert Record ID"
+            onChange=${setQuery}
+            placeholder="Enter Expert ID..."
+          />
 
-                    ${ searchedId !== '' && html`<p>Showing results for Expert ID: <strong>${ searchedId }</strong></p>`}
-                    ${ error && html`<p>No Research Highlights found.</p>` }
-                <//>
-        </${Fragment}>
-  <div style=${{ marginTop: '1.5rem' }}>
-  ${!hideResearchHighlights && html`
-    <h2 className="heading--auxiliary">Research Highlights</h2>
-    <div onClick=${openModal}>   
-      <div ...${ blockProps }>
-        <div className='alert'>
-          ${searchedId? html`Aggie Experts Research Highlights for <strong>${searchedId}</strong>`:html`Please enter an Expert ID to load Research Highlights.`}
-        </div>
+          <div style=${{ display: 'flex', gap: '8px', marginTop: '.5em', marginBottom: '.5em' }}>
+            <${Button} variant="primary" onClick=${saveExpertId}>Save Expert ID<//>
+            <${Button} variant="secondary" onClick=${clearExpertId}>Clear<//>
+          </div>
+
+          ${ expertId && html`<p>Saved Expert ID (meta): <strong>${expertId}</strong></p>` }
+        <//>
+      <//>
+
+      <div style=${{ marginTop: '1.5rem' }}>
+        ${ !hideResearchHighlights && html`
+          <h2 className="heading--auxiliary">Research Highlights</h2>
+          <div>
+            <div ...${blockProps}>
+              <div className='alert'>
+                ${ expertId
+                  ? html`Aggie Experts Research Highlights for <strong>${expertId}</strong>`
+                  : html`Please enter an Expert ID to load Research Highlights.` }
+              </div>
+            </div>
+          </div>
+        `}
       </div>
-      ${isOpen && html`
-        <${Modal} title="Editing Your Research Highlights" onRequestClose=${ closeModal }>
-          <div>To add or edit your Research Highlights, please update your Expert Record in the Aggie Experts system.</div>
-        </${Modal}>
-      `}
-    </div>
-    `}
-  </div>
-    `
-}
+    <//>
+  `;
+};

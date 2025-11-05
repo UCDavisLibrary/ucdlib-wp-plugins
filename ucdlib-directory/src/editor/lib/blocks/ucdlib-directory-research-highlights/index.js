@@ -13,16 +13,7 @@ const settings = {
     "html": false,
     "customClassName": false
   },
-  attributes: {
-    expertId: {
-      "type": "string",
-      "default": ""
-    },
-    hideResearchHighlights: {
-      "type": "boolean",
-      "default": false
-    }
-  },
+  attributes: {},
   edit: Edit
 };
 
