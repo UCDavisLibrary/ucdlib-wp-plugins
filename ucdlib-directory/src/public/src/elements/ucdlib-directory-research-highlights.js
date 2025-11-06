@@ -1,11 +1,14 @@
 import { LitElement } from 'lit';
 import { render } from './ucdlib-directory-research-highlights.tpl.js';
+import { Mixin, LitCorkUtils } from '@ucd-lib/cork-app-utils';
+import { MainDomElement } from "@ucd-lib/theme-elements/utils/mixins/main-dom-element.js";
 
 /**  
   @classdesc Element to display research highlights for a 
   directory profile 
 */
-export default class UcdlibDirectoryResearchHighlights extends LitElement {
+export default class UcdlibDirectoryResearchHighlights extends Mixin(LitElement) 
+  .with(LitCorkUtils, MainDomElement) {
   static get properties() {
     return {
       expertId: { type: String, attribute: 'expert-id' },
@@ -63,10 +66,11 @@ export default class UcdlibDirectoryResearchHighlights extends LitElement {
         const data = JSON.parse(raw); 
         this.res = this.formatResults(data);
       } else {
-        console.warn('Research highlight requested does not exist:', response.statusText);
+        this.error = `Research highlight ${this.expertId} requested does not exist`;
+        console.warn(this.error);
       }
     } catch (error) {
-      this.error = 'Network error while fetching research highlights. Please try again later.';
+      this.error = 'Error while fetching results for Research Highlights.';
       this._loadedOnce = false; 
       console.warn(this.error);
     } finally {

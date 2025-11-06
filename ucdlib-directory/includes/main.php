@@ -27,7 +27,6 @@ class UCDLibPluginDirectory {
   public $serviceTypes;
   public $services;
   public $areasOfExpertise;
-  public $researchHighlights;
 
   public function __construct(){
     $this->slug = "ucdlib-directory";
@@ -45,6 +44,7 @@ class UCDLibPluginDirectory {
     $this->services = new UCDLibPluginDirectoryServices( $this->config );
     $this->areasOfExpertise = new UCDLibPluginDirectoryAreasOfExpertise( $this->config );
 
+    $GLOBALS['UCDLibPluginDirectory'] = $this;
     add_action( 'admin_menu', array($this, 'add_admin_menu'));
     add_action( 'admin_head', array($this, 'admin_head') );
     add_filter( 'timber/locations', array($this, 'add_timber_locations') );

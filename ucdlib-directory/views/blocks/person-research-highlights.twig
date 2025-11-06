@@ -1,9 +1,9 @@
-{% set post_id = fn('get_the_ID') %}
-{% if post_id and fn('get_post_type') == 'person' %}
-  {% set expert_id = fn('get_post_meta', post_id, 'aggie_experts_id', true) %}
-    <ucdlib-directory-research-highlights
-      expert-id="{{ expert_id }}"
+{% set p = siteContext.post %}
+{% set hide = p.meta.hide_research_highlights == 1 or p.meta.hide_research_highlights is same as(true) %}
+{% if p.aggieExpertsId and not hide %}
+  <ucdlib-directory-research-highlights
+      expert-id="{{ p.aggieExpertsId }}"
       data-lazy="true"
       class="u-space-mb">
-    </ucdlib-directory-research-highlights>
+  </ucdlib-directory-research-highlights>
 {% endif %}

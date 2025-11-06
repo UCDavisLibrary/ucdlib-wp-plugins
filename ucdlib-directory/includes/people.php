@@ -302,14 +302,29 @@ class UCDLibPluginDirectoryPeople {
     ) );
   }
   
-  // ensure that highlights exists
-  public function ensureResearchHighlightBlockExists() {
+  // ensure block exists
+  public function ensureBlockExists($block_name, $dry_run=false, $inCLI=false, $insert_after_block='') {
     $post_type = $this->slug; 
-    echo "\n== Directory People: Ensure Research Highlights block ==";
+    if($inCLI) echo "\n== Directory People: Ensure {$block_name} block ==";
+
+    if (empty($block_name)) {
+      if($inCLI) echo "\n Block Name is empty, please give a valid blockname'.";
+      else {
+          $blockNameMessage = wp_json_encode("Block Name is empty, please give a valid blockname");   
+          echo "<script>console.warn({$blockNameMessage});</script>";
+      }
+      return;
+    }
 
     if (empty($post_type)) {
-      echo "\n ERROR: people post type slug is empty.\n";
-      exit(1);
+      if($inCLI) {
+        echo "\n ERROR: people post type slug is empty.\n";
+      }
+      else {
+          $postWarnMessage = wp_json_encode("{$post_type} slug is empty.");   
+          echo "<script>console.warn({$postWarnMessage});</script>";
+      }
+      return;
     }
 
     $q = new WP_Query([
@@ -320,7 +335,7 @@ class UCDLibPluginDirectoryPeople {
       'no_found_rows'  => true,
     ]);
 
-    echo "\n Found {$q->post_count} {$post_type} posts.";
+    if($inCLI) echo "\n Found {$q->post_count} {$post_type} posts.";
 
     // Filter out any invalid/empty IDs so we only process real posts
     $valid_ids = array_filter($q->posts, function($id) {
@@ -331,74 +346,32 @@ class UCDLibPluginDirectoryPeople {
     $q->posts = array_values($valid_ids);
     $q->post_count = count($q->posts);
 
-    echo "\n Processing {$q->post_count} valid {$post_type} posts.";
+    if($inCLI) echo "\n Processing {$q->post_count} valid {$post_type} posts.";
 
     if ($q->post_count === 0) {
-        echo "\n No valid posts found. Nothing to do.\n";
-        exit(0);
+        if($inCLI) {
+          echo "\n No valid posts found. Nothing to do.\n";
+        } else {
+          $invalidPostMessage = wp_json_encode("{$post_type} has no valid posts found. Nothing to do.");
+          echo "<script>console.warn({$invalidPostMessage});</script>";
+        }
+        return;
     }
+
+    $this->run_add_block($q, $block_name, $dry_run, $inCLI, $insert_after_block);
     
-    return $q;
-
   }
 
-  // convert various truthy values to boolean true
-  public function rh_bool($val){
-    return ($val === true || $val === 1 || $val === '1' || $val === 'true' || $val === 'on');
-  }
-
-  // build minimal block structure
-  public function rh_build_block($block_name, $attrs = []) {
-    $attrs_json = wp_json_encode((object)$attrs);
-    $block_comment = '<!-- wp:' . $block_name . ' ' . $attrs_json . ' /-->';
-
-    return [
-      'blockName'   => $block_name,
-      'attrs'       => $attrs,
-      'innerBlocks' => [],
-      'innerHTML'   => $block_comment,
-      'innerContent'=> [ $block_comment ],
-    ];
-  }
-
-  // return index of block in array, or -1 if not found
-  public function rh_find_block_index(array $blocks, $block_name){
-    foreach ($blocks as $i => $blk) {
-      if (!empty($blk['blockName']) && $blk['blockName'] === $block_name) return $i;
-    }
-    return -1;
-  }
-
-  // Helper function to extract attributes from post meta
-  public function rh_attr_from_meta($post_id, $meta_map){
-    $attrs = [];
-
-    // expertId (string) stored in attribute
-    if (!empty($meta_map['expertId'])) {
-      $eid = get_post_meta($post_id, $meta_map['expertId'], true);
-      if (is_string($eid) && $eid !== '') $attrs['expertId'] = $eid;
-    }
-
-    // hideResearchHighlights stored in meta (boolean)
-    if (!empty($meta_map['hideResearchHighlights'])) {
-      $hide = get_post_meta($post_id, $meta_map['hideResearchHighlights'], true);
-      $attrs['hideResearchHighlights'] = $this->rh_bool($hide);
-    }
-
-    // allow filtering of default attributes
-    $attrs = apply_filters('ucdlib_directory_research_highlights_default_attrs', $attrs, $post_id);
-
-    return $attrs;
-  }
-
-  public function run_add_block($q, $block_name, $insert_position, $insert_after_block, $meta_map, $dry_run){
+  public function run_add_block($q, $block_name, $dry_run=true, $inCLI=false, $insert_after_block=''){
+    
+    $insert_position = 'end';
     $added = 0; $skipped = 0; $errors = 0;
 
-    if($q->have_posts()) {
-      echo "\n Scanning for missing '{$block_name}' blocks...";
+    if(!empty($q->posts)) {
+      if($inCLI) echo "\n Scanning for missing '{$block_name}' blocks...";
       $target = $insert_after_block ? "after '{$insert_after_block}'" : $insert_position;
-      echo " Insertion preference: {$target}\n";
-      echo " Scanning for missing '{$block_name}' blocks...\n";
+      if($inCLI) echo " Insertion preference: {$target}\n";
+      if($inCLI) echo " Scanning for missing '{$block_name}' blocks...\n";
 
 
       foreach($q->posts as $post_id){
@@ -406,7 +379,7 @@ class UCDLibPluginDirectoryPeople {
           // load post
           $post = get_post($post_id);
           if(!$post){
-              echo "\n  ERROR: could not load post ID {$post_id}.";
+              if($inCLI) echo "\n  ERROR: could not load post ID {$post_id}.";
               $errors++;
               continue;
           }
@@ -417,19 +390,35 @@ class UCDLibPluginDirectoryPeople {
         
 
           // check if research highlights block exists
-          $idx = $this->rh_find_block_index($blocks, $block_name);
+          $idx = -1;
+
+          foreach ($blocks as $i => $blk) {
+            if (!empty($blk['blockName']) && $blk['blockName'] === $block_name){
+              $idx = $i;
+            }
+          }
+
           if ( $idx >= 0 ) {
               // block exists
-              echo "\n Block already exists for post ID {$post_id} titled '{$title}'";
+              if($inCLI) echo "\n Block already exists for post ID {$post_id} titled '{$title}'";
               $skipped++;
               continue;
           }
 
-          // build attributes from post meta
-          $attrs = $this->rh_attr_from_meta($post_id, $meta_map);
+          $attrs = [];
 
-          // find insert position
-          $new_block = $this->rh_build_block( $block_name, $attrs );
+          // Creating new Block
+          $attrs_json = wp_json_encode((object)$attrs);
+
+          $block_comment = '<!-- wp:' . $block_name . ' ' . $attrs_json . ' /-->';
+
+          $new_block = [
+            'blockName'   => $block_name,
+            'attrs'       => $attrs,
+            'innerBlocks' => [],
+            'innerHTML'   => $block_comment,
+            'innerContent'=> [ $block_comment ],
+          ];
 
           $inserted = false;
           // insert after specified block
@@ -454,7 +443,7 @@ class UCDLibPluginDirectoryPeople {
           }
 
           if($dry_run){
-              echo "\n DRY RUN: would insert block into post ID {$post_id} titled '{$title}'.";
+              if($inCLI) echo "\n DRY RUN: would insert block into post ID {$post_id} titled '{$title}'.";
               continue;
           }
 
@@ -467,19 +456,24 @@ class UCDLibPluginDirectoryPeople {
 
           if (is_wp_error($res)) {// error
               $errors++;
-              echo " ERROR updating #{$post_id}: " . $res->get_error_message() . "\n";
+              if($inCLI) echo " ERROR updating #{$post_id}: " . $res->get_error_message() . "\n";
           } else { // success
-              echo " Added block to post ID {$post_id} titled '{$title}'.\n";
+              if($inCLI) echo " Added block to post ID {$post_id} titled '{$title}'.\n";
               $added++;
           } // end is_wp_error
 
       } // end foreach posts
     } // end if have posts
 
-    echo " Done.\n";
-    echo " Added:   {$added}\n";
-    echo " Skipped: {$skipped}\n";
-    echo " Errors:  {$errors}\n";
+    if($inCLI) {
+      echo " Done.\n";
+      echo " Added:   {$added}\n";
+      echo " Skipped: {$skipped}\n";
+      echo " Errors:  {$errors}\n";
+    }else if (!$inCLI && $errors) {
+      $errorMessage = wp_json_encode("Errors: {$errors} posts had trouble adding {$block_name}.");
+      echo "<script>console.warn({$errorMessage});</script>";
+    }
   }
 
   // get link to current user's editor profile
@@ -841,7 +835,7 @@ class UCDLibPluginDirectoryPerson extends UcdThemePost {
     return $this->expertiseAreas;
   }
 
-  // protected $aggieExpertsId;
+  protected $aggieExpertsId;
   public function aggieExpertsId(){
     if ( ! empty( $this->aggieExpertsId ) ) {
       return $this->aggieExpertsId;
