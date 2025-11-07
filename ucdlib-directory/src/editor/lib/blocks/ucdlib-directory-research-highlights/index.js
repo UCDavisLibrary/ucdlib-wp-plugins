@@ -5,6 +5,7 @@ const name = 'ucdlib-directory/research-highlights';
 const settings = {
   api_version: 2,
   title: "Research Highlights",
+  parent: [],
   description: "Highlight your research works",
   icon: UCDIcons.renderPublic('fa-flask'),
   category: 'ucdlib-directory',

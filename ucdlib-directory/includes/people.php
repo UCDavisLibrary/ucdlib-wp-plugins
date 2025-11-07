@@ -301,18 +301,25 @@ class UCDLibPluginDirectoryPeople {
       'type' => 'boolean',
     ) );
   }
+
+  public function getResearchHighlightDefaults() {
+    return [
+      'block_name' => 'ucdlib-directory/research-highlights',
+      'insert_after_block' => 'ucdlib-directory/expertise-areas'
+    ];
+  }
   
   // ensure block exists
-  public function ensureBlockExists($block_name, $dry_run=false, $inCLI=false, $insert_after_block='') {
+  public function ensureBlockExists($dry_run=false, $inCLI=false, $insert_after_block='', $block_name='') {
+    $defaults = $this->getResearchHighlightDefaults();
+    $block_name = $block_name ? $block_name : $defaults['block_name'];
+    $insert_after_block = $insert_after_block ? $insert_after_block : $defaults['insert_after_block'];
+    
     $post_type = $this->slug; 
     if($inCLI) echo "\n== Directory People: Ensure {$block_name} block ==";
 
     if (empty($block_name)) {
       if($inCLI) echo "\n Block Name is empty, please give a valid blockname'.";
-      else {
-          $blockNameMessage = wp_json_encode("Block Name is empty, please give a valid blockname");   
-          echo "<script>console.warn({$blockNameMessage});</script>";
-      }
       return;
     }
 
@@ -320,16 +327,12 @@ class UCDLibPluginDirectoryPeople {
       if($inCLI) {
         echo "\n ERROR: people post type slug is empty.\n";
       }
-      else {
-          $postWarnMessage = wp_json_encode("{$post_type} slug is empty.");   
-          echo "<script>console.warn({$postWarnMessage});</script>";
-      }
       return;
     }
 
     $q = new WP_Query([
       'post_type'      => $post_type,
-      'post_status'    => 'any',
+      'post_status'    => 'publish',
       'posts_per_page' => -1,
       'fields'         => 'ids',
       'no_found_rows'  => true,
@@ -337,13 +340,6 @@ class UCDLibPluginDirectoryPeople {
 
     if($inCLI) echo "\n Found {$q->post_count} {$post_type} posts.";
 
-    // Filter out any invalid/empty IDs so we only process real posts
-    $valid_ids = array_filter($q->posts, function($id) {
-        // remove empty/zero values and ensure the post exists
-        return !empty($id) && get_post_status($id);
-    });
-
-    $q->posts = array_values($valid_ids);
     $q->post_count = count($q->posts);
 
     if($inCLI) echo "\n Processing {$q->post_count} valid {$post_type} posts.";
@@ -351,9 +347,6 @@ class UCDLibPluginDirectoryPeople {
     if ($q->post_count === 0) {
         if($inCLI) {
           echo "\n No valid posts found. Nothing to do.\n";
-        } else {
-          $invalidPostMessage = wp_json_encode("{$post_type} has no valid posts found. Nothing to do.");
-          echo "<script>console.warn({$invalidPostMessage});</script>";
         }
         return;
     }
@@ -375,7 +368,7 @@ class UCDLibPluginDirectoryPeople {
 
 
       foreach($q->posts as $post_id){
-        $title = get_the_title($post_id);
+
           // load post
           $post = get_post($post_id);
           if(!$post){
@@ -383,6 +376,8 @@ class UCDLibPluginDirectoryPeople {
               $errors++;
               continue;
           }
+
+          $title = $post->post_title;
 
           // parse blocks
           $blocks = parse_blocks( $post->post_content );
@@ -470,9 +465,6 @@ class UCDLibPluginDirectoryPeople {
       echo " Added:   {$added}\n";
       echo " Skipped: {$skipped}\n";
       echo " Errors:  {$errors}\n";
-    }else if (!$inCLI && $errors) {
-      $errorMessage = wp_json_encode("Errors: {$errors} posts had trouble adding {$block_name}.");
-      echo "<script>console.warn({$errorMessage});</script>";
     }
   }
 

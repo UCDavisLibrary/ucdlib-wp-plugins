@@ -15,11 +15,11 @@ export default () => {
   
   const saveExpertId = async (query) => {
     const q = (query || '').trim();
-    await editPost({ meta: { ...rawMeta, aggie_experts_id: q } });
+    await editPost({ meta: { aggie_experts_id: q } });
   };
 
   const clearExpertId = async () => {
-    await editPost({ meta: { ...rawMeta, aggie_experts_id: '' } });
+    await editPost({ meta: { aggie_experts_id: '' } });
   };
 
 
@@ -38,7 +38,6 @@ export default () => {
             <${Button} variant="secondary" onClick=${clearExpertId}>Clear<//>
           </div>
 
-          ${ expertId && html`<p>Saved Expert ID (meta): <strong>${expertId}</strong></p>` }
         <//>
       <//>
 

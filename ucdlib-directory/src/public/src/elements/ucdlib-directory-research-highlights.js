@@ -1,6 +1,6 @@
 import { LitElement } from 'lit';
 import { render } from './ucdlib-directory-research-highlights.tpl.js';
-import { Mixin, LitCorkUtils } from '@ucd-lib/cork-app-utils';
+import { Mixin } from '@ucd-lib/cork-app-utils';
 import { MainDomElement } from "@ucd-lib/theme-elements/utils/mixins/main-dom-element.js";
 
 /**  
@@ -8,7 +8,7 @@ import { MainDomElement } from "@ucd-lib/theme-elements/utils/mixins/main-dom-el
   directory profile 
 */
 export default class UcdlibDirectoryResearchHighlights extends Mixin(LitElement) 
-  .with(LitCorkUtils, MainDomElement) {
+  .with(MainDomElement) {
   static get properties() {
     return {
       expertId: { type: String, attribute: 'expert-id' },
@@ -26,10 +26,6 @@ export default class UcdlibDirectoryResearchHighlights extends Mixin(LitElement)
     this.loading = false;
     this.error = '';
     this._loadedOnce = false;
-  }
-
-  createRenderRoot() {
-    return this;
   }
 
 
@@ -57,18 +53,47 @@ export default class UcdlibDirectoryResearchHighlights extends Mixin(LitElement)
     this.error = '';
     this.res = [];
 
+
+
     try {
-      let url = 'https://experts.ucdavis.edu/api/expert/' + this.expertId;
-      const response = await fetch(url, { headers: { Accept: 'application/json' }});
+      const url = `https://experts.ucdavis.edu/api/expert/${this.expertId}`;
+
+      const body = {
+        "is-visible": true,
+        "expert": { "include": false },
+        "grants": { "include": false },
+        "works": {
+          "include": true,
+          "page": 1,
+          "size": 3,
+          "includeMisformatted": false,
+          "favouriteWorksFirst": true
+        }
+      };
+      const response = await fetch(url, {
+        method: 'POST', // POST is used only to send filter data — not to add/modify anything
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(body)
+      });
 
       if (response.ok) {
         const raw = await response.text();
         const data = JSON.parse(raw); 
         this.res = this.formatResults(data);
       } else {
-        this.error = `Research highlight ${this.expertId} requested does not exist`;
+        if (response.status === 404) {
+          this.error = `Expert ${this.expertId} not found (404).`;
+        } else if (response.status === 500) {
+          this.error = `Server error while fetching expert ${this.expertId}.`;
+        } else {
+          this.error = `Failed with status ${response.status}: ${response.statusText}`;
+        }
         console.warn(this.error);
       }
+
     } catch (error) {
       this.error = 'Error while fetching results for Research Highlights.';
       this._loadedOnce = false; 
@@ -126,47 +151,17 @@ export default class UcdlibDirectoryResearchHighlights extends Mixin(LitElement)
       return types.some(t => typeof t === 'string' && t.toLowerCase() === 'work');
     });
 
-    // Filter: keep only "favourite" works
-    let favourites = graph.filter(item => {
-      if (!item || typeof item !== 'object') return false;
-
-      // direct favourite
-      if (item['ucdlib:favourite'] === true) return true;
-
-      const related = item.relatedBy;
-      if (!Array.isArray(related) && typeof related !== 'object') return false;
-
-      // single object with ucdlib:favourite
-      if (related && related['ucdlib:favourite'] === true) return true;
-
-      // array of relations
-      if (Array.isArray(related)) {
-        for (const rel of related) {
-          if (rel && rel['ucdlib:favourite'] === true) return true;
-        }
-      }
-
-      return false;
-    });
-
-    // default to first 3 works if no favourites
-    if (favourites.length === 0) {
-      favourites = graph.slice(0, 3);
-    } else {
-      favourites = favourites.slice(0, 3);
-    }
-
-    const out = (favourites || []).map(i => ({
+    const out = (graph || []).map(i => ({
       id: i?.['@id'] || '',
       title: i?.title || '(untitled)',
-      url: i?.url || '',
+      url: i?.url || `https://experts.ucdavis.edu/work/${i?.['@id']}`,
       status: i?.status || '',
       publication: i?.hasPublicationVenue?.name || i?.publication || i?.['container-title'] || '',
       volume: i?.volume || '',
       page: i?.page || '',
       type: this.formatType(i?.type),
       issuedDate: this.formatDate(i?.issued || i?.issuedDate || ''),
-      author: this.formatAuthors(i?.author),
+      author: i?.author ? this.formatAuthors(i?.author): '',
       abstract: i?.abstract || ''
     }));
 
@@ -202,7 +197,7 @@ export default class UcdlibDirectoryResearchHighlights extends Mixin(LitElement)
     * @returns {String} Formatted date string
   */
   formatDate(dateStr) {
-    if (!dateStr) return '';
+    if (!dateStr || dateStr == '') return '';
     return dateStr.split('-')[0] + ' • ';
   }
 

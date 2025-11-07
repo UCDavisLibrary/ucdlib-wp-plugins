@@ -6,16 +6,16 @@ export function render() {
 
     ${this.loading
       ? html`<p><em>Loading research highlights...</em></p>`
-      : this.error ? html`<p class="alert" style="color: var(--ucd-theme-alert, red);"> ${this.error}</p>`
+      : this.error ? html`<p class="research-highlight-alert"> ${this.error}</p>`
       : this.res?.length ? html`
-        <ul style="margin-bottom:1.2rem;" class="list--bordered">
+        <ul class="list--bordered">
             ${this.res.map((r, i) => html`
             <li>
                 ${r?.url
-                ? html`<a style="font-weight: bold;font-size: 1.188rem;text-decoration: none;" href="${r.url}">${r.title || '(untitled)'}</a>`
+                ? html`<a class="research-highlight-url" href="${r.url}">${r.title || '(untitled)'}</a>`
                 : html`<span>${r.title || '(untitled)'}</span>`}
                 <br />
-                <span style="font-size: 1rem;">
+                <span class="research-highlight-info">
                 ${r?.type ?? ''} 
                 ${r?.issuedDate ?? ''} 
                 ${r?.author ?? ''} 
@@ -26,7 +26,8 @@ export function render() {
             </li>
             `)}
         </ul>
-        <a style="margin-left:.75rem;" href="${this.expertId ? `https://experts.ucdavis.edu/expert/${this.expertId}` : '#'}">More research</a>
+        <br />
+        <a class="research-highlight-more" href="${this.expertId ? `https://experts.ucdavis.edu/expert/${this.expertId}` : '#'}">More research</a>
         ` : html`<p><em>No Research Highlights added.</em></p>`
     }`
 }
