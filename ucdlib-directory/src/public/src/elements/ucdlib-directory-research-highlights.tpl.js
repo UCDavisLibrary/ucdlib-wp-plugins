@@ -2,6 +2,31 @@ import { html } from 'lit';
 
 export function render() {
   return html`
+    <style>
+      .research-highlight-url {
+        font-weight: bold;
+        font-size: 1.188rem;
+        text-decoration: none;
+      }
+
+      .research-highlight-info{
+        font-size: 1rem;
+      }
+
+      .research-highlight-more {
+        margin-left: 1rem;
+      }
+
+      .research-highlight-alert {
+        margin: 0 0 1rem;
+        padding: 2rem;
+        background-color: #dff4fb;
+        color: #022851;
+        font-size: 1rem;
+        font-style: italic;
+        color: var(--ucd-theme-alert, red);
+      }
+    </style>
     <h2 class="heading--auxiliary">Research Highlights</h2>
 
     ${this.loading

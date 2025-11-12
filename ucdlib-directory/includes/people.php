@@ -302,19 +302,15 @@ class UCDLibPluginDirectoryPeople {
     ) );
   }
 
-  public function getResearchHighlightDefaults() {
-    return [
-      'block_name' => 'ucdlib-directory/research-highlights',
-      'insert_after_block' => 'ucdlib-directory/expertise-areas'
-    ];
+  public function ensureResearchHighlightBlockExists($dry_run, $inCLI) {
+      $block_name='ucdlib-directory/research-highlights';
+      $insert_after_block='ucdlib-directory/expertise-areas';
+
+    $this->ensureBlockExists($dry_run, $inCLI, $insert_after_block, $block_name);
   }
   
   // ensure block exists
   public function ensureBlockExists($dry_run=false, $inCLI=false, $insert_after_block='', $block_name='') {
-    $defaults = $this->getResearchHighlightDefaults();
-    $block_name = $block_name ? $block_name : $defaults['block_name'];
-    $insert_after_block = $insert_after_block ? $insert_after_block : $defaults['insert_after_block'];
-    
     $post_type = $this->slug; 
     if($inCLI) echo "\n== Directory People: Ensure {$block_name} block ==";
 
@@ -355,7 +351,7 @@ class UCDLibPluginDirectoryPeople {
     
   }
 
-  public function run_add_block($q, $block_name, $dry_run=true, $inCLI=false, $insert_after_block=''){
+  public function run_add_block($q, $block_name, $dry_run=false, $inCLI=false, $insert_after_block=''){
     
     $insert_position = 'end';
     $added = 0; $skipped = 0; $errors = 0;
