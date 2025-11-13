@@ -32,7 +32,7 @@ class UCDLibPluginDirectoryAPIPeople {
       ]
     ) );
   }
-
+  
   // endpoint for looking up a single person
   public function epcb_person( $request ) {
     $term = $request['term'];
