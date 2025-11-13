@@ -1,0 +1,9 @@
+{% set p = siteContext.post %}
+{% set hide = p.meta.hide_research_highlights == 1 or p.meta.hide_research_highlights is same as(true) %}
+{% if p.aggieExpertsId and not hide %}
+  <ucdlib-directory-research-highlights
+      expert-id="{{ p.aggieExpertsId }}"
+      data-lazy="true"
+      class="u-space-mb">
+  </ucdlib-directory-research-highlights>
+{% endif %}

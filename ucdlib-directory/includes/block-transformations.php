@@ -22,6 +22,7 @@ class UCDLibPluginDirectoryBlockTransformations {
     return $attrs;
   }
 
+
   public static function getServiceResults( $attrs=[] ){
     $serviceQuery = [
       'post_type' => 'service',
@@ -96,6 +97,7 @@ class UCDLibPluginDirectoryBlockTransformations {
     $attrs['elasticSearch'] = true;
     return $attrs;
   }
+
 
   public static function getEsResults($attrs){
     if ( !array_key_exists('elasticSearch', $attrs) ||  !$attrs['elasticSearch'] ) return $attrs;

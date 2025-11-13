@@ -44,6 +44,7 @@ class UCDLibPluginDirectory {
     $this->services = new UCDLibPluginDirectoryServices( $this->config );
     $this->areasOfExpertise = new UCDLibPluginDirectoryAreasOfExpertise( $this->config );
 
+    
     add_action( 'admin_menu', array($this, 'add_admin_menu'));
     add_action( 'admin_head', array($this, 'admin_head') );
     add_filter( 'timber/locations', array($this, 'add_timber_locations') );
@@ -86,7 +87,7 @@ class UCDLibPluginDirectory {
         'service-type' => 'service-type',
         'library' => 'library',
         'directory' => 'directory-tag',
-        'expertise' => 'expertise-areas'
+        'expertise' => 'expertise-areas',
       ],
       'postSlugs' => [
         'service' => $service,
