@@ -6,15 +6,9 @@ class UCDLibPluginAssetsForminator {
     add_filter('forminator_field_markup', [$this, 'styleRadioAndCheck'], 10, 3);
     add_filter('forminator_field_markup', [$this, 'styleConsentBox'], 10, 3);
     add_filter('forminator_render_button_markup', [$this, 'styleSubmitButton'], 10, 2);
-    add_filter('forminator_custom_form_before_render', [$this, 'removeOAFundForm']);
     add_action( 'admin_init', [$this, 'forceNoStyling']);
     add_action( 'admin_footer', [$this, 'removeStyleOptions']);
   }
-
-  // public removeOAFundForm(){
-    // $TARGET_FORM_ID="27502";
-
-  // }
 
   public function removeStyleOptions(){
     if( isset( $_GET['page'] ) ){
