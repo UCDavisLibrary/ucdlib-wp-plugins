@@ -29,7 +29,7 @@ export default () => {
         <${PanelBody} title="Research Highlights" initialOpen=${true}>
           <${TextControl}
             value=${rawMeta.aggie_experts_id || ''}
-            label="Expert Record ID"
+            label="Aggie Expert ID"
             onChange=${(value) => saveExpertId(value)}
             placeholder="Enter Expert ID..."
           />
@@ -48,7 +48,7 @@ export default () => {
             <div ...${blockProps}>
               <div className='alert'>
                 ${ expertId
-                  ? html`Aggie Experts Research Highlights for <strong>${expertId}</strong>`
+                  ? html`Research highlights for Aggie Expert ID <strong>${expertId}</strong> will display here`
                   : html`Please enter an Expert ID to load Research Highlights.` }
               </div>
             </div>

@@ -53,8 +53,6 @@ export default class UcdlibDirectoryResearchHighlights extends Mixin(LitElement)
     this.error = '';
     this.res = [];
 
-
-
     try {
       const url = `https://experts.ucdavis.edu/api/expert/${this.expertId}`;
 
