@@ -19,6 +19,10 @@ export function render() {
         font-style: italic;
         color: var(--ucd-theme-alert, red);
       }
+
+      a.icon-ucdlib, span.icon-ucdlib {
+       display: flex;
+      }
     </style>
     <h2 class="heading--auxiliary">Research Highlights</h2>
 
