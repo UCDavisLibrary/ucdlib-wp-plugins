@@ -20,7 +20,7 @@ export function render() {
         color: var(--ucd-theme-alert, red);
       }
 
-      a.icon-ucdlib, span.icon-ucdlib {
+      ucdlib-directory-research-highlights a.icon-ucdlib, ucdlib-directory-research-highlights span.icon-ucdlib {
        display: flex;
       }
     </style>
