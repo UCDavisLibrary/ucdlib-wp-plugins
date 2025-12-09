@@ -21,5 +21,6 @@ if( !class_exists('ACF') ) {
     require_once $composer_autoload;
   } 
   require_once( __DIR__ . '/includes/main.php' );
-  new UCDLibPluginDirectory();
+  $UCDLibPluginDirectory = new UCDLibPluginDirectory();
+  $GLOBALS['UCDLibPluginDirectory'] = $UCDLibPluginDirectory;
 }

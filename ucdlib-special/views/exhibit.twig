@@ -18,12 +18,12 @@
     {% if post.isTopPage and ((not post.exhibitIsPast ) or (post.exhibitIsPast and not post.exhibitIsOnline)) %}
       <div class='u-space-mb--medium'>
         {% if post.exhibitLocations and post.exhibitLocations|length %}
-          <h2 class='heading--secondary exhibit-header-intro'>{{post.exhibitLocations[0].name}}</h2>
+          <div class='heading--secondary exhibit-header-intro'>{{post.exhibitLocations[0].name}}</div>
         {% endif %}
         {% if post.exhibitIsPhysical and post.exhibitIsPermanent %}
-          <h2 class='heading--secondary exhibit-header-intro'>Permanent Exhibit</h2>
+          <div class='heading--secondary exhibit-header-intro'>Permanent Exhibit</div>
         {% elseif post.exhibitIsPhysical and post.exhibitDateRange %}
-          <h2 class='heading--secondary exhibit-header-intro'>{{post.exhibitDateRange}}</h2>
+          <div class='heading--secondary exhibit-header-intro'>{{post.exhibitDateRange}}</div>
         {% endif %}
       </div>
     {% endif %}

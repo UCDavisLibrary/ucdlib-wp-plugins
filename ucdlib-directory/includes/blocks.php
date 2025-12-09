@@ -72,6 +72,9 @@ class UCDLibPluginDirectoryBlocks extends UCDThemeBlockRenderer {
     ],
     'ucdlib-directory/expertise-areas' => [
       'twig' => '@ucdlib-directory/blocks/person-expertise-areas.twig'
+    ],
+    'ucdlib-directory/research-highlights' => [
+      'twig' => '@ucdlib-directory/blocks/person-research-highlights.twig'
     ]
   ];
 

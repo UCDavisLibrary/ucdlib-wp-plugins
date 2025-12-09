@@ -13,6 +13,7 @@ import personPronouns from "./ucdlib-directory-pronouns";
 import personLibraryLocations from "./ucdlib-directory-library-locations"
 import personTags from "./ucdlib-directory-tags";
 import personExpertiseAreas from "./ucdlib-directory-expertise-areas";
+import personResearchHighlights from "./ucdlib-directory-research-highlights";
 import serviceFilters from "./ucdlib-directory-service-filters";
 import serviceResults from "./ucdlib-directory-service-results";
 
@@ -32,6 +33,7 @@ export default [
   personLibraryLocations,
   personTags,
   personExpertiseAreas,
+  personResearchHighlights,
   serviceFilters,
   serviceResults
 ]
