@@ -35,12 +35,12 @@ return html`
   <div>
     ${this.bottomSrc ? html`
       <div class='map'>
-        <img class='bottom-layer' src=${this.bottomSrc} style='opacity: ${this.bottomOpacity};'>
+        <img class='bottom-layer' src=${this.bottomSrc} style='opacity: ${this.bottomOpacity};' alt='bottom layer'>
         ${this.layers.map((layer, i) => html`
-          <img class='layer can-hide' src=${layer.src} style='z-index: ${i+1};opacity:${layer.visible ? '1' : '0'}'>
+          <img class='layer can-hide' src=${layer.src} style='z-index: ${i+1};opacity:${layer.visible ? '1' : '0'}' alt='overlay for: ${layer.slug}'>
         `)}
         ${this.topLayer ? html`
-          <img class='layer' src=${this.topLayer} style='z-index: ${this.layers.length + 1};'>
+          <img class='layer' src=${this.topLayer} style='z-index: ${this.layers.length + 1};' alt='top layer'>
         ` : html``}
       </div>
     ` : html``}

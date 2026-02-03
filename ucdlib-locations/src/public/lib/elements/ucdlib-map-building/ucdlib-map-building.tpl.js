@@ -2,6 +2,7 @@ import { html, css } from 'lit';
 
 import headingStyles from '@ucd-lib/theme-sass/1_base_html/_headings.css.js';
 import headingClasses from '@ucd-lib/theme-sass/2_base_class/_headings.css.js';
+import { headings } from '../../utils/styles.js';
 import layoutStyles from '@ucd-lib/theme-sass/5_layout/_l-basic.css.js';
 import containerStyles from '@ucd-lib/theme-sass/5_layout/_l-container.css.js';
 import gridStyles from '@ucd-lib/theme-sass/5_layout/_l-grid-regions.css.js';
@@ -27,7 +28,7 @@ export function styles() {
       padding-bottom: 1.5rem;
       margin-bottom: 1rem !important;
     }
-    .nav h4 {
+    .nav .h4 {
       margin-right: 1rem;
     }
     .nav-button {
@@ -45,7 +46,7 @@ export function styles() {
       background-color: #E5E5E5;
       border: 4px solid #E5E5E5;
     }
-    .nav-button h2 {
+    .nav-button .h2 {
       margin: 0;
       padding: 0;
     }
@@ -90,6 +91,7 @@ export function styles() {
     containerStyles,
     headingStyles,
     headingClasses,
+    headings,
     layoutStyles,
     gridStyles,
     oBoxStyles,
@@ -102,11 +104,11 @@ return html`
   <div>
     <div class='o-box u-space-pt--flush' ?hidden=${this.floors.length < 2}>
       <div class='nav'>
-        <h4>Level:</h4>
+        <div class='h4'>Level:</div>
         <div class='nav-buttons'>
           ${this.floors.map(floor => html`
             <a @click=${e => this._onFloorSelect(floor)} class='nav-button ${this.selectedFloorIndex == floor.propIndex ? "selected" : ""}'>
-              <h2>${floor.navText}</h2>
+              <div class='h2'>${floor.navText}</div>
             </a>
           `)}
         </div>
@@ -114,7 +116,7 @@ return html`
     </div>
     <div ?hidden=${!this.floorTitle && !this.floorSubTitle} class='o-box'>
       <h2 ?hidden=${!this.floorTitle}>${this.floorTitle}</h2>
-      <h3 ?hidden=${!this.floorSubTitle} class="heading--auxiliary">${this.floorSubTitle}</h3>
+      <div ?hidden=${!this.floorSubTitle} class="heading--auxiliary">${this.floorSubTitle}</div>
     </div>
     <div class="l-basic--flipped">
       <div class="l-content o-box">

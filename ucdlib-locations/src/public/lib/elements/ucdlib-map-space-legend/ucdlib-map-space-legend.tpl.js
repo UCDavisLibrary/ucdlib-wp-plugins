@@ -2,6 +2,7 @@ import { html, css } from 'lit';
 
 import headingStyles from '@ucd-lib/theme-sass/1_base_html/_headings.css.js';
 import headingClasses from '@ucd-lib/theme-sass/2_base_class/_headings.css.js';
+import { headings } from '../../utils/styles.js';
 import colorClasses from '@ucd-lib/theme-sass/4_component/_category-brand.css.js';
 
 export function styles() {
@@ -36,6 +37,7 @@ export function styles() {
   return [
     headingStyles,
     headingClasses,
+    headings,
     colorClasses,
     elementStyles
   ];
@@ -44,7 +46,7 @@ export function styles() {
 export function render() { 
 return html`
   <section ?hidden=${!this.spaces.length}>
-    <h4>${this.legendTitle}</h4>
+    <h2 class="h4">${this.legendTitle}</h2>
     <div class='rows'>
       ${this.spaces.map(space => html`
         <div class='row'>

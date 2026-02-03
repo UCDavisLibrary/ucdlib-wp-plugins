@@ -1,6 +1,7 @@
 import { html, css } from 'lit';
 import headingStyles from '@ucd-lib/theme-sass/1_base_html/_headings.css.js';
 import headingClasses from '@ucd-lib/theme-sass/2_base_class/_headings.css.js';
+import { headings } from '../../utils/styles.js';
 
 export function styles() {
   const elementStyles = css`
@@ -26,6 +27,7 @@ export function styles() {
   return [
     headingStyles,
     headingClasses,
+    headings,
     elementStyles
   ];
 }
@@ -33,7 +35,7 @@ export function styles() {
 export function render() { 
 return html`
   <section ?hidden=${!this.items.length}>
-    <h4>${this.legendTitle}</h4>
+    <h2 class="h4">${this.legendTitle}</h2>
     <div class='rows'>
       ${this.items.map(item => html`
         <div class='row'>
