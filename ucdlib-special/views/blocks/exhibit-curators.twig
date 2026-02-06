@@ -9,7 +9,7 @@
 {% set p = siteContext.post %}
 {% set curatedLabel = 'Curated by' %}
 {% if p.exhibitCuratorOrgs or p.exhibitCurators %}
-  <aside class="o-box panel">
+  <div class="o-box panel">
     <div class="curator-widget">
       <div class="subsection-label">Exhibit from</div>
       {% if p.exhibitCuratorOrgs|length %}
@@ -54,5 +54,5 @@
       {% endif %}
 
     </div>
-  </aside>
+  </div>
 {% endif %}

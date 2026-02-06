@@ -62,8 +62,12 @@
   {% if person.contactInfo.contact and not person.contactInfo.hide %}
     <ul class="contact-info list--pipe {{class ? class}}">
       {% for contact in person.contactInfo.contact %}
+        {% set ariaLabel = contact.ariaLabel %}
+        {% if contact.isAppointment %}
+          {% set ariaLabel = ariaLabel ? ariaLabel : 'Book an appointment with ' ~ person.name_first ~ ' ' ~ person.name_last %}
+        {% endif %}
         <li>
-          <a class="icon-ucdlib" href="{{contact.link}}">
+          <a class="icon-ucdlib" href="{{contact.link}}" {{ ariaLabel ? 'aria-label="' ~ ariaLabel ~ '"' : '' }}>
             <ucdlib-icon icon="{{contact.icon}}"></ucdlib-icon><div>{{contact.label}}</div>
           </a>
           {% if contact.additionalText %}
