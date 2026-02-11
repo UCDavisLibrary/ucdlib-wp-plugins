@@ -1,8 +1,9 @@
 {% macro teaser(person, kwargs={}) %}
+{% set personName = person.name_first ~ ' ' ~ person.name_last %}
   <article class='vm-teaser vm-teaser--person'>
     {% if person.teaser_image %}
         <div class="vm-teaser__figure" style="width:20%;max-width:135px;">
-          <a aria-label="{{person.name_first}} {{person.name_last}}" href="{{person.link}}" style="display:block;background-image:url({{person.teaser_image.src}})" class="aspect--1x1 u-background-image">
+          <a aria-label="{{personName|e('html_attr')}}" href="{{person.link}}" style="display:block;background-image:url({{person.teaser_image.src}})" class="aspect--1x1 u-background-image">
         </a>
       </div>
     {% endif %}
@@ -67,7 +68,12 @@
           {% set ariaLabel = ariaLabel ? ariaLabel : 'Book an appointment with ' ~ person.name_first ~ ' ' ~ person.name_last %}
         {% endif %}
         <li>
-          <a class="icon-ucdlib" href="{{contact.link}}" {{ ariaLabel ? 'aria-label="' ~ ariaLabel ~ '"' : '' }}>
+          <a 
+            class="icon-ucdlib" 
+            href="{{contact.link}}"
+            {% if ariaLabel %}
+              aria-label="{{ ariaLabel|e('html_attr') }}"
+            {% endif %}>
             <ucdlib-icon icon="{{contact.icon}}"></ucdlib-icon><div>{{contact.label}}</div>
           </a>
           {% if contact.additionalText %}
