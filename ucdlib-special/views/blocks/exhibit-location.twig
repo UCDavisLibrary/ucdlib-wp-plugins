@@ -1,7 +1,7 @@
 {% set p = siteContext.post %}
 
 {% if (p.exhibitLocationMapWithDefault.src or p.exhibitLocationDirectionsWithDefault) and not p.exhibitIsPast %}
-  <aside class='panel o-box'>
+  <div class='panel o-box'>
     <div class="location-widget">
       <h2 class='heading--highlight u-space-mb'>Exhibit Location</h2>
       {% if p.exhibitLocationDirectionsWithDefault %}
@@ -11,5 +11,5 @@
         <img src='{{p.exhibitLocationMapWithDefault.src}}' alt="{{ p.exhibitLocationMapWithDefault.alt }}" />
       {% endif %}
     </div>
-  </aside>
+  </div>
 {% endif %}

@@ -485,6 +485,8 @@ class UCDLibPluginDirectoryPeople {
       $profile_page = "post.php?post=$user->id&action=edit&is_own_profile";
     }
 
+    $profile_page = admin_url( $profile_page );
+
     $this->get_profile_editor_page = $profile_page;
     return $this->get_profile_editor_page;
   }

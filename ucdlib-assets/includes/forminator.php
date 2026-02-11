@@ -74,6 +74,12 @@ class UCDLibPluginAssetsForminator {
         } 
       }
       if ( !$baseDiv ) return $html;
+      if ( $baseDiv->hasAttribute('role') ) {
+        $baseDiv->removeAttribute('role');
+      }
+      if ( $baseDiv->hasAttribute('aria-labelledby') ) {
+        $baseDiv->removeAttribute('aria-labelledby');
+      }
       $c = $div->getAttribute('class');
       $c = $c ? $c : '';
       $baseDiv->setAttribute('class', "$c $brandClass");

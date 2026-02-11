@@ -116,6 +116,10 @@ class UCDLibPluginLocations {
   public function registerCron(){
     add_filter( 'cron_schedules', [$this, 'setHoursCronSchedule'] );
     add_action( $this->slug . '_cron', [$this, 'refreshHours']);
+
+    if ( ! wp_next_scheduled( $this->slug . '_cron' ) ) {
+      wp_schedule_event( time(), $this->slug . '_hours', $this->slug . '_cron' );
+    }
   }
 
   public function setHoursCronSchedule($schedules){
