@@ -20,6 +20,8 @@
     {% set classes = classes ~ ' hero-banner--no-background' %}
   {% endif %}
 
+  {% set ariaLabel = 'Exhibit details: ' ~ exhibit.exhibitTitle %}
+
   <article class='{{classes}}'>
     <div class="hero-banner__image u-background-image" style={{exhibit.exhibitHero ? "background-image:url("~exhibit.exhibitHero.src~")": ''}}></div>
     {% if color %}
@@ -42,7 +44,7 @@
         {% endif %}
       </div>
       <div class="hero-banner__button-group">
-        <a class="hero-banner__button" href='{{exhibit.exhibitLink}}'>Exhibit Details</a>
+        <a class="hero-banner__button" href='{{exhibit.exhibitLink}}' aria-label='{{ariaLabel|e('html_attr')}}'>Exhibit Details</a>
       </div>
     </div>
   </article>
