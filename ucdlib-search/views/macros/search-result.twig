@@ -15,7 +15,7 @@
 
   <article class="vm-teaser vm-teaser--search">
     <div class="vm-teaser__figure category" style="width:20%;max-width:80px;">
-      <a aria-label="{{result.title}}" href="{{result.link}}" style="display:block;background-image:url({{result.image}})" class="aspect--1x1 u-background-image">
+      <a aria-label="{{result.title|e('html_attr')}}" href="{{result.link}}" style="display:block;background-image:url({{result.image}})" class="aspect--1x1 u-background-image">
       </a>
     </div>
     <div class="vm-teaser__body">

@@ -9,19 +9,19 @@
 {% set p = siteContext.post %}
 {% set curatedLabel = 'Curated by' %}
 {% if p.exhibitCuratorOrgs or p.exhibitCurators %}
-  <aside class="o-box panel">
+  <div class="o-box panel">
     <div class="curator-widget">
       <div class="subsection-label">Exhibit from</div>
       {% if p.exhibitCuratorOrgs|length %}
         <div>
         {% for org in p.exhibitCuratorOrgs %}
-          <h2 class='heading--h5 u-space-mt--flush'>
+          <div class='heading--h5 u-space-mt--flush'>
           {% if org.homePage.link %}
             <a class='org-link' href='{{org.homePage.link}}'>{{org.name}}</a>
           {% else %}
             {{org.name}}
           {% endif %}
-          </h2>
+          </div>
         {% endfor %}
         </div>
       {% endif %}
@@ -54,5 +54,5 @@
       {% endif %}
 
     </div>
-  </aside>
+  </div>
 {% endif %}

@@ -6,13 +6,14 @@
     items: [{title: 'Introduction', link: post.exhibit.link}]|merge(post.exhibit.children),
     oBox: false,
     panel: false,
+    navAriaLabel: 'Exhibit navigation',
     show_children: post.showGrandchildrenInNav
     } 
   %}
-  <aside class="o-box panel">
+  <div class="o-box panel">
     <h2 class='heading--highlight u-space-mb'>{{'Exhibit: '~ post.exhibit.title}}</h2>
     {{ subnav( kwargs ) }}
-  </aside>
+  </div>
   
 
 {% endif %}

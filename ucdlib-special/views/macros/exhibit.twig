@@ -20,6 +20,8 @@
     {% set classes = classes ~ ' hero-banner--no-background' %}
   {% endif %}
 
+  {% set ariaLabel = 'Exhibit details: ' ~ exhibit.exhibitTitle %}
+
   <article class='{{classes}}'>
     <div class="hero-banner__image u-background-image" style={{exhibit.exhibitHero ? "background-image:url("~exhibit.exhibitHero.src~")": ''}}></div>
     {% if color %}
@@ -42,7 +44,7 @@
         {% endif %}
       </div>
       <div class="hero-banner__button-group">
-        <a class="hero-banner__button" href='{{exhibit.exhibitLink}}'>Exhibit Details</a>
+        <a class="hero-banner__button" href='{{exhibit.exhibitLink}}' aria-label='{{ariaLabel|e('html_attr')}}'>Exhibit Details</a>
       </div>
     </div>
   </article>
@@ -56,7 +58,7 @@
   <article class='vm-teaser vm-teaser--exhibit'>
     {% if exhibit.teaser_image %}
       <div class="vm-teaser__figure category" style="width:20%;max-width:135px;">
-        <a href="{{exhibit.link}}" style="display:block;background-image:url({{exhibit.teaser_image.src}})" class="aspect--1x1 u-background-image" aria-label='{{exhibit.title}}'>
+        <a href="{{exhibit.link}}" style="display:block;background-image:url({{exhibit.teaser_image.src}})" class="aspect--1x1 u-background-image" aria-label='{{exhibit.title|e('html_attr')}}'>
         </a>
       </div>
     {% endif %}

@@ -31,7 +31,8 @@ class UCDLibPluginDirectoryUtils {
               'type' => ['type' => 'string'],
               'value' => ['type' => 'string'],
               'label' => ['type' => 'string'],
-              'additionalText' => ['type' => 'string']
+              'additionalText' => ['type' => 'string'],
+              'ariaLabel' => ['type' => 'string']
             ]
           ]
         ]
@@ -48,7 +49,8 @@ class UCDLibPluginDirectoryUtils {
             'properties' => [
               'value' => ['type' => 'string'],
               'label' => ['type' => 'string'],
-              'additionalText' => ['type' => 'string']
+              'additionalText' => ['type' => 'string'],
+              'ariaLabel' => ['type' => 'string']
             ]
           ]
         ]
@@ -65,7 +67,8 @@ class UCDLibPluginDirectoryUtils {
             'properties' => [
               'value' => ['type' => 'string'],
               'label' => ['type' => 'string'],
-              'additionalText' => ['type' => 'string']
+              'additionalText' => ['type' => 'string'],
+              'ariaLabel' => ['type' => 'string']
             ]
           ]
         ]
@@ -101,6 +104,7 @@ class UCDLibPluginDirectoryUtils {
             'link' => 'mailto:' . $email['value'],
             'label' => array_key_exists('label', $email) && $email['label'] ? $email['label'] : $email['value'],
             'icon' => $icons['email'],
+            'ariaLabel' => array_key_exists('ariaLabel', $email) ? $email['ariaLabel'] : '',
             'additionalText' => array_key_exists('additionalText', $email) ? $email['additionalText'] : ''
           ];
         }
@@ -124,6 +128,7 @@ class UCDLibPluginDirectoryUtils {
             'link' => 'tel:' .  $phone['value'],
             'label' => $label,
             'icon' => $icons['phone'],
+            'ariaLabel' => array_key_exists('ariaLabel', $phone) ? $phone['ariaLabel'] : '',
             'additionalText' => array_key_exists('additionalText', $phone) ? $phone['additionalText'] : ''
           ];
         }
@@ -136,6 +141,7 @@ class UCDLibPluginDirectoryUtils {
         'value' => $attrs['appointmentUrl'],
         'link' => $attrs['appointmentUrl'],
         'label' => 'Book an Appointment',
+        'isAppointment' => true,
         'icon' => $icons['appointment']
       ];
     }
@@ -166,6 +172,7 @@ class UCDLibPluginDirectoryUtils {
             'link' => $website['value'],
             'label' => array_key_exists('label', $website) && $website['label'] ? $website['label'] : $website['value'],
             'icon' => $icon,
+            'ariaLabel' => array_key_exists('ariaLabel', $website) ? $website['ariaLabel'] : '',
             'additionalText' => array_key_exists('additionalText', $website) ? $website['additionalText'] : ''
           ];
         }
