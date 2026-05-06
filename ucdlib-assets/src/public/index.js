@@ -1,4 +1,5 @@
 import "@ucd-lib/brand-theme";
+import './lib/editoria11y-shims.js';
 
 class DynamicScriptLoader {
   
@@ -35,9 +36,25 @@ class DynamicScriptLoader {
       }
     ];
   }
+
+  get isWpAdmin(){
+    try {
+      if ( window?.location?.pathname?.includes('/wp-admin/') ) return true;
+      if ( window?.parent?.location?.pathname?.includes('/wp-admin/') ) return true;
+    } catch(e) {
+      // cross-origin, assume not admin
+    }
+    return false;
+  }
     
     
   async load() {
+    // If we're in the WP Admin, go ahead and just load all bundles since we don't know which blocks will be used
+    if ( this.isWpAdmin ){
+      this.registration.forEach(bundle => this.loadWidgetBundle(bundle.name));
+      return;
+    }
+
     for( let bundle of this.registration ) {
       if( bundle.cssQuery ) {
         if ( !Array.isArray(bundle.cssQuery) ){

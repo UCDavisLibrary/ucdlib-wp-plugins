@@ -35,26 +35,28 @@ export default () => {
           />
 
           <div style=${{ display: 'flex', gap: '8px', marginTop: '.5em', marginBottom: '.5em' }}>
-            <${Button} variant="secondary" onClick=${clearExpertId}>Clear<//>
+            <${Button} variant="secondary" onClick=${clearExpertId}>Clear</${Button}>
           </div>
 
-        <//>
-      <//>
+        </${PanelBody}>
+      </${InspectorControls}>
 
       <div style=${{ marginTop: '1.5rem' }}>
         ${ !hideResearchHighlights && html`
-          <h2 className="heading--auxiliary">Research Highlights</h2>
           <div>
-            <div ...${blockProps}>
-              <div className='alert'>
-                ${ expertId
-                  ? html`Research highlights for Aggie Expert ID <strong>${expertId}</strong> will display here`
-                  : html`Please enter an Expert ID to load Research Highlights.` }
+            <h2 className="heading--auxiliary">Research Highlights</h2>
+            <div>
+              <div ...${blockProps}>
+                <div className='alert'>
+                  ${ expertId
+                    ? html`<div>Research highlights for Aggie Expert ID <strong>${expertId}</strong> will display here</div>`
+                    : html`<div>Please enter an Expert ID to load Research Highlights.</div>` }
+                </div>
               </div>
             </div>
           </div>
         `}
       </div>
-    <//>
+    </${Fragment}>
   `;
 };

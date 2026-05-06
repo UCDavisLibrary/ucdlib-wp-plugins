@@ -3,7 +3,7 @@ import Edit from './edit';
 
 const name = 'ucdlib-special/exhibit-online';
 const settings = {
-  api_version: 2,
+  apiVersion: 3,
 	title: "Online Exhibits",
 	description: "Displays a list of online exhibits with filters",
 	icon: UCDIcons.renderPublic('fa-html5'),

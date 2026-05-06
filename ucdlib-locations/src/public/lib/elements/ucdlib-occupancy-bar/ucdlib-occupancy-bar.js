@@ -98,4 +98,6 @@ export default class UcdlibOccupancyBar extends LitElement {
 
 }
 
-customElements.define('ucdlib-occupancy-bar', UcdlibOccupancyBar);
+if (!customElements.get('ucdlib-occupancy-bar')) {
+  customElements.define('ucdlib-occupancy-bar', UcdlibOccupancyBar);
+}

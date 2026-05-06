@@ -3,7 +3,7 @@ import Edit from './edit';
 
 const name = 'ucdlib-locations/map-legend';
 const settings = {
-  api_version: 2,
+  apiVersion: 3,
 	title: "Map Legend",
   parent: [ 'ucdlib-locations/map-building' ],
 	description: "A static legend for a building map",

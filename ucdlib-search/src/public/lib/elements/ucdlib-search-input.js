@@ -49,4 +49,6 @@ export default class UcdlibSearchInput extends LitElement {
 
 }
 
-customElements.define('ucdlib-search-input', UcdlibSearchInput);
+if (!customElements.get('ucdlib-search-input')) {
+  customElements.define('ucdlib-search-input', UcdlibSearchInput);
+}

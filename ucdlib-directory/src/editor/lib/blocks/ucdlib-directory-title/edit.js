@@ -58,7 +58,6 @@ export default ( props ) => {
   const deptChoices = [{value: 0, label: 'Select a Department'}, ...departments.map(d => {return {value: d.id, label: d.title.rendered}})];
 
   const updateDepartment = (deptId, i) => {
-    //console.log(departments);
     const depts = [...positionDepartment];
     depts[i] = {id: deptId, name: deptChoices.find(({value}) => value == deptId).label};
     setPositionDepartment(depts);

@@ -3,7 +3,7 @@ import Edit from './edit';
 
 const name = 'ucdlib-directory/sort';
 const settings = {
-  api_version: 2,
+  apiVersion: 3,
 	title: "Interactive Directory Sort",
 	description: "Sorts people/department blocks. Should be used in conjunction with the Directory Results block",
 	icon: UCDIcons.renderPublic('fa-arrow-down-a-z'),

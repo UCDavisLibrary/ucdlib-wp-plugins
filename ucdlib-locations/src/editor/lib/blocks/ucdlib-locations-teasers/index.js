@@ -4,7 +4,7 @@ import { Save } from "@ucd-lib/brand-theme-editor/lib/utils";
 
 const name = 'ucdlib-locations/teasers';
 const settings = {
-  api_version: 2,
+  apiVersion: 3,
 	title: "Location Teasers",
 	description: "Preview UC Davis Library locations",
 	icon: UCDIcons.renderPublic('fa-city'),

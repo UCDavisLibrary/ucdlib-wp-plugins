@@ -3,7 +3,7 @@ import Edit from './edit';
 
 const name = 'ucdlib-directory/bio';
 const settings = {
-  api_version: 2,
+  apiVersion: 3,
 	title: "Your Bio",
   parent: [],
 	description: "Change your bio",

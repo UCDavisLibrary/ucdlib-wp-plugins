@@ -3,7 +3,7 @@ import Edit from './edit';
 
 const name = 'ucdlib-special/exhibit-location';
 const settings = {
-  api_version: 2,
+  apiVersion: 3,
 	title: "Exhibit Location",
 	description: "Displays a widget with an exhibit's location",
 	icon: UCDIcons.renderPublic('fa-map-location'),

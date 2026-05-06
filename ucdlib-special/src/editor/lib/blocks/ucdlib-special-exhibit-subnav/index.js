@@ -3,7 +3,7 @@ import Edit from './edit';
 
 const name = 'ucdlib-special/exhibit-subnav';
 const settings = {
-  api_version: 2,
+  apiVersion: 3,
 	title: "Exhibit Subnav",
 	description: "Displays a subnav for a hierarchical exhibit",
 	icon: UCDIcons.renderPublic('fa-folder-tree'),

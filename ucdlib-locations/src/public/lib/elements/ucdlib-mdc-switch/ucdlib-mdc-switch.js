@@ -63,4 +63,6 @@ export default class UcdlibMdcSwitch extends LitElement {
 
 }
 
-customElements.define('ucdlib-mdc-switch', UcdlibMdcSwitch);
+if (!customElements.get('ucdlib-mdc-switch')) {
+  customElements.define('ucdlib-mdc-switch', UcdlibMdcSwitch);
+}

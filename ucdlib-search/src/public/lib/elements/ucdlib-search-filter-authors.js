@@ -81,4 +81,6 @@ export default class UcdlibSearchFilterAuthors extends LitElement {
 
 }
 
-customElements.define('ucdlib-search-filter-authors', UcdlibSearchFilterAuthors);
+if (!customElements.get('ucdlib-search-filter-authors')) {
+  customElements.define('ucdlib-search-filter-authors', UcdlibSearchFilterAuthors);
+}

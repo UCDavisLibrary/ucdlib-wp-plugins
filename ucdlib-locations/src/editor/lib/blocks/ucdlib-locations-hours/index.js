@@ -3,7 +3,7 @@ import Edit from './edit';
 
 const name = 'ucdlib-locations/hours';
 const settings = {
-  api_version: 2,
+  apiVersion: 3,
 	title: "Location Hours",
 	description: "Display weekly hours for all locations",
 	icon: UCDIcons.renderPublic('fa-calendar-week'),

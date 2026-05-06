@@ -3,7 +3,7 @@ import Edit from './edit';
 
 const name = 'ucdlib-directory/tags';
 const settings = {
-  api_version: 2,
+  apiVersion: 3,
 	title: "Directory Tags",
   parent: [],
 	description: "Change your tags",

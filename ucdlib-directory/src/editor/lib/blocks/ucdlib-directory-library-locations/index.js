@@ -3,7 +3,7 @@ import Edit from './edit';
 
 const name = 'ucdlib-directory/library-locations';
 const settings = {
-  api_version: 2,
+  apiVersion: 3,
 	title: "Your Library Location",
   parent: [],
 	description: "Change your workplace",

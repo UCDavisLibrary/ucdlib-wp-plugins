@@ -3,7 +3,7 @@ import Edit from './edit';
 
 const name = 'ucdlib-locations/sign-hours';
 const settings = {
-  api_version: 2,
+  apiVersion: 3,
 	title: "Digital Sign Hours Display",
 	description: "Renders a simple display of a location's current hours",
 	icon: UCDIcons.renderPublic('fa-clock'),

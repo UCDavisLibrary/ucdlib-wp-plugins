@@ -3,7 +3,7 @@ import Edit from './edit';
 
 const name = 'ucdlib-locations/hours-today';
 const settings = {
-  api_version: 2,
+  apiVersion: 3,
 	title: "Today's Hours",
 	description: "Display today's hours for a location",
 	icon: UCDIcons.renderPublic('fa-clock'),

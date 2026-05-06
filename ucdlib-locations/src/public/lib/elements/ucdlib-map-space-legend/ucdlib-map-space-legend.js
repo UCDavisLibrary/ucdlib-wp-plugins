@@ -95,4 +95,6 @@ export default class UcdlibMapSpaceLegend extends LitElement {
 
 }
 
-customElements.define('ucdlib-map-space-legend', UcdlibMapSpaceLegend);
+if (!customElements.get('ucdlib-map-space-legend')) {
+  customElements.define('ucdlib-map-space-legend', UcdlibMapSpaceLegend);
+}

@@ -3,7 +3,7 @@ import Edit from './edit';
 
 const name = 'ucdlib-directory/meet';
 const settings = {
-  api_version: 2,
+  apiVersion: 3,
 	title: "Appointment Widget",
 	description: "Widget with a link to a person's appointment system",
 	icon: UCDIcons.renderPublic('fa-calendar-check'),

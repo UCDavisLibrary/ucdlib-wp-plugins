@@ -2,13 +2,14 @@ import { html, SelectUtils } from "@ucd-lib/brand-theme-editor/lib/utils";
 import { useBlockProps } from '@wordpress/block-editor';
 import { Button, Modal, TextControl } from '@wordpress/components';
 import { getQueryArg } from "@wordpress/url";
-import { useState } from '@wordpress/element';
+import { useState, useRef, useEffect } from '@wordpress/element';
 import { useDispatch } from "@wordpress/data";
 
 
 export default ( props ) => {
   const { attributes, setAttributes } = props;
-  const blockProps = useBlockProps();
+  const ref = useRef();
+  const blockProps = useBlockProps({ref});
 
   // metadata 
   const user = SelectUtils.currentUser();
@@ -24,8 +25,13 @@ export default ( props ) => {
   const openModal = () => setOpen( true );
   const closeModal = () => setOpen( false );
 
-  // hide native title block. there is probably a better way to do this?
-  document.querySelector('.wp-block-post-title').style.display = 'none'
+  // hide native title block. This block serves as a replacement for the title block on the profile page, and having both would be redundant.
+  useEffect( () => {
+    const { ownerDocument } = ref.current;
+    const title = ownerDocument.querySelector('.wp-block-post-title');
+    if ( title ) title.style.display = 'none';
+  }, [] );
+
 
   // open modal on click
   const onClick = () => {

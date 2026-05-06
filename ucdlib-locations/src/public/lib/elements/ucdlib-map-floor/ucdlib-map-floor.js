@@ -92,4 +92,6 @@ export default class UcdlibMapFloor extends LitElement {
 
 }
 
-customElements.define('ucdlib-map-floor', UcdlibMapFloor);
+if (!customElements.get('ucdlib-map-floor')) {
+  customElements.define('ucdlib-map-floor', UcdlibMapFloor);
+}

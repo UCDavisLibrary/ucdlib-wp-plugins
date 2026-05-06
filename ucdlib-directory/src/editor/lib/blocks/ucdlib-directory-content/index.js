@@ -3,7 +3,7 @@ import Edit from './edit';
 
 const name = 'ucdlib-directory/content';
 const settings = {
-  api_version: 2,
+  apiVersion: 3,
 	title: "Person Content Widget",
 	description: "Widget that displays counts of site content for a person.",
 	icon: UCDIcons.renderPublic('fa-file-pen'),

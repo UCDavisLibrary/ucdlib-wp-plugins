@@ -153,4 +153,6 @@ export default class UcdlibHours extends LitElement {
 
 }
 
-customElements.define('ucdlib-hours', UcdlibHours);
+if (!customElements.get('ucdlib-hours')) {
+  customElements.define('ucdlib-hours', UcdlibHours);
+}

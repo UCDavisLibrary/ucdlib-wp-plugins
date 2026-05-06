@@ -84,4 +84,6 @@ export default class UcdlibSpecialExhibitPastFilters extends LitElement {
 
 }
 
-customElements.define('ucdlib-special-exhibit-past-filters', UcdlibSpecialExhibitPastFilters);
+if (!customElements.get('ucdlib-special-exhibit-past-filters')) {
+  customElements.define('ucdlib-special-exhibit-past-filters', UcdlibSpecialExhibitPastFilters);
+}

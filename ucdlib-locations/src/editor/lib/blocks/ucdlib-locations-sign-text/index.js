@@ -3,7 +3,7 @@ import Edit from './edit';
 
 const name = 'ucdlib-locations/sign-text';
 const settings = {
-  api_version: 2,
+  apiVersion: 3,
 	title: "Digital Sign Text",
 	description: "Text input sized for a digital sign",
 	icon: UCDIcons.renderPublic('fa-font'),

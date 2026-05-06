@@ -3,7 +3,7 @@ import Edit from './edit';
 
 const name = 'ucdlib-directory/results';
 const settings = {
-  api_version: 2,
+  apiVersion: 3,
 	title: "Interactive Directory Results",
 	description: "Displays people and departments. Should be used in conjunction with the Directory Filter Block",
 	icon: UCDIcons.renderPublic('fa-users-line'),

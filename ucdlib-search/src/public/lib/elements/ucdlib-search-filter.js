@@ -201,4 +201,6 @@ export default class UcdlibSearchFilter extends LitElement {
 
 }
 
-customElements.define('ucdlib-search-filter', UcdlibSearchFilter);
+if (!customElements.get('ucdlib-search-filter')) {
+  customElements.define('ucdlib-search-filter', UcdlibSearchFilter);
+}

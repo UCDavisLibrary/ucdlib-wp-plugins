@@ -3,7 +3,7 @@ import Edit from './edit';
 
 const name = 'ucdlib-locations/map-space-legend';
 const settings = {
-  api_version: 2,
+  apiVersion: 3,
 	title: "Space Legend",
   parent: [ 'ucdlib-locations/map-building' ],
 	description: "Displays toggleable legend for space types",

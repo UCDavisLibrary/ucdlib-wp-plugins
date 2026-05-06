@@ -3,7 +3,7 @@ import Edit from './edit';
 
 const name = 'ucdlib-directory/expertise-areas';
 const settings = {
-  api_version: 2,
+  apiVersion: 3,
 	title: "Areas of Expertise",
   parent: [],
 	description: "Change your areas of expertise",

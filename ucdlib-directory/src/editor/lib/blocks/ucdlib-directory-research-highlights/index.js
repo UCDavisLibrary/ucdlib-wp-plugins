@@ -3,7 +3,7 @@ import Edit from './edit';
 
 const name = 'ucdlib-directory/research-highlights';
 const settings = {
-  api_version: 2,
+  apiVersion: 3,
   title: "Research Highlights",
   parent: [],
   description: "Highlight your research works",
