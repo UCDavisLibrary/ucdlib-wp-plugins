@@ -20,7 +20,11 @@
     </div>
     <div class="vm-teaser__body">
       <div class="vm-teaser__title"><a href="{{result.link}}">{{result.title}}</a></div>
-      <p class="vm-teaser__result-type">{{result.type.label}}</p>
+      <p class="vm-teaser__result-type">{{result.type.label}}
+      {% if result.type.urlArg == 'exhibit' and result.firstAncestor %}
+        <span> | Part of: <a href="{{result.firstAncestor.link}}">{{result.firstAncestor.title}}</a></span>
+      {% endif %}
+      </p>
       <div class="vm-teaser__summary">
         {% if result.type.showByline %}
 

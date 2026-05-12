@@ -3,6 +3,16 @@
     font-style: italic;
     margin-bottom: .5rem;
     line-height: 1.5;
+
+    a {
+      color: inherit;
+    }
+    a:visited {
+      color: inherit;
+    }
+    a:hover, a:focus {
+      color: #00b2e3;
+    }
   }
   em {
     font-weight: 700;
