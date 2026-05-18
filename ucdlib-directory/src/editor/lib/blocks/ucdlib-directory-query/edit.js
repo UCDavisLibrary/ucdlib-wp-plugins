@@ -14,8 +14,8 @@ export default ( props ) => {
     }
   }, [])
 
-  const libraries = SelectUtils.terms('library', {per_page: -1, orderby: 'name', order: 'asc'});
-  const tags = SelectUtils.terms('directory-tag', {per_page: -1, orderby: 'name', order: 'asc'});
+  const libraries = SelectUtils.terms('library', {per_page: 100, orderby: 'name', order: 'asc'});
+  const tags = SelectUtils.terms('directory-tag', {per_page: 100, orderby: 'name', order: 'asc'});
   const departments = SelectUtils.posts({per_page: 100, orderby: 'title', order: 'asc', context: 'view'}, 'department');
 
   const sortOptions = [
