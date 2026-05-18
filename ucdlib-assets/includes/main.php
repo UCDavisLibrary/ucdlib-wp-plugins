@@ -92,11 +92,22 @@ class UCDLibPluginAssets {
     add_action( 'admin_footer', [$this, 'highlightCustomTaxonomyPages']);
     add_filter('ucd-theme/admin-variable/editor-script', [$this, 'updateEditorScriptVariable' ]);
 
+    // accessibility plugin customizations
+    add_filter( 'editoria11y_editing_params', [$this, 'updateAccessibilityParams'] );
+    add_filter( 'editoria11y_viewing_params', [$this, 'updateAccessibilityParams'] );
 
     add_action( 'after_setup_theme', array($this, 'enqueue_editor_css'));
     add_action( 'admin_enqueue_scripts', [$this, 'registerAdminScripts']);
     // add_filter( 'mce_css', array($this, 'enqueue_editor_css') );
 
+  }
+
+  /**
+   * @description Update params for the Editoria11y accessibility plugin
+   */
+  public function updateAccessibilityParams($params){
+    $params['ignoreTests'] = [ 'altLong', 'altLongLinked' ];
+    return $params;
   }
 
   public function enqueue_block_assets(){
