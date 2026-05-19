@@ -162,4 +162,6 @@ export default class UcdlibDirectoryFilters extends LitElement {
 
 }
 
-customElements.define('ucdlib-directory-filters', UcdlibDirectoryFilters);
+if (!customElements.get('ucdlib-directory-filters')) {
+  customElements.define('ucdlib-directory-filters', UcdlibDirectoryFilters);
+}

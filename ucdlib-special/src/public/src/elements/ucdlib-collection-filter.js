@@ -60,4 +60,6 @@ export default class UcdlibCollectionFilter extends LitElement {
 
 }
 
-customElements.define('ucdlib-collection-filter', UcdlibCollectionFilter);
+if (!customElements.get('ucdlib-collection-filter')) {
+  customElements.define('ucdlib-collection-filter', UcdlibCollectionFilter);
+}

@@ -52,4 +52,6 @@ export default class UcdlibHoursTodaySimple extends LitElement {
 
 }
 
-customElements.define('ucdlib-hours-today-simple', UcdlibHoursTodaySimple);
+if (!customElements.get('ucdlib-hours-today-simple')) {
+  customElements.define('ucdlib-hours-today-simple', UcdlibHoursTodaySimple);
+}

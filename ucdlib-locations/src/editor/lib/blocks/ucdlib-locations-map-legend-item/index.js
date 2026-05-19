@@ -3,7 +3,7 @@ import Edit from './edit';
 
 const name = 'ucdlib-locations/map-legend-item';
 const settings = {
-  api_version: 2,
+  apiVersion: 3,
 	title: "Legend Item",
   parent: [ 'ucdlib-locations/map-legend' ],
 	description: "Add a static legend item",

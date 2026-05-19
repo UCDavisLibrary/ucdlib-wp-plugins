@@ -3,7 +3,7 @@ import Edit from './edit';
 
 const name = 'ucdlib-locations/map-floors';
 const settings = {
-  api_version: 2,
+  apiVersion: 3,
 	title: "Floors",
   parent: [ 'ucdlib-locations/map-building' ],
 	description: "Building map floors",

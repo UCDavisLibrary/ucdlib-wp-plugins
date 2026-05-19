@@ -9,7 +9,7 @@ export default ( props ) => {
   const { attributes, setAttributes } = props;
   const blockProps = useBlockProps();
 
-  const curatorOrg = SelectUtils.terms('curator', {per_page: -1, orderby: 'name', order: 'asc'});
+  const curatorOrg = SelectUtils.terms('curator', {per_page: 100, orderby: 'name', order: 'asc'});
   const [ peoplePosts, setPeoplePosts ] = useState( [] );
   useEffect(() => {
     const path = `ucdlib-directory/people`;

@@ -3,7 +3,7 @@ import Edit from './edit';
 
 const name = 'ucdlib-directory/query';
 const settings = {
-  api_version: 2,
+  apiVersion: 3,
 	title: "Person Query",
 	description: "Displays library people based on your query parameters",
 	icon: UCDIcons.renderPublic('fa-users-line'),

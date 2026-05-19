@@ -13,7 +13,7 @@
 
     {% if p.typeAggs.exhibit %}
       {% set text = 'Exhibits (' ~ p.typeAggs.exhibit ~ ')' %}
-      {{ focal_link({text, href: '/?s&type=exhibit' ~ email, icon: 'ucd-public:fa-image', brandColor: 'rec-pool'}) }}
+      {{ focal_link({text, href: '/?s&type=exhibit&no-parent=true' ~ email, icon: 'ucd-public:fa-image', brandColor: 'rec-pool'}) }}
     {% endif %}
 
     {% if p.typeAggs.libguide %}

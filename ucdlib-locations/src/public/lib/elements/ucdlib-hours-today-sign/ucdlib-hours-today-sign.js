@@ -32,4 +32,6 @@ export default class UcdlibHoursTodaySign extends LitElement {
 
 }
 
-customElements.define('ucdlib-hours-today-sign', UcdlibHoursTodaySign);
+if (!customElements.get('ucdlib-hours-today-sign')) {
+  customElements.define('ucdlib-hours-today-sign', UcdlibHoursTodaySign);
+}

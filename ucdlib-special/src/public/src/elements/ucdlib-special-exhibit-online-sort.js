@@ -81,4 +81,6 @@ export default class UcdlibSpecialExhibitOnlineSort extends LitElement {
 
 }
 
-customElements.define('ucdlib-special-exhibit-online-sort', UcdlibSpecialExhibitOnlineSort);
+if (!customElements.get('ucdlib-special-exhibit-online-sort')) {
+  customElements.define('ucdlib-special-exhibit-online-sort', UcdlibSpecialExhibitOnlineSort);
+}

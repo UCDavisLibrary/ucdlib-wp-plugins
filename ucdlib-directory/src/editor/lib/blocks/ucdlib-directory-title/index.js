@@ -3,7 +3,7 @@ import Edit from './edit';
 
 const name = 'ucdlib-directory/title';
 const settings = {
-  api_version: 2,
+  apiVersion: 3,
 	title: "Your Title and Department",
   parent: [],
 	description: "Change your position title and department within the library.",

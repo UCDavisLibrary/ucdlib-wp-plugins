@@ -195,4 +195,6 @@ export default class UcdlibMapBuilding extends LitElement {
 
 }
 
-customElements.define('ucdlib-map-building', UcdlibMapBuilding);
+if (!customElements.get('ucdlib-map-building')) {
+  customElements.define('ucdlib-map-building', UcdlibMapBuilding);
+}

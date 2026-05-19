@@ -3,7 +3,7 @@ import Edit from './edit';
 
 const name = 'ucdlib-directory/pronouns';
 const settings = {
-  api_version: 2,
+  apiVersion: 3,
 	title: "Your Preferred Pronoun(s)",
   parent: [],
 	description: "Change your preferred pronoun(s).",
@@ -14,8 +14,7 @@ const settings = {
     "html": false,
     "customClassName": false
   },
-  attributes: {
-  },
+  attributes: {},
   edit: Edit
 };
 

@@ -33,7 +33,7 @@
 
     {% if post.findingAid|length > 0 and post.findingAid.linkURL|length > 0 and post.findingAid.linkTitle|length > 0 %}
       <h3 class='heading--highlight'>Finding Aid</h3>
-      <a href="{{post.findingAid.linkURL}}" target="_blank">{{post.findingAid.linkTitle}}</a>
+      <a href="{{post.findingAid.linkURL}}">{{post.findingAid.linkTitle}}</a>
     {% endif %}
 
     {% if post.inclusiveDates|length > 0 %}
@@ -56,7 +56,7 @@
     {% if post.referenceInfoLinks %}
       <h3 class='heading--highlight'>Additional Collection Info</h3>
       {% for link in post.referenceInfoLinks %}
-        <p><a href="{{link.linkURL}}" target="_blank">{{link.displayLabel}}</a></p>
+        <p><a href="{{link.linkURL}}">{{link.displayLabel}}</a></p>
       {% endfor %}
     {% endif %}
 

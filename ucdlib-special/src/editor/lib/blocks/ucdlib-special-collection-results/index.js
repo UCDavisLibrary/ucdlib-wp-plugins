@@ -3,7 +3,7 @@ import Edit from './edit';
 
 const name = 'ucdlib-special/collection-results';
 const settings = {
-  api_version: 2,
+  apiVersion: 3,
 	title: "Collection Results",
 	description: "Displays a widget with an collection results",
 	icon: UCDIcons.renderPublic('fa-book'),

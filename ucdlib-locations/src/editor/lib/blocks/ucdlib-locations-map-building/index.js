@@ -3,7 +3,7 @@ import Edit from './edit';
 
 const name = 'ucdlib-locations/map-building';
 const settings = {
-  api_version: 2,
+  apiVersion: 3,
 	title: "Interactive Building Map",
 	description: "Displays an interactive map of a building",
 	icon: UCDIcons.renderPublic('fa-map'),

@@ -49,4 +49,6 @@ export default class UcdlibMapLegend extends LitElement {
 
 }
 
-customElements.define('ucdlib-map-legend', UcdlibMapLegend);
+if (!customElements.get('ucdlib-map-legend')) {
+  customElements.define('ucdlib-map-legend', UcdlibMapLegend);
+}

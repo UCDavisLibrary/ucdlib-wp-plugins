@@ -3,7 +3,7 @@ import Edit from './edit';
 
 const name = 'ucdlib-special/exhibit-past';
 const settings = {
-  api_version: 2,
+  apiVersion: 3,
 	title: "Past Exhibits",
 	description: "Displays a list of past exhibits by year with filters",
 	icon: UCDIcons.renderPublic('fa-images'),

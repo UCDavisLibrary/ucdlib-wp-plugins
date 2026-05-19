@@ -3,7 +3,7 @@ import Edit from './edit';
 
 const name = 'ucdlib-locations/sign-section';
 const settings = {
-  api_version: 2,
+  apiVersion: 3,
 	title: "Digital Sign Section",
   parent: ['ucdlib-locations/sign-sections'],
 	description: "A section of a digital sign",

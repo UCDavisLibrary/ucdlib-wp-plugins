@@ -158,4 +158,17 @@ class UCDLibPluginSearchDocument {
     }
     return $this->hideOgAuthor;
   }
+
+  protected $firstAncestor;
+  public function firstAncestor(){
+    if ( ! empty( $this->firstAncestor ) ) {
+      return $this->firstAncestor;
+    }
+    if ( empty($this->document['_source']['firstAncestor']['id'])){
+      $this->firstAncestor = false;
+    } else {
+      $this->firstAncestor = Timber::get_post($this->document['_source']['firstAncestor']['id']);
+    }
+    return $this->firstAncestor;
+  }
 }

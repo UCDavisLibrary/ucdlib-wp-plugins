@@ -3,7 +3,7 @@ import Edit from './edit';
 
 const name = 'ucdlib-locations/sign-sections';
 const settings = {
-  api_version: 2,
+  apiVersion: 3,
 	title: "Digital Sign Sections",
 	description: "Primary layout block for digital signs",
 	icon: UCDIcons.renderPublic('fa-layer-group'),

@@ -115,4 +115,6 @@ export default class UcdlibCollectionAZ extends LitElement {
 
 }
 
-customElements.define('ucdlib-collection-az', UcdlibCollectionAZ);
+if (!customElements.get('ucdlib-collection-az')) {
+  customElements.define('ucdlib-collection-az', UcdlibCollectionAZ);
+}

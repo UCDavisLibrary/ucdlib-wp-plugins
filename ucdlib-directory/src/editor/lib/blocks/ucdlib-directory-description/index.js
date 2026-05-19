@@ -3,7 +3,7 @@ import Edit from './edit';
 
 const name = 'ucdlib-directory/description';
 const settings = {
-  api_version: 2,
+  apiVersion: 3,
 	title: "Description",
   parent: [],
 	description: "A brief description",

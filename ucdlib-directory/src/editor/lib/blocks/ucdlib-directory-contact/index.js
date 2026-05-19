@@ -3,7 +3,7 @@ import Edit from './edit';
 
 const name = 'ucdlib-directory/contact';
 const settings = {
-  api_version: 2,
+  apiVersion: 3,
 	title: "Contact List",
   parent: [],
 	description: "Display phone numbers, email addresses, and websites in a stylized list.",

@@ -35,6 +35,7 @@ class UCDLibPluginSearch {
     $vars[] = 'type';
     $vars[] = 'sortby';
     $vars[] = 'authors';
+    $vars[] = 'no-parent';
     return $vars;
   }
 

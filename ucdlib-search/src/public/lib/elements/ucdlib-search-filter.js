@@ -155,7 +155,7 @@ export default class UcdlibSearchFilter extends LitElement {
     this.sortOptions.forEach(option => {
       option.isSelected = option.urlArg === v;
     })
-    this.apply();
+    this.apply({preserveParam: {'no-parent': true}});
   }
 
   _onSubmit(e){
@@ -182,7 +182,7 @@ export default class UcdlibSearchFilter extends LitElement {
     this.setMobileVisibility();
   }
 
-  apply(){
+  apply(opts={}){
     const params = new URLSearchParams();
     params.append(this.keyKeyword, this.keyword);
     if ( this.authors ) {
@@ -196,9 +196,17 @@ export default class UcdlibSearchFilter extends LitElement {
     if ( appliedSort.length && !appliedSort[0].default ){
       params.append(this.keySort, appliedSort[0].urlArg);
     }
+
+    const existingParams = new URLSearchParams(window.location.search);
+    if ( opts.preserveParam?.['no-parent'] && existingParams.has('no-parent') ){
+      params.append('no-parent', existingParams.get('no-parent'));
+    }
+
     window.location = this.url + '?' + params.toString();
   }
 
 }
 
-customElements.define('ucdlib-search-filter', UcdlibSearchFilter);
+if (!customElements.get('ucdlib-search-filter')) {
+  customElements.define('ucdlib-search-filter', UcdlibSearchFilter);
+}

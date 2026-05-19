@@ -3,7 +3,7 @@ import Edit from './edit';
 
 const name = 'ucdlib-special/exhibit-query';
 const settings = {
-  api_version: 2,
+  apiVersion: 3,
 	title: "Exhibit Query",
 	description: "Display a list of exhibits based on query parameters you define",
 	icon: UCDIcons.renderPublic('fa-clipboard-question'),

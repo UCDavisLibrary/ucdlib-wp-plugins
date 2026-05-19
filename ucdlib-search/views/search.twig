@@ -42,7 +42,14 @@
       {# at least one result found #}
       {% elseif found_posts %}
 
-        <div class="h5 search-results-message">{{ found_posts }} results {{search_query ? 'for "' ~ search_query ~ '"'}}</div>
+        <div class="h5 search-results-message">
+          <span>{{ found_posts }} results</span>
+          {% if search_query %}
+            <span>for {{ search_query }}</span>
+          {% elseif exhibitLandersOnly %}
+            <span style="font-weight: normal;"> &ndash; search can show matching pages within exhibits</span>
+          {% endif %}
+        </div>
         {% if hasSuggestion %}
           <div class="h5 search-results-message">Similar keyword: <a href="?s={{suggest.text|url_encode}}">{{suggest.highlighted}}</a> </div>
         {% endif %}

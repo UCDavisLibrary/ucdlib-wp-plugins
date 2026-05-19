@@ -3,7 +3,7 @@ import Edit from './edit';
 
 const name = 'ucdlib-special/exhibit-highlight';
 const settings = {
-  api_version: 2,
+  apiVersion: 3,
 	title: "Exhibit Highlight",
 	description: "Display a preview of a single existing exhibit",
 	icon: UCDIcons.renderPublic('fa-image'),

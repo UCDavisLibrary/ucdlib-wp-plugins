@@ -3,7 +3,7 @@ import Edit from './edit';
 
 const name = 'ucdlib-directory/service-filters';
 const settings = {
-  api_version: 2,
+  apiVersion: 3,
 	title: "Interactive Service Directory Filters",
 	description: "Displays filters. Should be used in conjunction with the Service Results block",
 	icon: UCDIcons.renderPublic('fa-filter'),

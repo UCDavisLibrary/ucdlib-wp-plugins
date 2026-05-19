@@ -251,7 +251,8 @@ class UCDLibPluginSpecialExhibitPage extends UcdThemePost {
       return $this->children;
     }
     $slug = UCDLibPluginSpecialConfig::$config['postTypes']['exhibit'];
-    $this->children = parent::children($slug);
+    $children = parent::children($slug);
+    $this->children = empty($children) ? [] : $children;
     return $this->children;
   }
 

@@ -3,7 +3,7 @@ import Edit from './edit';
 
 const name = 'ucdlib-special/exhibit-curators';
 const settings = {
-  api_version: 2,
+  apiVersion: 3,
 	title: "Exhibit Curators",
 	description: "Displays a widget with an exhibit's curators",
 	icon: UCDIcons.renderPublic('fa-trowel-bricks'),

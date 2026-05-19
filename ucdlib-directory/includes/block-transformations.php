@@ -166,7 +166,7 @@ class UCDLibPluginDirectoryBlockTransformations {
     if ( $hideDepartments ){
       $attrs['people'] = $people;
     } else if ( $orderby['attr'] == 'department' ) {
-      $attrs['departments'] = self::assignPeopleToDepartments($people);
+      $attrs['departments'] = self::assignPeopleToDepartments($people, $attrs['department']);
     } else {
       $attrs['people'] = $people;
     }
@@ -318,14 +318,14 @@ class UCDLibPluginDirectoryBlockTransformations {
     if ( $hideDepartments ){
       $attrs['people'] = $people;
     } else if ( $orderby['attr'] == 'department' ) {
-      $attrs['departments'] = self::assignPeopleToDepartments($people);
+      $attrs['departments'] = self::assignPeopleToDepartments($people, $attrs['department']);
     } else {
       $attrs['people'] = $people;
     }
     return $attrs;
   }
 
-  public static function assignPeopleToDepartments($people){
+  public static function assignPeopleToDepartments($people, $includeDept=[] ){
     $deptQuery = [
       'post_type' => 'department',
       'order' => 'ASC',
@@ -336,6 +336,7 @@ class UCDLibPluginDirectoryBlockTransformations {
 
     $deptWithPeople = [];
     foreach ($departments as $dept) {
+      if ( count($includeDept) && !in_array($dept->ID, $includeDept) ) continue;
       $deptWithPeople[$dept->ID] = ['post' => $dept, 'people' => []];
     }
     foreach ($people as $person) {

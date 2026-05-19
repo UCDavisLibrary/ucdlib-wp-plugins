@@ -53,4 +53,6 @@ export default class UcdlibDirectorySort extends LitElement {
 
 }
 
-customElements.define('ucdlib-directory-sort', UcdlibDirectorySort);
+if (!customElements.get('ucdlib-directory-sort')) {
+  customElements.define('ucdlib-directory-sort', UcdlibDirectorySort);
+}

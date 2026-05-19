@@ -3,7 +3,7 @@ import Edit from './edit';
 
 const name = 'ucdlib-locations/map-floor-layer';
 const settings = {
-  api_version: 2,
+  apiVersion: 3,
 	title: "Space Layer",
   parent: [ 'ucdlib-locations/map-floor' ],
 	description: "Building map floor space layer",

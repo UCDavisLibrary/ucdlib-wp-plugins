@@ -142,6 +142,7 @@ class UCDLibPluginSearchElasticsearch {
     $context['title'] = 'Search Our Website';
     $context['typeFacets'] = $this->typeFacets();
     $context['sortOptions'] = $this->sortOptions();
+    $context['exhibitLandersOnly'] = !empty(get_query_var('no-parent'));
     try {
       $results = $this->doMainSearch();
       $context['results'] = array_map(function($x){return new UCDLibPluginSearchDocument($x, $this->config);}, $results['hits']['hits']);
@@ -362,6 +363,10 @@ class UCDLibPluginSearchElasticsearch {
       if ( count( $authorFilter ) ){
         $filterContext['bool']['must'][] = $authorFilter;
         $filterContext['bool']['must'][] = ['term' => ['ucd_hide_author' => false]];
+
+        if ( !empty(get_query_var('no-parent')) ){
+          $filterContext['bool']['must'][] = ['term' => ['hasParent' => false]];
+        }
       }
       $params['body']['query']['bool']['filter'] = $filterContext;
       //echo '<pre>' . var_dump($filterContext) . '</pre>';
@@ -392,6 +397,16 @@ class UCDLibPluginSearchElasticsearch {
                 'must' => [
                   ['term' => ['ucd_hide_author' => false]],
                   ['term' => ['authors' => $email]]
+                ],
+                'must_not' => [
+                  [
+                    'bool' => [
+                      'must' => [
+                        ['term' => ['type' => 'exhibit']],
+                        ['term' => ['hasParent' => true]]
+                      ]
+                    ]
+                  ]
                 ]
               ]
             ]

@@ -221,4 +221,6 @@ export default class UcdlibDirectoryResearchHighlights extends Mixin(LitElement)
   }
 }
 
-customElements.define('ucdlib-directory-research-highlights', UcdlibDirectoryResearchHighlights);
+if (!customElements.get('ucdlib-directory-research-highlights')) {
+  customElements.define('ucdlib-directory-research-highlights', UcdlibDirectoryResearchHighlights);
+}

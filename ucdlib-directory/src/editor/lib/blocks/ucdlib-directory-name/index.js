@@ -3,7 +3,7 @@ import Edit from './edit';
 
 const name = 'ucdlib-directory/name';
 const settings = {
-  api_version: 2,
+  apiVersion: 3,
 	title: "Your Name",
   parent: [],
 	description: "Change your first and last name.",
