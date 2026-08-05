@@ -92,6 +92,21 @@ export function styles() {
       color: #fff;
       text-decoration: none;
     }
+
+    .toggle-button {
+      text-align: center;
+      background-color: #022851;
+      transition: background-color 0.3s ease; 
+    }
+
+    .panel__title {
+      color: #fff;
+    }
+
+    .toggle-button:hover {
+      background-color: #13639e;
+    }
+
     @media (min-width: 992px) {
       .main {
         display: block;
