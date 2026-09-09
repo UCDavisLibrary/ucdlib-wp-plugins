@@ -441,7 +441,7 @@ export class LocationsController{
           dayOfMonth: d.getUTCDate(),
           year: d.getUTCFullYear()
         })
-        d.setDate(d.getDate() + 1);
+        d.setUTCDate(d.getUTCDate() + 1);
       }
 
       if ( range.months.length > monthsToDisplay ){
