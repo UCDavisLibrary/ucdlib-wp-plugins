@@ -96,15 +96,24 @@ export function styles() {
     .toggle-button {
       text-align: center;
       background-color: #022851;
-      transition: background-color 0.3s ease; 
-    }
-
-    .panel__title {
+      transition: background-color 0.3s ease;
+      cursor: pointer;
       color: #fff;
     }
 
-    .toggle-button:hover {
-      background-color: #13639e;
+    .toggle-button .panel__title {
+       color: inherit;
+     }
+
+    .toggle-button:hover,
+    .toggle-button:focus-visible,
+    .toggle-button:active {
+       background-color: #13639e;
+    }
+
+    .toggle-button:focus-visible {
+       outline: 2px solid #fff;
+       outline-offset: 2px;
     }
 
     @media (min-width: 992px) {
