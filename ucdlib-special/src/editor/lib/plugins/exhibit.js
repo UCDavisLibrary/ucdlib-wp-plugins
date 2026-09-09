@@ -31,8 +31,8 @@ const Edit = () => {
   if ( !isExhibit )  return html`<${Fragment} />`;
 
   // get various select options
-  const curatorOrgs = SelectUtils.terms('curator', {per_page: '-1', orderby: 'name', order: 'asc'});
-  const locations = SelectUtils.terms('exhibit-location', {per_page: '-1', orderby: 'name', order: 'asc'});
+  const curatorOrgs = SelectUtils.terms('curator', {per_page: 100, orderby: 'name', order: 'asc'});
+  const locations = SelectUtils.terms('exhibit-location', {per_page: 100, orderby: 'name', order: 'asc'});
   const locationOptions = [
     {value: '', label: 'Select a location'},
     ...locations.map(l => {return {value: l.id, label: l.name}})

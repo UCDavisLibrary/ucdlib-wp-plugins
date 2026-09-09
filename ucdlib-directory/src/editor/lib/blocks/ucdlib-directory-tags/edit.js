@@ -13,7 +13,7 @@ export default ( props ) => {
   // get metadata
   const taxSlug = 'directory-tag';
   const tagIds = SelectUtils.editedPostAttribute(taxSlug);
-  const query = {per_page: -1, orderby: 'count', order: 'desc', context: 'view'};
+  const query = {per_page: 100, orderby: 'count', order: 'desc', context: 'view'};
   const tags = SelectUtils.terms(taxSlug, query);
   const meta = SelectUtils.editedPostAttribute('meta');
   const hideTags = meta.hide_tags ? meta.hide_tags : false;
