@@ -150,7 +150,6 @@ export default class UcdlibDirectoryFilters extends LitElement {
       params.set(this.keyDirectoryTag, this.directoryTag.join(','));
     }
 
-    //console.log(this.url + '?' + params.toString());
     let queryString = params.toString();
     if ( queryString ) {
       window.location = this.url + '?' + params.toString();
