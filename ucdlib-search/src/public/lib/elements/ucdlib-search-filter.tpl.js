@@ -1,6 +1,7 @@
 import { html, css } from 'lit';
 
 import formStyles from "@ucd-lib/theme-sass/1_base_html/_forms.css.js";
+import buttonStyles from "@ucd-lib/theme-sass/2_base_class/_buttons.css.js";
 import headerStyles from "@ucd-lib/theme-sass/1_base_html/_headings.css.js";
 import listStyles from "@ucd-lib/theme-sass/1_base_html/_lists.css.js";
 import listClassesStyles from "@ucd-lib/theme-sass/2_base_class/_lists.css.js";
@@ -92,6 +93,12 @@ export function styles() {
       color: #fff;
       text-decoration: none;
     }
+
+    .toggle-button .panel__title {
+       color: inherit;
+     }
+
+
     @media (min-width: 992px) {
       .main {
         display: block;
@@ -111,22 +118,23 @@ export function styles() {
     oBox,
     panelStyles,
     brandStyles,
+    buttonStyles,
     elementStyles
   ];
 }
 
 export function render() {
 return html`
-  <div
-    class="panel--mobile-collapse o-box toggle-button"
+  <button
+    class="btn btn--alt btn--block panel--mobile-collapse o-box toggle-button"
     tabindex="0"
-    role="button"
     @click=${this._onVisibilityClick}
     @keyup=${this._onVisibilityKeyUp}
     aria-label="Toggle result filters"
-    aria-expanded=${this.showOnMobile ? 'true' : 'false'}>
+    aria-expanded=${this.showOnMobile ? 'true' : 'false'}
+    aria-controls="filter-results">
     <h2 class="panel__title">Filter Results</h2>
-  </div>
+  </button>
   <div class="light-blue main ${this.showOnMobile ? 'show': 'hide'}">
     <form @submit="${this._onSubmit}">
       <div class="h5 section-header">
