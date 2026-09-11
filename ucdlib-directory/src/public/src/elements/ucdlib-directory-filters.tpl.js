@@ -84,20 +84,11 @@ export function styles() {
       text-decoration: none;
     }
 
-    .toggle-button {
-      text-align: center;
-      background-color: #022851;
-      margin: 0 .75rem;
-      transition: background-color 0.3s ease; 
-    }
 
-    .panel__title {
-      color: #fff;
-    }
+    .toggle-button .panel__title {
+       color: inherit;
+     }
 
-    .toggle-button:hover {
-      background-color: #13639e;
-    }
 
     @media (min-width: 992px) {
       .main {
@@ -110,29 +101,30 @@ export function styles() {
   `;
 
 return [
-  buttonStyles,
   formStyles,
   headerStyles,
   formsClassesStyles,
   oBox,
   panelStyles,
   brandStyles,
+  buttonStyles,
   elementStyles
 ];
 }
 
 export function render() {
 return html`
-  <div
-    class="panel--mobile-collapse o-box toggle-button"
+  <button
+    class="btn btn--alt btn--block panel--mobile-collapse o-box toggle-button"
     tabindex="0"
-    role="button"
     @click=${this._onVisibilityClick}
     @keyup=${this._onVisibilityKeyUp}
     aria-label="Toggle result filters"
-    aria-expanded=${this.mobileVisibility.showOnMobile ? 'true' : 'false'}>
+    aria-expanded=${this.mobileVisibility.showOnMobile ? 'true' : 'false'}
+    aria-controls="filter-results">
     <h2 class="panel__title">${this.mobileVisibility.showOnMobile ? `Hide ${this.widgetTitle}` : this.widgetTitle} </h2>
-  </div>
+  </button>
+
   <div class="main ${this.mobileVisibility.showOnMobile ? 'show': 'hide'}">
     <form @submit="${this._onSubmit}">
       <div class="h5 section-header">
