@@ -115,12 +115,6 @@ export default class UcdlibDirectoryFilters extends LitElement {
     
   }
 
-  _onVisibilityKeyUp(e){
-    if (e.key === 'Enter' || e.keyCode === 13) {
-      this.mobileVisibility.toggle();
-    }
-  }
-
   _onVisibilityClick(){
     this.mobileVisibility.toggle();
   }
@@ -150,7 +144,6 @@ export default class UcdlibDirectoryFilters extends LitElement {
       params.set(this.keyDirectoryTag, this.directoryTag.join(','));
     }
 
-    //console.log(this.url + '?' + params.toString());
     let queryString = params.toString();
     if ( queryString ) {
       window.location = this.url + '?' + params.toString();

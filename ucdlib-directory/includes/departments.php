@@ -84,7 +84,7 @@ class UCDLibPluginDirectoryDepartments {
         //'author',
         //'thumbnail',
         // 'excerpt',
-        //'revisions',
+        'revisions',
         'page-attributes',
         'custom-fields'
       )

@@ -131,7 +131,7 @@ class UCDLibPluginDirectoryPeople {
         'author',
         'thumbnail',
         // 'excerpt',
-        //'revisions',
+        'revisions',
         'page-attributes',
         'custom-fields'
       )
