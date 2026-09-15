@@ -52,7 +52,7 @@ class UCDLibPluginLocationsAPI {
       'args' => [
         'from' => [
           'description' => 'Date from formatted as Y-m-d',
-          "type" => "date",
+          "type" => "string",
           "required" => true,
           "validate_callback" => function($param, $request, $key) {return $this->isValidDate($param);}
         ],

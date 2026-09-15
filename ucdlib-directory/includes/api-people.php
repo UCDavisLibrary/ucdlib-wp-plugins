@@ -120,7 +120,8 @@ class UCDLibPluginDirectoryAPIPeople {
       'contactEmail' => $profile->meta('contactEmail'),
       'contactPhone' => $profile->meta('contactPhone'),
       'contactAppointmentUrl' => $profile->meta('contactAppointmentUrl'),
-      'positionTitle' => $profile->meta('position_title')
+      'positionTitle' => $profile->meta('position_title'),
+      'libraries' => $profile->libraries()
     ];
 
     $pic = $profile->thumbnail();

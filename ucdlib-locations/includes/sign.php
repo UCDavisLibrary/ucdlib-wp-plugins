@@ -83,7 +83,8 @@ class UCDLibPluginLocationsSigns {
         'title',
         'editor',
         'page-attributes',
-        'custom-fields'
+        'custom-fields',
+        'revisions'
       )
     );
 

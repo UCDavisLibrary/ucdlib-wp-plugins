@@ -172,12 +172,6 @@ export default class UcdlibSearchFilter extends LitElement {
     }
   }
 
-  _onVisibilityKeyUp(e){
-    if (e.key === 'Enter' || e.keyCode === 13) {
-      this.setMobileVisibility();
-    }
-  }
-
   _onVisibilityClick(){
     this.setMobileVisibility();
   }

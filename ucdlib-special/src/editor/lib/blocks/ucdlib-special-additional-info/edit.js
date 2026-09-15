@@ -102,6 +102,10 @@ export default ( props ) => {
       fetchedRecord.forEach((value, index) => {
         if (!isModified) {
           const currentRecord = Object.values(meta.links).filter(l => l.linkType === 'referenceInfo')[index];
+          if (!currentRecord) {
+            isModified = true;
+            return;
+          }
           isModified = !Object.keys(currentRecord)
             .every(key => fetchedRecord[index].hasOwnProperty(key) && fetchedRecord[index][key] === currentRecord[key]);
         }
