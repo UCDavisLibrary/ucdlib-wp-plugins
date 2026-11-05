@@ -8,6 +8,7 @@ class UCDLibPluginAssetsForminator {
     add_filter('forminator_render_button_markup', [$this, 'styleSubmitButton'], 10, 2);
     add_action( 'admin_init', [$this, 'forceNoStyling']);
     add_action( 'admin_footer', [$this, 'removeStyleOptions']);
+    add_filter( 'forminator_trusted_proxies', [$this, 'setTrustedProxies'] );
   }
 
   public function removeStyleOptions(){
@@ -144,5 +145,26 @@ class UCDLibPluginAssetsForminator {
     $dom->loadHTML($html, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
     libxml_clear_errors();
     return $dom;
+  }
+
+  /**
+   * Callback for the 'forminator_trusted_proxies' filter.
+   * Appends any additional trusted proxy IPs/CIDRs defined in the FORMINATOR_TRUSTED_PROXIES
+   * environment variable (comma-separated) to Forminator's existing trusted proxies list.
+   */
+  public function setTrustedProxies( $proxies ){
+    $env_value = $_ENV['FORMINATOR_TRUSTED_PROXIES'] ?? '';
+
+    if ( empty( $env_value ) ) {
+        return $proxies;
+    }
+
+    foreach ( array_map( 'trim', explode( ',', $env_value ) ) as $entry ) {
+        if ( $entry !== '' ) {
+            $proxies[] = $entry;
+        }
+    }
+
+    return $proxies;
   }
 }
